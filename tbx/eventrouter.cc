@@ -1,0 +1,1077 @@
+/*
+ * tbx RISC OS toolbox library
+ *
+ * Copyright (C) 2008 Alan Buckley   All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+ * BRIAN PAUL BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+ * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+#include "eventrouter.h"
+#include "application.h"
+#include "reporterror.h"
+#include "usereventids.h"
+#include "component.h"
+#include "wimpmessagelistener.h"
+#include "redrawlistener.h"
+#include "openwindowlistener.h"
+#include "closewindowlistener.h"
+#include "pointerlistener.h"
+#include "mouseclicklistener.h"
+#include "draghandler.h"
+#include "caretlistener.h"
+#include "command.h"
+
+#include <cstring>
+#include <kernel.h>
+#include <swis.h>
+#include <algorithm>
+
+using namespace tbx;
+
+EventRouter *EventRouter::_instance = 0;
+
+// Maximum window event in window event map
+const int MAX_WINDOW_EVENTS = 12;
+
+namespace tbx
+{
+	EventRouter the_event_router;
+}
+
+EventRouter::EventRouter()
+{
+	_instance = this;
+	_running_object_item = 0;
+	_remove_running = false;
+    _poll_mask = 1; // No Null events
+
+    _autocreate_listeners = 0;
+    _message_listeners = 0;
+    _running_message_item = 0;
+
+    _null_event_commands = 0;
+
+    _drag_handler = 0;
+}
+
+EventRouter::~EventRouter()
+{
+}
+
+void EventRouter::poll()
+{
+    _kernel_swi_regs regs;
+	int poll = Wimp_Poll;
+    regs.r[0] = _poll_mask;
+    regs.r[1] = reinterpret_cast<int>(&_poll_block);
+
+    // Reply task for User Message Acknowledge (eventCode == 18)
+	_reply_to = regs.r[2];
+
+    if (_kernel_swi(poll, &regs, &regs) == 0)
+	{
+		try
+		{
+			route_event(regs.r[0]);
+
+		} catch(std::exception &e)
+		{
+			report_error(e.what(), "Uncaught Exception");
+		} catch(...)
+		{
+			report_error("Uncaught exception");
+		}
+	}
+}
+
+void EventRouter::route_event(int event_code)
+{
+	switch(event_code)
+	{
+		case 0x200: process_toolbox_event(); break;
+
+		case 0: process_null_event(); break;
+
+		case 1: process_redraw_request(); break;
+		case 2: process_open_window_request(); break;
+		case 3: process_close_window_request(); break;
+		case 4: process_pointer_leaving_window(); break;
+		case 5: process_pointer_entering_window(); break;
+		case 6: process_mouse_click(); break;
+
+		case 7: // Drag finished
+			if (_drag_handler)
+			{
+				BBox dest(_poll_block.word[0], _poll_block.word[1],
+						_poll_block.word[2], _poll_block.word[3]);
+				_drag_handler->drag_finished(dest);
+				_drag_handler = 0;
+			}
+		break;
+
+		case 8: // TODO: Key_Pressed
+		// Pass on if not used
+		_swi(Wimp_ProcessKey, _IN(0), _poll_block.word[6]);
+		break;
+
+		case 9: // TODO: Menu_Selection
+		// No window handle so we need to route it via the application
+		break;
+
+//TODO:		case 10: process_scroll_request(); break;
+		case 11: process_lose_caret(); break;
+		case 12: process_gain_caret(); break;
+
+		case 17: // User_Message
+		case 18: // User_Message_Recorded
+		case 19: // User_Message_Acknowledge
+			process_wimp_message(event_code);
+		break;
+
+		default:
+		// Others require no special processing
+		//TODO:	RouteWimpEvent(eventCode);
+		break;
+	}
+}
+
+void EventRouter::process_toolbox_event()
+{
+	int action = _poll_block.word[2];
+	bool handled = false;
+
+	switch (action)
+	{
+	case 0x44EC0: // Toolbox error
+		{
+			//TODO: Allow error handler to be set
+			_kernel_oserror err;
+			err.errnum = _poll_block.word[4];
+			std::strcpy(err.errmess, reinterpret_cast<char *>(&_poll_block.word[5]));
+			report_error(&err,0);
+		}
+		break;
+
+	case 0x44EC1: // Auto Create
+		if (_autocreate_listeners != 0)
+		{
+			char *template_name = reinterpret_cast<char *>(&(_poll_block.word[4]));
+			std::map<std::string, AutoCreateListener *>::iterator found = _autocreate_listeners->find(template_name);
+			if (found != _autocreate_listeners->end())
+			{
+				found->second->auto_created(template_name, _id_block.self_object());
+			}
+		}
+		break;
+
+	case 0x44EC2: // Auto deleted event - automatically removes listeners
+		process_toolbox_event(_id_block.self_object_id, _id_block.self_component_id);
+		remove_all_listeners(_id_block.self_object_id);
+		break;
+
+	case 0x82a91: // Quit_Quit - always quits application
+		process_toolbox_event(_id_block.self_object_id, _id_block.self_component_id);
+		app()->quit();
+		break;
+
+	default:
+		handled = process_toolbox_event(_id_block.self_object_id, _id_block.self_component_id);
+
+		if (action >= FIRST_USER_EID && action <= LAST_USER_EID)
+		{
+			// User events are also passed to parent and ancestor objects and application
+			if (!handled && _id_block.parent_object_id != _id_block.self_object_id)
+			{
+				handled = process_toolbox_event(_id_block.parent_object_id, _id_block.parent_component_id);
+			}
+
+			if (!handled
+				&& _id_block.ancestor_object_id != _id_block.parent_object_id
+				&& _id_block.ancestor_object_id != _id_block.self_object_id)
+			{
+				handled = process_toolbox_event(_id_block.ancestor_object_id, _id_block.ancestor_component_id);
+			}
+
+			handled = process_toolbox_event(NULL_ObjectId, NULL_ComponentId);
+		}
+	}
+}
+
+bool EventRouter::process_toolbox_event(ObjectId object_id, ComponentId comp_id)
+{
+	int action = _poll_block.word[2];
+	bool handled = false;
+	ObjectListenerItem *item = find_first_object_listener(object_id, action);
+
+	while (item && item->action == action)
+	{
+		if (item->component_id == comp_id || item->component_id == NULL_ComponentId)
+		{
+			_running_object_item = item;
+			handled = true;
+			(*item->handler)(_id_block, _poll_block, item->listener);
+			item = item->next;
+			if (_remove_running)
+			{
+				ObjectListenerItem *remove_item = _running_object_item;
+				_remove_running = false;
+				_running_object_item = 0;
+				remove_object_listener(object_id, remove_item->component_id, remove_item->action, remove_item->listener);
+			} else
+				_running_object_item = 0;
+		} else
+			item = item->next;
+	}
+
+	return handled;
+}
+
+EventRouter::ObjectListenerItem *EventRouter::find_first_object_listener(ObjectId handle, int action)
+{
+	std::map<ObjectId, ObjectListenerItem *>::iterator found = _object_listeners.find(handle);
+	ObjectListenerItem *item = 0;
+
+	if (found != _object_listeners.end())
+	{
+		item = found->second;
+		while (item && action != item->action)
+		{
+			item = item->next;
+		}
+	}
+
+	return item;
+}
+
+void EventRouter::add_object_listener(ObjectId handle, ComponentId component_id, int action, Listener *listener, RawToolboxEventHandler handler)
+{
+	ObjectListenerItem *new_item = new ObjectListenerItem;
+	new_item->component_id = component_id;
+	new_item->action = action;
+	new_item->listener = listener;
+	new_item->handler = handler;
+	new_item->next = 0;
+
+	std::map<ObjectId, ObjectListenerItem *>::iterator found = _object_listeners.find(handle);
+	if (found == _object_listeners.end())
+	{
+		_object_listeners[handle] = new_item;
+	} else
+	{
+		ObjectListenerItem *item = found->second;
+		ObjectListenerItem *prev = 0;
+		while (item && item->action <= action)
+		{
+			prev = item;
+			item = item->next;
+		}
+		if (item == 0)
+		{
+			prev->next = new_item;
+		} else if (prev == 0)
+		{
+			new_item->next = item;
+			_object_listeners[handle] = new_item;
+		} else
+		{
+			new_item->next = item;
+			prev->next = new_item;
+		}
+	}
+}
+
+void EventRouter::remove_object_listener(ObjectId handle, ComponentId component_id, int action, Listener *listener)
+{
+	std::map<ObjectId, ObjectListenerItem *>::iterator found = _object_listeners.find(handle);
+	if (found != _object_listeners.end())
+	{
+		ObjectListenerItem *item = found->second;
+		ObjectListenerItem *prev = 0;
+
+        while (item && item->action < action)
+		{
+			prev = item;
+			item = item->next;
+		}
+		while (item && item->action == action
+				&& (item->listener != listener || item->component_id != component_id))
+		{
+			prev = item;
+			item = item->next;
+		}
+		if (item && item->action == action && item->listener == listener && item->component_id != component_id)
+		{
+			if (item == _running_object_item) _remove_running = true;
+			else
+			{
+				if (prev == 0)
+				{
+					if (item->next == 0)
+					{
+						_object_listeners.erase(handle);
+					} else
+					{
+						_object_listeners[handle] = item->next;
+					}
+				} else
+				{
+					prev->next = item->next;
+					item->next = 0;
+				}
+				delete item;
+			}
+		}
+	}
+}
+
+/**
+ * Handler is for an event that logically should not have more than one listener
+ */
+void EventRouter::set_object_handler(ObjectId handle, int action, Listener *listener, RawToolboxEventHandler handler)
+{
+	ObjectListenerItem *item = find_first_object_listener(handle, action);
+	if (item == 0)
+	{
+		if (listener != 0)
+		{
+			add_object_listener(handle, NULL_ComponentId, action, listener, handler);
+		}
+	} else if (listener == 0)
+	{
+		remove_object_listener(handle, NULL_ComponentId, action, listener);
+	} else
+	{
+		item->listener = listener;
+		item->handler = handler;
+	}
+}
+
+void EventRouter::remove_all_listeners(ObjectId handle)
+{
+	std::map<ObjectId, ObjectListenerItem *>::iterator found = _object_listeners.find(handle);
+	if (found != _object_listeners.end())
+	{
+		ObjectListenerItem *item = found->second;
+		ObjectListenerItem *running = 0;
+		while (item)
+		{
+			ObjectListenerItem *next = item->next;
+			if (item == _running_object_item)
+			{
+				item->next = 0;
+				running = item;
+				_remove_running = true;
+			} else
+				delete item;
+			item = next;
+		}
+
+		if (running)
+		{
+			_object_listeners[handle] = running;
+		} else
+			_object_listeners.erase(handle);
+	}
+
+	if (_window_event_listeners)
+	{
+		std::map<ObjectId, WindowEventListenerItem **>::iterator found = _window_event_listeners->find(handle);
+		if (found != _window_event_listeners->end())
+		{
+			bool delete_all = true;
+			for (int j = 0; j < MAX_WINDOW_EVENTS; j++)
+			{
+				WindowEventListenerItem *item = found->second[j];
+				WindowEventListenerItem *running = 0;
+				while (item)
+				{
+					WindowEventListenerItem *next = item->next;
+					if (item == _running_window_event_item)
+					{
+						item->next = 0;
+						running = item;
+						_remove_running = true;
+						delete_all = false;
+					} else
+						delete item;
+					item = next;
+				}
+				found->second[j] = running;
+			}
+			if (delete_all)
+			{
+				delete [] found->second;
+			}
+		}
+	}
+}
+
+void EventRouter::remove_all_listeners(ObjectId handle, ComponentId component_id)
+{
+	std::map<ObjectId, ObjectListenerItem *>::iterator found = _object_listeners.find(handle);
+	if (found != _object_listeners.end())
+	{
+		ObjectListenerItem *old_first = found->second;
+		ObjectListenerItem *item = old_first;
+		ObjectListenerItem *prev = 0;
+		ObjectListenerItem *first = 0;
+
+		while (item)
+		{
+			ObjectListenerItem *next = item->next;
+			if (item->component_id == component_id)
+			{
+				if (item == _running_object_item)
+				{
+					if (first == 0) first = item;
+					prev = item;
+					_remove_running = true;
+				} else
+				{
+					if (prev) prev->next = next;
+					delete item;
+				}
+			} else
+			{
+				if (first == 0) first = item;
+				prev = item;
+			}
+
+			item = next;
+		}
+
+		if (first)
+		{
+			if (first != old_first)
+			{
+				_object_listeners[handle] = first;
+			}
+		} else
+			_object_listeners.erase(handle);
+	}
+}
+
+
+void EventRouter::set_autocreate_listener(std::string template_name, AutoCreateListener *listener)
+{
+	if (_autocreate_listeners == 0) _autocreate_listeners = new std::map<std::string, AutoCreateListener*>();
+	(*_autocreate_listeners)[template_name] = listener;
+}
+
+void EventRouter::clear_autocreate_listener(std::string template_name)
+{
+	if (_autocreate_listeners != 0)
+	{
+		std::map<std::string, AutoCreateListener *>::iterator found = _autocreate_listeners->find(template_name);
+		if (found != _autocreate_listeners->end()) _autocreate_listeners->erase(found);
+	}
+}
+
+
+/**
+ * Run all the null event commands
+ */
+void EventRouter::process_null_event()
+{
+	if (_null_event_commands)
+	{
+		unsigned int i = 0;
+		unsigned int size = _null_event_commands->size();
+
+		while (i < size)
+		{
+			Command *to_run = (*_null_event_commands)[i];
+			to_run->execute();
+			if (i >= _null_event_commands->size()
+				|| (*_null_event_commands)[i] != to_run)
+			{
+				i = size; // Stop processing if list changes
+			}
+			i++;
+		}
+	}
+}
+
+/*
+ * Process window redraw requests
+ * for each rectangle calls all the registered listeners
+ */
+void EventRouter::process_redraw_request()
+{
+	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 1);
+
+	int more;
+	if (_swix(Wimp_RedrawWindow, _IN(1)|_OUT(0), &_poll_block, &more) != 0) more = 0;
+
+	if (item)
+	{
+		WindowEventListenerItem *redraw;
+		while (more)
+		{
+			RedrawEvent e(_poll_block);
+			redraw = item;
+			while(redraw)
+			{
+				_running_window_event_item = redraw;
+				static_cast<RedrawListener *>(redraw->listener)->redraw(e);
+				redraw = redraw->next;
+				if (_remove_running)
+				{
+					if (item == _running_window_event_item) item = redraw;
+					remove_running_window_event_listener(_id_block.self_object_id, 2);
+				}
+			}
+			if (_swix(Wimp_GetRectangle, _IN(1)|_OUT(0), &_poll_block, &more) != 0) more = 0;
+		}
+		_running_window_event_item = 0;
+
+	} else
+	{
+		// No registered redrawers so just run through process
+		while (more)
+		{
+			if (_swix(Wimp_GetRectangle, _IN(1)|_OUT(0), &_poll_block, &more) != 0) more = 0;
+		}
+	}
+}
+
+/*
+ * Process OpenWindowRequest from the Wimp.
+ * calls Wimp_OpenWindow after calling all listeners.
+ */
+void EventRouter::process_open_window_request()
+{
+	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 2);
+
+	if (item)
+	{
+		Window win(_id_block.self_object_id);
+		OpenWindowEvent ev(win, _poll_block);
+		while (item)
+		{
+			_running_window_event_item = item;
+			static_cast<OpenWindowListener *>(item->listener)->open_window(ev);
+			item = item->next;
+			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 2);
+		}
+		_running_window_event_item = 0;
+	}
+
+	_swix(Wimp_OpenWindow, _IN(1), &_poll_block);
+}
+
+/**
+ * Process close window request from WIMP
+ */
+void EventRouter::process_close_window_request()
+{
+	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 3);
+
+	if (item)
+	{
+		Window win(_id_block.self_object_id);
+		while (item)
+		{
+			_running_window_event_item = item;
+			static_cast<CloseWindowListener *>(item->listener)->close_window(win);
+			item = item->next;
+			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 3);
+		}
+		_running_window_event_item = 0;
+	}
+}
+
+/**
+ * Process pointer leaving window request from WIMP
+ */
+void EventRouter::process_pointer_leaving_window()
+{
+	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 4);
+
+	if (item)
+	{
+		Window win(_id_block.self_object_id);
+		while (item)
+		{
+			_running_window_event_item = item;
+			static_cast<PointerLeavingListener *>(item->listener)->pointer_leaving(win);
+			item = item->next;
+			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 4);
+		}
+		_running_window_event_item = 0;
+	}
+}
+
+/**
+ * Process pointer entering window request from WIMP
+ */
+void EventRouter::process_pointer_entering_window()
+{
+	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 5);
+
+	if (item)
+	{
+		Window win(_id_block.self_object_id);
+		while (item)
+		{
+			_running_window_event_item = item;
+			static_cast<PointerEnteringListener *>(item->listener)->pointer_entering(win);
+			item = item->next;
+			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 5);
+		}
+		_running_window_event_item = 0;
+	}
+}
+
+/*
+ * Process Mouse Click from the WIMP
+ */
+void EventRouter::process_mouse_click()
+{
+	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 6);
+	if (item)
+	{
+		Window win(_id_block.self_object_id);
+		Gadget g = win.gadget(_id_block.self_component_id);
+		Point pt(_poll_block.word[0], _poll_block.word[1]);
+		// Get flag to see if mouse click can include double clicks
+		ButtonType type = BUTTONTYPE_CLICK_ONCE;
+		if (_poll_block.word[2])
+		{
+			if (_poll_block.word[4] != -1)
+			{
+				// Click on an icon
+				int icon_info[10];
+				icon_info[0] = _poll_block.word[3];
+				icon_info[1] = _poll_block.word[4];
+				if (_swix(Wimp_GetIconState, _IN(1), icon_info) == 0)
+				{
+				    type = ButtonType((icon_info[6]>>12)&15);
+				}
+			} else
+			{
+				WindowInfo info;
+				win.get_info(info);
+				type = info.button_type();
+			}
+		}
+
+		MouseClickEvent ev(win, g, pt, _poll_block.word[2],
+				(type == BUTTONTYPE_DOUBLE
+				|| type == BUTTONTYPE_DOUBLE_DRAG
+				|| type == BUTTONTYPE_DOUBLE_CLICK_DRAG)
+		);
+		while (item)
+		{
+			_running_window_event_item = item;
+			static_cast<MouseClickListener *>(item->listener)->mouse_click(ev);
+			item = item->next;
+			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 6);
+		}
+		_running_window_event_item = 0;
+	}
+}
+
+/**
+ * Process lose caret event
+ */
+void EventRouter::process_lose_caret()
+{
+	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 11);
+
+	if (item)
+	{
+		Window win(_id_block.self_object_id);
+		Gadget g(_id_block.self_component());
+		CaretEvent ev(win, g, _poll_block);
+		while (item)
+		{
+			_running_window_event_item = item;
+			static_cast<LoseCaretListener *>(item->listener)->lose_caret(ev);
+			item = item->next;
+			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 11);
+		}
+		_running_window_event_item = 0;
+	}
+}
+
+/**
+ * Process gain caret event
+ */
+void EventRouter::process_gain_caret()
+{
+	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 12);
+
+	if (item)
+	{
+		Window win(_id_block.self_object_id);
+		Gadget g(_id_block.self_component());
+		CaretEvent ev(win, g, _poll_block);
+
+		while (item)
+		{
+			_running_window_event_item = item;
+			static_cast<GainCaretListener *>(item->listener)->gain_caret(ev);
+			item = item->next;
+			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 12);
+		}
+		_running_window_event_item = 0;
+	}
+}
+
+
+void EventRouter::remove_running_window_event_listener(ObjectId object_id, int event_code)
+{
+	WindowEventListenerItem *remove_item = _running_window_event_item;
+	_remove_running = false;
+	_running_window_event_item = 0;
+	remove_window_event_listener(object_id, event_code, remove_item->listener);
+}
+
+/*
+ * Finds first event listener item for an object and event
+ */
+EventRouter::WindowEventListenerItem *EventRouter::find_window_event_listener(ObjectId object_id, int event_code)
+{
+    WindowEventListenerItem *item = 0;
+    if (_window_event_listeners != 0)
+    {
+       std::map<ObjectId, WindowEventListenerItem **>::iterator found = _window_event_listeners->find(object_id);
+       if (found != _window_event_listeners->end())
+       {
+            item = found->second[event_code-1];
+       }
+    }
+
+    return item;
+}
+
+void EventRouter::add_window_event_listener(ObjectId object_id, int event_code, Listener *listener)
+{
+    WindowEventListenerItem *new_item = new WindowEventListenerItem();
+    new_item->listener = listener;
+    new_item->next = 0;
+
+    if (_window_event_listeners == 0) _window_event_listeners = new std::map<ObjectId, WindowEventListenerItem **>();
+
+    std::map<ObjectId, WindowEventListenerItem **>::iterator found = _window_event_listeners->find(object_id);
+    if (found == _window_event_listeners->end())
+    {
+    	WindowEventListenerItem **items = new WindowEventListenerItem*[MAX_WINDOW_EVENTS];
+    	for (int j = 0; j < MAX_WINDOW_EVENTS; j++)
+    		items[j] = 0;
+
+    	items[event_code - 1] = new_item;
+    	(*_window_event_listeners)[object_id] = items;
+    } else
+    {
+    	WindowEventListenerItem *item = found->second[event_code - 1];
+    	WindowEventListenerItem *prev = 0;
+    	while (item)
+    	{
+    		prev = item;
+    		item = item->next;
+    	}
+    	if (prev)
+    	{
+    		prev->next = new_item;
+    	} else
+    	{
+    		found->second[event_code - 1] = new_item;
+    	}
+    }
+}
+
+/*
+ * Remove window event listener.
+ * If the event is currently the event being run it will mark it to be deleted
+ * in the event process instead.
+ */
+void EventRouter::remove_window_event_listener(ObjectId object_id, int event_code, Listener *listener)
+{
+    if (_window_event_listeners != 0)
+    {
+       std::map<ObjectId, WindowEventListenerItem **>::iterator found = _window_event_listeners->find(object_id);
+       if (found != _window_event_listeners->end())
+       {
+    	   WindowEventListenerItem *item = found->second[event_code-1];
+    	   WindowEventListenerItem *prev = 0;
+    	   while (item && item->listener != listener)
+    	   {
+    		   prev = item;
+    		   item = item->next;
+    	   }
+    	   if (item == _running_window_event_item) _remove_running = true;
+    	   else if (item != 0)
+    	   {
+    		   if (prev == 0) found->second[event_code-1] = item->next;
+    		   else prev->next = item->next;
+
+    		   if (prev == 0 && item->next == 0)
+    		   {
+    			   // All of this type of listeners have been deleted
+    			   // so check if there are any other events
+    			   bool delete_all = true;
+    			   for (int j = 0; j < MAX_WINDOW_EVENTS && delete_all; j++)
+    				   if (found->second[j]) delete_all = false;
+    			   if (delete_all)
+    			   {
+    				   delete [] found->second;
+    				   _window_event_listeners->erase(found);
+    			   }
+    		   }
+
+       		   delete item;
+    	   }
+       }
+    }
+}
+
+void EventRouter::add_null_event_command(Command *command)
+{
+	if (_null_event_commands == 0)
+	{
+		_null_event_commands = new std::vector<Command *>();
+		_poll_mask &= ~1; // Turn on null event processing
+	}
+	_null_event_commands->push_back(command);
+}
+
+void EventRouter::remove_null_event_command(Command *command)
+{
+	if (_null_event_commands)
+	{
+		std::vector<Command *>::iterator found = std::find(
+				_null_event_commands->begin(),
+				_null_event_commands->end(),
+				command);
+		if (found != _null_event_commands->end())
+		{
+			_null_event_commands->erase(found);
+			if (_null_event_commands->empty())
+			{
+				delete _null_event_commands;
+				_null_event_commands = 0;
+				_poll_mask |= 1; // Stop null events being reported
+			}
+		}
+	}
+}
+
+void EventRouter::process_wimp_message(int event_code)
+{
+	int message_id = _poll_block.word[4];
+
+	if (_message_listeners != 0)
+	{
+		std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners->find(message_id);
+		if (found != _message_listeners->end())
+		{
+			WimpMessageListenerItem *item = found->second;
+			WimpMessageEvent event(_poll_block);
+
+			while (item && !event.claimed())
+			{
+				_running_message_item = item;
+				switch(event_code)
+				{
+				case 17: item->listener->user_message(event); break;
+				case 18: item->listener->user_message_recorded(event, _reply_to); break;
+				case 19: item->listener->user_message_acknowledge(event); break;
+				}
+
+				item = item->next;
+
+				if (_remove_running)
+				{
+					WimpMessageListenerItem *remove_item = _running_message_item;
+					_remove_running = false;
+					_running_message_item = 0;
+					remove_message_listener(message_id, remove_item->listener);
+				} else
+				{
+					_running_message_item = 0;
+				}
+			}
+		}
+	}
+
+	// Must always quit on message code 0
+	if (message_id == 0) app()->quit();
+}
+
+
+void EventRouter::add_message_listener(int message_id, WimpMessageListener *listener)
+{
+	if (_message_listeners == 0) _message_listeners = new std::map<int, WimpMessageListenerItem *>();
+
+	WimpMessageListenerItem *new_item = new WimpMessageListenerItem;
+	new_item->listener = listener;
+	new_item->next = 0;
+
+	std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners->find(message_id);
+	if (found == _message_listeners->end())
+	{
+		(*_message_listeners)[message_id] = new_item;
+	} else
+	{
+		WimpMessageListenerItem *item = found->second;
+		WimpMessageListenerItem *prev = 0;
+		while (item && item->message_id <= message_id)
+		{
+			prev = item;
+			item = item->next;
+		}
+		if (item == 0)
+		{
+			prev->next = new_item;
+		} else if (prev == 0)
+		{
+			new_item->next = item;
+			(*_message_listeners)[message_id] = new_item;
+		} else
+		{
+			new_item->next = item;
+			prev->next = new_item;
+		}
+	}
+
+}
+
+void EventRouter::remove_message_listener(int message_id, WimpMessageListener *listener)
+{
+	if (_message_listeners == 0) return;
+
+	std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners->find(message_id);
+	if (found != _message_listeners->end())
+	{
+		WimpMessageListenerItem *item = found->second;
+		WimpMessageListenerItem *prev = 0;
+
+		while (item && item->listener != listener)
+		{
+			prev = item;
+			item = item->next;
+		}
+		if (item && item->listener == listener)
+		{
+			if (item == _running_message_item) _remove_running = true;
+			else
+			{
+				if (prev == 0)
+				{
+					if (item->next == 0)
+					{
+						_message_listeners->erase(message_id);
+					} else
+					{
+						(*_message_listeners)[message_id] = item->next;
+					}
+				} else
+				{
+					prev->next = item->next;
+					item->next = 0;
+				}
+				delete item;
+			}
+		}
+	}
+}
+
+/**
+ * Set the handler for the next/current drag
+ */
+void EventRouter::set_drag_handler(DragHandler *handler)
+{
+	_drag_handler = handler;
+}
+
+/**
+ * Current drag has been cancelled so clear drag handler
+ */
+void EventRouter::cancel_drag()
+{
+	if (_drag_handler)
+	{
+		_drag_handler->drag_cancelled();
+		_drag_handler = 0;
+	}
+}
+
+/**
+ * Get the object the event occured on.
+ */
+Object IdBlock::self_object() const
+{
+    return Object(self_object_id);
+}
+
+/**
+ * Get the component the event occured on
+ *
+ * The returned component will be null if the event did not occur on a
+ * component.
+ */
+Component IdBlock::self_component() const
+{
+   return Component(self_object_id, self_component_id);
+}
+
+/**
+ * Get the parent object of the object the event occured upon.
+ *
+ * The object will be null if there was no parent object.
+ */
+Object IdBlock::parent_object() const
+{
+   return Object(parent_object_id);
+}
+
+/**
+ * Get the parent component of the object the event occured on
+ *
+ * The returned component will be null if the event did not occur on a
+ * component.
+ */
+
+Component IdBlock::parent_component() const
+{
+   return Component(parent_object_id, parent_component_id);
+}
+
+/**
+ * Get the ancestor object of the object the event occured upon.
+ *
+ * The object will be null if there was no parent object.
+ */
+Object IdBlock::ancestor_object() const
+{
+   return Object(ancestor_object_id);
+}
+
+/**
+ * Get the ancestor component of the object the event occured on
+ *
+ * The returned component will be null if the event did not occur on a
+ * component.
+ */
+Component IdBlock::ancestor_component() const
+{
+   return Component(ancestor_object_id, ancestor_component_id);
+}
+
