@@ -1,4 +1,0 @@
-| Boot file for TBX library
-
-Set TBX$Dir <Obey$Dir>
-Set TBX$Path <TBX$Dir>.
