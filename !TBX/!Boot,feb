@@ -1,4 +1,6 @@
 | Boot file for TBX library
 
+IconSprites <Obey$Dir>.!Sprites
+
 Set TBX$Dir <Obey$Dir>
 Set TBX$Path <TBX$Dir>.
