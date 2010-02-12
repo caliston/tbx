@@ -268,6 +268,13 @@ bool Path::create_file(int type) const
 	return (_kernel_swi(OS_File, &regs, &regs) == 0);
 }
 
+/**
+ * Create a directory at the given path.
+ *
+ * If the directory already exists this does nothing and returns true.
+ *
+ * @returns true if directory created or already exists
+ */
 bool Path::create_directory() const
 {
 	_kernel_swi_regs regs;
