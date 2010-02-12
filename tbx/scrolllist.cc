@@ -307,7 +307,7 @@ void ScrollList::get_colour(Colour &foreground, Colour &background) const
 static void scrolllist_selection_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
 	ScrollList source(id_block.self_component());
- 	 ScrollListSelectionEvent event(source, data.word[4], data.word[5]);
+ 	 ScrollListSelectionEvent event(source, data.word[5], data.word[4]);
  	 static_cast<ScrollListSelectionListener *>(listener)->scrolllist_selection(event);
 }
 
