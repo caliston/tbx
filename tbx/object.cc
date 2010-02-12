@@ -375,12 +375,12 @@ std::string Object::string_property(int property_id) const
     std::string value;
     if (len)
     {
-       std::auto_ptr<char> m_buffer(new char[len]);
+    	char buffer[len];
        // Run Toolbox_ObjectMiscOp to get the buffer
        swix_check(_swix(0x44ec6, _INR(0,4), 0, _handle, property_id,
-    		   reinterpret_cast<int>(m_buffer.get()),
+    		   reinterpret_cast<int>(buffer),
     		   len));
-       value = m_buffer.get();
+       value = buffer;
     }
 
     return value;
