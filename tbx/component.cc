@@ -253,14 +253,14 @@ std::string Component::string_property(int property_id) const
     int len = regs.r[5];
     if (len)
     {
-       std::auto_ptr<char> m_buffer(new char[len]);
-       regs.r[4] = reinterpret_cast<int>(m_buffer.get());
+       char buffer[len];
+       regs.r[4] = reinterpret_cast<int>(buffer);
        regs.r[5] = len;
 
        // Run Toolbox_ObjectMiscOp to get the buffer
        swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 
-       value = m_buffer.get();
+       value = buffer;
     }
 
     return value;
