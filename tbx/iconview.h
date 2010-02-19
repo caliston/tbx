@@ -118,6 +118,7 @@ private:
 	int _last_selected;
 	bool _sorted;
 	bool _auto_delete;
+	bool _menu_selected;
 
 public:
 	IconView(Window window, bool auto_delete = true);
@@ -153,6 +154,8 @@ public:
 	void erase(int index);
 	void remove(IconViewItem *item);
 	void erase(IconViewItem *item);
+	void remove_all();
+	void erase_all();
 	void changed(IconViewItem *item);
 
 	int find(IconViewItem *item) const;
@@ -165,6 +168,7 @@ public:
 	void select(int from, int to, bool sel, bool update = true);
 	void toggle_select(int index, bool update = true);
 	void toggle_select(int from, int to, bool update = true);
+	bool menu_selected() const;
 
 	/**
 	 * Returns true if any items are selected

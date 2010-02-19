@@ -106,8 +106,10 @@ void IconView::init()
 
 	_first_selected = 0x7FFFFFFF;
 	_last_selected = -1;
+	_menu_selected = false;
 
 	_sorted = false;
+
 }
 
 
@@ -295,14 +297,18 @@ void IconView::mouse_click(tbx::MouseClickEvent &event)
 		} else if (event.is_adjust())
 		{
 			select(index, !selected(index));
-		} else if (event.is_select())
+		} else if (event.is_select_double())
 		{
 			// Double click opens item
 			_items[index]->open(this, event.point(), false);
-		} else if (event.is_adjust())
+		} else if (event.is_adjust_double())
 		{
 			// Double click opens item
 			_items[index]->open(this, event.point(), true);
+		} else if (event.is_menu() && !any_selected())
+		{
+			select(index, true);
+			_menu_selected = true;
 		}
 	} else
 	{
@@ -472,6 +478,30 @@ void IconView::erase(IconViewItem *item)
 }
 
 /**
+ * Remove all items from the view, but don't delete them
+ */
+void IconView::remove_all()
+{
+	int num = _items.size();
+	_items.clear();
+	removed(0, num);
+}
+
+/**
+ * Remove all items from the view and delete them
+ */
+void IconView::erase_all()
+{
+	int num = _items.size();
+	for (IconView::iterator i = _items.begin(); i != _items.end(); ++i)
+	{
+		delete (*i);
+	}
+	_items.clear();
+	removed(0, num);
+}
+
+/**
  * Inform icon view the display characteristics of the
  * item have been changed.
  *
@@ -534,6 +564,7 @@ bool IconView::selected(int index) const
  */
 void IconView::select(int index, bool sel, bool update /*= true*/)
 {
+	_menu_selected = false;
 	if (_items[index]->_selected != sel)
 	{
 		_items[index]->_selected = sel;
@@ -574,6 +605,7 @@ void IconView::select(int index, bool sel, bool update /*= true*/)
  */
 void IconView::select(int from, int to, bool sel, bool update /* = true */)
 {
+	_menu_selected = false;
 	if (sel)
 	{
 		if (from < _first_selected) _first_selected = from;
@@ -625,6 +657,7 @@ void IconView::toggle_select(int index, bool update /* = true */)
  */
 void IconView::toggle_select(int from, int to, bool update  /* = true */)
 {
+	_menu_selected = false;
 	if (from > _last_selected || to < _first_selected) select(from, to, true, update);
 	else
 	{
@@ -667,6 +700,7 @@ void IconView::toggle_select(int from, int to, bool update  /* = true */)
 void IconView::clear_selection(bool update /* = true*/)
 {
 	if (_first_selected > _last_selected) return;
+	_menu_selected = false;
 
 	for (int i = _first_selected; i <= _last_selected; i++)
 	{
@@ -696,6 +730,15 @@ int IconView::count_selected() const
 
 	return cnt;
 }
+
+/**
+ * Returns true if last selection was with the menu button
+ */
+bool IconView::menu_selected() const
+{
+	return _menu_selected;
+}
+
 
 /**
  * Override from base class to keep selection information up to date
