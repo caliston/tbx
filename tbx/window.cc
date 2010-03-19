@@ -377,6 +377,211 @@ void Window::get_info(WindowInfo &info) const
 }
 
 /**
+ * Open window in a new location.
+ *
+ * This should only be called once a window has been shown.
+ * Resize, scroll and/or change the window stack position.
+ *
+ * Note that all coordinates are rounded down to whole numbers of pixels
+ *
+ * @param New state required for the window
+ * @throws OsError if unable to open the window
+ */
+void Window::open_window(const WindowState &state)
+{
+	swix_check(_swix(Wimp_OpenWindow, _IN(1), &(state._window_handle)));
+}
+
+/**
+ * Scroll window to given coordinates
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to scroll window
+ */
+void Window::scroll(int x, int y)
+{
+	WindowState state;
+	get_state(state);
+	state.visible_area().scroll().x = x;
+	state.visible_area().scroll().y = y;
+	open_window(state);
+}
+
+/**
+ * Scroll window to given coordinates
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to scroll window
+ */
+void Window::scroll(const Point &pos)
+{
+	WindowState state;
+	get_state(state);
+	state.visible_area().scroll() = pos;
+	open_window(state);
+}
+
+/**
+ * Returns the current scroll coordinates in the window
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to retrieve them
+ */
+Point Window::scroll() const
+{
+	WindowState state;
+	get_state(state);
+	return state.visible_area().scroll();
+}
+
+/**
+ * Set the size of the window
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to set the new size
+ */
+void Window::size(int width, int height)
+{
+	WindowState state;
+	get_state(state);
+	state.visible_area().bounds().size(width, height);
+	open_window(state);
+}
+/**
+ * Set the size of the window
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to set the new size
+ */
+void Window::size(const Size &size)
+{
+	WindowState state;
+	get_state(state);
+	state.visible_area().bounds().size(size);
+	open_window(state);
+}
+
+/**
+ * Returns the size of the window
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to get the size
+ */
+Size Window::size() const
+{
+	WindowState state;
+	get_state(state);
+	return state.visible_area().bounds().size();
+}
+
+/**
+ * Set the position of the top left of the visible
+ * area of the Window on the desktop
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to reposition the window
+ */
+void Window::top_left(int x, int y)
+{
+	WindowState state;
+	get_state(state);
+	BBox &bounds = state.visible_area().bounds();
+	bounds.move(x - bounds.min.x, y - bounds.max.y);
+	open_window(state);
+}
+
+/**
+ * Set the position of the top left of the visible
+ * area of the Window on the desktop
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to reposition the window
+ */
+void Window::top_left(const Point &pos)
+{
+	WindowState state;
+	get_state(state);
+	BBox &bounds = state.visible_area().bounds();
+	bounds.move(pos.x - bounds.min.x, pos.y - bounds.max.y);
+	open_window(state);
+}
+
+/**
+ * Get the position of the top left of the visible
+ * area of the Window on the desktop
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to reposition the window
+ */
+Point Window::top_left() const
+{
+	WindowState state;
+	get_state(state);
+	const BBox &bounds = state.visible_area().bounds();
+	return Point (bounds.min.x, bounds.max.y);
+}
+
+/**
+ * Set position and size of the visible area of window on the desktop
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to reposition the window
+ */
+void Window::bounds(const BBox &bounds)
+{
+	WindowState state;
+	get_state(state);
+	state.visible_area().bounds() = bounds;
+	open_window(state);
+}
+
+/**
+ * Get position and size of the visible area of window on the desktop
+ *
+ * This should only be called once a window has been shown.
+ *
+ * @throws OsError if unable to reposition the window
+ */
+BBox Window::bounds() const
+{
+	WindowState state;
+	get_state(state);
+	return state.visible_area().bounds();
+}
+
+/**
+ * Fast copy of a part of the work area to somewhere else.
+ *
+ * Uses VDU primitives where possible and invalidates other areas.
+ *
+ * @param bounds - rectangle to copy in work area coordinates
+ * @param to new location in work area coordinates
+ */
+void Window::block_copy(const BBox &bounds, const Point &to)
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = window_handle();
+	regs.r[1] = bounds.min.x;
+	regs.r[2] = bounds.min.y;
+	regs.r[3] = bounds.max.x;
+	regs.r[4] = bounds.max.y;
+	regs.r[5] = to.x;
+	regs.r[6] = to.y;
+
+	swix_check(_kernel_swi(Wimp_BlockCopy, &regs, &regs));
+}
+
+/**
  * Add a listener for when the window is about to be shown.
  *
  * The default about to be shown event must be enabled in

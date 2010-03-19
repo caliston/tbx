@@ -60,9 +60,20 @@ namespace tbx
 		const BBox &bounds() const {return _bounds;}
 
 		/**
+		 * The visible area of the window on the screen.
+		 * (screen coordinates)
+		 */
+		BBox &bounds() {return _bounds;}
+
+		/**
 		 * The scroll offset of the work area within the window
 		 */
 		const Point &scroll() const {return _scroll;}
+
+		/**
+		 * The scroll offset of the work area within the window
+		 */
+		Point &scroll() {return _scroll;}
 
 		 /**
 		  * Convert screen x coordinate to work area

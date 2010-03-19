@@ -97,6 +97,15 @@ public:
 	Size size() const {return max - min;}
 
 	/**
+	 * Resize the bounding box
+	 */
+	void size(int width, int height) {max.x = min.x + width; max.y = min.y + height;}
+	/**
+	 * Resize the bounding box
+	 */
+	void size(const Size &size) {max.x = min.x + size.width; max.y = min.y + size.height;}
+
+	/**
 	 * Move whole box by given amounts
 	 */
 	void move(int bx, int by) {min.x+=bx; max.x+=bx; min.y+=by; max.y+=by;}

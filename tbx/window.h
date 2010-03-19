@@ -120,6 +120,20 @@ namespace tbx
 		void update(const BBox &bounds, RedrawListener **redrawers, int redrawer_count);
 		void get_state(WindowState &state) const;
 		void get_info(WindowInfo &info) const;
+		void open_window(const WindowState &state);
+		void scroll(int x, int y);
+		void scroll(const Point &pos);
+		Point scroll() const;
+		void size(int width, int height);
+		void size(const Size &size);
+		Size size() const;
+		void top_left(int x, int y);
+		void top_left(const Point &pos);
+		Point top_left() const;
+		void bounds(const BBox &bounds);
+		BBox bounds() const;
+
+		void block_copy(const BBox &bounds, const Point &to);
 
 		// Listeners - toolbox events
 		void add_about_to_be_shown_listener(AboutToBeShownListener *listener);
@@ -178,6 +192,12 @@ namespace tbx
 		 * Visible area of this window
 		 */
 		const VisibleArea &visible_area() const {return _visible_area;}
+
+		/**
+		 * Visible area of this window
+		 */
+		VisibleArea &visible_area() {return _visible_area;}
+
 
 		/**
 		 * WIMP handle of window on top of this window or -1 for none
