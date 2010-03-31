@@ -29,6 +29,8 @@
 
 namespace tbx
 {
+	class Loader;
+
     /**
      * This is the base class for all Gadgets.
      *
@@ -139,6 +141,10 @@ namespace tbx
 		bool faded() const;
 
 		void focus();
+
+		void add_loader(Loader *loader, int file_type = -2);
+		void remove_loader(Loader *loader, int file_type = -2);
+
 	};
 }
 

@@ -31,6 +31,7 @@
 #include "tbxexcept.h"
 #include "swixcheck.h"
 #include "swis.h"
+#include "loadermanager.h"
 
 using namespace tbx;
 
@@ -139,4 +140,32 @@ void Gadget::focus()
 
     // Run Toolbox_ObjectMiscOp - to get the current flags
     swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Add a file loader.
+ *
+ * @param loader the loader to add
+ * @param the file type for the loader or -2 (the default) for
+ *        any type.
+ */
+void Gadget::add_loader(Loader *loader, int file_type /*=-2*/)
+{
+	LoaderManager *manager = LoaderManager::instance();
+	if (manager == 0) manager = new LoaderManager();
+	manager->add_loader(_handle, _id, file_type, loader);
+}
+
+/**
+ * Remove a file loader.
+ *
+ * @param loader the loader to remove
+ * @param the file type for the loader or -2 (the default) for
+ *        any type.
+ */
+void Gadget::remove_loader(Loader *loader, int file_type /*=-2*/)
+{
+	LoaderManager *manager = LoaderManager::instance();
+	if (manager != 0)
+		manager->remove_loader(_handle, _id, file_type, loader);
 }
