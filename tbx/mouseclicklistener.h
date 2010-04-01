@@ -26,6 +26,7 @@
 #define MOUSECLICKLISTENER_H_
 
 #include "gadget.h"
+#include "listener.h"
 
 namespace tbx
 {

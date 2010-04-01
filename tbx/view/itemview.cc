@@ -1,0 +1,242 @@
+/*
+ * tbx RISC OS toolbox library
+ *
+ * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+ * BRIAN PAUL BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+ * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
+ * itemview.cc
+ *
+ *  Created on: 24 Mar 2010
+ *      Author: alanb
+ */
+
+#include "itemview.h"
+
+namespace tbx {
+
+namespace view {
+
+/**
+ * Construct the item view with the given renderer.
+ *
+ * By default auto sizing is on a select dragging when using a multiple selection
+ */
+ItemView::ItemView(Window window) :
+		_window(window),
+		_selection(0),
+		_click_listeners(0),
+		_count(0),
+		_flags(ItemView::AUTO_SIZE | ItemView::SELECT_DRAG )
+{
+	_window.add_redraw_listener(this);
+}
+
+/**
+ * Destructor removed any listeners
+ */
+ItemView::~ItemView()
+{
+	_window.remove_redraw_listener(this);
+	if (_selection || _click_listeners)
+	{
+		if (_selection) _selection->remove_listener(this);
+		_window.remove_mouse_click_listener(this);
+		delete _click_listeners;
+	}
+}
+
+
+/**
+ * Set the selection model to use for the item view.
+ *
+ * @param selection Selection model to use for selecting items in the list
+ */
+void ItemView::selection(Selection *selection)
+{
+	if (selection == _selection) return;
+
+	if (_selection)
+	{
+		if (_count) _selection->clear();
+		_selection->remove_listener(this);
+		delete _selection;
+		if (selection == 0 && _click_listeners == 0) _window.remove_mouse_click_listener(this);
+	} else if (selection != 0)
+	{
+		if (_click_listeners == 0) _window.add_mouse_click_listener(this);
+	}
+
+	_selection = selection;
+	if (_selection) _selection->add_listener(this);
+}
+
+/**
+ * Add a listener for a click on the item view.
+ *
+ * The click listeners are run after any selection process.
+ */
+void ItemView::add_click_listener(ItemViewClickListener *listener)
+{
+	if (_click_listeners == 0)
+	{
+		_click_listeners = new SafeList<ItemViewClickListener>();
+		if (_selection == 0) _window.add_mouse_click_listener(this);
+	}
+	_click_listeners->push_back(listener);
+}
+
+/**
+ * Remove a listener for a click on the item view
+ */
+void ItemView::remove_click_listener(ItemViewClickListener *listener)
+{
+	if (_click_listeners != 0)
+	{
+		_click_listeners->remove(listener);
+		if (_click_listeners->empty())
+		{
+			delete _click_listeners;
+			_click_listeners = 0;
+			if (_selection == 0) _window.remove_mouse_click_listener(this);
+		}
+	}
+}
+
+/**
+ * Allow selection of multiple items by using a drag box
+ *
+ *@param on allow or disallow drag selection
+ *@param on_item set to true to allow drag selection starting on an item
+ */
+void ItemView::allow_drag_selection(bool on, bool on_item /*= false*/)
+{
+	if (on)
+	{
+		_flags |= SELECT_DRAG;
+		if (on_item) _flags |= SELECT_DRAG_ON_ITEM;
+		else _flags &= ~SELECT_DRAG_ON_ITEM;
+	} else
+	{
+		_flags &= ~(SELECT_DRAG | SELECT_DRAG_ON_ITEM);
+	}
+}
+
+/**
+ * Change the margin
+ */
+void ItemView::margin(const tbx::Margin &margin)
+{
+	_margin = margin;
+	update_window_extent();
+	refresh();
+}
+
+/**
+ * Mouse clicked on window containing list view.
+ *
+ * The version in this class processes the selection if
+ * necessary and fires the ItemViewClickListeners.
+ *
+ * If it is overridden then this functionality will
+ * be lost unless it is replaced or the ItemView
+ * implementation called.
+ */
+void ItemView::mouse_click(MouseClickEvent &event)
+{
+	if (_selection || _click_listeners)
+	{
+		int index = hit_test(event.point());
+		if (_selection)
+		{
+			if (event.is_select())
+			{
+				if (index == -1) _selection->clear();
+				else _selection->select(index);
+			} else if (event.is_adjust() && index != -1)
+			{
+				_selection->toggle(index);
+			}
+
+			if (_selection->type() == Selection::MULTIPLE)
+			{
+				if (((_flags & SELECT_DRAG) && index == -1)
+						|| (_flags & SELECT_DRAG_ON_ITEM))
+				{
+					_window.drag_rubber_box_local(event.point(), new Selector(this, event.is_adjust_drag()));
+				}
+			}
+		}
+		if (_click_listeners)
+		{
+			process_mouse_click(index, event);
+		}
+	}
+}
+
+/**
+ * Drag has been finished so select items in final box
+ * and self destruct
+ */
+void ItemView::Selector::drag_finished(const BBox &final)
+{
+	_me->process_drag_selection(final, _adjust);
+	delete this;
+}
+
+/**
+ * Drag has been cancelled so self destruct
+ */
+void ItemView::Selector::drag_cancelled()
+{
+	delete this;
+}
+
+
+/**
+ * Helper function to process mouse clicks
+ */
+void ItemView::process_mouse_click(int index, MouseClickEvent &event)
+{
+	ItemViewClickEvent ev(*this, index, event);
+	SafeList<ItemViewClickListener>::Iterator i(*_click_listeners);
+	ItemViewClickListener *l;
+	while ((l = i.next())!= 0)
+	{
+		l->itemview_clicked(ev);
+	}
+}
+
+/**
+ * Selection has changed event handling.
+ *
+ * The ItemView implementation forces a redraw of the items that have
+ * had there selection changed.
+ */
+void ItemView::selection_changed(const SelectionChangedEvent &event)
+{
+	BBox bounds;
+	get_bounds(bounds, event.first(), event.last());
+	_window.force_redraw(bounds);
+}
+
+
+}
+}
