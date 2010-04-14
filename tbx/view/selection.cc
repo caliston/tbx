@@ -50,7 +50,7 @@ void Selection::fire_event(const SelectionChangedEvent &event)
 /**
  * Helper for subclasses to fire Selection Changed Events
  */
-void Selection::fire_event(int index, bool selected, bool final)
+void Selection::fire_event(unsigned int index, bool selected, bool final)
 {
 	SelectionChangedEvent e(index, index, selected, final);
 	fire_event(e);
@@ -58,7 +58,7 @@ void Selection::fire_event(int index, bool selected, bool final)
 /**
  * Helper for subclasses to fire Selection Changed Events
  */
-void Selection::fire_event(int from, int to, bool selected, bool final)
+void Selection::fire_event(unsigned int from, unsigned int to, bool selected, bool final)
 {
 	SelectionChangedEvent e(from, to, selected, final);
 	fire_event(e);
@@ -163,10 +163,10 @@ void SingleSelection::set(unsigned int index)
 			unsigned int old = _selected;
 			_selected = NO_SELECTION;
 			fire_event(old, false, false);
-		} else
-		{
-			_selected = index;
 		}
+
+		_selected = index;
+
 		fire_event(_selected, true, true);
    }
 }

@@ -141,8 +141,8 @@ protected:
 	Selection() {}
 
 	void fire_event(const SelectionChangedEvent &event);
-	void fire_event(int index, bool selected, bool final);
-	void fire_event(int from, int to, bool selected, bool final);
+	void fire_event(unsigned int index, bool selected, bool final);
+	void fire_event(unsigned int from, unsigned int to, bool selected, bool final);
 
 public:
 	virtual ~Selection() {}
