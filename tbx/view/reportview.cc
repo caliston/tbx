@@ -92,6 +92,29 @@ unsigned int ReportView::calc_row_height() const
 	return height;
 }
 
+/**
+ * Turn on or off auto sizing.
+ *
+ * When auto sizing is on the item width is checked whenever an
+ * item is added, changed or removed.
+ *
+ * To prevent a scan of the whole list on removal call the
+ * removing method before actually doing a removal.
+ */
+void ReportView::auto_size(bool on)
+{
+	if (on)
+	{
+		if ((_flags & AUTO_SIZE)==0)
+		{
+			size_all_to_width();
+			_flags |= AUTO_SIZE;
+		}
+	} else
+	{
+		_flags &= ~AUTO_SIZE;
+	}
+}
 
 
 /**
@@ -928,6 +951,43 @@ void ReportView::get_cell_bounds(BBox &bounds, unsigned int row, unsigned int co
 	bounds.max.x = bounds.min.x + _columns[column].width;
 	bounds.max.y = -_margin.top - row * _height;
 	bounds.min.y = bounds.max.y - _height;
+}
+
+
+/**
+ * Override this method to process selection by dragging.
+ *
+ * allow_drag_selection must be set for this to be called.
+ *
+ * @param drag_box Final bounding box of drag
+ * @param adjust adjust button was used for selection
+ */
+void ReportView::process_drag_selection(const BBox &drag_box, bool adjust)
+{
+	WindowState state;
+	_window.get_state(state);
+
+	Point first_pt(state.visible_area().work(drag_box.max));
+	Point last_pt(state.visible_area().work(drag_box.min));
+
+	if (first_pt.y < last_pt.y)
+	{
+		std::swap<Point>(first_pt, last_pt);
+	}
+	first_pt.y += _margin.top;
+	last_pt.y += _margin.top;
+
+	unsigned int first = -first_pt.y / _height;
+	if (first >= _count) return;
+	unsigned int last = -last_pt.y / _height;
+	if (last < 0) return;
+	if (last >= _count) last = _count - 1;
+
+	if (first <= last)
+	{
+		if (adjust) _selection->toggle(first, last);
+		else _selection->select(first, last);
+	}
 }
 
 // End of namespaces

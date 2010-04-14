@@ -54,13 +54,6 @@ public:
 	ReportView(tbx::Window window);
 	virtual ~ReportView();
 
-	/**
-	 * Set to true to resize the the view automatically
-	 * when an item is added/removed or changed.
-	 *
-	 * Derived classes should set the AUTO_SIZE flag and when set on
-	 * should recalculate the size for the existing items.
-	 */
 	virtual void auto_size(bool on);
 
 	void row_height(unsigned int height);
