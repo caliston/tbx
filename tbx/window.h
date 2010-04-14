@@ -80,8 +80,9 @@ namespace tbx
 
 		//TODO: add_gadget
 		//TODO: remove_gadget
-		//TODO: set_menu
-		//TODO: get_menu
+		void menu(Menu menu);
+		Menu menu() const;
+		void remove_menu();
 		//TODO: set_pointer
 		//TODO: get_pointer
 

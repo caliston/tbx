@@ -39,6 +39,55 @@
 
 using namespace tbx;
 
+
+/**
+ * Set menu used with this window
+ *
+ * @param menu new menu to use.
+ */
+void Window::menu(Menu menu)
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[1] = _handle;
+	regs.r[2] = 3;
+	regs.r[3] = menu.handle();
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Removes the menu from the window
+ */
+void Window::remove_menu()
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[1] = _handle;
+	regs.r[2] = 3;
+	regs.r[3] = 0;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Get the current menu used by this object
+ *
+ * @returns Menu on Window. If there is no menu the return menus null() method
+ * will be true.
+ */
+Menu Window::menu() const
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[1] = _handle;
+	regs.r[2] = 4;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+	return tbx::Menu(regs.r[0]);
+}
+
 /**
  * Set toolbars for this window.
  *
