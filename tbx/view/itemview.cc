@@ -140,6 +140,49 @@ void ItemView::allow_drag_selection(bool on, bool on_item /*= false*/)
 }
 
 /**
+ * Turn on/off selection of an item when the menu button
+ * is pressed over an item and no other item is selected.
+ *
+ * Usually you would add the ItemViewClearMenuSelection as a has been
+ * hidden listener to the menu on the views window so a menu selection
+ * is removed when the menu is closed.
+ *
+ * @param true to turn menu selection on, false to turn it off.
+ */
+void ItemView::menu_selects(bool on)
+{
+	if (on) _flags |= SELECT_MENU;
+	else _flags &= ~SELECT_MENU;
+}
+
+/**
+ * Returns true if the menu button selects an item
+ */
+bool ItemView::menu_selects() const
+{
+	return (_flags & SELECT_MENU)!= 0;
+}
+
+/**
+ * Clear the current selection if it was made by the menu button
+ */
+void ItemView::clear_menu_selection()
+{
+	if (_flags & LAST_SELECT_MENU && _selection != 0)
+	{
+		_selection->clear();
+	}
+}
+
+/**
+ * Returns true if the last selection was made by the menu button
+ */
+bool ItemView::last_selection_menu() const
+{
+	return (_flags & LAST_SELECT_MENU) != 0;
+}
+
+/**
  * Change the margin
  */
 void ItemView::margin(const tbx::Margin &margin)
@@ -163,21 +206,28 @@ void ItemView::mouse_click(MouseClickEvent &event)
 {
 	if (_selection || _click_listeners)
 	{
-		int index = hit_test(event.point());
+		unsigned int index = hit_test(event.point());
 		if (_selection)
 		{
-			if (event.is_select())
+			if (event.is_menu())
 			{
-				if (index == -1) _selection->clear();
+				if (index != NO_INDEX && _selection->empty())
+				{
+					_selection->select(index);
+					_flags |= LAST_SELECT_MENU;
+				}
+			} else if (event.is_select())
+			{
+				if (index == NO_INDEX) _selection->clear();
 				else _selection->select(index);
-			} else if (event.is_adjust() && index != -1)
+			} else if (event.is_adjust() && index != NO_INDEX)
 			{
 				_selection->toggle(index);
 			}
 
 			if (_selection->type() == Selection::MULTIPLE)
 			{
-				if (((_flags & SELECT_DRAG) && index == -1)
+				if (((_flags & SELECT_DRAG) && index == NO_INDEX)
 						|| (_flags & SELECT_DRAG_ON_ITEM))
 				{
 					_window.drag_rubber_box_local(event.point(), new Selector(this, event.is_adjust_drag()));
@@ -235,6 +285,9 @@ void ItemView::selection_changed(const SelectionChangedEvent &event)
 	BBox bounds;
 	get_bounds(bounds, event.first(), event.last());
 	_window.force_redraw(bounds);
+
+	// Any other selection turns last select menu off
+	_flags &= ~LAST_SELECT_MENU;
 }
 
 

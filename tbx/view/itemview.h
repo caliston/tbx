@@ -36,6 +36,7 @@
 #include "../margin.h"
 #include "../draghandler.h"
 #include "../safelist.h"
+#include "../hasbeenhiddenlistener.h"
 #include "itemrenderer.h"
 #include "selection.h"
 
@@ -71,8 +72,10 @@ protected:
 	enum ViewFlags {NONE = 0,
 					AUTO_SIZE = 1,
 					SELECT_DRAG = 2, SELECT_DRAG_ON_ITEM = 4,
-					AUTO_SIZE_CHECKED = 8, // Removing or changing called
-					WANT_AUTO_SIZE = 16  // Need to auto size on removed called
+					SELECT_MENU = 8,
+					AUTO_SIZE_CHECKED = 0x100, // Removing or changing called
+					WANT_AUTO_SIZE = 0x200,    // Need to auto size on removed called
+					LAST_SELECT_MENU = 0x400   // Last selection was caused by menu button
 				   };
 	unsigned int _flags;
 
@@ -120,6 +123,11 @@ public:
 	void remove_click_listener(ItemViewClickListener *listener);
 
 	void allow_drag_selection(bool on, bool on_item = false);
+
+	void menu_selects(bool on);
+	bool menu_selects() const;
+	void clear_menu_selection();
+	bool last_selection_menu() const;
 
 	/**
 	 * Subclasses must override the redraw event to draw
@@ -310,6 +318,29 @@ public:
 
 	virtual void itemview_clicked(const ItemViewClickEvent &event) = 0;
 };
+
+/**
+ * Helper class to clear selection when an object has been
+ * hidden if the selection was made by the menu button.
+ *
+ * Add to the object with it's add_has_been_hidden_listener.
+ * Usually used on the menu shown from a view window.
+ */
+class ItemViewClearMenuSelection : public tbx::HasBeenHiddenListener
+{
+	ItemView *_view;
+public:
+	ItemViewClearMenuSelection(ItemView *iv) : _view(iv) {};
+
+	/**
+	 * Clears the menu selection when the object is hidden
+	 */
+	virtual void has_been_hidden(Object &object)
+	{
+		_view->clear_menu_selection();
+	}
+};
+
 
 }
 
