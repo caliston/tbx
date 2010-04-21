@@ -1,0 +1,11 @@
+TBX
+
+TBX is a library to provide C++ classes to help write applications that
+use the RISC OS Toolbox.
+
+The full help for TBX is in HTML files, please run a browser to see them.
+
+Selecting Help again once a browser is running will bring up the HTML.
+
+Alan Buckley
+
