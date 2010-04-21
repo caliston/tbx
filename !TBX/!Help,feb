@@ -1,2 +1,3 @@
-| Help file for tbx just run HTML index for now
-*/<Obey$Dir>.html.index/html
+| Help file for TBX
+
+If "<Alias$@RunType_FAF>" <> "" then Filer_Run <Obey$Dir>.html.index/html else Filer_Run <Obey$Dir>.HelpText
