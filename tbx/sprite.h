@@ -433,6 +433,9 @@ namespace tbx
 		 */
 		WimpSprite(const std::string &sname) : _name(sname) {};
 		WimpSprite(const char *sname) : _name(sname) {};
+		WimpSprite(int filetype);
+		WimpSprite(int filetype, std::string leafname);
+
 		virtual ~WimpSprite() {};
 
 		bool exist() const;

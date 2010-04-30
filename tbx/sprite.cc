@@ -2,9 +2,12 @@
 
 #include "sprite.h"
 #include "modeinfo.h"
+#include "path.h"
 
 #include "swis.h"
 #include "swixcheck.h"
+
+#include <sstream>
 
 using namespace tbx;
 
@@ -956,6 +959,65 @@ bool SpriteCapture::release()
                ) != 0);
 
    return !_capturing;
+}
+
+
+/**
+ * Construct a wimp sprite to represent the given
+ * filetype.
+ *
+ * Applications will be given the generic file type.
+ *
+ * If the sprite is not in the current wimp sprite pool
+ * unknown will be used.
+ *
+ * @param file type to construct sprite for
+ */
+WimpSprite::WimpSprite(int filetype)
+{
+   if (filetype == tbx::FILETYPE_APPLICATION)
+   {
+	   _name = "application";
+   } else if (filetype == tbx::FILETYPE_DIRECTORY)
+   {
+	   _name = "directory";
+   } else
+   {
+	   std::ostringstream ss;
+	   ss << "file_" << std::hex << filetype;
+	   _name = ss.str();
+	   if (!exist()) _name = "unknown";
+   }
+}
+
+/**
+ * Construct a wimp sprite to represent the given
+ * filetype.
+ *
+ * Applications will be check for the name sprite first.
+ *
+ * If the sprite is not in the current wimp sprite pool
+ * unknown will be used.
+ *
+ * @param file type to construct sprite for
+ * @param leafname leaf name of file (used for applications)
+ */
+WimpSprite::WimpSprite(int filetype, std::string leafname)
+{
+	if (filetype == tbx::FILETYPE_APPLICATION)
+	{
+		_name = leafname;
+	   if (!exist()) _name = "application";
+	} else if (filetype == tbx::FILETYPE_DIRECTORY)
+	{
+		   _name = "directory";
+	} else
+	{
+		   std::ostringstream ss;
+		   ss << "file_" << std::hex << filetype;
+		   _name = ss.str();
+		   if (!exist()) _name = "unknown";
+	}
 }
 
 /**
