@@ -556,7 +556,7 @@ unsigned int ListView::hit_test(const Point &scr_pt) const
 			Point in_item;
 			in_item.x = work_pt.x - bounds.min.x;
 			in_item.y = work_pt.y - bounds.min.y;
-			if (!_item_renderer->hit_test(index, in_item))
+			if (!_item_renderer->hit_test(index, Size(_width, _height), in_item))
 				index = NO_INDEX;
 		}
 	}
@@ -618,15 +618,17 @@ void ListView::process_drag_selection(const BBox &drag_box, bool adjust)
 	bool first_top = ((-first_pt.y  - (_height * first)) <= _height/2);
 	bool last_top = ((-last_pt.y - (_height * last)) <= _height/2);
 
+	Size line_size(_width, _height);
+
 	if (!first_top)
 	{
 		first_pt.x -= _margin.left;
-		if (_item_renderer->hit_test(first, first_pt) == NO_INDEX) first++;
+		if (_item_renderer->hit_test(first, line_size, first_pt) == NO_INDEX) first++;
 	}
 	if (last_top)
 	{
 		last_pt.x -= _margin.left;
-		if (_item_renderer->hit_test(last, last_pt) == NO_INDEX) last--;
+		if (_item_renderer->hit_test(last, line_size, last_pt) == NO_INDEX) last--;
 	}
 
 	if (first <= last)

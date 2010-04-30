@@ -904,7 +904,7 @@ unsigned int ReportView::hit_test(const Point &scr_pt) const
 				Point in_item;
 				in_item.x = work_pt.x - bounds.min.x;
 				in_item.y = work_pt.y - bounds.min.y;
-				if (!_columns[column].renderer->hit_test(index, in_item))
+				if (!_columns[column].renderer->hit_test(index, bounds.size(), in_item))
 					index = NO_INDEX;
 			}
 		}

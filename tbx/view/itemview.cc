@@ -219,7 +219,10 @@ void ItemView::mouse_click(MouseClickEvent &event)
 			} else if (event.is_select())
 			{
 				if (index == NO_INDEX) _selection->clear();
-				else _selection->select(index);
+				else if (!_selection->selected(index))
+				{
+					_selection->set(index);
+				}
 			} else if (event.is_adjust() && index != NO_INDEX)
 			{
 				_selection->toggle(index);

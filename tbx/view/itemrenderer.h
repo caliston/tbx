@@ -116,11 +116,11 @@ public:
 	virtual unsigned int height(unsigned int index) const = 0;
 
 	/**
-	 * Called to get the size of the cell.
+	 * Called to get the size of the item.
 	 *
 	 * Should return the equivalent of Size(width(index), height(index))
 	 */
-	virtual Size cell_size(unsigned int index) const = 0;
+	virtual Size size(unsigned int index) const = 0;
 
 	/**
 	 * Check if the point given hits content of the cell rather
@@ -129,10 +129,11 @@ public:
 	 * Default returns true so all the cell is content.
 	 *
 	 * @param index index of item to check
+	 * @param size of area item is rendered in
 	 * @param pos location to check relative to bottom left of cell
 	 * @return true if content is at that location, otherwise false
 	 */
-	virtual bool hit_test(int index, const Point &pos) const {return true;}
+	virtual bool hit_test(unsigned int index, const Size &size, const Point &pos) const {return true;}
 
 	/**
 	 * Check if the given rectangle intersects the content of the cell
@@ -141,10 +142,11 @@ public:
 	 * Default returns true so all cell is content.
 	 *
 	 * @param index index of item to  check
+	 * @param size of area item is rendered in
 	 * @param box box to check if it intersect the cell
 	 * @return true if some contents are in the box, otherwise false
 	 */
-	virtual bool intersects(int index, const BBox &box) const {return true;}
+	virtual bool intersects(unsigned int index, const Size &size, const BBox &box) const {return true;}
 
 };
 
@@ -198,7 +200,7 @@ public:
 	/**
 	 * Called to get the size of the cell.
 	 */
-	virtual Size cell_size(unsigned int index) const;
+	virtual Size size(unsigned int index) const;
 
 };
 
@@ -234,7 +236,7 @@ public:
 	/**
 	 * Called to get the size of the cell.
 	 */
-	virtual Size cell_size(unsigned int index) const;
+	virtual Size size(unsigned int index) const;
 };
 
 }

@@ -70,9 +70,9 @@ unsigned int WimpFontItemRenderer::width(unsigned int index) const
 }
 
 /**
- * Called to get the size of the cell.
+ * Called to get the size of an item.
  */
-Size WimpFontItemRenderer::cell_size(unsigned int index) const
+Size WimpFontItemRenderer::size(unsigned int index) const
 {
 	return Size((int)width(index), 32);
 }
@@ -105,9 +105,9 @@ unsigned int SpriteItemRenderer::height(unsigned int index) const
 }
 
 /**
- * Called to get the size of the cell.
+ * Called to get the size of an item.
  */
-Size  SpriteItemRenderer::cell_size(unsigned int index) const
+Size  SpriteItemRenderer::size(unsigned int index) const
 {
 	tbx::Sprite *s = _value_provider->value(index);
 	return s ? Size(s->width(), s->height()) : Size(0,0);
