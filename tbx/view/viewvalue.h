@@ -82,7 +82,7 @@ template<class T, class C> class IndexItemViewValue : public ItemViewValue<T>
 template<class T, class C, class I> class MethodItemViewValue : public ItemViewValue<T>
 {
    private:
-      const C &_collection;
+      C *_collection;
       T (I::*_method)() const;
 
     public:
@@ -90,7 +90,7 @@ template<class T, class C, class I> class MethodItemViewValue : public ItemViewV
         * Construct for the given collection with the given data
         * retrieval method
         */
-       MethodItemViewValue(const C &collection, T (I::*method)() const) :
+       MethodItemViewValue(C *collection, T (I::*method)() const) :
     	   _collection(collection), _method(method) {}
 
        /**
@@ -99,7 +99,7 @@ template<class T, class C, class I> class MethodItemViewValue : public ItemViewV
         */
        virtual T value(unsigned int index) const
        {
-    	   return (_collection[index].*_method)();
+    	   return (((*_collection)[index]).*_method)();
        }
 };
 
