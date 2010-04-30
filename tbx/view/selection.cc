@@ -85,6 +85,104 @@ void Selection::remove_listener(SelectionListener *listener)
 	}
 }
 
+Selection::Iterator Selection::begin() const
+{
+	return Iterator(get_iterator_impl());
+}
+
+Selection::Iterator Selection::end() const
+{
+	return Iterator(0);
+}
+
+// Copy constructor
+Selection::Iterator::Iterator(const Selection::Iterator &other)
+{
+	_impl = other._impl;
+	if (_impl) _impl->add_ref();
+}
+
+// Destructor
+Selection::Iterator::~Iterator()
+{
+	if (_impl) _impl->release();
+}
+
+/**
+ * Assignment
+ */
+Selection::Iterator &Selection::Iterator::operator=(const Selection::Iterator &other)
+{
+	if (_impl != other._impl)
+	{
+		_impl->release();
+		_impl=other._impl;
+		if (_impl) _impl->add_ref();
+	}
+	return *this;
+}
+
+/**
+ * Compare two iterators
+ */
+bool Selection::Iterator::operator==(const Selection::Iterator &other) const
+{
+	unsigned int index = (_impl == 0) ? NO_SELECTION : _impl->index();
+	unsigned int check = (other._impl == 0) ? NO_SELECTION : other._impl->index();
+	return (index == check);
+}
+
+/**
+ * Compare two iterators
+ */
+bool Selection::Iterator::operator!=(const Selection::Iterator &other) const
+{
+	unsigned int index = (_impl == 0) ? NO_SELECTION : _impl->index();
+	unsigned int check = (other._impl == 0) ? NO_SELECTION : other._impl->index();
+	return (index != check);
+}
+
+
+/**
+ * Get index for iterator
+ */
+unsigned int Selection::Iterator::operator*() const
+{
+	return (_impl) ? _impl->index() : NO_SELECTION;
+}
+
+/**
+ * Prefix operator
+ */
+Selection::Iterator &Selection::Iterator::operator++()
+{
+	if (_impl)
+	{
+		if (_impl->shared())
+		{
+			_impl->release();
+			_impl = _impl->clone();
+		}
+		_impl->next();
+	}
+	return *this;
+}
+
+/**
+ * Postfix operator
+ */
+Selection::Iterator Selection::Iterator::operator++(int)
+{
+	Iterator tmp(_impl);
+	if (_impl)
+	{
+		_impl = _impl->clone();
+		_impl->next();
+	}
+	return *this;
+}
+
+
 /**
  * Called by the object selection is on when new items have
  * been inserted and selected item need to be moved
@@ -414,6 +512,7 @@ void MultiSelection::clear()
  */
 void MultiSelection::set(unsigned int index)
 {
+	printf("set %d\n", index);
 	if (_first == NO_SELECTION)
 	{
 		_first = index;
@@ -463,6 +562,7 @@ void MultiSelection::set(unsigned int index)
  */
 void MultiSelection::select(unsigned int index)
 {
+	printf("select %d\n", index);
 	if (_first == NO_SELECTION)
 	{
 		_first = index;
@@ -568,8 +668,29 @@ void MultiSelection::deselect(unsigned int index)
  */
 void MultiSelection::toggle(unsigned int index)
 {
+	printf("toggle %d\n", index);
+
 	if (_first == NO_SELECTION || index < _first || index > _last) select(index);
-	else
+	else if (index == _first)
+	{
+		if (index == _last)
+		{
+			_selected.clear();
+			_first = _last = NO_SELECTION;
+		} else
+		{
+			RangeIterator i = _selected.begin();
+			i->first++;
+			if (i->first > i->second) _selected.erase(i);
+			_first++;
+		}
+		fire_event(index, false, true);
+	} else if (index == _last)
+	{
+		if (_selected.back().second == _selected.back().first + 1) _selected.pop_back();
+		else _selected.back().second--;
+		_last--;
+	} else
 	{
 		RangeIterator i;
 		if (index == 0) i = _selected.begin();
@@ -602,10 +723,11 @@ void MultiSelection::toggle(unsigned int index)
 		} else if (index == i->first)
 		{
 			i->first++;
+			if (i->first > i->second) _selected.erase(i);
 			fire_event(index, false, true);
 		} else if (index == i->second)
 		{
-			i->second++;
+			i->second--;
 			fire_event(index, false, true);
 		} else
 		{
@@ -861,6 +983,54 @@ void MultiSelection::toggle(unsigned int from, unsigned int to)
 		fire_changes(changes);
 	}
 }
+
+/**
+ * Construct iterator implementation from iterators
+ */
+MultiSelection::MultiIteratorImpl::MultiIteratorImpl(ConstRangeIterator start, ConstRangeIterator end)
+{
+	_current = start;
+	_end = end;
+	if (start == end) _index = NO_SELECTION;
+	else _index = (*start).first;
+}
+
+/**
+ * Make a copy of the current iterator
+ */
+Selection::IteratorImpl *MultiSelection::MultiIteratorImpl::clone()
+{
+	MultiIteratorImpl *copy = new MultiIteratorImpl(_current, _end);
+	copy->_index = _index;
+	return copy;
+}
+
+/**
+ * Advance iterator
+ */
+void MultiSelection::MultiIteratorImpl::next()
+{
+	if (_index != NO_SELECTION)
+	{
+		if (_index == _current->second)
+		{
+			if (++_current == _end) _index = NO_SELECTION;
+			else _index = _current->first;
+		} else
+		{
+			_index++;
+		}
+	}
+}
+
+/**
+ * Get initial iterator implementation
+ */
+Selection::IteratorImpl *MultiSelection::get_iterator_impl() const
+{
+	return new MultiIteratorImpl(_selected.begin(), _selected.end());
+}
+
 
 }
 }

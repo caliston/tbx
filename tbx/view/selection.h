@@ -302,6 +302,57 @@ public:
 	 * @param to last index to toggle
 	 */
 	virtual void toggle(unsigned int from, unsigned int to) = 0;
+
+protected:
+	/**
+	 * Class derived from in subclasses to actually provided
+	 * the iterator implementation
+	 */
+	class IteratorImpl
+	{
+		unsigned int _refcount;
+	public:
+		IteratorImpl() : _refcount(1) {}
+		virtual ~IteratorImpl() {}
+		void add_ref() {++_refcount;}
+		void release() {if (--_refcount == 0) delete this;}
+		bool shared() const {return _refcount > 1;}
+
+		// Return a copy of the implementation
+		virtual IteratorImpl *clone() = 0;
+		// return the current index or NO_INDEX if at end
+		virtual unsigned int index() const = 0;
+		// advance iterator
+		virtual void next() = 0;
+	};
+	virtual IteratorImpl *get_iterator_impl() const = 0;
+
+public:
+	/**
+	 * Class to iterate through all the selected indices
+	 */
+	class Iterator
+	{
+		IteratorImpl *_impl;
+		friend class Selection;
+		Iterator()  {_impl = 0;}
+		Iterator(IteratorImpl *impl) : _impl(impl) {};
+
+	public:
+		Iterator(const Iterator &other);
+		~Iterator();
+		Iterator &operator=(const Iterator &other);
+		bool operator==(const Iterator &other) const;
+		bool operator!=(const Iterator &other) const;
+		unsigned int operator*() const;
+
+		Iterator &operator++();
+		Iterator operator++(int);
+	};
+
+	Iterator begin() const;
+	Iterator end() const;
+
 };
 
 /**
@@ -377,6 +428,25 @@ public:
 	virtual void select(unsigned int from, unsigned int to);
 	virtual void deselect(unsigned int from, unsigned int to);
 	virtual void toggle(unsigned int from, unsigned int to);
+
+protected:
+	/**
+	 * Class derived to implement iterator
+	 */
+	class SingleIteratorImpl : public IteratorImpl
+	{
+		unsigned int _index;
+	public:
+		SingleIteratorImpl(unsigned int index) : _index(index) {}
+		// Return a copy of the implementation
+		virtual IteratorImpl *clone() {add_ref(); return this;}
+		// return the current index or NO_SELECTION if at end
+		virtual unsigned int index() const {return _index;}
+		// advance iterator
+		virtual void next() {_index = NO_SELECTION;}
+	};
+	virtual IteratorImpl *get_iterator_impl() const {return new SingleIteratorImpl(_selected);}
+
 };
 
 /**
@@ -389,6 +459,7 @@ class MultiSelection : public Selection
 	unsigned int _last;
 	std::vector<Range> _selected;
 	typedef std::vector<Range>::iterator RangeIterator;
+	typedef std::vector<Range>::const_iterator ConstRangeIterator;
 public:
 	MultiSelection() : _first(NO_SELECTION), _last(NO_SELECTION) {}
 	virtual ~MultiSelection() {}
@@ -455,6 +526,27 @@ public:
 	virtual void select(unsigned int from, unsigned int to);
 	virtual void deselect(unsigned int from, unsigned int to);
 	virtual void toggle(unsigned int from, unsigned int to);
+
+protected:
+	/**
+	 * Class derived to implement iterator
+	 */
+	class MultiIteratorImpl : public IteratorImpl
+	{
+		ConstRangeIterator _current;
+		ConstRangeIterator _end;
+		unsigned int _index;
+
+	public:
+		MultiIteratorImpl(ConstRangeIterator start, ConstRangeIterator end);
+		// Return a copy of the implementation
+		virtual IteratorImpl *clone();
+		// return the current index or NO_SELECTION if at end
+		virtual unsigned int index() const {return _index;}
+		// advance iterator
+		virtual void next();
+	};
+	virtual IteratorImpl *get_iterator_impl() const;
 
 private:
 	// Helper functions
