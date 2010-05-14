@@ -399,8 +399,8 @@ bool MultiSelection::selected(unsigned int index) const
 	std::vector<Range>::const_iterator i;
 	for (i = _selected.begin(); i != _selected.end(); ++i)
 	{
-		if (index > (*i).second) return false;
-		if (index >= (*i).first) return true;
+		if (index < (*i).first) return false;
+		if (index <= (*i).second) return true;
 	}
 
 	return false;
@@ -512,7 +512,6 @@ void MultiSelection::clear()
  */
 void MultiSelection::set(unsigned int index)
 {
-	printf("set %d\n", index);
 	if (_first == NO_SELECTION)
 	{
 		_first = index;
@@ -562,7 +561,6 @@ void MultiSelection::set(unsigned int index)
  */
 void MultiSelection::select(unsigned int index)
 {
-	printf("select %d\n", index);
 	if (_first == NO_SELECTION)
 	{
 		_first = index;
@@ -643,6 +641,7 @@ void MultiSelection::deselect(unsigned int index)
 				} else
 				{
 					_first = _selected.front().first;
+					_last = _selected.back().second;
 				}
 			} else
 			{
@@ -668,8 +667,6 @@ void MultiSelection::deselect(unsigned int index)
  */
 void MultiSelection::toggle(unsigned int index)
 {
-	printf("toggle %d\n", index);
-
 	if (_first == NO_SELECTION || index < _first || index > _last) select(index);
 	else if (index == _first)
 	{
@@ -682,14 +679,15 @@ void MultiSelection::toggle(unsigned int index)
 			RangeIterator i = _selected.begin();
 			i->first++;
 			if (i->first > i->second) _selected.erase(i);
-			_first++;
+			_first = _selected.front().first;
 		}
 		fire_event(index, false, true);
 	} else if (index == _last)
 	{
-		if (_selected.back().second == _selected.back().first + 1) _selected.pop_back();
+		if (_selected.back().second == _selected.back().first) _selected.pop_back();
 		else _selected.back().second--;
-		_last--;
+		_last = _selected.back().second;
+		fire_event(index, false, true);
 	} else
 	{
 		RangeIterator i;
@@ -940,7 +938,7 @@ void MultiSelection::toggle(unsigned int from, unsigned int to)
 		} else if (from < i->first)
 		{
 			changes.push_back(SelectionChangedEvent(from, i->first-1, true, false));
-			i = _selected.insert(i, Range(from, to));
+			i = _selected.insert(i, Range(from, i->first-1));
 			++i;
 		}
 		unsigned int last_second = i->second;
@@ -954,7 +952,20 @@ void MultiSelection::toggle(unsigned int from, unsigned int to)
 				++i;
 			}
 			last_second = i->second;
-			if (i->second <= to)
+			if (i->first < from)
+			{
+				if (i->second <= to)
+				{
+					changes.push_back(SelectionChangedEvent(from, i->second, false, false));
+					i->second = from-1;
+				} else
+				{
+					changes.push_back(SelectionChangedEvent(from, to, false, false));
+					i = _selected.insert(i, Range(i->first, from - 1));
+					i++;
+					i->first = to + 1;
+				}
+			} else if (i->second <= to)
 			{
 				changes.push_back(SelectionChangedEvent(i->first, i->second, false, false));
 				i = _selected.erase(i);
@@ -968,8 +979,8 @@ void MultiSelection::toggle(unsigned int from, unsigned int to)
 
 		if (to > last_second)
 		{
-			changes.push_back(SelectionChangedEvent(last_second+1, i->first-1, true, false));
-			i = _selected.insert(i, Range(last_second+1, i->first - 1));
+			changes.push_back(SelectionChangedEvent(last_second+1, to, true, false));
+			i = _selected.insert(i, Range(last_second+1, to));
 		}
 
 		if (_selected.empty())
@@ -980,6 +991,7 @@ void MultiSelection::toggle(unsigned int from, unsigned int to)
 			_first = _selected.front().first;
 			_last = _selected.back().second;
 		}
+
 		fire_changes(changes);
 	}
 }

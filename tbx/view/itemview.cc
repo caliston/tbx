@@ -230,10 +230,13 @@ void ItemView::mouse_click(MouseClickEvent &event)
 
 			if (_selection->type() == Selection::MULTIPLE)
 			{
-				if (((_flags & SELECT_DRAG) && index == NO_INDEX)
-						|| (_flags & SELECT_DRAG_ON_ITEM))
+				if (event.is_select_drag() || event.is_adjust_drag())
 				{
-					_window.drag_rubber_box_local(event.point(), new Selector(this, event.is_adjust_drag()));
+					if (((_flags & SELECT_DRAG) && index == NO_INDEX)
+							|| (_flags & SELECT_DRAG_ON_ITEM))
+					{
+						_window.drag_rubber_box_local(event.point(), new Selector(this, event.is_adjust_drag()));
+					}
 				}
 			}
 		}
