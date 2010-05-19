@@ -88,7 +88,7 @@ public:
 	/**
 	 * Get the item at the specified index
 	 */
-	T &item(unsigned int index) const
+	const T &item(unsigned int index) const
 	{
 		return _items[index];
 	}
