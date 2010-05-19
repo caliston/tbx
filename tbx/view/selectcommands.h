@@ -51,7 +51,13 @@ public:
 	/**
 	 * Select all items in the given view
 	 */
-	virtual void execute() {_view->selection()->select(0, _view->count());}
+	virtual void execute()
+	{
+		if (_view->count())
+		{
+			_view->selection()->select(0, _view->count()-1);
+		}
+	}
 };
 
 /**
@@ -85,7 +91,13 @@ public:
 	/**
 	 * Select all items in the given view
 	 */
-	virtual void execute() {_view->selection()->toggle(0, _view->count());}
+	virtual void execute()
+	{
+		if (_view->count())
+		{
+			_view->selection()->toggle(0, _view->count()-1);
+		}
+	}
 };
 
 
