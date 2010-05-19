@@ -477,8 +477,14 @@ void MultiSelection::removed(unsigned int index, unsigned int count)
 		}
 	}
 
-	if (_first > index) _first -= count;
-	if (_last > index) _last -= count;
+	if (_selected.empty())
+	{
+		_first = _last = NO_SELECTION;
+	} else
+	{
+		_first = _selected.front().first;
+		_last = _selected.back().second;
+	}
 }
 
 /**
@@ -843,17 +849,25 @@ void MultiSelection::select(unsigned int from, unsigned int to)
 			i->second = to;
 			RangeIterator check = i;
 			check++;
-			while (check != _selected.end() && check->first <= to + 1)
+			while (check != _selected.end() && check->first <= to)
 			{
 				changes.push_back(SelectionChangedEvent(oldlast+1, check->first-1, true, false));
 				oldlast= check->second;
-				check = _selected.erase(check);
 			}
 
 			if (oldlast > i->second) i->second = oldlast;
-
-			fire_changes(changes);
+			if (oldlast < to)
+			{
+				changes.push_back(SelectionChangedEvent(oldlast+1, to, true, false));
+			}
+			++i;
+			while (i != _selected.end() && i->second <= to)
+			{
+				i = _selected.erase(i);
+			}
 		}
+
+		fire_changes(changes);
 	}
 }
 
