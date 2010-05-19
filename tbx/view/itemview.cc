@@ -211,7 +211,9 @@ void ItemView::mouse_click(MouseClickEvent &event)
 		{
 			if (event.is_menu())
 			{
-				if (index != NO_INDEX && _selection->empty())
+				if ((_flags & SELECT_MENU)
+					 && index != NO_INDEX
+					 && _selection->empty())
 				{
 					_selection->select(index);
 					_flags |= LAST_SELECT_MENU;
