@@ -423,6 +423,31 @@ TagAttribute *Tag::find_attribute(const std::string &name) const
 	return find_attribute(doc()->attribute_id_if_exists(name));
 }
 
+
+/**
+ * Get the value of an attribute
+ *
+ * @param att_id id of the attribute
+ * @return attribute value or empty string if attribute doesn't exist on this tag
+ */
+std::string Tag::attribute_value(int att_id) const
+{
+	TagAttribute *att = find_attribute(att_id);
+	return (att ? att->value() : "");
+}
+
+/**
+ * Get the value of an attribute
+ *
+ * @param name name of the attribute
+ * @return attribute value or empty string if attribute doesn't exist on this tag
+ */
+std::string Tag::attribute_value(const std::string &name) const
+{
+	TagAttribute *att = find_attribute(name);
+	return (att ? att->value() : "");
+}
+
 /**
  * Constructor for a new empty tag document.
  */

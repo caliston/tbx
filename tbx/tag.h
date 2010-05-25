@@ -134,6 +134,9 @@ public:
 	TagAttribute *find_attribute(int att_id) const;
 	TagAttribute *find_attribute(const std::string &name) const;
 
+	std::string attribute_value(int att_id) const;
+	std::string attribute_value(const std::string &name) const;
+
 protected:
 	Tag *_parent;
 	Tag *_first_child;
