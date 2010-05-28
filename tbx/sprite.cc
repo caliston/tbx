@@ -750,6 +750,25 @@ bool SpriteArea::erase(UserSprite &s)
     return false;
 }
 
+/**
+ * Erase the a sprite from the sprite area.
+ *
+ * @param name Name of sprite to erase
+ * @returns true if sprite was erased.
+ */
+bool SpriteArea::erase(const std::string name)
+{
+    if (!_area) return false;
+
+    if (_swix(OS_SpriteOp, _INR(0,2), 25 + 256, _area, name.c_str()) == NULL)
+    {
+       return true;
+    }
+
+    return false;
+}
+
+
 // Create translation table to current mode
 
 bool TranslationTable::create(int mode, const ColourPalette *pal)

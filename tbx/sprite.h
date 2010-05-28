@@ -272,6 +272,7 @@ namespace tbx
 
 		  bool rename(UserSprite &sprite, const std::string &newname);
 		  bool erase(UserSprite &sprite);
+		  bool erase(const std::string name);
 
 		  static int calculate_memory(int width, int height, int mode, bool withPalette);
 		  static int calculate_mask_size(int width, int height, int mode);
