@@ -84,14 +84,14 @@ static void stringset_changed_handler(IdBlock &id_block, PollBlock &data, Listen
 void StringSet::selected_index(int index)
 {
    // Run Toolbox_ObjectMiscOp
-	swix_check(_swix(0x44ec6, _INR(0,4), 1, _handle, _id, 898, index));
+	swix_check(_swix(0x44ec6, _INR(0,4), 1, _handle, 898, _id, index));
 }
 
 int StringSet::selected_index() const
 {
    // Run Toolbox_ObjectMiscOp
 	int index;
-	swix_check(_swix(0x44ec6, _INR(0,3)|_OUT(0), 1, _handle, _id, 899, &index));
+	swix_check(_swix(0x44ec6, _INR(0,3)|_OUT(0), 1, _handle, 899, _id, &index));
 	return index;
 }
 
