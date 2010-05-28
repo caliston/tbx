@@ -233,6 +233,9 @@ public:
      */
     int version() const {return header()->version;}
 
+	void check_class_id(int class_id) const;
+
+
 protected:
 	/**
 	 * Return a pointer to the header information for this object
@@ -248,9 +251,11 @@ protected:
 	const char *string(int offset) const;
 	void string(int offset, const char *value);
 	void string(int offset, std::string value);
+	void string_with_length(int offset, const char *value, int length = -1);
 	const char *message(int offset) const;
 	void message(int offset, const char *value);
 	void message(int offset, std::string value);
+	void message_with_length(int offset, const char *value, int length = -1);
 	int number(int offset) const;
 	void number(int offset, int value);
 };

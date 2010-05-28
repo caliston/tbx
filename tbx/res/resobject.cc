@@ -30,6 +30,7 @@
 #include "resobject.h"
 #include <cstring>
 #include <stdexcept>
+#include "../tbxexcept.h"
 
 namespace tbx {
 
@@ -934,6 +935,18 @@ void ResObject::name(std::string name)
 }
 
 /**
+ * Check if this objects class id is as specified.
+ *
+ * @param class_id the toolbox class id to check against
+ * @throws ObjectClassError if the class id does not match this objects class id
+ */
+void ResObject::check_class_id(int class_id) const
+{
+	if (header()->class_id != class_id) throw ObjectClassError();
+}
+
+
+/**
  * Return a string at the given offset
  */
 const char *ResObject::string(int offset) const
@@ -958,6 +971,25 @@ void ResObject::string(int offset, std::string value)
 	make_writeable();
 	if (_impl->_data == 0) _impl->_data = new ResData();
 	_impl->_data->text(header()->body, offset, value, true);
+}
+
+/**
+ * Assign a string where the length is at offset+4
+ *
+ * @param offset - offset into body of string
+ * @param value - new value for the string
+ * @param length - new length or -1 to use existing length.
+ * The length is always adjusted so it is big enough for the value.
+ */
+void ResObject::string_with_length(int offset, const char *value, int length /*= -1*/)
+{
+	make_writeable();
+	if (_impl->_data == 0) _impl->_data = new ResData();
+	_impl->_data->text(header()->body, offset, value, true);
+	int text_len = std::strlen(value) + 1;
+	if (length == -1) length = number(offset+4);
+	if (length < text_len) length = text_len;
+	number(offset+4, length);
 }
 
 /**
@@ -986,6 +1018,25 @@ void ResObject::message(int offset, std::string value)
 	make_writeable();
 	if (_impl->_data == 0) _impl->_data = new ResData();
 	_impl->_data->text(header()->body, offset, value, false);
+}
+
+/**
+ * Assign a message where the length is at offset+4
+ *
+ * @param offset - offset into body of message
+ * @param value - new value for the message
+ * @param length - new length or -1 to use existing length.
+ * The length is always adjusted so it is big enough for the value.
+ */
+void ResObject::message_with_length(int offset, const char *value, int length/* = -1*/)
+{
+	make_writeable();
+	if (_impl->_data == 0) _impl->_data = new ResData();
+	_impl->_data->text(header()->body, offset, value, false);
+	int text_len = std::strlen(value) + 1;
+	if (length == -1) length = number(offset+4);
+	if (length < text_len) length = text_len;
+	number(offset+4, length);
 }
 
 /**
