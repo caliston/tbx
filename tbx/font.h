@@ -65,6 +65,7 @@ namespace tbx
 		void get_char_bounds_os(BBox &bounds, char c);
 
 		int find_split_os(const char *text, int length, int width, int split_char =-1);
+		int find_index_xy_os(const char *text, int length, int x, int y);
 
 		// Operators
 		Font &operator=(const Font &other);

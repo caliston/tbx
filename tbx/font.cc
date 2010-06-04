@@ -302,8 +302,8 @@ int Font::find_split_os(const char *text, int length, int width, int split_char 
 	block[0] = 0;
 	block[1] = 0;
 	block[2] = 0;
-	block[3] = split_char;
-
+	block[3] = 0;
+	block[4] = split_char;
 
 	regs.r[0] = _font_ref->handle;
 	regs.r[1] = reinterpret_cast<int>(text);
@@ -315,7 +315,38 @@ int Font::find_split_os(const char *text, int length, int width, int split_char 
 	regs.r[5] = (int)block;
 	regs.r[7] = length;
 
-	// Font_Paint
+	// Font_ScanString
+	swix_check(_kernel_swi(0x400A1, &regs, &regs));
+
+	return (unsigned int)regs.r[1] - (unsigned int)text;
+}
+
+/**
+ * Find index in a string of the given co-ordinate, rounded to the nearest
+ * caret position.
+ *
+ * @param text text to measure
+ * @param length to text or -1 to measure all
+ * @param width to fit text in in os units
+ * @param split_char character that causes a split before the line end
+ *         or -1 if none.
+ *
+ * @returns offset of character for split
+ */
+int Font::find_index_xy_os(const char *text, int length, int x, int y)
+{
+	_kernel_swi_regs regs;
+
+	regs.r[0] = _font_ref->handle;
+	regs.r[1] = reinterpret_cast<int>(text);
+	regs.r[2] = (1<<17); // Return nearest caret position
+	if (length > 0) regs.r[2] |= (1<<7); // Use string length
+	regs.r[2] |= 256 | 512; // Always use handle in r0 and kerning is on
+	regs.r[3] = os_to_millipoints(x);
+	regs.r[4] = os_to_millipoints(y);
+	regs.r[7] = length;
+
+	// Font_ScanString
 	swix_check(_kernel_swi(0x400A1, &regs, &regs));
 
 	return (unsigned int)regs.r[1] - (unsigned int)text;
