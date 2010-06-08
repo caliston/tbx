@@ -231,6 +231,8 @@ void TextView::recalc_layout(const BBox &visible_bounds)
 	tbx::Font font; // Can't use WimpFont as it doesn't have split function
 	font.desktop_font();
 
+	unsigned int refresh_width = _width, refresh_lines = _line_end.size();
+
 	if (_wrap)
 	{
 		// Wrap to window
@@ -272,7 +274,12 @@ void TextView::recalc_layout(const BBox &visible_bounds)
 	}
 
 	update_window_extent(visible_bounds);
-	refresh();
+
+	if (_width > refresh_width) refresh_width = _width;
+	if (_line_end.size() > refresh_lines) refresh_lines = _line_end.size();
+	BBox all(_margin.left, -_margin.top - refresh_lines * ROW_HEIGHT,
+			_margin.left + refresh_width, -_margin.top);
+	_window.force_redraw(all);
 }
 
 /**
