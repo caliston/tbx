@@ -9,7 +9,7 @@
  * it can be freely modified and used by anyone.
  *
  * @author Alan Buckley.
- * <i>September 2008</i>
+ * <i>September 2010</i>
  *
  * @section Contents
  * - @subpage toolbox
