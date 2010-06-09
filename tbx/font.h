@@ -31,6 +31,9 @@
 
 namespace tbx
 {
+    /**
+     * Class to handle painting and measuring text using an outline font
+     */
 	class Font
 	{
 	public:
