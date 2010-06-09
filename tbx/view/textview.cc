@@ -283,7 +283,13 @@ void TextView::recalc_layout(const BBox &visible_bounds)
 }
 
 /**
- * Load text for view from file
+ * Load text for view from file.
+ *
+ * Replace all control codes (character < ASCII 32) except line feed (10)
+ * with a space.
+ *
+ * @param file_name - name of file to load
+ * @return true if file loaded OK.
  */
 bool TextView::load_file(const std::string &file_name)
 {
@@ -302,7 +308,15 @@ bool TextView::load_file(const std::string &file_name)
 		_text = new char[_size+1];
 		is.read (_text,_size);
 		_text[_size] = 0;
-		if (!is.fail()) loaded = true;
+		if (!is.fail())
+		{
+			loaded = true;
+			// Replace all control codes except "\n" with a space
+			for (int c = 0; c < _size; c++)
+			{
+				if (_text[c] < 32 && _text[c] != '\n') _text[c] = ' ';
+			}
+		}
 		is.close();
 	}
 
