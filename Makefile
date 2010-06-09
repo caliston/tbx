@@ -8,9 +8,14 @@ AR=ar
 
 TARGET=libtbx.a
 
-CCSRC = $(wildcard tbx/*.cc)
+CCSRC = $(wildcard tbx/*.cc) $(wildcard tbx/view/*.cc)
 
-all: $(TARGET)
+bin:	$(TARGET)
+
+doc:
+	doxygen tbx.doxyfile
+
+all:	bin doc
 
 $(TARGET): $(CCSRC:.cc=.o)
 	$(AR) -r $(TARGET) $(CCSRC:.cc=.o)
@@ -18,10 +23,8 @@ $(TARGET): $(CCSRC:.cc=.o)
 clean:
 	rm -f $(CCSRC:.cc=.o)
 
-doc:
-	doxygen tbx.doxyfile
 
-copytoapp: all doc
+copytoapp: all
 	mkdir -p !TBX/tbx/h
 	copy tbx.h.* !TBX.tbx.h.* ~CF
 	copy libtbx/a !TBX.libtbx/a ~CF
