@@ -11,8 +11,17 @@
  * @author Alan Buckley.
  * <i>September 2010</i>
  *
+ * @section Alpha "Alpha Version 0.1"
+ * The current release is an alpha version with many ommissions and
+ * possibly a few bugs too!
+ *
+ * However it does have enough functionality to write full applications.
+ * If you try to use the library and need something that is missing please
+ * get in touch with me (alan_baa@hotmail.com).
+ *
  * @section Contents
- * - @subpage toolbox
- * - @subpage events
- * - @subpage copyright
+ * - @ref toolbox
+ * - @ref events
+ * - @ref copyright
+ * - @ref examples
  */
