@@ -9,9 +9,9 @@
  * it can be freely modified and used by anyone.
  *
  * @author Alan Buckley.
- * <i>September 2010</i>
+ * <i>Junw 2010</i>
  *
- * @section Alpha "Alpha Version 0.1"
+ * @section Alpha Alpha Version 0.1
  * The current release is an alpha version with many ommissions and
  * possibly a few bugs too!
  *
@@ -20,8 +20,16 @@
  * get in touch with me (alan_baa@hotmail.com).
  *
  * @section Contents
+ * - @ref using
  * - @ref toolbox
  * - @ref events
  * - @ref copyright
  * - @ref examples
+ * - @ref source
+ * - @ref history
+ *
+ * @section Contact
+ *
+ * Please send feedback, bug reports and comments to Alan Buckley
+ * alan_baa@hotmail.com
  */
