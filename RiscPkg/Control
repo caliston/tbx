@@ -1,0 +1,11 @@
+Source: TBX
+Version: 0.1-1
+Section: Library
+Priority: Optional
+Maintainer: Alan Buckley <alan_baa@hotmail.com>
+Standards-Version: 0.1.0
+Licence: Free
+Description: A C++ library to create applications using the RISC OS Toolbox
+ This library is provided in ELF format and although functional enough to write many applications is incomplete.
+
+Package: TBX-Dev

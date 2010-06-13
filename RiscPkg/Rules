@@ -1,0 +1,37 @@
+VERSION = 0.1.0-1
+PACKAGES = \
+ TBX-Dev_$(VERSION)
+INSTALL_TO=Temp/Apps/Library
+
+all: build pkg
+
+build:
+	make all
+
+pkg:
+	rm -rf Temp
+	mkdir -p Temp/RiscPkg
+	mkdir -p $(INSTALL_TO)
+	cp RiscPkg/Copyright Temp/RiscPkg
+	svn export SysVars Temp/SysVars
+	svn export !TBX $(INSTALL_TO)/!TBX
+	svn export tbx $(INSTALL_TO)/!TBX/tbx
+	rm -rf $(INSTALL_TO)/!TBX/tbx/cc
+	rm -rf $(INSTALL_TO)/!TBX/tbx/view/cc
+	rm -rf $(INSTALL_TO)/!TBX/tbx/res/cc
+	set UnixEnv$$cp$$sfix f:for:F:fpp:cc:cxx:cpp:c++:C:i:ii:rpo:c:m:h:hh:s:S:xrb:xrs:l:o:y:tcc:cmhg:adb:ads:ali
+	cp libtbx.a $(INSTALL_TO)/!TBX
+	cp -R docs/html $(INSTALL_TO)/!TBX/html
+	make -C Temp -f ../RiscPkg/Rules $(PACKAGES)
+	set UnixEnv$$rm$$sfix f:for:F:fpp:cc:cxx:cpp:c++:C:i:ii:rpo:c:m:h:hh:s:S:xrb:xrs:l:o:y:tcc:cmhg:adb:ads:ali
+	rm -rf Temp
+
+.PHONY: $(PACKAGES)
+$(PACKAGES): %:
+	riscpkg-gencontrol $(firstword $(subst _, ,$@)) < ../RiscPkg/Control > RiscPkg/Control
+	rm -f ../RiscPkg/$@
+	set StoreSuffix <UnixEnv$$zip$$sfix>
+	set UnixEnv$$zip$$sfix \"\"
+	zip -r ../RiscPkg/$@ * -i@../RiscPkg/$(firstword $(subst _, ,$@)).inc
+	set UnixEnv$$zip$$sfix <StoreSuffix>
+	unset StoreSuffix
