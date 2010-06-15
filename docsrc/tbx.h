@@ -9,7 +9,7 @@
  * it can be freely modified and used by anyone.
  *
  * @author Alan Buckley.
- * <i>Junw 2010</i>
+ * <i>June 2010</i>
  *
  * @section Alpha Alpha Version 0.1
  * The current release is an alpha version with many ommissions and
