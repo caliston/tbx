@@ -35,6 +35,7 @@
 #include "draghandler.h"
 #include "caretlistener.h"
 #include "command.h"
+#include "loadermanager.h"
 
 #include <cstring>
 #include <kernel.h>
@@ -85,17 +86,17 @@ void EventRouter::poll()
 
     if (_kernel_swi(poll, &regs, &regs) == 0)
 	{
-		try
-		{
+//		try
+//		{
 			route_event(regs.r[0]);
 
-		} catch(std::exception &e)
-		{
-			report_error(e.what(), "Uncaught Exception");
-		} catch(...)
-		{
-			report_error("Uncaught exception");
-		}
+//		} catch(std::exception &e)
+//		{
+//			report_error(e.what(), "Uncaught Exception");
+//		} catch(...)
+//		{
+//			report_error("Uncaught exception");
+//		}
 	}
 }
 
@@ -182,6 +183,10 @@ void EventRouter::process_toolbox_event()
 	case 0x44EC2: // Auto deleted event - automatically removes listeners
 		process_toolbox_event(_id_block.self_object_id, _id_block.self_component_id);
 		remove_all_listeners(_id_block.self_object_id);
+		if (LoaderManager::instance())
+		{
+			LoaderManager::instance()->remove_all_loaders(_id_block.self_object_id);
+		}
 		break;
 
 	case 0x82a91: // Quit_Quit - always quits application
