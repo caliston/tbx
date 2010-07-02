@@ -8,4 +8,5 @@
  * - Release for PackIt
  * - Removed uncaught exception handling so program stops with an error.
  * - Automatically remove file loaders from an object when it is destroyed.
+ * - ReportView didn't refresh enough lines when items were inserted.
  */
