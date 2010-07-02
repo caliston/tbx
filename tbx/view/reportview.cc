@@ -400,7 +400,6 @@ bool ReportView::adjust_min_width(unsigned int from, unsigned int end)
 void ReportView::inserted(unsigned int where, unsigned int how_many)
 {
 	int first_row = where;
-	int last_row = row_count();
 
 	_count += how_many;
 
@@ -421,7 +420,7 @@ void ReportView::inserted(unsigned int where, unsigned int how_many)
 	if (_selection) _selection->inserted(where, how_many);
 
 	BBox dirty(_margin.left,
-		-last_row * _height - _margin.top,
+		-_count * _height - _margin.top,
 		_width + _margin.left,
 		-first_row * _height - _margin.top);
 	_window.force_redraw(dirty);
