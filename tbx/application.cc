@@ -316,16 +316,16 @@ std::string Application::directory() const
 {
 	int len;
 	// Toolbox_GetSysInfo to get the directory size
-	swix_check(_swix(0x44ECE, _INR(0,2), 2, 0, &len));
+	swix_check(_swix(0x44ECE, _INR(0,2)|_OUT(2), 2, 0, 0, &len));
 
     std::string dir;
     if (len)
     {
-       std::auto_ptr<char> buffer(new char[len]);
-       swix_check(_swix(0x44ECE, _INR(0,2), 2,
-    		   reinterpret_cast<int>(buffer.get()),
+    	char buffer[len];
+        swix_check(_swix(0x44ECE, _INR(0,2), 2,
+    		   reinterpret_cast<int>(buffer),
     		   len));
-       dir = buffer.get();
+        dir = buffer;
     }
 
     return dir;
