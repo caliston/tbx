@@ -335,7 +335,7 @@ public:
 	/**
 	 * Clears the menu selection when the object is hidden
 	 */
-	virtual void has_been_hidden(Object &object)
+	virtual void has_been_hidden(const EventInfo &hidden_event)
 	{
 		_view->clear_menu_selection();
 	}

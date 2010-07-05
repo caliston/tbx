@@ -30,8 +30,8 @@ namespace tbx {
  */
 void has_been_hidden_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-	Object obj(id_block.self_object());
-    static_cast<HasBeenHiddenListener *>(listener)->has_been_hidden(obj);
+	EventInfo ev(id_block, data);
+    static_cast<HasBeenHiddenListener *>(listener)->has_been_hidden(ev);
 }
 
 }

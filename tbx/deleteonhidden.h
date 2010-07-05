@@ -43,7 +43,7 @@ namespace tbx
 		/**
 		 * Delete the given C++ class and this object on event received
 		 */
-		virtual void has_been_hidden(Object &object)
+		virtual void has_been_hidden(const EventInfo &hidden_event)
 		{
 			delete _class_to_delete;
 			delete this;
@@ -59,9 +59,9 @@ namespace tbx
 	class DeleteObjectOnHidden  : public tbx::HasBeenHiddenListener
 	{
 	public:
-		virtual void has_been_hidden(Object &object)
+		virtual void has_been_hidden(const EventInfo &hidden_event)
 		{
-			object.delete_object();
+			hidden_event.id_block().self_object().delete_object();
 			delete this;
 		}
 	};

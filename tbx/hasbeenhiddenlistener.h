@@ -25,8 +25,7 @@
 #define TBX_HASBEENHIDDENLISTENER_H_
 
 #include "listener.h"
-#include "object.h"
-#include "pollinfo.h"
+#include "eventinfo.h"
 
 namespace tbx {
 
@@ -38,7 +37,7 @@ public:
 	/**
 	 * This method is called when the given object is hidden.
 	 */
-	virtual void has_been_hidden(Object &object) = 0;
+	virtual void has_been_hidden(const EventInfo &event_info) = 0;
 };
 
 void has_been_hidden_router(IdBlock &id_block, PollBlock &data, Listener *listener);
