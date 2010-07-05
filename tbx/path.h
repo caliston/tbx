@@ -75,6 +75,13 @@ namespace tbx
 			return *((long long *)buf);
 		}
 
+		/**
+		 * Pointer to start of time in memory.
+		 * This is used for calls to the OS that pass a UTC.
+		 */
+		unsigned char *buffer() {return (unsigned char *)&_lowWord;}
+		unsigned char *buffer() const {return (unsigned char *)&_lowWord;}
+
 	protected:
 		unsigned int _lowWord;
 		unsigned char _highByte;
