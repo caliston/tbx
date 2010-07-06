@@ -25,6 +25,7 @@
 #define TBX_BUTTONSELECTEDLISTENER_H_
 
 #include "listener.h"
+#include "eventinfo.h"
 #include "actionbutton.h"
 
 namespace tbx {
@@ -32,53 +33,46 @@ namespace tbx {
 /**
  * Button has been selected event
  */
-class ButtonSelectedEvent
+class ButtonSelectedEvent : public EventInfo
 {
-private:
-	ActionButton _button;
-	int _flags;
 public:
 	/**
 	 * Construct the event.
 	 */
-	ButtonSelectedEvent(ActionButton button, int flags) : _button(button), _flags(flags) {};
-
-	/**
-	 * Return the source of the event.
-	 */
-	ActionButton source() {return _button;}
+	ButtonSelectedEvent(IdBlock &id_block, PollBlock &data) :
+		EventInfo(id_block, data) {};
 
 	/**
 	 * Check if adjust was held down.
 	 */
-	bool adjust() const {return (_flags & 1)!=0;}
+	bool adjust() const {return (_data.word[3] & 1)!=0;}
 
 	/**
 	 * Check if select was held down
 	 */
-	bool select() const {return (_flags & 4)!=0;}
+	bool select() const {return (_data.word[3] & 4)!=0;}
 
 	/**
 	 * Check if the button was the default button activated by return
 	 * or the cancel button executed by escape.
 	 */
-	bool return_or_escape() const {return (_flags & 7)==0;}
+	bool return_or_escape() const {return (_data.word[3] & 7)==0;}
 
 	/**
 	 * Button clicked was the default button.
 	 */
-	bool default_button() const {return (_flags & 8)!=0;}
+	bool default_button() const {return (_data.word[3] & 8)!=0;}
 
 	/**
 	 * Button clicked was the cancel button.
 	 */
-	bool cancel_button() const {return (_flags & 16)!=0;}
+	bool cancel_button() const {return (_data.word[3] & 16)!=0;}
 
 	/**
 	 * Button clicked was a local button so the window was not
 	 * automatically closed.
 	 */
-	bool local_button() const {return (_flags & 32)!=0;}
+	bool local_button() const {return (_data.word[3] & 32)!=0;}
 };
 
 /**

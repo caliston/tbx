@@ -25,6 +25,7 @@
 #define TBX_ICONBARCLICKLISTENER_H_
 
 #include "listener.h"
+#include "eventinfo.h"
 #include "iconbar.h"
 
 namespace tbx {
@@ -32,31 +33,23 @@ namespace tbx {
 /**
  * Iconbar as been clicked event details
  */
-class IconbarClickEvent
+class IconbarClickEvent : public EventInfo
 {
-private:
-	Iconbar _iconbar;
-	int _flags;
 public:
 	/**
 	 * Construct the event.
 	 */
-	IconbarClickEvent(Iconbar iconbar, int flags) : _iconbar(iconbar), _flags(flags) {};
-
-	/**
-	 * Return the source of the event.
-	 */
-	Iconbar source() {return _iconbar;}
+	IconbarClickEvent(IdBlock &id_block, PollBlock &data) : EventInfo(id_block, data) {};
 
 	/**
 	 * Check if click was with adjust
 	 */
-	bool adjust() const {return (_flags & 1)!=0;}
+	bool adjust() const {return (_data.word[3] & 1)!=0;}
 
 	/**
 	 * Check if click was with select
 	 */
-	bool select() const {return (_flags & 4)!=0;}
+	bool select() const {return (_data.word[3] & 4)!=0;}
 };
 
 /**

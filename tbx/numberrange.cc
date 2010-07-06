@@ -29,8 +29,7 @@ namespace tbx {
 
 void value_changed_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-	NumberRange source(id_block.self_component());
- 	 ValueChangedEvent event(source, data.word[4]);
+ 	 ValueChangedEvent event(id_block, data);
  	 static_cast<ValueChangedListener *>(listener)->value_changed(event);
 }
 

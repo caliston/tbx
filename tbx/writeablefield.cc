@@ -36,12 +36,9 @@ namespace tbx {
 
 class WriteableFieldTextChangedEvent : public TextChangedEvent
 {
-private:
-	WriteableField _source;
-
 public:
-	WriteableFieldTextChangedEvent(WriteableField source, bool too_long, const std::string & text) :
-		TextChangedEvent(too_long, text), _source(source)
+	WriteableFieldTextChangedEvent(IdBlock &id_block, PollBlock &data) :
+		TextChangedEvent(id_block, data)
 	{
 
 	}
@@ -49,17 +46,16 @@ public:
 	virtual ~WriteableFieldTextChangedEvent() {};
 
 	/**
-	 * The gadget that generated the event.
-	 */
-	virtual Gadget &source() {return _source;}
-
-	/**
 	 * Override in sub class to fetch text from the gadget.
 	 *
 	 * Called from the text method if the text wasn't delivered in
 	 * the event buffer.
 	 */
-	virtual std::string text_from_gadget() const {return _source.text();}
+	virtual std::string text_from_gadget() const
+	{
+		WriteableField source(id_block().self_component());
+		return source.text();
+	}
 };
 
 /*
@@ -67,11 +63,7 @@ public:
  */
 static void writeable_changed_handler(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-	WriteableField source(id_block.self_component());
-	bool too_long =((data.word[3] & 1) == 0);
-	std::string text;
-	if (!too_long) text = reinterpret_cast<const char *>(data.word +4);
-	WriteableFieldTextChangedEvent event(source, too_long, text);
+	WriteableFieldTextChangedEvent event(id_block, data);
 	static_cast<TextChangedListener *>(listener)->text_changed(event);
 }
 

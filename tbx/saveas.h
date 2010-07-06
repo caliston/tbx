@@ -33,6 +33,7 @@
 
 #include "showfullobject.h"
 #include "listener.h"
+#include "eventinfo.h"
 #include "window.h"
 
 namespace tbx {
@@ -137,6 +138,23 @@ public:
 };
 
 /**
+ * Event information for when saveas dialogue has been completed.
+ */
+class SaveAsDialogueCompletedEvent : public EventInfo
+{
+public:
+	SaveAsDialogueCompletedEvent(IdBlock &id_block, PollBlock &data) :
+		EventInfo(id_block, data) {}
+
+	/*
+	 * save_done true if the dialogue box was closed after a successful save.
+	 * This value will also be false if a successful save by click on OK with adjust
+	 * and then cancelling the dialogue box.
+	 */
+	bool save_done() const	{return ((_data.word[3]&1) != 0);}
+};
+
+/**
  * Listener for when the save as dialogue box has been closed
  */
 class SaveAsDialogueCompletedListener : public Listener
@@ -148,51 +166,40 @@ public:
 	 * This value will also be false if a successful save by click on OK with adjust
 	 * and then cancelling the dialogue box.
 	 */
-	virtual void saveas_dialogue_completed(SaveAs save_as, bool save_done) = 0;
+	virtual void saveas_dialogue_completed(const SaveAsDialogueCompletedEvent &completed_event) = 0;
 };
 
 /**
  * Event for SaveAsSaveCompletedListener
  */
 
-class SaveAsSaveCompletedEvent
+class SaveAsSaveCompletedEvent : public EventInfo
 {
-private:
-	SaveAs _saveas;
-	int _flags;
-	int _message_id;
-	std::string _filename;
-
 public:
-	SaveAsSaveCompletedEvent(SaveAs saveas, int flags, int message, const char *filename) :
-		_saveas(saveas), _flags(flags), _message_id(message), _filename(filename)
+	SaveAsSaveCompletedEvent(IdBlock &id_block, PollBlock &data) :
+		EventInfo(id_block, data)
 	{}
-
-	/**
-	 * Return save as dialogue this event was on
-	 */
-	SaveAs saveas() {return _saveas;}
 
 	/**
 	 * Check if save was of the selection
 	 */
-	bool selection_saved() const {return (_flags & 1) !=0;}
+	bool selection_saved() const {return (_data.word[3] & 1) !=0;}
 
 	/**
 	 * Check if the save was to a safe location (e.g. a filing system)
 	 */
-	bool safe() const {return (_flags & 2) != 0;}
+	bool safe() const {return (_data.word[3] & 2) != 0;}
 
 	/**
 	 * Wimp message of original datasave message or 0 if
 	 * save wasn't by a drag
 	 */
-	int message_id() const {return _message_id;}
+	int message_id() const {return _data.word[4];}
 
 	/**
 	 * Full filename of file location if save was safe
 	 */
-	const std::string &filename() const {return _filename;}
+	const std::string filename() const {return 	reinterpret_cast<const char *>(&_data.word[5]);}
 };
 
 /**

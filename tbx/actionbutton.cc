@@ -33,7 +33,7 @@ namespace tbx {
 
 static void button_selected_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-	ButtonSelectedEvent event(ActionButton(id_block.self_component()), data.word[3]);
+	ButtonSelectedEvent event(id_block, data);
 	static_cast<ButtonSelectedListener *>(listener)->button_selected(event);
 }
 

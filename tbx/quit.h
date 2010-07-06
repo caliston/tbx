@@ -32,6 +32,7 @@
 
 #include "showfullobject.h"
 #include "listener.h"
+#include "eventinfo.h"
 #include "window.h"
 
 namespace tbx {
@@ -120,7 +121,7 @@ public:
 	/**
 	 * Called when quit is selected from a Quit dialog
 	 */
-	virtual void quit_quit() = 0;
+	virtual void quit_quit(const EventInfo &quit_event) = 0;
 };
 
 /**
@@ -132,7 +133,7 @@ public:
 	/**
 	 * Called when cancel is selected from a Quit dialog
 	 */
-	virtual void quit_cancel() = 0;
+	virtual void quit_cancel(const EventInfo &cancel_event) = 0;
 };
 
 

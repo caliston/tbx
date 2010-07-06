@@ -68,7 +68,8 @@ void Quit::remove_has_been_hidden_listener(HasBeenHiddenListener *listener)
 
 static void quit_quit_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-    static_cast<QuitQuitListener*>(listener)->quit_quit();
+	EventInfo ev(id_block, data);
+    static_cast<QuitQuitListener*>(listener)->quit_quit(ev);
 }
 
 /***
@@ -86,7 +87,8 @@ void Quit::remove_quit_listener(QuitQuitListener *listener)
 
 static void quit_cancel_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-    static_cast<QuitCancelListener*>(listener)->quit_cancel();
+	EventInfo ev(id_block, data);
+    static_cast<QuitCancelListener*>(listener)->quit_cancel(ev);
 }
 
 /***

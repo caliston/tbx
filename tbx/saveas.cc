@@ -99,8 +99,8 @@ void SaveAs::remove_about_to_be_shown_listener(AboutToBeShownListener *listener)
 
 static void saveas_dialog_completed_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-	SaveAs saveas(id_block.self_object());
-    static_cast<SaveAsDialogueCompletedListener*>(listener)->saveas_dialogue_completed(saveas, (data.word[3]&1)!=0);
+	SaveAsDialogueCompletedEvent ev(id_block, data);
+    static_cast<SaveAsDialogueCompletedListener*>(listener)->saveas_dialogue_completed(ev);
 }
 
 /***
@@ -118,11 +118,7 @@ void SaveAs::remove_dialogue_completed_listener(SaveAsDialogueCompletedListener 
 
 static void saveas_save_completed_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-	SaveAsSaveCompletedEvent ev(id_block.self_object(),
-			data.word[3],
-			data.word[4],
-			reinterpret_cast<const char *>(&data.word[5])
-			);
+	SaveAsSaveCompletedEvent ev(id_block, data);
     static_cast<SaveAsSaveCompletedListener*>(listener)->saveas_save_completed(ev);
 }
 

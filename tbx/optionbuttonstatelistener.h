@@ -32,45 +32,36 @@
 #define TBX_OPTIONBUTTONSTATELISTENER_H
 
 #include "listener.h"
+#include "eventinfo.h"
 
 namespace tbx
 {
 /**
  * Event for Option button state changed
  */
-class OptionButtonStateEvent
+class OptionButtonStateEvent : public EventInfo
 {
-private:
-	OptionButton _button;
-	int _flags;
-	bool _turned_on;
-
 public:
 	/**
 	 * Construct the event
 	 */
-	OptionButtonStateEvent(OptionButton but, int flags, bool on) :
-		_button(but), _flags(flags), _turned_on(on) {}
-
-	/**
-	 * Get the button that generated this event
-	 */
-	OptionButton button() {return _button;}
+	OptionButtonStateEvent(IdBlock &id_block, PollBlock &data) :
+		EventInfo(id_block, data) {}
 
 	/**
 	 * Return true is now on else false
 	 */
-	bool turned_on() const {return _turned_on;}
+	bool turned_on() const {return (_data.word[4]!=0);}
 
 	/**
 	 * Return true if state changed with adjust
 	 */
-	bool adjust() const {return (_flags & 1) != 0;}
+	bool adjust() const {return (_data.word[3] & 1) != 0;}
 
 	/**
 	 * Return true if state changed with select
 	 */
-	bool select() const {return (_flags & 4) != 0;}
+	bool select() const {return (_data.word[3] & 4) != 0;}
 };
 
 class OptionButtonStateListener : public Listener

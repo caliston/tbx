@@ -27,6 +27,7 @@
 #include "gadget.h"
 #include "sprite.h"
 #include "listener.h"
+#include "eventinfo.h"
 
 namespace tbx
 {
@@ -185,25 +186,36 @@ public:
 	void remove_selection_listener(ScrollListSelectionListener *listener);
 };
 
-class ScrollListSelectionEvent
+/**
+ * Item has been selected event
+ */
+class ScrollListSelectionEvent : public EventInfo
 {
-	ScrollList _source;
-	int _index;
-	int _flags;
 public:
-	ScrollListSelectionEvent(ScrollList source, int index, int flags) :
-		 _source(source), _index(index), _flags(flags)
-		 {};
+	ScrollListSelectionEvent(IdBlock &id_block, PollBlock &data) :
+		 EventInfo(id_block, data) {}
 
     virtual ~ScrollListSelectionEvent() {};
 
-    ScrollList &source() {return _source;}
-    int index() const {return _index;}
+    /**
+     * Index of item event is for
+     */
+    int index() const {return _data.word[5];}
 
-    bool selected() const {return (_flags & 1) !=0;}
-    bool double_click() const {return (_flags & 2) != 0;}
+    /**
+     * true if index was selected
+     */
+    bool selected() const {return (_data.word[4] & 1) !=0;}
+
+    /**
+     * true if index was double-clicked
+     */
+    bool double_click() const {return (_data.word[4] & 2) != 0;}
 };
 
+/**
+ * Listener for selections on a scroll list
+ */
 class ScrollListSelectionListener : public Listener
 {
 public:

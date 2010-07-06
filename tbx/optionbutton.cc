@@ -36,8 +36,7 @@ namespace tbx {
 
 static void option_button_state_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-	OptionButtonStateEvent event(OptionButton(id_block.self_component()),
-			data.word[3], (data.word[4]!=0));
+	OptionButtonStateEvent event(id_block, data);
 	static_cast<OptionButtonStateListener *>(listener)->option_button_state_changed(event);
 }
 

@@ -32,6 +32,7 @@
 
 #include "showfullobject.h"
 #include "listener.h"
+#include "EventInfo.h"
 #include "window.h"
 
 namespace tbx {
@@ -124,7 +125,7 @@ public:
 	/**
 	 * Called when discard is selected from a DCS dialog
 	 */
-	virtual void dcs_discard() = 0;
+	virtual void dcs_discard(const EventInfo &discard_event) = 0;
 };
 
 /**
@@ -136,7 +137,7 @@ public:
 	/**
 	 * Called when save is selected from a DCS dialog
 	 */
-	virtual void dcs_save() = 0;
+	virtual void dcs_save(const EventInfo &save_event) = 0;
 };
 
 /**
@@ -148,7 +149,7 @@ public:
 	/**
 	 * Called when cancel is selected from a DCS dialog
 	 */
-	virtual void dcs_cancel() = 0;
+	virtual void dcs_cancel(const EventInfo &cancel_event) = 0;
 };
 
 

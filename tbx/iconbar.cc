@@ -37,7 +37,7 @@ namespace tbx {
 // Internal event/command routers
 static void iconbar_clicked_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-	IconbarClickEvent event(Iconbar(id_block.self_object()), data.word[3]);
+	IconbarClickEvent event(id_block, data);
 	static_cast<IconbarClickListener *>(listener)->iconbar_clicked(event);
 }
 

@@ -25,6 +25,7 @@
 #define TBX_TEXTCHANGEDLISTENER_H_
 
 #include "listener.h"
+#include "eventinfo.h"
 #include "Gadget.h"
 
 namespace tbx
@@ -34,22 +35,14 @@ namespace tbx
      *
      * @see TextChangedListener
      */
-	class TextChangedEvent
+	class TextChangedEvent : public EventInfo
 	{
-		bool _too_long;
-		std::string _text;
-
 	public:
 		/**
-		 * Contstruct the event.
-		 *
-		 * @param source The gadget that generated the event
-		 * @param too_long true if the changed text was too long to be
-		 *        delivered with the event.
-		 * @param text The text for the event if it was delivered with the event.
+		 * Construct the event.
 		 */
-		TextChangedEvent(bool too_long, std::string text) :
-			_too_long(too_long), _text(text) {};
+		TextChangedEvent(IdBlock &id_block, PollBlock &data) :
+			EventInfo(id_block, data) {};
 
 		/**
 		 * Virtual destructor
@@ -63,7 +56,7 @@ namespace tbx
 		 * @returns true If the gadget contained more text than would
 		 *          fit in the event delivery buffer.
 		 */
-		bool too_long() const {return _too_long;}
+		bool too_long() const {return (_data.word[3] & 1)!=0;}
 
 		/**
 		 * Get the text of the gadget that delivered the event.
@@ -74,12 +67,7 @@ namespace tbx
 		 *
 		 * @returns the gadget text.
 		 */
-		std::string text() const {return (_too_long) ? text_from_gadget(): _text;}
-
-		/**
-		 * The gadget that generated the event.
-		 */
-		virtual Gadget &source() = 0;
+		std::string text() const {return (too_long()) ? text_from_gadget() : text_from_event();}
 
 	protected:
 		/**
@@ -89,6 +77,12 @@ namespace tbx
 		 * the event buffer.
 		 */
 		virtual std::string text_from_gadget() const = 0;
+
+		/**
+		 * text from event data
+		 */
+		std::string text_from_event() const {return std::string(reinterpret_cast<const char *>(_data.word +4));}
+
 	};
 
 	/**

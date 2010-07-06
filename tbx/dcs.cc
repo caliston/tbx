@@ -46,7 +46,8 @@ void DCS::remove_has_been_hidden_listener(HasBeenHiddenListener *listener)
 
 static void dcs_discard_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-    static_cast<DCSDiscardListener*>(listener)->dcs_discard();
+	EventInfo ev(id_block, data);
+    static_cast<DCSDiscardListener*>(listener)->dcs_discard(ev);
 }
 
 /***
@@ -64,7 +65,8 @@ void DCS::remove_discard_listener(DCSDiscardListener *listener)
 
 static void dcs_save_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-    static_cast<DCSSaveListener*>(listener)->dcs_save();
+	EventInfo ev(id_block, data);
+    static_cast<DCSSaveListener*>(listener)->dcs_save(ev);
 }
 
 /***
@@ -82,7 +84,8 @@ void DCS::remove_save_listener(DCSSaveListener *listener)
 
 static void dcs_cancel_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
-    static_cast<DCSCancelListener*>(listener)->dcs_cancel();
+	EventInfo ev(id_block, data);
+   static_cast<DCSCancelListener*>(listener)->dcs_cancel(ev);
 }
 
 /***

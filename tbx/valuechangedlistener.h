@@ -25,6 +25,7 @@
 #define TBX_VALUECHANGEDLISTENER_H_
 
 #include "listener.h"
+#include "eventinfo.h"
 #include "numberrange.h"
 
 //TODO: This event should be generalised for more gadgets to use.
@@ -36,11 +37,8 @@ namespace tbx
      *
      * @see ValueChangedListener
      */
-	class ValueChangedEvent
+	class ValueChangedEvent : public EventInfo
 	{
-		NumberRange _source;
-		int _value;
-
 	public:
 		/**
 		 * Contstruct the event.
@@ -48,20 +46,15 @@ namespace tbx
 		 * @param source The gadget that generated the event
 		 * @param value The new value in the gadget
 		 */
-		ValueChangedEvent(NumberRange &source, int value) :
-			_source(source), _value(value) {};
-
-		/**
-		 * The gadget that generated the event.
-		 */
-		NumberRange &source() {return _source;}
+		ValueChangedEvent(IdBlock &id_block, PollBlock &data) :
+			EventInfo(id_block, data) {};
 
 		/**
 		 * Get the value of the gadget that delivered the event.
 		 *
 		 * @returns the gadget value.
 		 */
-		int value() const {return _value;}
+		int value() const {return _data.word[4];}
 	};
 
 	/**
