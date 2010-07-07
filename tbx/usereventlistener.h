@@ -26,7 +26,7 @@
 #define TBX_USEREVENTLISTENER_H_
 
 #include "listener.h"
-#include "pollinfo.h"
+#include "eventinfo.h"
 
 namespace tbx {
 
@@ -34,24 +34,14 @@ namespace tbx {
  * UserEvent class holds details for a UserEventListener.
  *
  */
-class UserEvent
+class UserEvent : public EventInfo
 {
-private:
-	IdBlock &_id_block;
-	PollBlock &_data;
-
 public:
 	/**
 	 * Construct a user event listener with references to the underlying
 	 * toolbox event.
 	 */
-	UserEvent(IdBlock &id_block, PollBlock &data) : _id_block(id_block), _data(data) {}
-
-	/**
-	 * Return the id block that allows details of where the event occurred
-	 * to be read.
-	 */
-	IdBlock &id_block() const {return _id_block;}
+	UserEvent(IdBlock &id_block, PollBlock &data) : EventInfo(id_block, data) {}
 
 	/**
 	 * Return a PollBlock with the raw data of the event.
