@@ -13,4 +13,6 @@
  * - Added missing toolbox objects ColourMenu, FileInfo, FontDbox, FontMenu,
  * PrintDbox, ProgInfo and Scale.
  * - Partial implementation of ColourDbox
+ * - Added missing gadgets Adjuster, PopUp and RadioButton
+ * - Partial implementation of Button, Draggable, ToolAction.
  */
