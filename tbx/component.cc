@@ -129,6 +129,26 @@ void Component::remove_listener(int action, Listener *listener)
 	event_router()->remove_object_listener(_handle, _id, action, listener);
 }
 
+/**
+ * Helper function to add a listener for a WIMP window event
+ */
+void Component::add_window_listener(int event_code, Listener *listener)
+{
+	if (_id == NULL_ComponentId) throw ComponentNullError();
+
+	event_router()->add_window_event_listener(_handle, _id, event_code, listener);
+}
+
+/**
+ * Helper function to remove a listener for a WIMP window event
+ */
+void Component::remove_window_listener(int event_code, Listener *listener)
+{
+	if (_id == NULL_ComponentId) throw ComponentNullError();
+
+	event_router()->remove_window_event_listener(_handle, _id, event_code, listener);
+}
+
 //@{
 //  Get an integer property from the toolbox Component.
 //

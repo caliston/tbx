@@ -32,13 +32,11 @@
 #define TBX_BUTTON_H_
 
 #include "gadget.h"
-#include "listener.h"
+#include "mouseclicklistener.h"
 #include "eventinfo.h"
 
 namespace tbx
 {
-
-class ButtonListener;
 
 /**
  * A Button is a gadget that show a sprite or some text in the window.
@@ -173,7 +171,8 @@ public:
 	void font(const std::string &name, int width, int height);
 	void system_font(int width, int height);
 
-	//TODO: Button uses wimp events so add listeners for them
+	void add_mouse_click_listener(MouseClickListener *listener);
+	void remove_mouse_click_listener(MouseClickListener *listener);
 };
 
 }

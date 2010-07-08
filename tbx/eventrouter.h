@@ -70,6 +70,8 @@ private:
 
 	void add_window_event_listener(ObjectId handle, int event_code, Listener *listener);
 	void remove_window_event_listener(ObjectId handle, int event_code, Listener *listener);
+	void add_window_event_listener(ObjectId handle, ComponentId component_id, int event_code, Listener *listener);
+	void remove_window_event_listener(ObjectId handle, ComponentId component_id, int event_code, Listener *listener);
 
 	void remove_all_listeners(ObjectId handle);
 	void remove_all_listeners(ObjectId handle, ComponentId component_id);
@@ -120,11 +122,12 @@ private:
 		ObjectListenerItem *next;
 	};
 
-    // List item for Wimp window events
+    // List item for WIMP window events
     struct WindowEventListenerItem
     {
     	Listener *listener;
     	WindowEventListenerItem *next;
+    	ComponentId component_id;
     };
 
     // List item for wimp messages
@@ -155,6 +158,7 @@ private:
 	// Listener list helpers
 	ObjectListenerItem *find_first_object_listener(ObjectId handle, int action);
     WindowEventListenerItem *find_window_event_listener(ObjectId object_id, int event_code);
+    WindowEventListenerItem *find_window_event_component(WindowEventListenerItem *&item, ComponentId component_id);
     void remove_running_window_event_listener(ObjectId object_id, int event_code);
 
 private:

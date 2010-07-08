@@ -81,4 +81,21 @@ void Button::system_font(int width, int height)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Add listener for mouse click on the button
+ */
+void Button::add_mouse_click_listener(MouseClickListener *listener)
+{
+	add_window_listener(6, listener);
+}
+
+/**
+ * Remove listener for mouse click on the button
+ */
+void Button::remove_mouse_click_listener(MouseClickListener *listener)
+{
+	remove_window_listener(6, listener);
+}
+
+
 }

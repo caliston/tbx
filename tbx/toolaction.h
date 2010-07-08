@@ -170,12 +170,19 @@ public:
 	ToolActionSelectedEvent(IdBlock &id_block, PollBlock &data) :
 	  EventInfo(id_block, data) {}
 
-	//TODO: Check if there are adjust and selected flags somewhere
+	/**
+	 * Check if adjust was held down.
+	 */
+	bool adjust() const {return (_data.word[3] & 1)!=0;}
+
+	/**
+	 * Check if select was held down
+	 */
+	bool select() const {return (_data.word[3] & 4)!=0;}
 
 	/**
 	 * Return true if tool action has been turned on
 	 */
-	//TODO: Double check this
 	bool on() const {return (_data.word[4] != 0);}
 };
 

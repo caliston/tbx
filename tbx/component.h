@@ -122,6 +122,10 @@ protected:
 	void add_listener( int action, Listener *listener, RawToolboxEventHandler handler);
 	void remove_listener(int action, Listener *listener);
 
+	// Add listener for WIMP window event helper
+	void add_window_listener(int event_code, Listener *listener);
+	void remove_window_listener(int event_code, Listener *listener);
+
     // Property Helpers
     int int_property(int property_id) const;
     void int_property(int property_id, int value);

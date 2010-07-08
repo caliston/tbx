@@ -27,47 +27,46 @@
 
 #include "gadget.h"
 #include "listener.h"
+#include "eventinfo.h"
 
 namespace tbx
 {
 	/**
 	 * Event for click on a window.
+	 *
+	 * Window clicked upon is id_block().self_object();
+	 * Gadget clicked upon is id_block().self_component() and will be null if
+	 * click is on a window background
 	 */
-	class MouseClickEvent
+	class MouseClickEvent : EventInfo
 	{
-		Window _window;
-		Gadget _gadget;
-		Point _point;
-		unsigned int _button;
 		unsigned int _click_shift;
 
 	public:
 		/**
 		 * Constructor
 		 */
-		MouseClickEvent(Window &window, Gadget _gadget, Point &pt, unsigned int b, bool d) :
-			_window(window), _point(pt), _button(b)
+		MouseClickEvent(IdBlock &id_block, PollBlock &data, bool d) :
+			EventInfo(id_block, data)
 		{
 			if (d) _click_shift = 8;
 			else _click_shift = 0;
 		};
 
 		/**
-		 * Window mouse click occurred upon
+		 * x coordinate of click in screen coordinates
 		 */
-		Window window() const {return _window;}
+		int x() const {return _data.word[0];}
 
 		/**
-		 * Gadget click occurred up.
-		 *
-		 * Returned gadget will be null if clicked on window background.
+		 * y coordinate of click in screen coordinates
 		 */
-		Gadget gadget() const {return _gadget;}
+		int y() const {return _data.word[1];}
 
 		/**
 		 * Point of the click in screen coordinates
 		 */
-		const Point &point() const {return _point;}
+		Point point() const {return Point(_data.word[0], _data.word[1]);}
 
 		/**
 		 * Button pressed.
@@ -78,50 +77,50 @@ namespace tbx
 		 * The methods below take into account the icon/window button flags
 		 * and return a consistent result.
 		 */
-		unsigned int button() const {return _button;}
+		unsigned int button() const {return _data.word[2];}
 
 		/**
 		 * Adjust button has been clicked.
 		 */
-		bool is_adjust() const {return (_button & (1 << _click_shift)) != 0;}
+		bool is_adjust() const {return (_data.word[2] & (1 << _click_shift)) != 0;}
 
 		/**
 		 * Menu button has been clicked
 		 */
-		bool is_menu() const {return (_button & 2) != 0;}
+		bool is_menu() const {return (_data.word[2] & 2) != 0;}
 
 		/**
 		 * Select button has been clicked.
 		 */
-		bool is_select() const {return (_button & (4 << _click_shift)) != 0;}
+		bool is_select() const {return (_data.word[2] & (4 << _click_shift)) != 0;}
 
 		/**
 		 * Drag started with adjust.
 		 *
 		 * Button types 6 to 11 only
 		 */
-		bool is_adjust_drag() const {return (_button & 0x10) != 0;}
+		bool is_adjust_drag() const {return (_data.word[2] & 0x10) != 0;}
 
 		/**
 		 * Drag start with select.
 		 *
 		 * Button types 6 to 11 only.
 		 */
-		bool is_select_drag() const {return (_button & 0x40) != 0;}
+		bool is_select_drag() const {return (_data.word[2] & 0x40) != 0;}
 
 		/**
 		 * Click is a double adjust click.
 		 *
 		 * This only applies to window button type 5 & 10.
 		 */
-		bool is_adjust_double() const {return (_click_shift != 0) && (_button & 0x1) != 0;}
+		bool is_adjust_double() const {return (_click_shift != 0) && (_data.word[2] & 0x1) != 0;}
 
 		/**
 		 * Click is a double select click.
 		 *
 		 * This only applies to window button type 5 & 10.
 		 */
-		bool is_select_double() const {return (_click_shift != 0) && (_button & 0x4) != 0;}
+		bool is_select_double() const {return (_click_shift != 0) && (_data.word[2] & 0x4) != 0;}
 	};
 
 	/**

@@ -421,6 +421,7 @@ void EventRouter::remove_all_listeners(ObjectId handle)
 			if (delete_all)
 			{
 				delete [] found->second;
+				_window_event_listeners->erase(found);
 			}
 		}
 	}
@@ -468,6 +469,47 @@ void EventRouter::remove_all_listeners(ObjectId handle, ComponentId component_id
 			}
 		} else
 			_object_listeners.erase(handle);
+	}
+
+	if (_window_event_listeners)
+	{
+		std::map<ObjectId, WindowEventListenerItem **>::iterator found = _window_event_listeners->find(handle);
+		if (found != _window_event_listeners->end())
+		{
+			bool delete_all = true;
+			// Just need to remove mouse_click 5 (6-1) and key press 8 (7-1)
+			for (int j = 5; j < 8; j+=2)
+			{
+				WindowEventListenerItem *item = found->second[j];
+				WindowEventListenerItem *prev = find_window_event_component(item, component_id);
+
+				while (item && item->component_id == component_id)
+				{
+					WindowEventListenerItem *next = item->next;
+					if (item == _running_window_event_item)
+					{
+						_remove_running = true;
+						prev = item;
+						delete_all = false;
+					} else
+					{
+						if (prev) prev->next = next;
+						else found->second[j] = next;
+						delete item;
+					}
+					item = next;
+				}
+			}
+			for (int j = 0; j < MAX_WINDOW_EVENTS && delete_all; j++)
+			{
+				if (found->second[j] != 0) delete_all = false;
+			}
+			if (delete_all)
+			{
+				delete [] found->second;
+				_window_event_listeners->erase(found);
+			}
+		}
 	}
 }
 
@@ -649,6 +691,7 @@ void EventRouter::process_pointer_entering_window()
 void EventRouter::process_mouse_click()
 {
 	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 6);
+	if (item) find_window_event_component(item, _id_block.self_component_id);
 	if (item)
 	{
 		Window win(_id_block.self_object_id);
@@ -676,12 +719,12 @@ void EventRouter::process_mouse_click()
 			}
 		}
 
-		MouseClickEvent ev(win, g, pt, _poll_block.word[2],
+		MouseClickEvent ev(_id_block, _poll_block,
 				(type == BUTTONTYPE_DOUBLE
 				|| type == BUTTONTYPE_DOUBLE_DRAG
 				|| type == BUTTONTYPE_DOUBLE_CLICK_DRAG)
 		);
-		while (item)
+		while (item && item->component_id == _id_block.self_component_id)
 		{
 			_running_window_event_item = item;
 			static_cast<MouseClickListener *>(item->listener)->mouse_click(ev);
@@ -745,7 +788,7 @@ void EventRouter::remove_running_window_event_listener(ObjectId object_id, int e
 	WindowEventListenerItem *remove_item = _running_window_event_item;
 	_remove_running = false;
 	_running_window_event_item = 0;
-	remove_window_event_listener(object_id, event_code, remove_item->listener);
+	remove_window_event_listener(object_id, remove_item->component_id, event_code, remove_item->listener);
 }
 
 /*
@@ -766,11 +809,13 @@ EventRouter::WindowEventListenerItem *EventRouter::find_window_event_listener(Ob
     return item;
 }
 
+// Add main window WIMP event listener
 void EventRouter::add_window_event_listener(ObjectId object_id, int event_code, Listener *listener)
 {
     WindowEventListenerItem *new_item = new WindowEventListenerItem();
     new_item->listener = listener;
     new_item->next = 0;
+    new_item->component_id = NULL_ComponentId;
 
     if (_window_event_listeners == 0) _window_event_listeners = new std::map<ObjectId, WindowEventListenerItem **>();
 
@@ -803,7 +848,7 @@ void EventRouter::add_window_event_listener(ObjectId object_id, int event_code, 
 }
 
 /*
- * Remove window event listener.
+ * Remove main window event listener.
  * If the event is currently the event being run it will mark it to be deleted
  * in the event process instead.
  */
@@ -816,11 +861,132 @@ void EventRouter::remove_window_event_listener(ObjectId object_id, int event_cod
        {
     	   WindowEventListenerItem *item = found->second[event_code-1];
     	   WindowEventListenerItem *prev = 0;
-    	   while (item && item->listener != listener)
+    	   while (item && item->listener != listener && item->component_id != NULL_ComponentId)
     	   {
     		   prev = item;
     		   item = item->next;
     	   }
+    	   if (item == _running_window_event_item) _remove_running = true;
+    	   else if (item != 0)
+    	   {
+    		   if (prev == 0) found->second[event_code-1] = item->next;
+    		   else prev->next = item->next;
+
+    		   if (prev == 0 && item->next == 0)
+    		   {
+    			   // All of this type of listeners have been deleted
+    			   // so check if there are any other events
+    			   bool delete_all = true;
+    			   for (int j = 0; j < MAX_WINDOW_EVENTS && delete_all; j++)
+    				   if (found->second[j]) delete_all = false;
+    			   if (delete_all)
+    			   {
+    				   delete [] found->second;
+    				   _window_event_listeners->erase(found);
+    			   }
+    		   }
+
+       		   delete item;
+    	   }
+       }
+    }
+}
+
+// Add Component WIMP event listener
+void EventRouter::add_window_event_listener(ObjectId object_id, ComponentId component_id, int event_code, Listener *listener)
+{
+    WindowEventListenerItem *new_item = new WindowEventListenerItem();
+    new_item->listener = listener;
+    new_item->next = 0;
+    new_item->component_id = component_id;
+
+    if (_window_event_listeners == 0) _window_event_listeners = new std::map<ObjectId, WindowEventListenerItem **>();
+
+    std::map<ObjectId, WindowEventListenerItem **>::iterator found = _window_event_listeners->find(object_id);
+    if (found == _window_event_listeners->end())
+    {
+    	WindowEventListenerItem **items = new WindowEventListenerItem*[MAX_WINDOW_EVENTS];
+    	for (int j = 0; j < MAX_WINDOW_EVENTS; j++)
+    		items[j] = 0;
+
+    	items[event_code - 1] = new_item;
+    	(*_window_event_listeners)[object_id] = items;
+    } else
+    {
+    	WindowEventListenerItem *item = found->second[event_code - 1];
+    	WindowEventListenerItem *prev = 0;
+    	while (item && item->component_id != -1
+    			&& item->component_id <= component_id)
+    	{
+    		prev = item;
+    		item = item->next;
+    	}
+		new_item->next = item;
+    	if (prev)
+    	{
+    		prev->next = new_item;
+    	} else
+    	{
+    		found->second[event_code - 1] = new_item;
+    	}
+    }
+}
+
+/**
+ * Find the Window event listener item for a component
+ *
+ * @param item first item in list to search - updated to found item or null
+ * @param component_id id to find
+ * @returns previous item to found item
+ */
+EventRouter::WindowEventListenerItem *EventRouter::find_window_event_component(WindowEventListenerItem *&item, ComponentId component_id)
+{
+	WindowEventListenerItem *prev = 0;
+    if (component_id == -1)
+	{
+		while (item && item->component_id != component_id)
+		{
+			prev = item;
+			item = item->next;
+		}
+	} else
+	{
+		while (item
+				&& item->component_id != -1
+				&& item->component_id < component_id)
+		{
+			prev = item;
+			item = item->next;
+		}
+		if (item && item->component_id != component_id) item = 0;
+	}
+
+	return prev;
+}
+
+/*
+ * Remove component WIMP event listener.
+ * If the event is currently the event being run it will mark it to be deleted
+ * in the event process instead.
+ */
+void EventRouter::remove_window_event_listener(ObjectId object_id, ComponentId component_id, int event_code, Listener *listener)
+{
+    if (_window_event_listeners != 0)
+    {
+       std::map<ObjectId, WindowEventListenerItem **>::iterator found = _window_event_listeners->find(object_id);
+       if (found != _window_event_listeners->end())
+       {
+    	   WindowEventListenerItem *item = found->second[event_code-1];
+    	   WindowEventListenerItem *prev = find_window_event_component(item, component_id);
+
+    	   while (item && item->component_id == component_id
+    			   && item->listener != listener)
+    	   {
+    		   prev = item;
+    		   item = item->next;
+    	   }
+
+    	   if (item && item->component_id != component_id) item = 0;
     	   if (item == _running_window_event_item) _remove_running = true;
     	   else if (item != 0)
     	   {

@@ -32,8 +32,7 @@
 #define TBX_DRAGABLE_H_
 
 #include "gadget.h"
-#include "listener.h"
-#include "eventinfo.h"
+#include "mouseclicklistener.h"
 
 namespace tbx
 {
@@ -165,7 +164,8 @@ public:
 	void add_drag_ended_listener(DragEndedListener *listener);
 	void remove_drag_ended_listener(DragEndedListener *listener);
 
-	//TODO: Support for WIMP click/double click events
+	void add_mouse_click_listener(MouseClickListener *listener);
+	void remove_mouse_click_listener(MouseClickListener *listener);
 };
 
 /**

@@ -78,4 +78,19 @@ void Draggable::remove_drag_ended_listener(DragEndedListener *listener)
 	remove_listener(0x82888, listener);
 }
 
+/**
+ * Add listener for mouse click on the button
+ */
+void Draggable::add_mouse_click_listener(MouseClickListener *listener)
+{
+	add_window_listener(6, listener);
+}
+
+/**
+ * Remove listener for mouse click on the button
+ */
+void Draggable::remove_mouse_click_listener(MouseClickListener *listener)
+{
+	remove_window_listener(6, listener);
+}
 }
