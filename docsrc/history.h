@@ -14,4 +14,6 @@
  * PrintDbox, ProgInfo and Scale.
  * - Partial implementation of ColourDbox
  * - Added missing gadgets Adjuster, PopUp, RadioButton, Button, Draggable and ToolAction.
+ * - WimpFont::paint - changed to paint font along base line provided
+ * - Desktop font item rendering and textview rendering modifed to use 40 os units for the height.
  */
