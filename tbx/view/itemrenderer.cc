@@ -74,7 +74,7 @@ unsigned int WimpFontItemRenderer::width(unsigned int index) const
  */
 Size WimpFontItemRenderer::size(unsigned int index) const
 {
-	return Size((int)width(index), 32);
+	return Size((int)width(index), 40);
 }
 
 /**

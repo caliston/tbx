@@ -40,7 +40,6 @@ namespace view {
 ReportView::ReportView(Window window) : ItemView(window),
 	    _height(0), _width(0), _column_gap(4)
 {
-
 }
 
 /**

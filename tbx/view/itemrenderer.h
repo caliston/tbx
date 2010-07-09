@@ -193,9 +193,9 @@ public:
 	virtual unsigned int width(unsigned int index) const;
 
 	/**
-	 * Wimp font height is always 32
+	 * Wimp font height is always 40
 	 */
-	virtual unsigned int height(unsigned int index) const {return 32;}
+	virtual unsigned int height(unsigned int index) const {return 40;}
 
 	/**
 	 * Called to get the size of the cell.

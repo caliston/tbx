@@ -37,7 +37,7 @@ namespace tbx
 namespace view
 {
 
-const char ROW_HEIGHT = 32;
+const char ROW_HEIGHT = 40;
 
 /**
  * Construct a text view.
@@ -193,7 +193,7 @@ void TextView::redraw(const RedrawEvent &event)
 		if (_text[start] == '\n') start++;
 		if (start < end)
 		{
-			font.paint(x, y, _text + start, end-start);
+			font.paint(x, y+8, _text + start, end-start);
 		}
 		start = end;
 		y -= ROW_HEIGHT;
