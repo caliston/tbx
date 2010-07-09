@@ -51,6 +51,12 @@ namespace tbx
 		friend class EventRouter;
 
 	public:
+		/**
+		 * Construct uninitialised IdBlock
+		 */
+		IdBlock() {}
+
+		IdBlock(Object obj);
 		Object self_object() const;
 		Component self_component() const;
 		Object parent_object() const;

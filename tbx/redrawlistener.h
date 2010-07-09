@@ -25,6 +25,7 @@
 #define REDRAWLISTENER_H_
 
 #include "listener.h"
+#include "eventinfo.h"
 #include "bbox.h"
 #include "pollinfo.h"
 #include "visiblearea.h"
@@ -38,16 +39,11 @@ namespace tbx
      * Also contains helper functions to convert between screen
      * area coordinates and work area coordinates.
      */
-	class RedrawEvent
+	class RedrawEvent : EventInfo
 	{
-		VisibleArea _visible_area;
-		Point _scroll;
-		BBox _clip;
-
 	public:
-		RedrawEvent(PollBlock &poll_block) :
-			_visible_area(&poll_block.word[1]),
-			_clip(poll_block.word[7], poll_block.word[8], poll_block.word[9], poll_block.word[10])
+		RedrawEvent(IdBlock &id_block, PollBlock &poll_block) :
+			EventInfo(id_block, poll_block)
 			{
 			}
 
@@ -55,12 +51,12 @@ namespace tbx
 		 * The visible area class giving details or screen area and scroll
 		 * offset.
 		 */
-		const VisibleArea &visible_area() const {return _visible_area;}
+		const VisibleArea &visible_area() const {return *reinterpret_cast<const VisibleArea *>(&_data.word[1]);}
 
 		/**
 		 * The graphics clip in screen coordinates
 		 */
-		const BBox &clip() const {return _clip;}
+		const BBox &clip() const {return *reinterpret_cast<const BBox *>(&_data.word[7]);}
 	};
 
 	/**

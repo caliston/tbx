@@ -36,6 +36,8 @@
 #include "caretlistener.h"
 #include "command.h"
 #include "loadermanager.h"
+#include "swixcheck.h"
+#include "tbxexcept.h"
 
 #include <cstring>
 #include <kernel.h>
@@ -570,7 +572,7 @@ void EventRouter::process_redraw_request()
 		WindowEventListenerItem *redraw;
 		while (more)
 		{
-			RedrawEvent e(_poll_block);
+			RedrawEvent e(_id_block, _poll_block);
 			redraw = item;
 			while(redraw)
 			{
@@ -607,8 +609,7 @@ void EventRouter::process_open_window_request()
 
 	if (item)
 	{
-		Window win(_id_block.self_object_id);
-		OpenWindowEvent ev(win, _poll_block);
+		OpenWindowEvent ev(_id_block, _poll_block);
 		while (item)
 		{
 			_running_window_event_item = item;
@@ -631,11 +632,11 @@ void EventRouter::process_close_window_request()
 
 	if (item)
 	{
-		Window win(_id_block.self_object_id);
+		EventInfo ev(_id_block, _poll_block);
 		while (item)
 		{
 			_running_window_event_item = item;
-			static_cast<CloseWindowListener *>(item->listener)->close_window(win);
+			static_cast<CloseWindowListener *>(item->listener)->close_window(ev);
 			item = item->next;
 			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 3);
 		}
@@ -652,11 +653,11 @@ void EventRouter::process_pointer_leaving_window()
 
 	if (item)
 	{
-		Window win(_id_block.self_object_id);
+		EventInfo ev(_id_block, _poll_block);
 		while (item)
 		{
 			_running_window_event_item = item;
-			static_cast<PointerLeavingListener *>(item->listener)->pointer_leaving(win);
+			static_cast<PointerLeavingListener *>(item->listener)->pointer_leaving(ev);
 			item = item->next;
 			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 4);
 		}
@@ -673,11 +674,11 @@ void EventRouter::process_pointer_entering_window()
 
 	if (item)
 	{
-		Window win(_id_block.self_object_id);
+		EventInfo ev(_id_block, _poll_block);
 		while (item)
 		{
 			_running_window_event_item = item;
-			static_cast<PointerEnteringListener *>(item->listener)->pointer_entering(win);
+			static_cast<PointerEnteringListener *>(item->listener)->pointer_entering(ev);
 			item = item->next;
 			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 5);
 		}
@@ -744,9 +745,7 @@ void EventRouter::process_lose_caret()
 
 	if (item)
 	{
-		Window win(_id_block.self_object_id);
-		Gadget g(_id_block.self_component());
-		CaretEvent ev(win, g, _poll_block);
+		CaretEvent ev(_id_block, _poll_block);
 		while (item)
 		{
 			_running_window_event_item = item;
@@ -767,9 +766,7 @@ void EventRouter::process_gain_caret()
 
 	if (item)
 	{
-		Window win(_id_block.self_object_id);
-		Gadget g(_id_block.self_component());
-		CaretEvent ev(win, g, _poll_block);
+		CaretEvent ev(_id_block, _poll_block);
 
 		while (item)
 		{
@@ -1182,6 +1179,21 @@ void EventRouter::cancel_drag()
 		_drag_handler->drag_cancelled();
 		_drag_handler = 0;
 	}
+}
+
+/**
+ * Construct IdBlock with details from the given object
+ */
+IdBlock::IdBlock(Object obj)
+{
+	if (obj.handle() == NULL_ObjectId) throw ObjectNullError();
+	self_object_id = obj.handle();
+	self_component_id = NULL_ComponentId;
+
+	swix_check(_swix(0x44ECA, _INR(0,1) | _OUTR(0,1), 0, self_object_id,
+			&parent_object_id, &parent_component_id));
+	swix_check(_swix(0x44ECB, _INR(0,1) | _OUTR(0,1), 0, self_object_id,
+			&ancestor_object_id, &ancestor_component_id));
 }
 
 /**

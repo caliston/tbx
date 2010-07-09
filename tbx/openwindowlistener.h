@@ -28,6 +28,7 @@
 #include "bbox.h"
 #include "handles.h"
 #include "listener.h"
+#include "eventinfo.h"
 #include "window.h"
 
 namespace tbx
@@ -35,49 +36,53 @@ namespace tbx
 	/**
 	 * Event data for open window request listener
 	 */
-	class OpenWindowEvent
+	class OpenWindowEvent : EventInfo
 	{
-	private:
-		Window _window;
-		WindowHandle _handle;
-		BBox _visible_area;
-		Point _scroll;
-		WindowHandle _behind;
-
-		//TODO: Mechanism for updating details
-
 	public:
-		OpenWindowEvent(Window window, PollBlock &poll_block) :
-			_window(window),
-			_handle(poll_block.word[0]),
-			_visible_area(poll_block.word[1], poll_block.word[2], poll_block.word[3], poll_block.word[4]),
-			_scroll(poll_block.word[5], poll_block.word[6]),
-			_behind(poll_block.word[7]) {}
+		OpenWindowEvent(IdBlock &id_block, PollBlock &poll_block) :
+			EventInfo(id_block, poll_block) {}
 
 		/**
 		 * Get Window that generated this event
 		 */
-		Window window() const {return _window;}
+		Window window() const {return id_block().self_object();}
 
 		/**
 		 * Wimp window handle of window being opened
 		 */
-		WindowHandle handle() const {return _handle;}
+		WindowHandle handle() const {return _data.word[0];}
 
 		/**
-		 * Visible area on screen
+		 * Get visible area on screen
 		 */
-		const BBox &visible_area() const {return _visible_area;}
+		const BBox &visible_area() const {return *reinterpret_cast<const BBox *>(&_data.word[1]);}
 
 		/**
-		 * Scroll offsets in work area
+		 * Set visible area on screen
 		 */
-		const Point &scroll() const {return _scroll;}
+		void visible_area(const BBox &area) {_data.word[1] = area.min.x; _data.word[2] = area.min.y; _data.word[3] = area.max.x; _data.word[4] = area.max.y;}
 
 		/**
-		 * Wimp Window handle opened behind
+		 * Get scroll offsets in work area
 		 */
-		WindowHandle behind() const {return _behind;}
+		const Point &scroll() const {return *reinterpret_cast<const Point *>(&_data.word[5]);}
+
+		/**
+		 * Set scroll offsets in work area
+		 */
+		void scroll(const Point &offsets) {_data.word[5] = offsets.x; _data.word[6] = offsets.y;}
+
+		/**
+		 * Get WIMP Window handle opened behind
+		 */
+		WindowHandle behind() const {return _data.word[7];}
+
+		/**
+		 * Set WIMP Window handle to open behind
+		 */
+		void behind(WindowHandle h) {_data.word[7] = h;}
+
+		//TODO: Methods or constants for specific places like on top.
 	};
 
 	/**

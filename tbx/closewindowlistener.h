@@ -26,6 +26,7 @@
 #define TBX_CLOSEWINDOWLISTENER_H_
 
 #include "listener.h"
+#include "eventinfo.h"
 #include "window.h"
 
 namespace tbx
@@ -52,7 +53,7 @@ public:
 	 * Call window.hide() to actually close the window if that
 	 * is required.
 	 */
-	virtual void close_window(Window window) = 0;
+	virtual void close_window(const EventInfo &ev) = 0;
 };
 
 }

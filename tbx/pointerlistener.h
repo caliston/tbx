@@ -26,6 +26,7 @@
 #define TBX_POINTERLISTENER_H_
 
 #include "listener.h"
+#include "eventinfo.h"
 #include "window.h"
 
 namespace tbx
@@ -48,7 +49,7 @@ public:
 	/**
 	 * Called when the pointer leaves the windows visible work area
 	 */
-	virtual void pointer_leaving(Window window) = 0;
+	virtual void pointer_leaving(const EventInfo &ev) = 0;
 };
 
 /**
@@ -66,7 +67,7 @@ public:
 	/**
 	 * Called when the pointer enters the windows workspace
 	 */
-	virtual void pointer_entering(Window window) = 0;
+	virtual void pointer_entering(const EventInfo &ev) = 0;
 };
 
 }

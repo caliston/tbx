@@ -288,6 +288,7 @@ void Window::force_redraw(const BBox &work_area)
 void Window::update(const BBox &bounds, RedrawListener *background = 0)
 {
 	int more;
+	IdBlock id_block(*this);
 	PollBlock poll_block;
 	EventRouter::WindowEventListenerItem *first_item = event_router()->find_window_event_listener(_handle, 1);
 
@@ -302,7 +303,7 @@ void Window::update(const BBox &bounds, RedrawListener *background = 0)
 		swix_check(_swix(Wimp_UpdateWindow, _IN(1)|_OUT(0), &poll_block, &more));
 		while (more)
 		{
-			RedrawEvent e(poll_block);
+			RedrawEvent e(id_block, poll_block);
 			if (background) background->redraw(e);
 			EventRouter::WindowEventListenerItem *redraw = first_item;
 			while(redraw)
@@ -325,6 +326,7 @@ void Window::update(const BBox &bounds, RedrawListener *background = 0)
 void Window::update(const BBox &bounds, RedrawListener **redrawers, int redrawer_count)
 {
 	int more;
+	IdBlock id_block(*this);
 	PollBlock poll_block;
 
 	if (redrawers && redrawer_count)
@@ -338,7 +340,7 @@ void Window::update(const BBox &bounds, RedrawListener **redrawers, int redrawer
 		swix_check(_swix(Wimp_UpdateWindow, _IN(1)|_OUT(0), &poll_block, &more));
 		while (more)
 		{
-			RedrawEvent e(poll_block);
+			RedrawEvent e(id_block, poll_block);
 			for (int j = 0; j < redrawer_count; j++)
 			{
 				redrawers[j]->redraw(e);
