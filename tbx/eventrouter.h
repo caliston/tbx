@@ -101,6 +101,7 @@ private:
 	void process_pointer_leaving_window();
     void process_pointer_entering_window();
 	void process_mouse_click();
+	void process_key_pressed();
 	void process_lose_caret();
 	void process_gain_caret();
 

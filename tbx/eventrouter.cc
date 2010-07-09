@@ -32,6 +32,7 @@
 #include "closewindowlistener.h"
 #include "pointerlistener.h"
 #include "mouseclicklistener.h"
+#include "keylistener.h"
 #include "draghandler.h"
 #include "caretlistener.h"
 #include "command.h"
@@ -127,9 +128,8 @@ void EventRouter::route_event(int event_code)
 			}
 		break;
 
-		case 8: // TODO: Key_Pressed
-		// Pass on if not used
-		_swi(Wimp_ProcessKey, _IN(0), _poll_block.word[6]);
+		case 8: // Key_Pressed
+			process_key_pressed();
 		break;
 
 		case 9: // TODO: Menu_Selection
@@ -733,6 +733,36 @@ void EventRouter::process_mouse_click()
 			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 6);
 		}
 		_running_window_event_item = 0;
+	}
+}
+
+/*
+ * Process Key pressed from the WIMP
+ */
+void EventRouter::process_key_pressed()
+{
+	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 8);
+	bool used = false;
+	if (item) find_window_event_component(item, _id_block.self_component_id);
+	if (item)
+	{
+		KeyEvent ev(_id_block, _poll_block);
+
+		while (!used && item && item->component_id == _id_block.self_component_id)
+		{
+			_running_window_event_item = item;
+			static_cast<KeyListener *>(item->listener)->key(ev);
+			item = item->next;
+			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 6);
+			used = ev.is_key_used();
+		}
+		_running_window_event_item = 0;
+	}
+
+	// Pass on if not used
+	if (!used)
+	{
+		_swi(Wimp_ProcessKey, _IN(0), _poll_block.word[6]);
 	}
 }
 

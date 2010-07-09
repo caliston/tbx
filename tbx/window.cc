@@ -31,6 +31,7 @@
 #include "closewindowlistener.h"
 #include "pointerlistener.h"
 #include "mouseclicklistener.h"
+#include "keylistener.h"
 #include "caretlistener.h"
 #include "loadermanager.h"
 
@@ -789,6 +790,22 @@ void Window::add_mouse_click_listener(MouseClickListener *listener)
 void Window::remove_mouse_click_listener(MouseClickListener *listener)
 {
 	event_router()->remove_window_event_listener(_handle, 6, listener);
+}
+
+/**
+ * Add a listener for key pressed events.
+ */
+void Window::add_key_listener(KeyListener *listener)
+{
+	event_router()->add_window_event_listener(_handle, 8, listener);
+}
+
+/**
+ * Remove a listener for key pressed events.
+ */
+void Window::remove_key_listener(KeyListener *listener)
+{
+	event_router()->remove_window_event_listener(_handle, 8, listener);
 }
 
 /**
