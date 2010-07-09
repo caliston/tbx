@@ -547,6 +547,41 @@ int Font::width_os() const
 	return (regs.r[2] * 5 + 31) / 32;
 }
 
+/**
+ * Get the bounding box (in os coordinates) of the font.
+ * The bounding box is the minimum sized box that will cover all characters
+ * in the font.
+ *
+ * @return bounds bounding box (min inclusive, max exclusive)
+ */
+BBox Font::bounding_box() const
+{
+	BBox result;
+	get_bounding_box(result);
+	return result;
+}
+
+/**
+ * Get the bounding box (in os coordinates) of the font.
+ * The bounding box is the minimum sized box that will cover all characters
+ * in the font.
+ *
+ * @param bounds updated with the bounding box (min inclusive, max exclusive)
+ */
+void Font::get_bounding_box(BBox &bounds) const
+{
+	_kernel_swi_regs regs;
+
+	regs.r[0] = _font_ref->handle;
+
+	swix_check(_kernel_swi(0x40084, &regs, &regs));
+
+	bounds.min.x = regs.r[1];
+	bounds.min.y = regs.r[2];
+	bounds.max.x = regs.r[3];
+	bounds.max.y = regs.r[4];
+}
+
 
 
 Font::FontRef::FontRef(int handle)
