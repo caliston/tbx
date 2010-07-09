@@ -31,7 +31,7 @@ class Colour
 {
   union {
     unsigned _colour;
-    struct { char r, g, b, x; } _k;
+    struct { char x, r, g, b; } _k;
   };
 
 public:
