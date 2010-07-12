@@ -30,6 +30,8 @@
 #include "toolaction.h"
 #include "swixcheck.h"
 #include "kernel.h"
+#include "command.h"
+#include "commandrouter.h"
 #include <swis.h>
 
 namespace tbx
@@ -222,6 +224,69 @@ void ToolAction::add_selected_listener(ToolActionSelectedListener *listener)
 void ToolAction::remove_selected_listener(ToolActionSelectedListener *listener)
 {
 	remove_listener(0x140140, listener);
+}
+
+static void toolaction_select_router(IdBlock &id_block, PollBlock &data, Listener *listener)
+{
+	if ((data.word[3] & 1) == 0)
+		static_cast<Command *>(listener)->execute();
+}
+
+static void toolaction_adjust_router(IdBlock &id_block, PollBlock &data, Listener *listener)
+{
+	if ((data.word[3] & 1) != 0)
+		static_cast<Command *>(listener)->execute();
+}
+
+/**
+ * Add command to be run if the button is selected with the select or adjust.
+ */
+void ToolAction::add_selected_command(Command *command)
+{
+	add_listener(0x140140, command, command_router);
+}
+
+/**
+ * Remove command to be run if the button is selected with the select or adjust.
+ */
+void ToolAction::remove_selected_command(Command *command)
+{
+	remove_listener(0x140140, command);
+}
+
+/**
+ * Add command to be run if the button is selected with the select mouse button.
+ */
+
+void ToolAction::add_select_command(Command *command)
+{
+	add_listener(0x140140, command, toolaction_select_router);
+}
+
+/**
+ * Remove command to be run if the button is selected with the select mouse button.
+ */
+void ToolAction::remove_select_command(Command *command)
+{
+	remove_listener(0x140140, command);
+}
+
+/**
+ * Add command to be run if the button is selected with the adjust mouse button
+ * only
+ */
+void ToolAction::add_adjust_command(Command *command)
+{
+	add_listener(0x140140, command, toolaction_adjust_router);
+}
+
+/**
+ * Remove command to be run if the button is selected with the adjust mouse button
+ * only
+ */
+void ToolAction::remove_adjust_command(Command *command)
+{
+	remove_listener(0x140140, command);
 }
 
 }

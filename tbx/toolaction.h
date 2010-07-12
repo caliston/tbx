@@ -39,6 +39,7 @@ namespace tbx
 {
 
 class ToolActionSelectedListener;
+class Command;
 
 /**
  * A ToolAction is a gadget that shows a button that changes
@@ -159,6 +160,15 @@ public:
 
 	void add_selected_listener(ToolActionSelectedListener *listener);
 	void remove_selected_listener(ToolActionSelectedListener *listener);
+
+	void add_selected_command(Command *command);
+	void remove_selected_command(Command *command);
+
+	void add_select_command(Command *command);
+	void remove_select_command(Command *command);
+
+	void add_adjust_command(Command *command);
+	void remove_adjust_command(Command *command);
 };
 
 /**
