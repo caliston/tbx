@@ -202,19 +202,25 @@ void EventRouter::process_toolbox_event()
 		if (action >= FIRST_USER_EID && action <= LAST_USER_EID)
 		{
 			// User events are also passed to parent and ancestor objects and application
-			if (!handled && _id_block.parent_object_id != _id_block.self_object_id)
+			if (!handled
+					&& _id_block.parent_object_id != NULL_ObjectId
+					&& _id_block.parent_object_id != _id_block.self_object_id)
 			{
 				handled = process_toolbox_event(_id_block.parent_object_id, _id_block.parent_component_id);
 			}
 
 			if (!handled
+			    && _id_block.ancestor_object_id != NULL_ObjectId
 				&& _id_block.ancestor_object_id != _id_block.parent_object_id
 				&& _id_block.ancestor_object_id != _id_block.self_object_id)
 			{
 				handled = process_toolbox_event(_id_block.ancestor_object_id, _id_block.ancestor_component_id);
 			}
 
-			handled = process_toolbox_event(NULL_ObjectId, NULL_ComponentId);
+			if (!handled)
+			{
+				handled = process_toolbox_event(NULL_ObjectId, NULL_ComponentId);
+			}
 		}
 	}
 }
