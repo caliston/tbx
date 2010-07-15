@@ -2,10 +2,10 @@
  * @page history History/Changelog
  *
  * <B>0.1 Alpha June 2010</B>
- * - Alpha release so library use with !PackMan is available
+ * - Alpha release so library used with !PackMan is available
  *
- * <B>0.2 Alpha ???</B>
- * - Release for PackIt
+ * <B>0.2 Alpha July 2010</B>
+ * - Release so version used with PackIt is available.
  * - Removed uncaught exception handling so program stops with an error.
  * - Automatically remove file loaders from an object when it is destroyed.
  * - ReportView didn't refresh enough lines when items were inserted.
@@ -17,4 +17,5 @@
  * - WimpFont::paint - changed to paint font along base line provided
  * - Desktop font item rendering and textview rendering modifed to use 40 os units for the height.
  * - Added key pressed event processing to Window object.
+ * - Fixed bug where command added to application could be executed multiple times
  */
