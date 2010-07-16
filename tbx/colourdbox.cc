@@ -130,6 +130,8 @@ ColourSelectedEvent &ColourSelectedEvent::operator=(const ColourSelectedEvent &o
 	//TODO: Should this be 8 + remainder size - in which case what happens to the model field
 	// if it's 0.
 	std::memcpy(_block, other._block, 12 + remainder_size);
+
+    return *this;
 }
 
 }
