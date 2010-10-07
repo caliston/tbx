@@ -70,8 +70,8 @@ public:
 		init_string(44,0); // click_show
 	}
 
-	bool default() const {return flag(0, 1<<0);}
-	void default(bool value) {flag(0,1<<0,value);}
+	bool is_default() const {return flag(0, 1<<0);}
+	void is_default(bool value) {flag(0,1<<0,value);}
 	bool cancel() const {return flag(0, 1<<1);}
 	void cancel(bool value) {flag(0,1<<1,value);}
 	bool local() const {return flag(0, 1<<2);}
