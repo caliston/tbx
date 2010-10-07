@@ -24,11 +24,14 @@
 
 #include "saveas.h"
 #include "abouttobeshownlistener.h"
+#include "res/ressaveas.h"
 
 #include "swis.h"
 #include "swixcheck.h"
 
 namespace tbx {
+
+SaveAs::SaveAs(const res::ResSaveAs &object_template) : ShowFullObject(object_template) {}
 
 /**
  * Set the data addresses for Type 1 saves.

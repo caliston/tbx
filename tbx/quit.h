@@ -45,6 +45,10 @@ class HasBeenHiddenListener;
 class QuitQuitListener;
 class QuitCancelListener;
 
+namespace res
+{
+    class ResQuit;
+}
 
 /**
  * Class to show a toolbox Quit object that gives
@@ -62,6 +66,7 @@ public:
 	Quit(const Quit &other) : ShowFullObject(other._handle) {}
 	Quit(const Object &other) : ShowFullObject(other)	{check_toolbox_class(Quit::TOOLBOX_CLASS);}
 	Quit(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(Quit::TOOLBOX_CLASS);}
+	Quit(const res::ResQuit &object_template);
 
 	Quit &operator=(const Quit &other) {_handle = other.handle(); return *this;}
 	Quit &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

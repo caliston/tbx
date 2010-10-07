@@ -50,6 +50,13 @@ namespace tbx
 	class Loader;
 	class DragHandler;
 
+	namespace res
+	{
+	    class ResWindow;
+	    class ResGadget;
+	    class ResShortcut;
+	}
+
 	/**
 	 * The Window object represents a toolbox window.
 	 */
@@ -63,6 +70,7 @@ namespace tbx
 		Window(const Window &other) : ShowFullObject(other._handle) {}
 		Window(const Object &other) : ShowFullObject(other)	{check_toolbox_class(Window::TOOLBOX_CLASS);}
 		Window(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(Window::TOOLBOX_CLASS);}
+		Window(const res::ResWindow &object_template);
 
 		Window &operator=(const Window &other) {_handle = other.handle(); return *this;}
 		Window &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}
@@ -80,8 +88,9 @@ namespace tbx
 		 */
 		WindowHandle window_handle() const {return (WindowHandle)int_property(0);}
 
-		//TODO: add_gadget
-		//TODO: remove_gadget
+		Gadget add_gadget(const res::ResGadget &gadget_template);
+		void remove_gadget(ComponentId component_id);
+
 		void menu(Menu menu);
 		Menu menu() const;
 		void remove_menu();
@@ -91,8 +100,10 @@ namespace tbx
 		void help_message(const std::string &message) {string_property(7, message);}
 		std::string help_message() const {return string_property(8);}
 
-		//TODO: add_keyboard_shortcuts
-		//TODO: remove_keyboard_shortcuts
+		void add_shorcut(const res::ResShortcut &shortcut);
+		void add_shortcuts(const res::ResShortcut *shortcuts, int num);
+		void remove_all_shortcuts();
+		void remove_shortcuts(const res::ResShortcut *shortcuts, int num);
 
 		std::string title() const {return string_property(11);}
 		void title(std::string new_title) {string_property(11, new_title);}

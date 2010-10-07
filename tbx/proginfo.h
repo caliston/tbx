@@ -42,6 +42,11 @@ namespace tbx {
 class AboutToBeShownListener;
 class HasBeenHiddenListener;
 
+namespace res
+{
+    class ResProgInfo;
+}
+
 
 /**
  * Class to show a toolbox ProgInfo object.
@@ -57,6 +62,7 @@ public:
 	ProgInfo(const ProgInfo &other) : ShowFullObject(other._handle) {}
 	ProgInfo(const Object &other) : ShowFullObject(other)	{check_toolbox_class(ProgInfo::TOOLBOX_CLASS);}
 	ProgInfo(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(ProgInfo::TOOLBOX_CLASS);}
+	ProgInfo(const res::ResProgInfo &object_template);
 
 	ProgInfo &operator=(const ProgInfo &other) {_handle = other.handle(); return *this;}
 	ProgInfo &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

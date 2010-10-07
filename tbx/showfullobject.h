@@ -29,7 +29,9 @@
 #include "showfullspec.h"
 
 namespace tbx {
-
+namespace res {
+   class ResObject;
+}
 /**
  * Objects derived from this class can be shown with there
  * full location and size specified as well as the top left
@@ -42,6 +44,7 @@ public:
 	ShowFullObject(ObjectId handle) : ShowPointObject(handle) {}
 	ShowFullObject(const Object &other) : ShowPointObject(other) {}
 	ShowFullObject(const std::string &template_name) : ShowPointObject(template_name) {}
+	ShowFullObject(const res::ResObject &object_template) : ShowPointObject(object_template) {}
 
 	using ShowPointObject::show;
 

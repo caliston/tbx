@@ -43,6 +43,10 @@ namespace tbx {
 class AboutToBeShownListener;
 class HasBeenHiddenListener;
 
+namespace res
+{
+    class ResFileInfo;
+}
 
 /**
  * Class to show a toolbox FileInfo object.
@@ -57,6 +61,7 @@ public:
 	FileInfo(const FileInfo &other) : ShowFullObject(other._handle) {}
 	FileInfo(const Object &other) : ShowFullObject(other)	{check_toolbox_class(FileInfo::TOOLBOX_CLASS);}
 	FileInfo(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(FileInfo::TOOLBOX_CLASS);}
+	FileInfo(const res::ResFileInfo &object_template);
 
 	FileInfo &operator=(const FileInfo &other) {_handle = other.handle(); return *this;}
 	FileInfo &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

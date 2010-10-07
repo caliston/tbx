@@ -32,8 +32,11 @@
 #include "colourdbox.h"
 #include "abouttobeshownlistener.h"
 #include "hasbeenhiddenlistener.h"
+#include "res/rescolourdbox.h"
 
 namespace tbx {
+
+ColourDbox::ColourDbox(const res::ResColourDbox &object_template) : ShowPointObject(object_template) {}
 
 /**
  * This event is raised just before the ColourDbox underlying window is

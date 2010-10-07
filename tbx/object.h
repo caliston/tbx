@@ -37,6 +37,11 @@ namespace tbx
 	class ObjectDeletedListener;
 	class Component;
 
+	namespace res
+	{
+	    class ResObject;
+	}
+
 	/**
 	 * Class to manipulate a toolbox object.
 	 *
@@ -44,6 +49,9 @@ namespace tbx
 	 */
 	class Object
 	{
+	protected:
+		Object(const res::ResObject &object_template);
+
 	public:
 		Object() : _handle(NULL_ObjectId) {}
 		Object(ObjectId handle) : _handle(handle) {};

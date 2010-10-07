@@ -32,8 +32,11 @@
 #include "colourmenu.h"
 #include "abouttobeshownlistener.h"
 #include "hasbeenhiddenlistener.h"
+#include "res/rescolourmenu.h"
 
 namespace tbx {
+
+ColourMenu::ColourMenu(const res::ResColourMenu &object_template) : ShowPointObject(object_template) {}
 
 /**
  * This event is raised just before the ColourMenu underlying window is

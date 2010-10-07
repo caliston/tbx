@@ -33,6 +33,11 @@ namespace tbx
 	class Loader;
 	class IconbarClickListener;
 
+	namespace res
+	{
+	    class ResIconbar;
+	}
+
 	//@{
 	// Class to represent toolbox iconbar.
 	//
@@ -65,6 +70,7 @@ namespace tbx
 		 */
 		Iconbar(const Object &other) : Object(other)	{check_toolbox_class(Iconbar::TOOLBOX_CLASS);}
 		Iconbar(const char *template_name) : Object(template_name)	{check_toolbox_class(Iconbar::TOOLBOX_CLASS);}
+		Iconbar(const res::ResIconbar &object_template);
 
 		/**
 		 * Assign a Iconbar to an existing Iconbar.

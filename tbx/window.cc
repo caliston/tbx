@@ -35,11 +35,57 @@
 #include "keylistener.h"
 #include "caretlistener.h"
 #include "loadermanager.h"
+#include "res/reswindow.h"
+#include "res/resgadget.h"
+#include "res/resshortcut.h"
 
 #include "swis.h"
 #include "swixcheck.h"
 
 using namespace tbx;
+
+Window::Window(const res::ResWindow &object_template) : ShowFullObject(object_template)
+{
+}
+
+/**
+ * Add a gadget to the window.
+ *
+ * If the window is visible it will be shown immediately
+ * If the gadgets component id is -1 it will be allocated an unused component id
+ *
+ * @param gadget_template - gadget template to add
+ * @returns new gadget created
+ * @throws OsError if add fails
+ */
+Gadget Window::add_gadget(const res::ResGadget &gadget_template)
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[1] = _handle;
+	regs.r[2] = 1;
+	regs.r[3] = (int)gadget_template.header();
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+	return Gadget(_handle, (ComponentId)regs.r[0]);
+}
+
+/**
+ * Remove a gadget from the window.
+ *
+ * If the window is visible this will cause a redraw of the Window
+ */
+void Window::remove_gadget(ComponentId component_id)
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[1] = _handle;
+	regs.r[2] = 2;
+	regs.r[3] = component_id;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
 
 
 /**
@@ -88,6 +134,78 @@ Menu Window::menu() const
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 
 	return tbx::Menu(regs.r[0]);
+}
+
+/**
+ * Add a keyboard short cut
+ */
+void Window::add_shorcut(const res::ResShortcut &shortcut)
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[1] = _handle;
+	regs.r[2] = 9;
+	regs.r[3] = 1;
+	regs.r[4] = (int)shortcut.header();
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+void Window::add_shortcuts(const res::ResShortcut *shortcuts, int num)
+{
+	char temp[num * res::SHORTCUT_SIZE];
+	char *p = temp;
+	for (int sc = 0; sc < num; sc++)
+	{
+		memcpy(p, shortcuts->header(), res::SHORTCUT_SIZE);
+		p+= res::SHORTCUT_SIZE;
+		shortcuts++;
+	}
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[1] = _handle;
+	regs.r[2] = 9;
+	regs.r[3] = num;
+	regs.r[4] = (int)temp;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Remove all window shortcuts
+ */
+void Window::remove_all_shortcuts()
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[1] = _handle;
+	regs.r[2] = 10;
+	regs.r[3] = -1;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Remove given window shortcuts
+ */
+void Window::remove_shortcuts(const res::ResShortcut *shortcuts, int num)
+{
+	char temp[num * res::SHORTCUT_SIZE];
+	char *p = temp;
+	for (int sc = 0; sc < num; sc++)
+	{
+		memcpy(p, shortcuts->header(), res::SHORTCUT_SIZE);
+		p+= res::SHORTCUT_SIZE;
+		shortcuts++;
+	}
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[1] = _handle;
+	regs.r[2] = 10;
+	regs.r[3] = num;
+	regs.r[4] = (int)temp;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
 /**

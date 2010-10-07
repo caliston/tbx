@@ -34,11 +34,13 @@
 #include "hasbeenhiddenlistener.h"
 #include "swixcheck.h"
 #include "tbxexcept.h"
+#include "res/resprintdbox.h"
 
 #include <swis.h>
 
 namespace tbx {
 
+PrintDbox::PrintDbox(const res::ResPrintDbox &object_template) : ShowFullObject(object_template) {}
 
 void PrintDbox::page_range(int start, int end)
 {

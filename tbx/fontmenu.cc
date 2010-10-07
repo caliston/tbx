@@ -32,8 +32,11 @@
 #include "fontmenu.h"
 #include "abouttobeshownlistener.h"
 #include "hasbeenhiddenlistener.h"
+#include "res/resfontmenu.h"
 
 namespace tbx {
+
+FontMenu::FontMenu(const res::ResFontMenu &object_template) : ShowPointObject(object_template) {}
 
 /**
  * This event is raised just before the FontMenu underlying window is

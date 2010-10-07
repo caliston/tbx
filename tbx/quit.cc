@@ -32,8 +32,11 @@
 #include "quit.h"
 #include "abouttobeshownlistener.h"
 #include "hasbeenhiddenlistener.h"
+#include "res/resquit.h"
 
 namespace tbx {
+
+Quit::Quit(const res::ResQuit &object_template) : ShowFullObject(object_template) {}
 
 /**
  * This event is raised just before the Quit underlying window is

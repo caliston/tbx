@@ -31,6 +31,7 @@
 #include "objectdeletedlistener.h"
 #include "usereventlistener.h"
 #include "component.h"
+#include "res/resobject.h"
 
 #include <stdexcept>
 #include <swis.h>
@@ -46,6 +47,21 @@ Object::Object(const std::string &template_name)
 			reinterpret_cast<int>(template_name.c_str()),
 			&_handle
 			));
+}
+
+/**
+ * Protected constructor to create an object
+ */
+Object::Object(const res::ResObject &object_template)
+{
+	_handle = NULL_ObjectId;
+
+	swix_check(_swix(0x44EC0, _INR(0,1) |_OUT(0),
+			1,
+			reinterpret_cast<int>(object_template.object_header()),
+			&_handle
+			));
+
 }
 
 /**

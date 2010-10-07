@@ -34,10 +34,13 @@
 #include "hasbeenhiddenlistener.h"
 #include "swixcheck.h"
 #include "tbxexcept.h"
+#include "res/resfontdbox.h"
 
 #include <swis.h>
 
 namespace tbx {
+
+FontDbox::FontDbox(const res::ResFontDbox &object_template) : ShowFullObject(object_template) {}
 
 /**
  * Set size of font

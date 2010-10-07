@@ -44,6 +44,11 @@ class AboutToBeShownListener;
 class HasBeenHiddenListener;
 class FontDboxApplyListener;
 
+namespace res
+{
+    class ResFontDbox;
+}
+
 /**
  * Class to show a toolbox FontDbox object.
  * This dialogue allows you to choose a font with its size, weight and style.
@@ -58,6 +63,7 @@ public:
 	FontDbox(const FontDbox &other) : ShowFullObject(other._handle) {}
 	FontDbox(const Object &other) : ShowFullObject(other)	{check_toolbox_class(FontDbox::TOOLBOX_CLASS);}
 	FontDbox(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(FontDbox::TOOLBOX_CLASS);}
+	FontDbox(const res::ResFontDbox &object_template);
 
 	FontDbox &operator=(const FontDbox &other) {_handle = other.handle(); return *this;}
 	FontDbox &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

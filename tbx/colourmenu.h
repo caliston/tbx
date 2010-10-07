@@ -44,6 +44,11 @@ class AboutToBeShownListener;
 class HasBeenHiddenListener;
 class ColourMenuSelectionListener;
 
+namespace res
+{
+    class ResColourMenu;
+}
+
 /**
  * Class to show a toolbox ColourMenu object.
 
@@ -57,6 +62,7 @@ public:
 	ColourMenu(const ColourMenu &other) : ShowPointObject(other._handle) {}
 	ColourMenu(const Object &other) : ShowPointObject(other)	{check_toolbox_class(ColourMenu::TOOLBOX_CLASS);}
 	ColourMenu(const std::string &template_name) : ShowPointObject(template_name)	{check_toolbox_class(ColourMenu::TOOLBOX_CLASS);}
+	ColourMenu(const res::ResColourMenu &object_template);
 
 	ColourMenu &operator=(const ColourMenu &other) {_handle = other.handle(); return *this;}
 	ColourMenu &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

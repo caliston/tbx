@@ -32,8 +32,11 @@
 #include "dcs.h"
 #include "abouttobeshownlistener.h"
 #include "hasbeenhiddenlistener.h"
+#include "res/resdcs.h"
 
 namespace tbx {
+
+DCS::DCS(const res::ResDCS &object_template) : ShowFullObject(object_template) {}
 
 /**
  * This event is raised just before the DCS underlying window is

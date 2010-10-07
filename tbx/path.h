@@ -55,6 +55,7 @@ namespace tbx
 	{
 	public:
 		UTCTime();
+		UTCTime(long long csecs);
 		UTCTime(unsigned int loadAddress, unsigned int execAddress);
 		UTCTime(const UTCTime &other);
 
@@ -65,27 +66,20 @@ namespace tbx
 		std::string text() const;
 		std::string text(const std::string &format) const;
 
-		unsigned int low_word() const {return _lowWord;}
-		unsigned char high_byte() const {return _highByte;}
+		unsigned int low_word() const {return (unsigned int)(_centiseconds & 0xFFFFFFFF);}
+		unsigned char high_byte() const {return (unsigned char)((_centiseconds >> 32) & 0xFF);}
 
-		long long centiseconds() const
-		{
-			char buf[8];
-			*(unsigned int *)buf = _lowWord;
-			*(((unsigned int *)buf)+1) = _highByte;
-			return *((long long *)buf);
-		}
+		long long centiseconds() const {return _centiseconds;}
 
 		/**
 		 * Pointer to start of time in memory.
 		 * This is used for calls to the OS that pass a UTC.
 		 */
-		unsigned char *buffer() {return (unsigned char *)&_lowWord;}
-		unsigned char *buffer() const {return (unsigned char *)&_lowWord;}
+		unsigned char *buffer() {return (unsigned char *)&_centiseconds;}
+		unsigned char *buffer() const {return (unsigned char *)&_centiseconds;}
 
 	protected:
-		unsigned int _lowWord;
-		unsigned char _highByte;
+		long long _centiseconds;
 	};
 
 	class Path;

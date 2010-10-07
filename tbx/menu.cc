@@ -28,6 +28,7 @@
 #include "abouttobeshownlistener.h"
 #include "hasbeenhiddenlistener.h"
 #include "tbxexcept.h"
+#include "res/resmenu.h"
 
 #include <cstring>
 
@@ -42,37 +43,6 @@ namespace tbx {
 MenuItem Menu::item(ComponentId id)
 {
 	return MenuItem(_handle, id);
-}
-
-/**
- * Static function to return a resource menu item from
- * a resource template.
- *
- * @param res_menu_item menu item resource to fill in with retrieved details
- * @param res Resource handle for a menu resource
- * @param id Component id of item to retrieve.
- * @throws ObjectClassError res is not a menu resource
- * @throws ResMenuItemError component id isn't part of the menu resource
- */
-void Menu::resource_item(ResMenuItem &res_menu_item, ResHandle res, ComponentId id)
-{
-   int *res_data = (int *)res;
-   int *body = (int *)res_data[7];
-   int num_items = body[7];
-   int *item = body + 8;
-
-   if (res_data[0] != TOOLBOX_CLASS) throw ObjectClassError();
-
-   while (num_items && item[1] != id)
-   {
-	   num_items--;
-	   item += 10;
-   }
-   if (num_items == 0) throw ResMenuItemError();
-
-   res_menu_item.clear_strings();
-   memcpy(&res_menu_item._flags, item, 40);
-   res_menu_item.copy_strings();
 }
 
 void Menu::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
@@ -107,7 +77,7 @@ void Menu::remove_has_been_hidden_listener(HasBeenHiddenListener *listener)
  * @returns MenuItem added
  * @throws OsError add failed.
  */
-MenuItem Menu::add(const ResMenuItem &res_item, MenuItem *after /*= 0*/)
+MenuItem Menu::add(const res::ResMenuItem &res_item, MenuItem *after /*= 0*/)
 {
 	ComponentId id;
 	swix_check(_swix(0x44ec6, _INR(0,4)|_OUT(0),
@@ -115,7 +85,7 @@ MenuItem Menu::add(const ResMenuItem &res_item, MenuItem *after /*= 0*/)
 			_handle,
 			20,
 			(after) ? after->id() : -2,
-			&(res_item._flags),
+			res_item.header(),
 			&id
 			));
 
@@ -136,7 +106,7 @@ MenuItem Menu::add(const ResMenuItem &res_item, MenuItem *after /*= 0*/)
  * @throws OsError insert failed.
  */
 
-MenuItem Menu::insert(const ResMenuItem &res_item, MenuItem *before /* = 0*/)
+MenuItem Menu::insert(const res::ResMenuItem &res_item, MenuItem *before /* = 0*/)
 {
 	ComponentId id;
 	swix_check(_swix(0x44ec6, _INR(0,4)|_OUT(0),
@@ -144,7 +114,7 @@ MenuItem Menu::insert(const ResMenuItem &res_item, MenuItem *before /* = 0*/)
 			_handle,
 			20,
 			(before) ? before->id() : -1,
-			&(res_item._flags),
+			res_item.header(),
 			&id
 			));
 

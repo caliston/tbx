@@ -46,6 +46,10 @@ class DCSDiscardListener;
 class DCSSaveListener;
 class DCSCancelListener;
 
+namespace res
+{
+    class ResDCS;
+}
 
 /**
  * Class to show a toolbox DCS object that gives
@@ -64,6 +68,7 @@ public:
 	DCS(const DCS &other) : ShowFullObject(other._handle) {}
 	DCS(const Object &other) : ShowFullObject(other)	{check_toolbox_class(DCS::TOOLBOX_CLASS);}
 	DCS(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(DCS::TOOLBOX_CLASS);}
+	DCS(const res::ResDCS &object_template);
 
 	DCS &operator=(const DCS &other) {_handle = other.handle(); return *this;}
 	DCS &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

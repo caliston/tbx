@@ -676,26 +676,28 @@ bool Path::Iterator::IterBlock::next()
 
 UTCTime::UTCTime()
 {
-	_lowWord = 0;
-	_highByte = 0;
+	_centiseconds = 0;
+}
+
+UTCTime::UTCTime(long long csecs) : _centiseconds(csecs)
+{
+
 }
 
 UTCTime::UTCTime(unsigned int load_address, unsigned int exec_address)
 {
-	_lowWord = exec_address;
-	_highByte = (unsigned char)(load_address & 0xFF);
+	_centiseconds = exec_address
+			| ((long long)(load_address & 0xFF) << 32);
 }
 
 UTCTime::UTCTime(const UTCTime &other)
 {
-	_lowWord = other._lowWord;
-	_highByte = other._highByte;
+	_centiseconds = other._centiseconds;
 }
 
 UTCTime &UTCTime::operator=(const UTCTime &other)
 {
-	_lowWord = other._lowWord;
-	_highByte = other._highByte;
+	_centiseconds = other._centiseconds;
 
 	return *this;
 }
@@ -707,8 +709,8 @@ UTCTime UTCTime::now()
    _kernel_swi_regs in, out;
 
    in.r[0] = 14;
-   in.r[1] = (int)&(now._lowWord);
-   now._lowWord = 3; // Reason code for os call
+   in.r[1] = (int)&(now._centiseconds);
+   now._centiseconds = 3; // Reason code for os call
    _kernel_swi(OS_Word, &in, &out);
 
    return now;
@@ -728,7 +730,7 @@ std::string UTCTime::text() const
 
 	_kernel_swi_regs in, out;
 
-   in.r[0] = (int)&_lowWord;
+   in.r[0] = (int)&_centiseconds;
    in.r[1] = (int)dateText;
    in.r[2] = 32;
 
@@ -751,7 +753,7 @@ std::string UTCTime::text(const std::string &format) const
    int bufLen = format.length() + 64;
    std::auto_ptr<char> buffer(new char[bufLen]);
 
-   in.r[0] = (int)&_lowWord;
+   in.r[0] = (int)&_centiseconds;
    in.r[1] = reinterpret_cast<int>(buffer.get());
    in.r[2] = bufLen;
    in.r[3] = reinterpret_cast<int>(format.c_str());

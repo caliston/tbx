@@ -32,6 +32,7 @@
 #include "reporterror.h"
 #include "swixcheck.h"
 #include "sprite.h"
+#include "res/resobject.h"
 #include <swis.h>
 
 // Unix filename processing
@@ -287,26 +288,20 @@ void Application::remove_quit_listener(QuitListener *listener)
 }
 
 /**
- * Get a handle to a toolbox template.
+ * Get a Resource object template from the main toolbox templates.
  *
- * The returned handle can be used to create an object
- * for the template, copied into a ResObject derived
- * class to make a modified version of the template,
- * used to extract a ResGadget from a window or a
- * ResMenuItem from a menu.
- *
- * The return value should not be saved as it is not
- * guaranteed to be the same for the lifetime of the
- * application.
+ * The return value should not be saved as the resource it
+ * points to is not guaranteed to exist the same for the
+ * lifetime of the application.
  */
-ResHandle *Application::resource(std::string template_name)
+res::ResObject Application::resource(std::string template_name)
 {
-    ResHandle *res = 0;
+    res::ResObjectHeader *res = 0;
     swix_check(_swix(0x44EFB, _INR(0,1)|_OUT(0),
         0, reinterpret_cast<int>(template_name.c_str()),
         &res));
 
-    return res;
+    return res::ResObject(res);
 }
 
 /**

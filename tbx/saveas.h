@@ -46,6 +46,11 @@ class SaveAsSaveToFileHandler;
 class SaveAsFillBufferHandler;
 class SaveAsSaveCompletedListener;
 
+namespace res
+{
+    class ResSaveAs;
+}
+
 /**
  * Class to show the RISC OS SaveAs dialog box and generate
  * events to allow the application to do the Save.
@@ -64,6 +69,7 @@ public:
 	SaveAs(const SaveAs &other) : ShowFullObject(other._handle) {}
 	SaveAs(const Object &other) : ShowFullObject(other)	{check_toolbox_class(SaveAs::TOOLBOX_CLASS);}
 	SaveAs(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(SaveAs::TOOLBOX_CLASS);}
+	SaveAs(const res::ResSaveAs &object_template);
 
 	SaveAs &operator=(const SaveAs &other) {_handle = other.handle(); return *this;}
 	SaveAs &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

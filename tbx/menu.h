@@ -37,6 +37,11 @@ class HasBeenHiddenListener;
 class SubMenuListener;
 class MenuItemSelectedListener;
 
+namespace res
+{
+class ResMenuItem;
+}
+
 /**
  * Class representing a toolbox menu
  */
@@ -99,8 +104,6 @@ public:
 
 	MenuItem item(ComponentId id);
 
-	static void resource_item(ResMenuItem &resMenuItem, ResHandle res, ComponentId id);
-
 	/**
 	 * Set the help message text for the menu.
 	 */
@@ -114,8 +117,8 @@ public:
 	 */
 	int help_message_length() const {return string_property_length(17);}
 
-	MenuItem add(const ResMenuItem &res_item, MenuItem *after = 0);
-	MenuItem insert(const ResMenuItem &res_item, MenuItem *before = 0);
+	MenuItem add(const res::ResMenuItem &res_item, MenuItem *after = 0);
+	MenuItem insert(const res::ResMenuItem &res_item, MenuItem *before = 0);
 	void erase(ComponentId id);
 	void erase(MenuItem &item);
 

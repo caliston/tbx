@@ -38,6 +38,10 @@ namespace tbx
 	class PreQuitListener;
 	class QuitListener;
 	class SpriteArea;
+	namespace res
+	{
+	   class ResObject;
+	}
 
 	/**
 	 * The main application class.
@@ -106,7 +110,7 @@ namespace tbx
 		void add_quit_listener(QuitListener *listener);
 		void remove_quit_listener(QuitListener *listener);
 
-		ResHandle *resource(std::string template_name);
+		res::ResObject resource(std::string template_name);
 
 		std::string directory() const;
 

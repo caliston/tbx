@@ -29,11 +29,12 @@
 #include "command.h"
 #include "commandrouter.h"
 #include "loadermanager.h"
-
-using namespace tbx;
+#include "res/resiconbar.h"
 
 
 namespace tbx {
+
+Iconbar::Iconbar(const res::ResIconbar &object_template) : Object(object_template) {}
 
 // Internal event/command routers
 static void iconbar_clicked_router(IdBlock &id_block, PollBlock &data, Listener *listener)
@@ -52,8 +53,6 @@ static void iconbar_adjust_router(IdBlock &id_block, PollBlock &data, Listener *
 {
 	if ((data.word[3] & 1) != 0)
 		static_cast<Command *>(listener)->execute();
-}
-
 }
 
 /************************** PROPERTIES ******************/
@@ -336,3 +335,6 @@ void Iconbar::remove_loader(Loader *loader, int file_type /*=-2*/)
 	if (manager != 0)
 		manager->remove_loader(_handle, NULL_ComponentId, file_type, loader);
 }
+
+}
+

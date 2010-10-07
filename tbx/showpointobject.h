@@ -30,6 +30,10 @@
 #include "point.h"
 
 namespace tbx {
+namespace res
+{
+    class ResObject;
+}
 
 /**
  * Object that can be shown at a specific position
@@ -42,6 +46,7 @@ public:
 	ShowPointObject(ObjectId handle) : Object(handle) {}
 	ShowPointObject(const Object &other) : Object(other) {}
 	ShowPointObject(const std::string &template_name) : Object(template_name) {}
+	ShowPointObject(const res::ResObject &object_template) : Object(object_template) {}
 
 	using Object::show;
 

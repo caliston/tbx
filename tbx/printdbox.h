@@ -47,6 +47,11 @@ class PrintDboxSetupListener;
 class PrintDboxPrintListener;
 class PrintDboxSaveListener;
 
+namespace res
+{
+    class ResPrintDbox;
+}
+
 /**
  * Class to show a toolbox PrintDbox object.
  * The PrintDbox object shows a dialog that allows the user to
@@ -61,6 +66,7 @@ public:
 	PrintDbox(const PrintDbox &other) : ShowFullObject(other._handle) {}
 	PrintDbox(const Object &other) : ShowFullObject(other)	{check_toolbox_class(PrintDbox::TOOLBOX_CLASS);}
 	PrintDbox(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(PrintDbox::TOOLBOX_CLASS);}
+	PrintDbox(const res::ResPrintDbox &object_template);
 
 	PrintDbox &operator=(const PrintDbox &other) {_handle = other.handle(); return *this;}
 	PrintDbox &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 /*
  * reseditor.h
  *
@@ -38,18 +37,6 @@
 namespace tbx {
 
 namespace res {
-
-const int RESF_MARKER = 0x46534552;// 'RESF'
-
-/**
- * Structure representing the header of a resource file
- */
-struct ResFileHeader
-{
-	unsigned int file_id; /* Magic number should be RESF_MARKER */
-	unsigned int version; /* Version number * 100 */
-	int object_offset;    /* Offset to first object in the file or -1 for no objects */
-};
 
 /**
  * Class to allow creation, loading, editing and saving of a
@@ -69,33 +56,32 @@ public:
 	 */
 	const ResFileHeader *header() const {return reinterpret_cast<ResFileHeader *>(_header);}
 
-	void clear();
+	typedef std::vector<ResObject>::const_iterator const_iterator;
+	typedef std::vector<ResObject>::iterator iterator;
+
+	const_iterator begin() const {return _objects.begin();}
+	const_iterator end()   const {return _objects.end();}
+	const_iterator find(std::string name) const;
+
+	iterator begin() {return _objects.begin();}
+	iterator end()   {return _objects.end();}
+	iterator find(std::string name);
 
 	/**
 	 * Return number of objects
 	 */
 	unsigned int count() const {return _objects.size();}
 	bool contains(std::string name) const;
-	ResObject &object(std::string name);
 	const ResObject &object(std::string name) const;
-	void remove(std::string name);
 
-	/**
-	 * Add an object to the resource file.
-	 *
-	 * @param obj The object to add
-	 */
-	void add(ResObject obj) {_objects.push_back(obj);}
+	void clear();
+	void add(ResObject obj);
+	void replace(ResObject obj);
+	void erase(std::string name);
 
-
-	typedef std::vector<ResObject>::iterator iterator;
-	typedef std::vector<ResObject>::const_iterator const_iterator;
-
-	iterator begin() {return _objects.begin();}
-	iterator end()   {return _objects.end();}
-
-	const_iterator begin() const {return _objects.begin();}
-	const_iterator end()   const {return _objects.end();}
+	iterator insert(iterator before, ResObject obj);
+	iterator erase(iterator where);
+	void replace(iterator where, ResObject obj);
 
 	bool load(std::string filename);
 	bool save(std::string filename);
@@ -103,6 +89,8 @@ public:
 private:
 	// Only editor can change header
 	ResFileHeader *header() {return reinterpret_cast<ResFileHeader *>(_header);}
+
+
 };
 
 }

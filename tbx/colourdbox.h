@@ -44,6 +44,11 @@ class HasBeenHiddenListener;
 class ColourSelectedListener;
 class ColourDboxDialogueCompletedListener;
 
+namespace res
+{
+	class ResColourDbox;
+}
+
 /**
  * Class to show a toolbox ColourDbox object which allows a user to
  * pick a colour using a variety of colour models.
@@ -60,6 +65,7 @@ public:
 	ColourDbox(const ColourDbox &other) : ShowPointObject(other._handle) {}
 	ColourDbox(const Object &other) : ShowPointObject(other)	{check_toolbox_class(ColourDbox::TOOLBOX_CLASS);}
 	ColourDbox(const std::string &template_name) : ShowPointObject(template_name)	{check_toolbox_class(ColourDbox::TOOLBOX_CLASS);}
+	ColourDbox(const res::ResColourDbox &object_template);
 
 	ColourDbox &operator=(const ColourDbox &other) {_handle = other.handle(); return *this;}
 	ColourDbox &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

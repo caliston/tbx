@@ -34,10 +34,13 @@
 #include "hasbeenhiddenlistener.h"
 #include "swixcheck.h"
 #include "tbxexcept.h"
+#include "res/resscale.h"
 
 #include <swis.h>
 
 namespace tbx {
+
+Scale::Scale(const res::ResScale &object_template) : ShowFullObject(object_template) {}
 
 /**
  * Set the lower bound for the scale

@@ -44,6 +44,10 @@ class AboutToBeShownListener;
 class HasBeenHiddenListener;
 class FontMenuSelectionListener;
 
+namespace res
+{
+    class ResFontMenu;
+}
 
 /**
  * Class to show a toolbox FontMenu object.
@@ -58,6 +62,7 @@ public:
 	FontMenu(const FontMenu &other) : ShowPointObject(other._handle) {}
 	FontMenu(const Object &other) : ShowPointObject(other)	{check_toolbox_class(FontMenu::TOOLBOX_CLASS);}
 	FontMenu(const std::string &template_name) : ShowPointObject(template_name)	{check_toolbox_class(FontMenu::TOOLBOX_CLASS);}
+	FontMenu(const res::ResFontMenu &object_template);
 
 	FontMenu &operator=(const FontMenu &other) {_handle = other.handle(); return *this;}
 	FontMenu &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

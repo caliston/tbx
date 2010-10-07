@@ -34,11 +34,13 @@
 #include "hasbeenhiddenlistener.h"
 #include "swixcheck.h"
 #include "tbxexcept.h"
+#include "res/resfileinfo.h"
 
 #include <swis.h>
 
 namespace tbx {
 
+FileInfo::FileInfo(const res::ResFileInfo &object_template) : ShowFullObject(object_template) {}
 
 /**
  * Set the date

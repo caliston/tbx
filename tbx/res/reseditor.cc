@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 /*
  * reseditor.cc
  *
@@ -30,9 +29,9 @@
  */
 
 #include "reseditor.h"
+#include "resexcept.h"
 #include <fstream>
 #include <memory>
-#include <stdexcept>
 
 namespace tbx {
 
@@ -51,7 +50,7 @@ ResEditor::ResEditor()
 
 ResEditor::~ResEditor()
 {
-	delete _header;
+	delete [] _header;
 }
 
 /**
@@ -79,6 +78,8 @@ bool ResEditor::load(std::string filename)
 	file.read((char *)&h, sizeof(ResFileHeader));
 	if (!file) return false;
 
+	if (h.file_id != RESF_MARKER) return false;
+
 	 char *new_header = new char[h.object_offset == -1 ? 12 : h.object_offset];
 	std::memcpy(new_header, &h, sizeof(ResFileHeader));
 
@@ -86,9 +87,8 @@ bool ResEditor::load(std::string filename)
 	{
 		file.read(new_header+12, h.object_offset - sizeof(ResFileHeader));
 	}
-	delete _header;
+	delete [] _header;
 	_header = new_header;
-
 
 	while (file)
 	{
@@ -119,7 +119,7 @@ bool ResEditor::save(std::string filename)
 	header()->object_offset = obj_offset;
 
 	file.write(_header, obj_offset);
-	for (iterator i = _objects.begin(); i != _objects.end(); ++i)
+	for (std::vector<ResObject>::iterator i = _objects.begin(); i != _objects.end(); ++i)
 	{
 		ResObject &obj = (*i);
 		if (!obj.save(file)) return false;
@@ -137,46 +137,128 @@ bool ResEditor::save(std::string filename)
  */
 bool ResEditor::contains(std::string name) const
 {
-	for (const_iterator i = _objects.begin(); i != _objects.end(); ++i)
-	{
-		if (name == (*i).name()) return true;
-	}
-	return false;
+	return (find(name) != end());
 }
-
 /**
  * Get object
  *
  * @param name name of the object
  * @returns ResObject with the given name
- * @throws std::invalid_argument if object with name doesn't exists
- */
-ResObject &ResEditor::object(std::string name)
-{
-	for (iterator i = _objects.begin(); i != _objects.end(); ++i)
-	{
-		if (name == (*i).name()) return (*i);
-	}
-	throw std::invalid_argument("Object name '" + name +"' is not in this ResEditor");
-}
-
-/**
- * Get object
- *
- * @param name name of the object
- * @returns ResObject with the given name
- * @throws std::invalid_argument if object with name doesn't exists
+ * @throws ResObjectNotFound if object with name doesn't exists
  */
 const ResObject &ResEditor::object(std::string name) const
 {
-	for (const_iterator i = _objects.begin(); i != _objects.end(); ++i)
-	{
-		if (name == (*i).name()) return (*i);
-	}
-	throw std::invalid_argument("Object name '" + name +"' is not in this ResEditor");
+	const_iterator i = find(name);
+	if (i != end()) return (*i);
+	throw ResObjectNotFound(name);
 }
 
+/**
+ * Add a new object
+ *
+ * @param obj object to add
+ * @throws ResObjectExists if name is already used for an object
+ */
+void ResEditor::add(ResObject obj)
+{
+	if (find(obj.name()) != end()) throw ResObjectExists(obj.name());
+	_objects.push_back(obj);
+}
 
+/**
+ * Replace object with same name as object given
+ *
+ * @param obj to replace.
+ * @throws ResObjectNotFound if object with name doesn't exists
+ */ 
+void ResEditor::replace(ResObject obj)
+{
+	std::vector<ResObject>::iterator i = find(obj.name());
+	if (i == _objects.end()) throw ResObjectNotFound(obj.name());
+	*i = obj;
+}
+
+/**
+ * Erase object with given name
+ *
+ * @throws ResObjectNotFound if object with name doesn't exists
+ */
+void ResEditor::erase(std::string name)
+{
+	std::vector<ResObject>::iterator i = find(name);
+	if (i == _objects.end()) throw ResObjectNotFound(name);
+	_objects.erase(i);
+}
+
+/**
+ * Find object with given name
+ *
+ * @param name to find
+ * @returns const_iterator for found object or end() if not found
+ */
+ResEditor::const_iterator ResEditor::find(std::string name) const
+{
+	const_iterator i;
+	for (i = _objects.begin(); i != _objects.end(); ++i)
+	{
+		if (name == (*i).name()) break;
+	}
+
+	return i;
+}
+
+/**
+ * Find object with given name
+ *
+ * @param name to find
+ * @returns iterator for found object or end() if not found
+ */
+ResEditor::iterator ResEditor::find(std::string name)
+{
+	ResEditor::iterator i;
+	for (i = _objects.begin(); i != _objects.end(); ++i)
+	{
+		if (name == (*i).name()) break;
+	}
+
+	return i;
+}
+
+/**
+ * Insert object before given object
+ * @throws ResObjectExists if name is already used for an object
+ */
+ResEditor::iterator ResEditor::insert(iterator before, ResObject obj)
+{
+	if (find(obj.name()) != end())  throw ResObjectExists(obj.name());
+	return _objects.insert(before, obj);
+}
+
+/**
+ * Erase object at iterator
+ */
+ResEditor::iterator ResEditor::erase(iterator where)
+{
+	return _objects.erase(where);
+}
+
+/**
+ * Replace object at location
+ *
+ * It is recommend this is used instead of just *where = obj as this
+ * routine checks that the name is unique in the editor
+ *
+ * @throws ResObjectExists if name is already used for an object
+ * other than the one that is being replaced
+ */
+void ResEditor::replace(iterator where, ResObject obj)
+{
+	if ((*where).name() != obj.name())
+	{
+		if (find(obj.name()) != end())  throw ResObjectExists(obj.name());
+	}
+	*where = obj;
+}
 
 }
 }

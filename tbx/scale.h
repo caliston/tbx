@@ -44,6 +44,11 @@ class AboutToBeShownListener;
 class HasBeenHiddenListener;
 class ScaleApplyFactorListener;
 
+namespace res
+{
+    class ResScale;
+}
+
 /**
  * Class to show a toolbox Scale object.
  *
@@ -59,6 +64,7 @@ public:
 	Scale(const Scale &other) : ShowFullObject(other._handle) {}
 	Scale(const Object &other) : ShowFullObject(other)	{check_toolbox_class(Scale::TOOLBOX_CLASS);}
 	Scale(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(Scale::TOOLBOX_CLASS);}
+	Scale(const res::ResScale &object_template);
 
 	Scale &operator=(const Scale &other) {_handle = other.handle(); return *this;}
 	Scale &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}

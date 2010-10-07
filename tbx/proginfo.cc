@@ -32,8 +32,11 @@
 #include "proginfo.h"
 #include "abouttobeshownlistener.h"
 #include "hasbeenhiddenlistener.h"
+#include "res/resproginfo.h"
 
 namespace tbx {
+
+ProgInfo::ProgInfo(const res::ResProgInfo &object_template) : ShowFullObject(object_template) {}
 
 /**
  * This event is raised just before the ProgInfo underlying window is
