@@ -113,8 +113,8 @@ public:
 	void clear();
 	bool empty();
 
-	bool save(std::string filename) const;
-	bool load(std::string filename);
+	bool save(std::string file_name) const;
+	bool load(std::string file_name);
 
 protected:
    std::map<std::string,std::string> _properties;

@@ -34,12 +34,12 @@ namespace tbx
 	/**
 	 * Special file type returned for a directory
 	 */
-	const int FILETYPE_DIRECTORY = 0x1000;
+	const int FILE_TYPE_DIRECTORY = 0x1000;
 	/**
 	 * Special file type returned for an application directory.
 	 * i.e. a directory where the first character is a '!'
 	 */
-	const int FILETYPE_APPLICATION = 0x2000;
+	const int FILE_TYPE_APPLICATION = 0x2000;
 
 	///////////////////////////////////////////////////////////
 	//@{
@@ -229,8 +229,8 @@ namespace tbx
 
 		Path &down(const std::string &child);
 		Path &up();
-		void leafname(const std::string &child);
-		std::string leafname() const;
+		void leaf_name(const std::string &child);
+		std::string leaf_name() const;
 
 		PathInfo::ObjectType object_type() const;
 

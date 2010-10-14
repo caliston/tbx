@@ -96,32 +96,32 @@ public:
 	/**
 	 * Set the file name for the save as object
 	 */
-	void filename(std::string value) {string_property(3, value);}
+	void file_name(std::string value) {string_property(3, value);}
 
 	/**
-	 * Get the filename for the SaveAs object
+	 * Get the file name for the SaveAs object
 	 */
-	std::string filename() const {return string_property(4);}
+	std::string file_name() const {return string_property(4);}
 
 	/**
 	 * Set the file type for the SaveAs object
 	 */
-	void filetype(int value) {int_property(5, value);}
+	void file_type(int value) {int_property(5, value);}
 
 	/**
 	 * Get the file type from the SaveAs object
 	 */
-	int filetype() const {return int_property(6);}
+	int file_type() const {return int_property(6);}
 
 	/**
 	 * Set the file size for the SaveAs object
 	 */
-	void filesize(int value) {int_property(7, value);}
+	void file_size(int value) {int_property(7, value);}
 
 	/**
 	 * Get the file size from the SaveAs object
 	 */
-	int filesize() const {return int_property(8);}
+	int file_size() const {return int_property(8);}
 
 	/**
 	 * Set if a selection is available
@@ -130,7 +130,7 @@ public:
 
 	void set_data_address(void *data, int size, void *selection  = 0, int selection_size = 0);
 	void buffer_filled(void *buffer, int size);
-	void file_save_completed(bool successful, std::string filename);
+	void file_save_completed(bool successful, std::string file_name);
 
 	void add_about_to_be_shown_listener(AboutToBeShownListener *listener);
 	void remove_about_to_be_shown_listener(AboutToBeShownListener *listener);
@@ -204,9 +204,9 @@ public:
 	int message_id() const {return _data.word[4];}
 
 	/**
-	 * Full filename of file location if save was safe
+	 * Full file name of file location if save was safe
 	 */
-	const std::string filename() const {return 	reinterpret_cast<const char *>(&_data.word[5]);}
+	const std::string file_name() const {return 	reinterpret_cast<const char *>(&_data.word[5]);}
 };
 
 /**
@@ -237,9 +237,9 @@ public:
 	 *
 	 * @param saveas SaveAs object for save
 	 * @param selection save the selection only
-	 * @param filename filename to save to
+	 * @param file_name file name to save to
 	 */
-	virtual void saveas_save_to_file(SaveAs saveas, bool selection, std::string filename) = 0;
+	virtual void saveas_save_to_file(SaveAs saveas, bool selection, std::string file_name) = 0;
 };
 
 /**

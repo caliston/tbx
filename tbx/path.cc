@@ -124,19 +124,19 @@ Path &Path::up()
 
 ///////////////////////////////////////////////////////////////
 //@{
-// Change the leafname part of the path.
+// Change the leaf name part of the path.
 //
-// The leafname part is the last path of the path after the
+// The leaf name part is the last path of the path after the
 // directory delimiter.
 //
 // If a directory delimiter is not found the child is appended
 // to the path.
 //
-//@param child The new leafname part of the path.
+//@param child The new leaf name part of the path.
 //@}
 ///////////////////////////////////////////////////////////////
 
-void tbx::Path::leafname(const std::string &child)
+void tbx::Path::leaf_name(const std::string &child)
 {
 	std::string::size_type idx = _name.rfind(PathDelim);
 	if (idx == std::string::npos)
@@ -149,16 +149,16 @@ void tbx::Path::leafname(const std::string &child)
 
 //////////////////////////////////////////////////////////////
 //@{
-// Get the leafname part of the path.
+// Get the leaf name part of the path.
 //
-// The leafname part is the last part of the path after
+// The leaf name part is the last part of the path after
 // the final directory delimiter in the path.
 //
-//@retuns leafname part or "" string if it can't be determined
+//@retuns leaf name part or "" string if it can't be determined
 //@}
 //////////////////////////////////////////////////////////////
 
-std::string tbx::Path::leafname() const
+std::string tbx::Path::leaf_name() const
 {
 	std::string child;
 
@@ -239,6 +239,20 @@ bool Path::file_type(int type)
 
 	return (_kernel_swi(OS_File, &regs, &regs) == 0);
 }
+
+/**
+ * Return the modified time from the file in the path.
+ *
+ * @returns modified time of file or UTCTime(0)
+ *          if file doesn't exist or doesn't have a time.
+ */
+UTCTime Path::modified_time() const
+{
+	PathInfo info;
+	info.read(_name);
+	return info.modified_time();
+}
+
 
 /*TODO: It's unclear in the manual how to set this
 bool Path::SetModifiedTime(const UTCTime &utcTime)
@@ -827,7 +841,7 @@ bool PathInfo::read(const Path &path)
 {
 	_kernel_swi_regs regs;
 
-	_name = path.leafname();
+	_name = path.leaf_name();
 
 	regs.r[0] = 23;
 	regs.r[1] = reinterpret_cast<int>(path.name().c_str());

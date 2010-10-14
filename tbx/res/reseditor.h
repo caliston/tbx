@@ -83,8 +83,8 @@ public:
 	iterator erase(iterator where);
 	void replace(iterator where, ResObject obj);
 
-	bool load(std::string filename);
-	bool save(std::string filename);
+	bool load(std::string file_name);
+	bool save(std::string file_name);
 
 private:
 	// Only editor can change header

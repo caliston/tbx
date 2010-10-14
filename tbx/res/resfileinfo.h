@@ -69,7 +69,7 @@ public:
 	  : ResObject(name, CLASS_ID, 100, 36+40)
 	{
 		init_message(4,0); // title
-		init_message(20,0); // filename
+		init_message(20,0); // file name
 		filesize(1024);
 		init_string(36,0); // window
 	}
@@ -88,11 +88,11 @@ public:
 	int max_title() const {return int_value(8);}
 	int modified() const {return int_value(12);}
 	void modified(int value) {int_value(12,value);}
-	int filetype() const {return int_value(16);}
-	void filetype(int value) {int_value(16,value);}
-	const char *filename() const {return message(20);}
-	void filename(const char *value) {message(20, value);}
-	void filename(const std::string &value) {message(20, value);}
+	int file_type() const {return int_value(16);}
+	void file_type(int value) {int_value(16,value);}
+	const char *file_name() const {return message(20);}
+	void file_name(const char *value) {message(20, value);}
+	void file_name(const std::string &value) {message(20, value);}
 	int filesize() const {return int_value(24);}
 	void filesize(int value) {int_value(24,value);}
 	UTCTime date() const {return UTCTime(int_value(28), int_value(32));}

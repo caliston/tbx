@@ -215,16 +215,16 @@ bool PropertySet::empty()
 	return _properties.empty();
 }
 
-bool PropertySet::save(std::string filename) const
+bool PropertySet::save(std::string file_name) const
 {
-	std::ofstream os(filename.c_str());
+	std::ofstream os(file_name.c_str());
 	if (!os) return false;
 	return write(os);
 }
 
-bool PropertySet::load(std::string filename)
+bool PropertySet::load(std::string file_name)
 {
-	std::ifstream is(filename.c_str());
+	std::ifstream is(file_name.c_str());
 	if (!is) return false;
 	clear();
 	return read(is);

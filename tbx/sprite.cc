@@ -633,13 +633,13 @@ bool SpriteArea::initialise(int size)
 	}
 }
 
-bool SpriteArea::load(const std::string &filename)
+bool SpriteArea::load(const std::string &file_name)
 {
 	_kernel_swi_regs regs;
 
 	// get size of file
 	regs.r[0] = 5;
-	regs.r[1] = (int)filename.c_str();
+	regs.r[1] = (int)file_name.c_str();
 	if (_kernel_swi(OS_File, &regs,&regs) == NULL)
 	{
 		int fileSize = regs.r[4];
@@ -648,7 +648,7 @@ bool SpriteArea::load(const std::string &filename)
 		{
 			regs.r[0] = 10 + 512;
 			regs.r[1] = (int)_area;
-			regs.r[2] = (int)filename.c_str();
+			regs.r[2] = (int)file_name.c_str();
 			if (_kernel_swi(OS_SpriteOp, &regs, &regs) == NULL)
 			{
 				return true;
@@ -661,13 +661,13 @@ bool SpriteArea::load(const std::string &filename)
 
 // Note: any pointers will no longer be valid
 
-bool SpriteArea::merge(const std::string &filename)
+bool SpriteArea::merge(const std::string &file_name)
 {
    _kernel_swi_regs regs;
 
    // get size of file
    regs.r[0] = 17;
-   regs.r[1] = (int)filename.c_str();
+   regs.r[1] = (int)file_name.c_str();
    if (_kernel_swi(OS_File, &regs,&regs) == NULL)
    {
 	   int fileSize = regs.r[4];
@@ -676,7 +676,7 @@ bool SpriteArea::merge(const std::string &filename)
 	   {
 		   regs.r[0] = 11 + 512;
 		   regs.r[1] = (int)_area;
-		   regs.r[2] = (int)filename.c_str();
+		   regs.r[2] = (int)file_name.c_str();
 		   if (_kernel_swi(OS_SpriteOp, &regs, &regs) == NULL)
 		   {
 			   return true;
@@ -687,7 +687,7 @@ bool SpriteArea::merge(const std::string &filename)
    return false;
 }
 
-bool SpriteArea::save(const std::string &filename) const
+bool SpriteArea::save(const std::string &file_name) const
 {
    bool saved = false;
 
@@ -696,7 +696,7 @@ bool SpriteArea::save(const std::string &filename) const
       _kernel_swi_regs regs;
       regs.r[0] = 12 + 512;
       regs.r[1] = (int)_area;
-      regs.r[2] = (int)filename.c_str();
+      regs.r[2] = (int)file_name.c_str();
       saved = (_kernel_swi(OS_SpriteOp, &regs, &regs) == NULL);
    }
 
@@ -1007,7 +1007,7 @@ bool SpriteCapture::release()
 
 /**
  * Construct a wimp sprite to represent the given
- * filetype.
+ * file_type.
  *
  * Applications will be given the generic file type.
  *
@@ -1016,18 +1016,18 @@ bool SpriteCapture::release()
  *
  * @param file type to construct sprite for
  */
-WimpSprite::WimpSprite(int filetype)
+WimpSprite::WimpSprite(int file_type)
 {
-   if (filetype == tbx::FILETYPE_APPLICATION)
+   if (file_type == tbx::FILE_TYPE_APPLICATION)
    {
 	   _name = "application";
-   } else if (filetype == tbx::FILETYPE_DIRECTORY)
+   } else if (file_type == tbx::FILE_TYPE_DIRECTORY)
    {
 	   _name = "directory";
    } else
    {
 	   std::ostringstream ss;
-	   ss << "file_" << std::hex << filetype;
+	   ss << "file_" << std::hex << file_type;
 	   _name = ss.str();
 	   if (!exist()) _name = "unknown";
    }
@@ -1035,7 +1035,7 @@ WimpSprite::WimpSprite(int filetype)
 
 /**
  * Construct a wimp sprite to represent the given
- * filetype.
+ * file_type.
  *
  * Applications will be check for the name sprite first.
  *
@@ -1045,19 +1045,19 @@ WimpSprite::WimpSprite(int filetype)
  * @param file type to construct sprite for
  * @param leafname leaf name of file (used for applications)
  */
-WimpSprite::WimpSprite(int filetype, std::string leafname)
+WimpSprite::WimpSprite(int file_type, std::string leafname)
 {
-	if (filetype == tbx::FILETYPE_APPLICATION)
+	if (file_type == tbx::FILE_TYPE_APPLICATION)
 	{
 		_name = leafname;
 	   if (!exist()) _name = "application";
-	} else if (filetype == tbx::FILETYPE_DIRECTORY)
+	} else if (file_type == tbx::FILE_TYPE_DIRECTORY)
 	{
 		   _name = "directory";
 	} else
 	{
 		   std::ostringstream ss;
-		   ss << "file_" << std::hex << filetype;
+		   ss << "file_" << std::hex << file_type;
 		   _name = ss.str();
 		   if (!exist()) _name = "unknown";
 	}

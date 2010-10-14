@@ -251,9 +251,9 @@ namespace tbx
 		  bool is_valid() const	{return (_area != 0);}
 
 		  bool initialise(int size);
-		  bool load(const std::string &fileName);
-		  bool merge(const std::string &fileName);
-		  bool save(const std::string &fileName) const;
+		  bool load(const std::string &file_name);
+		  bool merge(const std::string &file_name);
+		  bool save(const std::string &file_name) const;
 
 		  int size() const;
 		  int free_space() const;
@@ -434,8 +434,8 @@ namespace tbx
 		 */
 		WimpSprite(const std::string &sname) : _name(sname) {};
 		WimpSprite(const char *sname) : _name(sname) {};
-		WimpSprite(int filetype);
-		WimpSprite(int filetype, std::string leafname);
+		WimpSprite(int file_type);
+		WimpSprite(int file_type, std::string leafname);
 
 		virtual ~WimpSprite() {};
 

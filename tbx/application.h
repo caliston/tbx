@@ -122,10 +122,10 @@ namespace tbx
 		 */
 		void quit() {_running = false;}
 
-		void unix_filename_translation(bool on);
-		bool unix_filename_translation() const;
-		void unix_filename_control(int flags);
-		int unix_filename_control() const;
+		void unix_file_name_translation(bool on);
+		bool unix_file_name_translation() const;
+		void unix_file_name_control(int flags);
+		int unix_file_name_control() const;
 
 	private:
 		bool _running;

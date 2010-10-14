@@ -64,14 +64,14 @@ void ResEditor::clear()
 /**
  * Load resources from a file
  *
- * @param filename - name of file for load
+ * @param file_name - name of file for load
  * @returns true if load succeeded
  */
-bool ResEditor::load(std::string filename)
+bool ResEditor::load(std::string file_name)
 {
 	_objects.clear();
 
-	std::ifstream file(filename.c_str(), std::ios_base::in | std::ios_base::binary);
+	std::ifstream file(file_name.c_str(), std::ios_base::in | std::ios_base::binary);
 	if (!file) return false;
 
 	ResFileHeader h;
@@ -106,12 +106,12 @@ bool ResEditor::load(std::string filename)
 /**
  * Save resources to the name file
  *
- * @param filename  name of file to save to
+ * @param file_name  name of file to save to
  * @returns true if save was successful
  */
-bool ResEditor::save(std::string filename)
+bool ResEditor::save(std::string file_name)
 {
-	std::ofstream file(filename.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+	std::ofstream file(file_name.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
 
 	int obj_offset = header()->object_offset;
 	if (_objects.empty()) obj_offset = -1;

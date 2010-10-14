@@ -35,7 +35,7 @@
 #include "res/resobject.h"
 #include <swis.h>
 
-// Unix filename processing
+// Unix file name processing
 #include "unixlib/local.h"
 int __riscosify_control = __RISCOSIFY_NO_PROCESS;
 
@@ -80,7 +80,7 @@ Application::Application(const char *task_directory,
 	_running = false;
 	_instance = this;
 
-	// By default TBX applications do not do unix filename processing
+	// By default TBX applications do not do unix file name processing
 	__riscosify_control = __RISCOSIFY_NO_PROCESS;
 
 	_kernel_swi_regs regs;
@@ -331,44 +331,44 @@ std::string Application::directory() const
  * Turn on or off UnixLib's automatic translation of unix
  * style file names.
  *
- * By default TBX applications have the unix filename translation
+ * By default TBX applications have the unix file name translation
  * turned off.
  *
  * When turned on this uses the default processing.
- * @see unix_filename_control to tune how the details of the translation
+ * @see unix_file_name_control to tune how the details of the translation
  *
- * @param on true to turn on the filename translation, false to turn it off
+ * @param on true to turn on the file name translation, false to turn it off
  *
  */
-void Application::unix_filename_translation(bool on)
+void Application::unix_file_name_translation(bool on)
 {
 	if (on) __riscosify_control = 0;
 	else __riscosify_control = __RISCOSIFY_NO_PROCESS;
 }
 
 /**
- * Check if some unix filename translations are being used
- * @return true if any unix filename translation is in force.
+ * Check if some unix file name translations are being used
+ * @return true if any unix file name translation is in force.
  */
-bool Application::unix_filename_translation() const
+bool Application::unix_file_name_translation() const
 {
 	return ((__riscosify_control & __RISCOSIFY_NO_PROCESS) == 0);
 }
 
 /**
- * Set flags to control the unix filename translation process.
+ * Set flags to control the unix file name translation process.
  *
  * @param flags See the unixlib/local.h UnixLib header file RISCOSIFY flags.
  */
-void Application::unix_filename_control(int flags)
+void Application::unix_file_name_control(int flags)
 {
 	__riscosify_control = flags;
 }
 
 /**
- * Get the flags that control the unix filename translation process
+ * Get the flags that control the unix file name translation process
  */
-int Application::unix_filename_control() const
+int Application::unix_file_name_control() const
 {
 	return __riscosify_control;
 }

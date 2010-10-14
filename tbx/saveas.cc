@@ -70,12 +70,12 @@ void SaveAs::buffer_filled(void *buffer, int size)
  * type 2 and 3 transfers
  *
  * @param successful set to true if save was successful
- * @param filename actual filename client saved to.
+ * @param file_name actual file name client saved to.
  */
-void SaveAs::file_save_completed(bool successful, std::string filename)
+void SaveAs::file_save_completed(bool successful, std::string file_name)
 {
 	swix_check(_swix(0x44ec6, _INR(0,3), successful, _handle, 12,
-			reinterpret_cast<int>(filename.c_str())
+			reinterpret_cast<int>(file_name.c_str())
 			));
 }
 
@@ -83,7 +83,7 @@ void SaveAs::file_save_completed(bool successful, std::string filename)
  * This event is raised just before the saveas underlying window is
  * about to be shown.
  *
- * Commonly it is used to set the filename, file type, file size and
+ * Commonly it is used to set the file name, file type, file size and
  * if there is a selection available.
  * For save type 1 it can also be used to set the data buffer address
  */
@@ -146,9 +146,9 @@ void SaveAs::remove_save_completed_listener(SaveAsSaveCompletedListener *listene
 static void saveas_save_to_file_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
 	SaveAs saveas(id_block.self_object());
-	std::string filename(reinterpret_cast<const char *>(&data.word[4]));
+	std::string file_name(reinterpret_cast<const char *>(&data.word[4]));
 	static_cast<SaveAsSaveToFileHandler *>(listener)->saveas_save_to_file(
-			saveas, (data.word[3]&1)!=0, filename);
+			saveas, (data.word[3]&1)!=0, file_name);
 }
 
 /**
