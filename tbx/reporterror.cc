@@ -86,4 +86,24 @@ ReportErrorReply report_error(const char *msg, const char *title, int flags /*= 
 	return report_error(&err, title, flags);
 }
 
+ReportErrorReply report_error(const std::string &msg, int flags /* = 0*/)
+{
+	_kernel_oserror err;
+	err.errnum = 0;
+	strncpy(err.errmess, msg.c_str(), 251);
+	err.errmess[251] = 0;
+
+	return report_error(&err);
+}
+
+ReportErrorReply report_error(const std::string &msg, const std::string &title, int flags /*= 0*/)
+{
+	_kernel_oserror err;
+	err.errnum = 0;
+	strncpy(err.errmess, msg.c_str(), 251);
+	err.errmess[251] = 0;
+
+	return report_error(&err, title.c_str(), flags);
+}
+
 }

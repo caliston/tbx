@@ -33,6 +33,7 @@
 #define REPORTERROR_H_
 
 #include "kernel.h"
+#include <string>
 
 namespace tbx
 {
@@ -52,6 +53,8 @@ namespace tbx
 	ReportErrorReply report_error(_kernel_oserror *err, int flags = 0);
 	ReportErrorReply report_error(const char* msg, int flags = 0);
 	ReportErrorReply report_error(const char* msg, const char *title, int flags = 0);
+	ReportErrorReply report_error(const std::string &msg, int flags = 0);
+	ReportErrorReply report_error(const std::string &msg, const std::string &title, int flags = 0);
 
 	void report_error_close(ReportErrorReply reply);
 }
