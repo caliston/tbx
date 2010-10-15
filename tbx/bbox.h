@@ -67,6 +67,15 @@ public:
 	Point max;
 
 	/**
+	 * Get top left of box
+	 */
+	Point top_left() const {return Point(min.x,max.y);}
+	/**
+	 * Set top left of box
+	 */
+	void top_left(const Point &pos) {min.x = pos.x; max.y = pos.y;}
+
+	/**
 	 * Assign value from another bounding box
 	 */
 	BBox &operator=(const BBox &other) {min=other.min; max=other.max; return *this;}
