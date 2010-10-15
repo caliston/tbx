@@ -8,7 +8,8 @@ AR=ar
 
 TARGET=libtbx.a
 
-CCSRC = $(wildcard tbx/*.cc) $(wildcard tbx/view/*.cc)
+CCSRC = $(wildcard tbx/*.cc) $(wildcard tbx/view/*.cc) $(wildcard tbx/res/*.cc) $(wildcard tbx/doc/*.cc)
+
 
 bin:	$(TARGET)
 
