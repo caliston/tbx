@@ -26,6 +26,7 @@
 #define TBX_APPLICATION_H
 
 #include "object.h"
+#include "messagefile.h"
 
 /**
  * A library for creating RISC OS toolbox applications.
@@ -38,6 +39,7 @@ namespace tbx
 	class PreQuitListener;
 	class QuitListener;
 	class SpriteArea;
+
 	namespace res
 	{
 	   class ResObject;
@@ -115,6 +117,11 @@ namespace tbx
 		std::string directory() const;
 
 		/**
+		 * Return the default message file for this application
+		 */
+		const MessageFile &messages() const {return _messages;}
+
+		/**
 		 * Quit the application.
 		 *
 		 * The application will quit once it returns to the
@@ -132,7 +139,7 @@ namespace tbx
         int _task_handle;
         int _wimp_version;
         SpriteArea *_sprite_area;
-        int _messagesFD[4];
+        MessageFile _messages;
 
 		static Application *_instance;
 	};

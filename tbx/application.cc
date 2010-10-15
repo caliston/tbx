@@ -84,13 +84,14 @@ Application::Application(const char *task_directory,
 	__riscosify_control = __RISCOSIFY_NO_PROCESS;
 
 	_kernel_swi_regs regs;
+    int messagesFD[4];
 
 	regs.r[0] = 0; // flags
 	regs.r[1] = wimp_version; // Minimum wimp version
 	regs.r[2] = reinterpret_cast<int> (deliver_messages); // Message to allow return
 	regs.r[3] = reinterpret_cast<int> (deliver_events); // toolbox events to allow
 	regs.r[4] = reinterpret_cast<int> (task_directory);
-	regs.r[5] = reinterpret_cast<int> (&_messagesFD); // Message trans descriptor
+	regs.r[5] = reinterpret_cast<int> (&messagesFD); // Message trans descriptor
 	regs.r[6] = reinterpret_cast<int> (&(event_router()->_id_block));
 
 	// Initialise the toolbox
@@ -105,6 +106,8 @@ Application::Application(const char *task_directory,
 
 	if (os_sprite_area) _sprite_area = new SpriteArea(os_sprite_area, false);
 	else _sprite_area = 0;
+
+	_messages.attach(messagesFD);
 }
 
 /**
