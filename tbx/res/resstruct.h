@@ -41,7 +41,7 @@ const int RESF_MARKER = 0x46534552;// 'RESF'
  */
 struct ResFileHeader
 {
-	unsigned int file_id; /* Magic number should be RESF_MARKER */
+	int file_id; /* Magic number should be RESF_MARKER */
 	unsigned int version; /* Version number * 100 */
 	int object_offset;    /* Offset to first object in the file or -1 for no objects */
 };

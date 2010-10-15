@@ -170,7 +170,7 @@ void ResEditor::add(ResObject obj)
  *
  * @param obj to replace.
  * @throws ResObjectNotFound if object with name doesn't exists
- */ 
+ */
 void ResEditor::replace(ResObject obj)
 {
 	std::vector<ResObject>::iterator i = find(obj.name());
