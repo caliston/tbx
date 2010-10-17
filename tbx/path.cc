@@ -753,6 +753,9 @@ UTCTime UTCTime::now()
 //@{
 //  Get time/date as text in standard format.
 //
+// The standard format is read from the system variable
+// Sys$DateFormat
+//
 //@returns string with formatted date
 //@}
 //////////////////////////////////////////////////////////
@@ -775,6 +778,32 @@ std::string UTCTime::text() const
 ///////////////////////////////////////////////////////////
 //@{
 //  Get time/date as text in specified format.
+//
+// Text from the format is copied directly into the result
+// unless it starts with a "%" in which case the following
+// is substituted.
+//    CS Centiseconds
+//    SE Seconds
+//    MI Minutes
+//    12 Hours in 12 hour format
+//    24 Hours in 24 hour format
+//    AM AM or PM indicator (in local language)
+//    PM AM or PM indicator (in local language)
+//    WE Weekday - full (in local language)
+//    W3 Weekday - short (in local language)
+//    WN Weekday - number
+//    DY Day of the month (in local language)
+//    ST Ordinal pre/suffix (in local language) (e.g st nd rd th)
+//    MO Month name - full (in local language)
+//    M3 Month name - short (in local language)
+//    MN Month - numbe
+//    CE Century
+//    YR Year within century
+//    WK Week of year (using local start of week)
+//    DN Day of the year
+//    TZ Timezone
+//    0  Insert an ASCII 0 zero byte
+//    %  Insert a '%'
 //
 //@returns string with formatted date
 //@}
