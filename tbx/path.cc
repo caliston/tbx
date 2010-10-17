@@ -240,6 +240,25 @@ bool Path::file_type(int type)
 	return (_kernel_swi(OS_File, &regs, &regs) == 0);
 }
 
+// File information
+int Path::file_type(const std::string &file_name)
+{
+	PathInfo info;
+	info.read(file_name);
+	return info.file_type();
+}
+
+bool Path::file_type(const std::string &file_name, int type)
+{
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 18;
+	regs.r[1] = reinterpret_cast<int>(file_name.c_str());
+	regs.r[2] = type;
+
+	return (_kernel_swi(OS_File, &regs, &regs) == 0);
+}
+
 /**
  * Return the modified time from the file in the path.
  *

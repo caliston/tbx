@@ -244,6 +244,8 @@ namespace tbx
 		// File information
 		int file_type() const;
 		bool file_type(int type);
+		static int file_type(const std::string &file_name);
+		static bool file_type(const std::string &file_name, int type);
 
 		UTCTime modified_time() const;
 //TODO:		bool modified_time(const UTCTime &utcTime);
