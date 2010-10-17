@@ -30,6 +30,7 @@
 
 #include "reseditor.h"
 #include "resexcept.h"
+#include "../path.h"
 #include <fstream>
 #include <memory>
 
@@ -125,7 +126,14 @@ bool ResEditor::save(std::string file_name)
 		if (!obj.save(file)) return false;
 	}
 
-	return file.good();
+    bool saved = file.good();
+
+    if (saved)
+    {
+       tbx::Path::file_type(file_name, 0xfae); // Resource file
+    }
+
+	return saved;
 }
 
 
@@ -253,7 +261,7 @@ ResEditor::iterator ResEditor::erase(iterator where)
  */
 void ResEditor::replace(iterator where, ResObject obj)
 {
-	if ((*where).name() != obj.name())
+	if (std::strcmp((*where).name(), obj.name()) != 0)
 	{
 		if (find(obj.name()) != end())  throw ResObjectExists(obj.name());
 	}
