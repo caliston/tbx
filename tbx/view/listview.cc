@@ -30,7 +30,7 @@
  */
 
 #include "listview.h"
-#include "../graphics.h"
+#include "../osgraphics.h"
 #include <algorithm>
 
 namespace tbx {
@@ -242,9 +242,9 @@ void ListView::redraw(const tbx::RedrawEvent & event)
         if (cell_info.selected)
         {
         	// Fill background with selected colour
-    		Graphics g;
-    		g.set_colour(Colour::black);
-    		g.fill_rect(cell_info.screen.x, cell_info.screen.y,
+    		OSGraphics g;
+    		g.foreground(Colour::black);
+    		g.fill_rectangle(cell_info.screen.x, cell_info.screen.y,
     				cell_info.screen.x + _width -1,
     				cell_info.screen.y + _height - 1);
         }

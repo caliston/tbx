@@ -58,8 +58,8 @@ namespace tbx
 		bool desktop_font();
 
 		enum PaintFlags {FPF_NONE = 0, FPF_JUSTIFY=1, FPF_RUBOUT= 2, FPF_OSUNITS=16};
-		void paint(int x, int y, const std::string &text, int flags = Font::FPF_NONE);
-		void paint(int x, int y, const char *text, int length = -1, int flags = Font::FPF_NONE);
+		void paint(int x, int y, const std::string &text, int flags = Font::FPF_NONE) const;
+		void paint(int x, int y, const char *text, int length = -1, int flags = Font::FPF_NONE) const;
 
 		int string_width_mp(const std::string &text);
 		int string_width_mp(const char *text, int length = -1);
@@ -124,8 +124,8 @@ namespace tbx
     	int string_width_os(const std::string &text, int num_chars = 0);
 
     	enum PaintFlags {WFPF_NONE, WFPF_VCENTRE = (1<<30), WFPF_RJUSTIFY = (1<<31)};
-    	void paint(int x, int y, const std::string &text, int flags = WimpFont::WFPF_NONE);
-    	void paint(int x, int y, const char *text, int length = -1, int flags = WimpFont::WFPF_NONE);
+    	void paint(int x, int y, const std::string &text, int flags = WimpFont::WFPF_NONE) const;
+    	void paint(int x, int y, const char *text, int length = -1, int flags = WimpFont::WFPF_NONE) const;
     };
 };
 

@@ -29,7 +29,7 @@
  */
 
 #include "reportview.h"
-#include "../graphics.h"
+#include "../osgraphics.h"
 
 namespace tbx {
 
@@ -798,9 +798,9 @@ void ReportView::redraw(const RedrawEvent &event)
         	int sel_right;
         	if (last_col < column_count()-1) sel_right = x_from_column(last_col+1);
         	else sel_right = _width + _margin.left;
-    		Graphics g;
-    		g.set_colour(Colour::black);
-    		g.fill_rect(first_col_scr_x, cell_info.screen.y,
+    		OSGraphics g;
+    		g.foreground(Colour::black);
+    		g.fill_rectangle(first_col_scr_x, cell_info.screen.y,
     				first_col_scr_x + sel_right - first_col_x - 1,
     				cell_info.screen.y + _height - 1);
         }

@@ -28,65 +28,83 @@
 #include "colour.h"
 #include "font.h"
 #include "bbox.h"
+#include "sprite.h"
+#include <string>
 
 namespace tbx
 {
 	/**
-	 * Class to draw to graphics to the screen
+	 * Interface to drawing graphics to the screen.
+	 *
+	 * This provides a standard interface that can be used with all
+	 * the graphics classes.
 	 */
 	class Graphics
 	{
 	public:
-		Graphics();
+		Graphics() {}
+		virtual ~Graphics() {}
 
-		void plot(int code, int x, int y);
+		// coordinate conversion
+		virtual int os_x(int logical_x) const = 0;
+		virtual int os_y(int logical_y) const = 0;
+		virtual int logical_x(int os_x) const = 0;
+		virtual int logical_y(int os_y) const = 0;
+
+		virtual Point os(const Point &pt) {Point o;o.x=os_x(pt.x);o.y=os_y(pt.y);return o;}
+		virtual Point logical(const Point &pt) {Point o;o.x=logical_x(pt.x);o.y=logical_y(pt.y);return o;}
+		virtual BBox os(const BBox &b) {BBox o;o.min = os(b.min);o.max = os(b.max);return o;}
+		virtual BBox logical(const BBox &b) {BBox o;o.min = logical(b.min);o.max = logical(b.max);return o;}
 
 		// Colours
-		void set_colour(Colour colour);
-		void set_background(Colour colour);
+		virtual void foreground(Colour colour) = 0;
+		virtual void background(Colour colour) = 0;
 
-		void set_wimp_colour(WimpColour colour);
-		void set_wimp_background(WimpColour colour);
-
-		// plot action
-		enum PlotAction {ACTION_OVERWRITE, ACTION_OR, ACTION_AND, ACTION_XOR,
-			ACTION_INVERT, ACTION_NONE, ACTION_AND_NOT, ACTION_OR_NOT};
-
-		void set_plot_action(PlotAction action);
+		virtual void wimp_foreground(WimpColour colour) = 0;
+		virtual void wimp_background(WimpColour colour) = 0;
 
 		// Drawing
-		inline void move(int x, int y);
-		inline void point(int x, int y);
-		void line(int fx, int fy, int tx, int ty);
-		inline void line_to(int x, int y);
-		inline void line_not_end_to(int x, int y);
-		void rect(int xmin, int ymin, int xmax, int ymax);
-		void triangle(int x1, int y1, int x2, int y2, int x3, int y3);
-		inline void fill_rect(int xmin, int ymin, int xmax, int ymax);
-		void fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3);
-		inline void fill_triangle_to(int x, int y);
+		virtual void move(int x, int y) = 0;
+		virtual void point(int x, int y) = 0;
+		virtual void line(int tx, int ty) = 0;
+		virtual void line(int fx, int fy, int tx, int ty) {move(fx,ty);line(tx,ty);}
+		virtual void rectangle(int xmin, int ymin, int xmax, int ymax) = 0;
+		virtual void fill_rectangle(int xmin, int ymin, int xmax, int ymax) = 0;
+		virtual void path(const Point *points, int num) = 0;
+		virtual void polygon(const Point *points, int num) = 0;
+		virtual void fill_polygon(const Point *points, int num) = 0;
+		virtual void circle(int centre_x, int centre_y, int radius) = 0;
+		virtual void circle_fill(int centre_x, int centre_y, int radius) = 0;
+		virtual void arc(int centre_x, int centre_y, int start_x, int start_y, int end_x, int end_y) = 0;
+		virtual void segment(int centre_x, int centre_y, int start_x, int start_y, int end_x, int end_y) = 0;
+		virtual void sector(int centre_x, int centre_y, int start_x, int start_y, int end_x, int end_y) = 0;
+		virtual void ellipse(int centre_x, int centre_y, int intersect_x, int intersect_y, int high_x, int high_y) = 0;
+		virtual void ellipse_fill(int centre_x, int centre_y, int intersect_x, int intersect_y, int high_x, int high_y) = 0;
 
 		// Drawing using points and boxes
-	    void move(const Point &point) {plot(4 ,point.x,point.y);}
-	    void point(const Point &point) {plot(69 ,point.x,point.y);}
-		void line_to(const Point &to_point) {plot(5 ,to_point.x,to_point.y);}
-	    void line_not_end_to(const Point &to_point) {plot(13 ,to_point.x,to_point.y);}
-		void line(const Point &from_point, const Point &to_point) {move(from_point);line_to(to_point);}
-		void rect(const BBox &r) {rect(r.min.x,r.min.y, r.max.x, r.max.y);}
-		void fill_rect(const BBox &rect) {fill_rect(rect.min.x, rect.min.y, rect.max.x, rect.max.y);}
-	    void fill_triangle_to(const Point &to_point) {plot(85 ,to_point.x,to_point.y);}
+	    virtual void move(const Point &point) {move(point.x,point.y);}
+	    virtual void point(const Point &pt) {point(pt.x,pt.y);}
+		virtual void line(const Point &to_point) {line(to_point.x,to_point.y);}
+		virtual void line(const Point &from_point, const Point &to_point) {move(from_point);line(to_point);}
+		virtual void rectangle(const Point &min_point, const Point &max_point) {rectangle(min_point.x, min_point.y, max_point.x, max_point.y);}
+		virtual void rectangle(const BBox &r) {rectangle(r.min.x,r.min.y, r.max.x, r.max.y);}
+		virtual void fill_rectangle(const Point &min_point, const Point &max_point) {fill_rectangle(min_point.x, min_point.y, max_point.x, max_point.y);}
+		virtual void fill_rectangle(const BBox &r) {fill_rectangle(r.min.x,r.min.y, r.max.x, r.max.y);}
+		virtual void circle(const Point &centre_point, int radius) {circle(centre_point.x, centre_point.y, radius);}
+		virtual void circle_fill(const Point &centre_point, int radius) {circle_fill(centre_point.x, centre_point.y, radius);}
+		virtual void arc(const Point &centre_point, const Point &start_point, const Point &end_point) {arc(centre_point.x, centre_point.y, start_point.x, start_point.y, end_point.x, end_point.y);}
+		virtual void segment(const Point &centre_point, const Point &start_point, const Point &end_point) {segment(centre_point.x, centre_point.y, start_point.x, start_point.y, end_point.x, end_point.y);}
+		virtual void sector(const Point &centre_point, const Point &start_point, const Point &end_point) {sector(centre_point.x, centre_point.y, start_point.x, start_point.y, end_point.x, end_point.y);}
+		virtual void ellipse(const Point &centre_point, const Point &intersect_point, const Point &high_point) {ellipse(centre_point.x, centre_point.y, intersect_point.x, intersect_point.y, high_point.x, high_point.y);}
+		virtual void ellipse_fill(const Point &centre_point, const Point &intersect_point, const Point &high_point) {ellipse_fill(centre_point.x, centre_point.y, intersect_point.x, intersect_point.y, high_point.x, high_point.y);}
 
-	protected:
-		int _plot_action;
+		// Text
+		virtual void text(int x, int y, const std::string &text) = 0;
+		virtual void text(int x, int y, const std::string &text, const Font &font) = 0;
+
+		// Sprites
+		virtual void sprite(int x, int y, const Sprite &sprite) = 0;
 	};
-
-	inline void Graphics::move(int x, int y) {plot(4 ,x, y);}
-	inline void Graphics::point(int x, int y) {plot(69 ,x, y);}
-	inline void Graphics::line_to(int x, int y) {plot(5 ,x, y);}
-	inline void Graphics::line_not_end_to(int x, int y) {plot(13 ,x, y);}
-	inline void Graphics::fill_rect(int xmin, int ymin, int xmax, int ymax) {move(xmin,ymin);plot(101,xmax,ymax);}
-	inline void Graphics::fill_triangle_to(int x, int y) {plot(85 ,x, y);};
-
 }
 
 #endif

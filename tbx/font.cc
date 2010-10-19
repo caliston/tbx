@@ -137,7 +137,7 @@ bool Font::desktop_font()
 //@}
 /////////////////////////////////////////////////////////////////////////
 
-void Font::paint(int x, int y, const std::string &text, int flags /*= Font::NONE*/)
+void Font::paint(int x, int y, const std::string &text, int flags /*= Font::NONE*/) const
 {
 	_kernel_swi_regs regs;
 	regs.r[0] = _font_ref->handle;
@@ -166,7 +166,7 @@ void Font::paint(int x, int y, const std::string &text, int flags /*= Font::NONE
 //@}
 /////////////////////////////////////////////////////////////////////////
 
-void Font::paint(int x, int y, const char *text, int length /*= -1*/, int flags /*= Font::NONE*/)
+void Font::paint(int x, int y, const char *text, int length /*= -1*/, int flags /*= Font::NONE*/) const
 {
 	if (length > 0) flags |= (1<<7); // Use string length
 
@@ -649,7 +649,7 @@ int WimpFont::string_width_os(const std::string &text, int num_chars /*= 0*/)
  * @param text text to plot
  * @param flags flags to control painting, defaults to WFPF_NONE
  */
-void WimpFont::paint(int x, int y, const std::string &text, int flags /*= WimpFont::WFPF_NONE*/)
+void WimpFont::paint(int x, int y, const std::string &text, int flags /*= WimpFont::WFPF_NONE*/) const
 {
 	swix_check(_swix(Wimp_TextOp, _INR(0,5), 2 | flags,
 			reinterpret_cast<int>(text.c_str()),
@@ -673,7 +673,7 @@ void WimpFont::paint(int x, int y, const std::string &text, int flags /*= WimpFo
  * @param length length of text or -1 to plot to end of null terminated text
  * @param flags flags to control painting, defaults to WFPF_NONE
  */
-void WimpFont::paint(int x, int y, const char *text, int length /*= -1*/, int flags /*= WimpFont::WFPF_NONE*/)
+void WimpFont::paint(int x, int y, const char *text, int length /*= -1*/, int flags /*= WimpFont::WFPF_NONE*/) const
 {
 	std::string ttext;
 	if (length > 0) ttext.assign(text, length);
