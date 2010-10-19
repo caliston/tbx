@@ -145,6 +145,15 @@ void OSGraphics::line(int x, int y)
 }
 
 /**
+ * Draw a line betweenn the given coordinates.
+ */
+void OSGraphics::line(int from_x, int from_y, int to_x, int to_y)
+{
+	move(from_x, from_y);
+	plot(5, to_x, to_y);
+}
+
+/**
  * Draw outline of a rectangle
  */
 void OSGraphics::rectangle(int xmin, int ymin, int xmax, int ymax)
