@@ -134,6 +134,8 @@ namespace tbx
 		void unix_file_name_control(int flags);
 		int unix_file_name_control() const;
 
+		void catch_poll_exceptions(bool on);
+
 	private:
 		bool _running;
         int _task_handle;

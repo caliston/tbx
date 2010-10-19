@@ -375,3 +375,23 @@ int Application::unix_file_name_control() const
 {
 	return __riscosify_control;
 }
+
+/**
+ * Catch any uncaught exceptions thrown during polling and
+ * show them in an error box.
+ *
+ * If this is off, uncaught exceptions will close the program.
+ *
+ * This defaults to true so an end user will get an indication
+ * if something goes wrong.
+ *
+ * It is useful to turn it off during development so a full
+ * stack trace of the error is shown in stdout.
+ *
+ * @param on - true to catch the unhandled exceptions, false
+ *             to let them through.
+ */
+void Application::catch_poll_exceptions(bool on)
+{
+	event_router()->catch_exceptions(on);
+}

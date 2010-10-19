@@ -54,6 +54,9 @@ public:
 
 	void poll();
 
+	// Turn on catching of uncaught exceptions (default to on)
+	void catch_exceptions(bool c) {_catch_exceptions = c;}
+
 private:
 	// Allow base listener adding classes access to low level listener adding routines
 	friend class Application;
@@ -113,6 +116,7 @@ private:
 	int _poll_mask;
 	PollBlock _poll_block;
 	int _reply_to;
+	bool _catch_exceptions;
 
 	// List item for object/component toolbox events
     struct ObjectListenerItem

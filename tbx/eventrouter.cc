@@ -72,6 +72,8 @@ EventRouter::EventRouter()
     _null_event_commands = 0;
 
     _drag_handler = 0;
+
+    _catch_exceptions = true;
 }
 
 EventRouter::~EventRouter()
@@ -90,17 +92,22 @@ void EventRouter::poll()
 
     if (_kernel_swi(poll, &regs, &regs) == 0)
 	{
-//		try
-//		{
-			route_event(regs.r[0]);
-
-//		} catch(std::exception &e)
-//		{
-//			report_error(e.what(), "Uncaught Exception");
-//		} catch(...)
-//		{
-//			report_error("Uncaught exception");
-//		}
+    	if (_catch_exceptions)
+    	{
+			try
+			{
+				route_event(regs.r[0]);
+			} catch(std::exception &e)
+			{
+				report_error(e.what(), "Uncaught Exception");
+			} catch(...)
+			{
+				report_error("Uncaught exception");
+			}
+    	} else
+    	{
+    		route_event(regs.r[0]);
+    	}
 	}
 }
 
