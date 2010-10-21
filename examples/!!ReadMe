@@ -12,4 +12,5 @@ The examples are:
 
 !TbxMin   - This is a minimum tbx application
 !Reverser - Show how to use objects and events
+!StopWatch - use of a timer
 !IconView - A simple application showing how to create a "filer-like" view
