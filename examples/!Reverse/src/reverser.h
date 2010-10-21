@@ -12,7 +12,7 @@
 
 #include "tbx/autocreatelistener.h"
 #include "tbx/displayfield.h"
-#include "tbx/writeablefield.h"
+#include "tbx/writablefield.h"
 #include "tbx/textchangedlistener.h"
 #include "tbx/command.h"
 
@@ -35,9 +35,9 @@ public:
  */
 class ReverseCommand : public tbx::Command
 {
-    tbx::WriteableField _reverse;
+    tbx::WritableField _reverse;
 public:
-    void reverse_field(tbx::WriteableField &reverse) {_reverse = reverse;}
+    void reverse_field(tbx::WritableField &reverse) {_reverse = reverse;}
 
     virtual void execute();
 };

@@ -22,7 +22,7 @@ using namespace tbx;
 void Reverser::auto_created(std::string template_name, Object object)
 {
     Window window(object);
-    WriteableField input(window.gadget(CID_Text));
+    WritableField input(window.gadget(CID_Text));
     DisplayField count(window.gadget(CID_Display));
 
   _counter.display_to(count);

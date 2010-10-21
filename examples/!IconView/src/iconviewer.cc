@@ -50,10 +50,10 @@ bool IconViewer::load_file(tbx::LoadEvent &event)
    if (event.from_filer())
    {
 	   Path path(event.file_name());
-	   WimpSprite ws(event.file_type(), path.leafname());
+	   WimpSprite ws(event.file_type(), path.leaf_name());
 
 	   unsigned int index = _view.insert_index(event.destination_point());
-	   _icons.insert(index, IconData(path.leafname(), ws.name()));
+	   _icons.insert(index, IconData(path.leaf_name(), ws.name()));
    }
 
    return false;

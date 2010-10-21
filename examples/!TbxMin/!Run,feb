@@ -15,6 +15,6 @@ RMEnsure ProgInfo 0.09 Error ListTest needs version 0.09 or later of the ProgInf
 
 Set TbxMin$Dir <Obey$Dir>
 
-WimpSlot -min 736k -max 736k
+WimpSlot -min 768k -max 768k
 
 /<TbxMin$Dir>.!RunImage %*0

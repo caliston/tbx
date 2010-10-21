@@ -12,6 +12,6 @@ RMENSURE IconBar  0.00  RMLOAD System:modules.toolbox.IconBar
 RMENSURE IconBar  0.00  ERROR You need IconBar to run !Reverse
 
 Set Reverse$Dir <Obey$Dir>
-WimpSlot -min 712K -max 712K
+WimpSlot -min 768K -max 768K
 
 Run <Obey$Dir>.!RunImage
