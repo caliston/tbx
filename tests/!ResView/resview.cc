@@ -196,7 +196,7 @@ void dump_object(std::ostream &os, const ResObject &obj)
 	os << MARGIN << "Class ID: " << obj.class_id();
 
 	int cidx = 0;
-	while (ObjectClasses[cidx].class_id != obj.class_id() 
+	while (ObjectClasses[cidx].class_id != obj.class_id()
 		&& ObjectClasses[cidx].class_id != 0) cidx++;
 	os << " " << ObjectClasses[cidx].name << endl;
 	os << MARGIN << "Version : " << obj.object_version() << endl;
@@ -316,8 +316,8 @@ void dump_saveas(std::ostream &os, const ResObject &obj)
 	if (g.no_selection())	os << MARGIN << MARGIN << " no_selection" << endl;
 	if (g.use_buffer())	os << MARGIN << MARGIN << " use_buffer" << endl;
 	if (g.ram_transfer())	os << MARGIN << MARGIN << " ram_transfer" << endl;
-	os << MARGIN << MARGIN << "Filename: " << string_or_null(g.filename()) << endl;
-	os << MARGIN << MARGIN << "Filetype: " << hex << g.filetype() << dec << endl;
+	os << MARGIN << MARGIN << "Filename: " << string_or_null(g.file_name()) << endl;
+	os << MARGIN << MARGIN << "Filetype: " << hex << g.file_type() << dec << endl;
 	os << MARGIN << MARGIN << "Title: " << string_or_null(g.title()) << endl;
 	os << MARGIN << MARGIN << "Max_title: " << g.max_title() << endl;
 	os << MARGIN << MARGIN << "Window: " << string_or_null(g.window()) << endl;
@@ -374,8 +374,8 @@ void dump_fileinfo(std::ostream &os, const ResObject &obj)
 	os << MARGIN << "Title: " << string_or_null(g.title()) << endl;
 	os << MARGIN << "Max title: " << g.max_title() << endl;
 	os << MARGIN << "Modified: " << g.modified() << endl;
-	os << MARGIN << "Filetype: " << g.filetype() << endl;
-	os << MARGIN << "Filename: " << string_or_null(g.filename()) << endl;
+	os << MARGIN << "Filetype: " << g.file_type() << endl;
+	os << MARGIN << "Filename: " << string_or_null(g.file_name()) << endl;
 	os << MARGIN << "Filesize: " << g.filesize() << endl;
 //TODO:	os << MARGIN << "Date: " << g.date() << endl;
 	os << MARGIN << "Window: " << string_or_null(g.window()) << endl;
@@ -465,7 +465,7 @@ void dump_window(std::ostream &os, const ResObject &obj)
 	os << MARGIN << "Pointer Y hot: " << rw.pointer_y_hot() << endl;
 	os << MARGIN << "Menu: " << string_or_null(rw.menu()) << endl;
 	os << MARGIN << "Num keyboard shortcuts: " << rw.num_shortcuts() << endl;
-	os << MARGIN << "Num gadgets: " << rw.num_gadgets() << endl;		
+	os << MARGIN << "Num gadgets: " << rw.num_gadgets() << endl;
 	os << MARGIN << "Default focus id: " << rw.default_focus() << endl;
 	os << MARGIN << "Show event: " << rw.show_event() << endl;
 	os << MARGIN << "Hide event: " << rw.hide_event() << endl;
@@ -519,7 +519,7 @@ void dump_window(std::ostream &os, const ResObject &obj)
 void dump_gadget(std::ostream &os, const ResGadget &gadget)
 {
 	int cidx = 0;
-	while (GadgetClasses[cidx].type_id != gadget.type() 
+	while (GadgetClasses[cidx].type_id != gadget.type()
 		&& GadgetClasses[cidx].type_id != 0) cidx++;
 
 	os << MARGIN << " Gadget" << endl;
@@ -573,7 +573,7 @@ void dump_adjuster(std::ostream &os, const ResGadget &gadget)
 
 void dump_button(std::ostream &os, const ResGadget &gadget)
 {
-	static char *ButtonTypes[] = 
+	static char *ButtonTypes[] =
 	{
 		"IGNORE_CLICKS",
 		"CONTINUOUS",

@@ -1,7 +1,7 @@
 # Makefile for ResView test program
 
 CXX=g++
-CXXFLAGS=-O2 -ITBX:
+CXXFLAGS=-O2 -ITBX: -mthrowback
 
 LDFLAGS=-LTBX: -ltbx -static
 
