@@ -291,6 +291,31 @@ void Application::remove_quit_listener(QuitListener *listener)
 }
 
 /**
+ * Add a timer to the application that will be called at a
+ * regular interval.
+ *
+ * Timers are only processed when there are no other events
+ * so they will not necessarily be delivered exactly on time.
+ *
+ * @param elapsed number of centiseconds between calls
+ * @param timer - timer to add
+ */
+void Application::add_timer(int elapsed, Timer *timer)
+{
+	event_router()->add_timer(elapsed, timer);
+}
+
+/**
+ * Remove the given timer
+ *
+ * @param timer Timer to remove
+ */
+void Application::remove_timer(Timer *timer)
+{
+	event_router()->remove_timer(timer);
+}
+
+/**
  * Get a Resource object template from the main toolbox templates.
  *
  * The return value should not be saved as the resource it

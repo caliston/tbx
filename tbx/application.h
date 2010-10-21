@@ -39,6 +39,7 @@ namespace tbx
 	class PreQuitListener;
 	class QuitListener;
 	class SpriteArea;
+	class Timer;
 
 	namespace res
 	{
@@ -112,7 +113,15 @@ namespace tbx
 		void add_quit_listener(QuitListener *listener);
 		void remove_quit_listener(QuitListener *listener);
 
+		void add_timer(int elapsed, Timer *timer);
+		void remove_timer(Timer *timer);
+
 		res::ResObject resource(std::string template_name);
+
+		/**
+		 * Get WIMP task handle for application
+		 */
+		int task_handle() const {return _task_handle;}
 
 		std::string directory() const;
 

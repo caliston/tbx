@@ -40,6 +40,8 @@
 #include "loadermanager.h"
 #include "swixcheck.h"
 #include "tbxexcept.h"
+#include "monotonictime.h"
+#include "timer.h"
 
 #include <cstring>
 #include <kernel.h>
@@ -73,6 +75,8 @@ EventRouter::EventRouter()
 
     _drag_handler = 0;
 
+    _first_timer = 0;
+
     _catch_exceptions = true;
 }
 
@@ -87,11 +91,23 @@ void EventRouter::poll()
     regs.r[0] = _poll_mask;
     regs.r[1] = reinterpret_cast<int>(&_poll_block);
 
-    // Reply task for User Message Acknowledge (eventCode == 18)
-	_reply_to = regs.r[2];
+    if ((_poll_mask & 1) && _first_timer)
+    {
+    	// Use PollIdle if we have a timer in the future.
+    	regs.r[0] &= ~1; // Ensure null events are processed
+    	unsigned int now = monotonic_time();
+    	if (monotonic_lt(now, _first_timer->due))
+    	{
+    		poll = Wimp_PollIdle;
+			regs.r[2] = _first_timer->due;
+    	}
+    }
 
     if (_kernel_swi(poll, &regs, &regs) == 0)
 	{
+        // Reply task for User Message Acknowledge (eventCode == 18)
+    	_reply_to = regs.r[2];
+
     	if (_catch_exceptions)
     	{
 			try
@@ -566,6 +582,36 @@ void EventRouter::process_null_event()
 				i = size; // Stop processing if list changes
 			}
 			i++;
+		}
+	}
+
+	// Process timers
+	if (_first_timer)
+	{
+		unsigned int now = monotonic_time();
+		unsigned int actual = now; // take into account long timer routines
+		while (_first_timer && monotonic_ge(now, _first_timer->due))
+		{
+			TimerInfo *running = _first_timer;
+			unsigned int diff = monotonic_elapsed(_first_timer->due, actual);
+			_first_timer->timer->timer(diff);
+			if (running == _first_timer)
+			{
+				// Update due time for this timer
+				while (diff > _first_timer->elapsed)
+				{
+					diff -= _first_timer->elapsed;
+					_first_timer->due += _first_timer->elapsed;
+				}
+				_first_timer->due += _first_timer->elapsed;
+				if (_first_timer->next != 0)
+				{
+					_first_timer = _first_timer->next;
+					// Re-add in correct order
+					add_timer_info(running);
+					actual = monotonic_time();
+				}
+			}
 		}
 	}
 }
@@ -1222,6 +1268,72 @@ void EventRouter::cancel_drag()
 	{
 		_drag_handler->drag_cancelled();
 		_drag_handler = 0;
+	}
+}
+
+/**
+ * Add a timer that is called repeatedly after a given time
+ * has elapsed.
+ *
+ * The timer runs after other messages so may occur at a
+ * time later than the elapsed time given.
+ *
+ * @param elapsed Minimum time between each call to the timer in centiseconds
+ */
+void EventRouter::add_timer(int elapsed, Timer *timer)
+{
+	TimerInfo *info = new TimerInfo;
+	info->due = monotonic_time() + elapsed;
+	info->elapsed = elapsed;
+	info->timer = timer;
+	add_timer_info(info);
+}
+
+/**
+ * Remove timer
+ */
+void EventRouter::remove_timer(Timer *timer)
+{
+	TimerInfo *last = 0, *check = _first_timer;
+	while (check && check->timer != timer)
+	{
+		last = check;
+		check = check->next;
+	}
+	if (check)
+	{
+		if (last) last->next = check->next;
+		else _first_timer = check->next;
+		delete check;
+	}
+}
+
+/**
+ * Add internal timer info structure in correct location
+ */
+void EventRouter::add_timer_info(TimerInfo *info)
+{
+	if (_first_timer == 0)
+	{
+		_first_timer = info;
+		info->next = 0;
+	} else
+	{
+		TimerInfo *last = 0, *check = _first_timer;
+		while (check && monotonic_ge(info->due, check->due))
+		{
+			last = check;
+			check = check->next;
+		}
+		if (last == 0)
+		{
+			info->next = _first_timer;
+			_first_timer = info;
+		} else
+		{
+			info->next = last->next;
+			last->next = info;
+		}
 	}
 }
 

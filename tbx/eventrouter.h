@@ -43,6 +43,7 @@ class WimpMessageListener;
 class RedrawListener;
 class DragHandler;
 class Command;
+class Timer;
 
 class EventRouter
 {
@@ -91,6 +92,9 @@ private:
 
 	void set_drag_handler(DragHandler *handler);
 	void cancel_drag();
+
+	void add_timer(int elapsed, Timer *timer);
+	void remove_timer(Timer *timer);
 
 private:
 	void route_event(int event_code);
@@ -160,12 +164,22 @@ private:
 
 	DragHandler *_drag_handler;
 
+	struct TimerInfo
+	{
+		unsigned int due;
+		unsigned int elapsed;
+		Timer *timer;
+		TimerInfo *next;
+	} *_first_timer;
+
 private:
 	// Listener list helpers
 	ObjectListenerItem *find_first_object_listener(ObjectId handle, int action);
     WindowEventListenerItem *find_window_event_listener(ObjectId object_id, int event_code);
     WindowEventListenerItem *find_window_event_component(WindowEventListenerItem *&item, ComponentId component_id);
     void remove_running_window_event_listener(ObjectId object_id, int event_code);
+
+    void add_timer_info(TimerInfo *info);
 
 private:
 	static EventRouter *_instance;
