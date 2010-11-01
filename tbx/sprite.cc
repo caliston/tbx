@@ -993,6 +993,8 @@ SpriteCapture::SpriteCapture(UserSprite *sprite, bool start_capture /*= false*/,
              sprite->pointer(),
              &save_size);
    _save_area = new char[save_size];
+   *((int *)_save_area) = 0;
+   _save_area = 0;
    _capturing = false;
 
    _save_regs[0] = (to_mask) ? 61 : 60;
@@ -1006,6 +1008,7 @@ SpriteCapture::SpriteCapture(UserSprite *sprite, bool start_capture /*= false*/,
 SpriteCapture::~SpriteCapture()
 {
     if (_capturing) release();
+    delete [] _save_area;
 }
 
 /**
@@ -1017,17 +1020,18 @@ bool SpriteCapture::capture()
 {
     if (_capturing) return true;
 
-    _capturing = (_swix(OS_SpriteOp, _INR(0,3)|_OUTR(2,3),
-         _save_regs[0], // Output to mask or sprite op
+    _capturing = (_swix(OS_SpriteOp, _INR(0,3)|_OUTR(0,3),
+         _save_regs[0]+512, // Output to mask or sprite op
          _sprite->get_sprite_area()->pointer(),
          _sprite->pointer(),
          _save_area,
+         &_save_regs[0],
          &_save_regs[1],
          &_save_regs[2],
          &_save_regs[3]
          ) == 0);
 
-      return _capturing;
+     return _capturing;
 }
 
 /**
