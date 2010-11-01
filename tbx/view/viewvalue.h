@@ -104,6 +104,39 @@ template<class T, class C, class I> class MethodItemViewValue : public ItemViewV
        }
 };
 
+/**
+ * Convenience template to return a member of the class in a collection
+ * of pointers as the value for a view.
+ *
+ * T is the type returned
+ * C is the collection to return from
+ * I is the type of the items in the collection
+ */
+template<class T, class C, class I> class MethodItemPtrViewValue : public ItemViewValue<T>
+{
+   private:
+      C *_collection;
+      T (I::*_method)() const;
+
+    public:
+       /**
+        * Construct for the given collection with the given data
+        * retrieval method
+        */
+       MethodItemPtrViewValue(C *collection, T (I::*method)() const) :
+    	   _collection(collection), _method(method) {}
+
+       /**
+        * Get the value for the index by calling the method
+        * from the constructor on the object
+        */
+       virtual T value(unsigned int index) const
+       {
+    	   return (((*_collection)[index])->*_method)();
+       }
+};
+
+
 // end of namespaces
 }
 }
