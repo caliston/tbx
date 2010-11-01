@@ -118,7 +118,7 @@ namespace tbx
     class WimpFont
     {
     public:
-    	void set_font_colours(Colour foreground, Colour background);
+    	void set_colours(Colour foreground, Colour background);
 
     	int height_os() const {return 32;}
     	int string_width_os(const std::string &text, int num_chars = 0);

@@ -611,7 +611,7 @@ Font::FontRef::~FontRef()
  * Note: If the current WIMP font is the system font this will
  * change the colours for following graphics methods.
  */
-void WimpFont::set_font_colours(Colour foreground, Colour background)
+void WimpFont::set_colours(Colour foreground, Colour background)
 {
 	swix_check(_swix(Wimp_TextOp, _INR(0,2), 0,
 			(unsigned)foreground,
