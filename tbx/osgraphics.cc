@@ -398,3 +398,11 @@ void OSGraphics::sprite(int x, int y, const Sprite &sprite)
 {
 	sprite.plot_screen(Point(x,y));
 }
+
+/**
+ * Clear the current graphics window to the background colour
+ */
+void OSGraphics::clear()
+{
+	_kernel_oswrch(16);
+}

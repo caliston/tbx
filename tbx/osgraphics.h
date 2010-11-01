@@ -92,6 +92,9 @@ namespace tbx
 		// Sprites
 		virtual void sprite(int x, int y, const Sprite &sprite);
 
+		// OS Graphics specific functions
+		void clear();
+
 	protected:
 		int _plot_action;
 	};
