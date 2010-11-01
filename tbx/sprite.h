@@ -38,6 +38,7 @@ namespace tbx
 	class SpriteArea;
 	class Sprite;
 	class UserSprite;
+	class WimpSprite;
 
 	const int SPRITE_NAMELEN = 13;
 
@@ -95,6 +96,7 @@ namespace tbx
 		  bool create(int mode, const ColourPalette *pal = NULL);
 		  bool create(const UserSprite *s);
 		  bool create(UserSprite *source, UserSprite *target);
+		  bool create(const WimpSprite *s);
 
 		  /**
 		   * Return a pointer to the translation table data
@@ -449,6 +451,8 @@ namespace tbx
 	   virtual bool info(Size *pixel_size, int *mode  = NULL, bool *mask = NULL) const;
 
 	   virtual void get_wimp_scale(ScaleFactors &factor) const;
+
+	   bool has_palette() const;
 
 	private:
 		std::string _name;

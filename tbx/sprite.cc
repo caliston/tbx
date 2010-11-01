@@ -825,7 +825,7 @@ bool TranslationTable::create(const UserSprite *s)
    if (_table)
    {
       _kernel_swi_regs regs;
-      if (s->has_palette() || numColours > 15)
+      if (s->has_palette() || numColours > 16)
       {
          regs.r[0] = (int)(s->get_sprite_area()->pointer());
          regs.r[1] = (int)(s->pointer());
@@ -850,6 +850,49 @@ bool TranslationTable::create(const UserSprite *s)
 
    return ok;
 }
+
+bool TranslationTable::create(const WimpSprite *s)
+{
+   int num_colours = initialise(s->mode());
+   bool ok = false;
+
+   if (_table)
+   {
+      _kernel_swi_regs regs;
+      if (num_colours > 16 || s->has_palette())
+      {
+		  _kernel_swi(Wimp_BaseOfSprites, &regs, &regs);
+		  int rom_base = regs.r[0];
+		  regs.r[0] = regs.r[1]; // RMA base
+		  regs.r[1] = (int)(s->name().c_str());
+		  regs.r[2] = -1;
+		  regs.r[3] = -1;
+		  regs.r[4] = (int)_table;
+		  // The following parameter is new to RiscOS 3.1
+		  // bit 0 - set if pointer to sprite directly, clear if pointer to name
+		  // bit 1 - set to use current palette for mode, clear for default palette
+		  regs.r[5] = 2;
+		  ok = (_kernel_swi(ColourTrans_SelectTable, &regs, &regs) == 0);
+		  if (!ok)
+		  {
+			  // Try ROM sprites if not in RMA
+			  regs.r[0] = rom_base;
+			  ok = (_kernel_swi(ColourTrans_SelectTable, &regs, &regs) == 0);
+		  }
+      } else
+      {
+          regs.r[0] = 256;
+          regs.r[1] = 1; // WIMP area
+          regs.r[2] = (int)(s->name().c_str());
+          regs.r[6] = 0;
+          regs.r[7] = (int)_table;
+          ok = (_kernel_swi(Wimp_ReadPixTrans, &regs, &regs) == 0);
+      }
+   }
+
+   return ok;
+}
+
 
 bool TranslationTable::create(UserSprite *source, UserSprite *target)
 {
@@ -1113,7 +1156,7 @@ void WimpSprite::plot_scaled(const Point &pos, const ScaleFactors *sf, const Tra
   in.r[6] = (int)sf;
   in.r[7] = (int)(tbl ? tbl->data() : 0);
 
-  _kernel_swi(Wimp_SpriteOp, &in, &in);
+  swix_check(_kernel_swi(Wimp_SpriteOp, &in, &in));
 }
 
 /**
@@ -1125,13 +1168,13 @@ void WimpSprite::plot_scaled(const Point &pos, const ScaleFactors *sf, const Tra
 
 void WimpSprite::plot_screen(const Point &pos, int code /* = 8*/) const
 {
-//    TranslationTable table;
+    TranslationTable table;
     ScaleFactors scale;
 
-//    table.create(this);
+    table.create(this);
     get_wimp_scale(scale);
 
-    plot_scaled(pos, &scale, NULL);
+    plot_scaled(pos, &scale, &table, code);
 }
 
 //@{
@@ -1147,6 +1190,20 @@ void WimpSprite::get_wimp_scale(ScaleFactors &factor) const
 	regs.r[6] = (int)(factor.as_array());
 	regs.r[7] = 0;
 	_kernel_swi(Wimp_ReadPixTrans, &regs, &regs);
+}
+
+/**
+ * Check if WimpSprite is using a palette
+ */
+bool WimpSprite::has_palette() const
+{
+    _kernel_swi_regs regs;
+    regs.r[0] = 37;
+    regs.r[1] = 1;
+    regs.r[2] = (int)(_name.c_str());
+    regs.r[3] = -1;
+    _kernel_swi(Wimp_SpriteOp, &regs, &regs);
+    return (regs.r[4] != 0); // palette pointer
 }
 
 /********************************************************/
