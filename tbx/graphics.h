@@ -74,12 +74,12 @@ namespace tbx
 		virtual void polygon(const Point *points, int num) = 0;
 		virtual void fill_polygon(const Point *points, int num) = 0;
 		virtual void circle(int centre_x, int centre_y, int radius) = 0;
-		virtual void circle_fill(int centre_x, int centre_y, int radius) = 0;
+		virtual void fill_circle(int centre_x, int centre_y, int radius) = 0;
 		virtual void arc(int centre_x, int centre_y, int start_x, int start_y, int end_x, int end_y) = 0;
 		virtual void segment(int centre_x, int centre_y, int start_x, int start_y, int end_x, int end_y) = 0;
 		virtual void sector(int centre_x, int centre_y, int start_x, int start_y, int end_x, int end_y) = 0;
 		virtual void ellipse(int centre_x, int centre_y, int intersect_x, int intersect_y, int high_x, int high_y) = 0;
-		virtual void ellipse_fill(int centre_x, int centre_y, int intersect_x, int intersect_y, int high_x, int high_y) = 0;
+		virtual void fill_ellipse(int centre_x, int centre_y, int intersect_x, int intersect_y, int high_x, int high_y) = 0;
 
 		// Drawing using points and boxes
 	    virtual void move(const Point &point) {move(point.x,point.y);}
@@ -91,16 +91,18 @@ namespace tbx
 		virtual void fill_rectangle(const Point &min_point, const Point &max_point) {fill_rectangle(min_point.x, min_point.y, max_point.x, max_point.y);}
 		virtual void fill_rectangle(const BBox &r) {fill_rectangle(r.min.x,r.min.y, r.max.x, r.max.y);}
 		virtual void circle(const Point &centre_point, int radius) {circle(centre_point.x, centre_point.y, radius);}
-		virtual void circle_fill(const Point &centre_point, int radius) {circle_fill(centre_point.x, centre_point.y, radius);}
+		virtual void fill_circle(const Point &centre_point, int radius) {fill_circle(centre_point.x, centre_point.y, radius);}
 		virtual void arc(const Point &centre_point, const Point &start_point, const Point &end_point) {arc(centre_point.x, centre_point.y, start_point.x, start_point.y, end_point.x, end_point.y);}
 		virtual void segment(const Point &centre_point, const Point &start_point, const Point &end_point) {segment(centre_point.x, centre_point.y, start_point.x, start_point.y, end_point.x, end_point.y);}
 		virtual void sector(const Point &centre_point, const Point &start_point, const Point &end_point) {sector(centre_point.x, centre_point.y, start_point.x, start_point.y, end_point.x, end_point.y);}
 		virtual void ellipse(const Point &centre_point, const Point &intersect_point, const Point &high_point) {ellipse(centre_point.x, centre_point.y, intersect_point.x, intersect_point.y, high_point.x, high_point.y);}
-		virtual void ellipse_fill(const Point &centre_point, const Point &intersect_point, const Point &high_point) {ellipse_fill(centre_point.x, centre_point.y, intersect_point.x, intersect_point.y, high_point.x, high_point.y);}
+		virtual void fill_ellipse(const Point &centre_point, const Point &intersect_point, const Point &high_point) {fill_ellipse(centre_point.x, centre_point.y, intersect_point.x, intersect_point.y, high_point.x, high_point.y);}
 
 		// Text
 		virtual void text(int x, int y, const std::string &text) = 0;
 		virtual void text(int x, int y, const std::string &text, const Font &font) = 0;
+		virtual void text_colours(Colour foreground, Colour background) = 0;
+		virtual void text_colours(Font &font, Colour foreground, Colour background) = 0;
 
 		// Sprites
 		virtual void sprite(int x, int y, const Sprite &sprite) = 0;

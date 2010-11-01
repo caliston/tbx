@@ -63,8 +63,14 @@ namespace tbx
 		virtual int logical_y(int os_y) const {return os_y - _offset_y;}
 		virtual Point os(const Point &pt) {return Point(pt.x+_offset_x, pt.x+_offset_y);}
 		virtual Point logical(const Point &pt) {return Point(pt.x-_offset_x, pt.x-_offset_y);}
-		virtual BBox os(const BBox &b) {return BBox(b.min.x + _offset_x, b.min.y + _offset_y, b.max.x + _offset_x, _b.max.y + _offset_y);}
-		virtual BBox logical(const BBox &b) {return BBox(b.min.x - _offset_x, b.min.y - _offset_y, b.max.x - _offset_x, _b.max.y - _offset_y);}
+		virtual BBox os(const BBox &b) {return BBox(b.min.x + _offset_x, b.min.y + _offset_y, b.max.x + _offset_x, b.max.y + _offset_y);}
+		virtual BBox logical(const BBox &b) {return BBox(b.min.x - _offset_x, b.min.y - _offset_y, b.max.x - _offset_x, b.max.y - _offset_y);}
+
+		virtual void text(int x, int y, const std::string &text) {OSGraphics::text(x + _offset_x, y + _offset_y, text);}
+		virtual void text(int x, int y, const std::string &text, const Font &font) {OSGraphics::text(x + _offset_x, y + _offset_y, text, font);}
+
+		// Sprites
+		virtual void sprite(int x, int y, const Sprite &sprite) {OSGraphics::sprite(x + _offset_x, y + _offset_y, sprite);}
 
 	};
 }

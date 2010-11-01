@@ -72,12 +72,12 @@ namespace tbx
 		virtual void rectangle(int xmin, int ymin, int xmax, int ymax);
 		virtual void fill_rectangle(int xmin, int ymin, int xmax, int ymax);
 		virtual void circle(int centre_x, int centre_y, int radius);
-		virtual void circle_fill(int centre_x, int centre_y, int radius);
+		virtual void fill_circle(int centre_x, int centre_y, int radius);
 		virtual void arc(int centre_x, int centre_y, int start_x, int start_y, int end_x, int end_y);
 		virtual void segment(int centre_x, int centre_y, int start_x, int start_y, int end_x, int end_y);
 		virtual void sector(int centre_x, int centre_y, int start_x, int start_y, int end_x, int end_y);
 		virtual void ellipse(int centre_x, int centre_y, int intersect_x, int intersect_y, int high_x, int high_y);
-		virtual void ellipse_fill(int centre_x, int centre_y, int intersect_x, int intersect_y, int high_x, int high_y);
+		virtual void fill_ellipse(int centre_x, int centre_y, int intersect_x, int intersect_y, int high_x, int high_y);
 
 		virtual void path(const Point *points, int num);
 		virtual void polygon(const Point *points, int num);
@@ -85,6 +85,9 @@ namespace tbx
 
 		virtual void text(int x, int y, const std::string &text);
 		virtual void text(int x, int y, const std::string &text, const Font &font);
+		virtual void text_colours(Colour foreground, Colour background);
+		virtual void text_colours(Font &font, Colour foreground, Colour background);
+
 
 		// Sprites
 		virtual void sprite(int x, int y, const Sprite &sprite);

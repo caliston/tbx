@@ -183,7 +183,7 @@ void TextView::redraw(const RedrawEvent &event)
 	if (last_row >= _line_end.size()) last_row = _line_end.size() - 1;
 
 	tbx::WimpFont font;
-	font.set_font_colours(tbx::Colour::black, tbx::Colour::white);
+	font.set_colours(tbx::Colour::black, tbx::Colour::white);
 
 	int x = event.visible_area().screen_x(_margin.left);
 	int y = event.visible_area().screen_y(-_margin.top - (first_row+1) * ROW_HEIGHT) + 4;
@@ -314,7 +314,7 @@ bool TextView::load_file(const std::string &file_name)
 		{
 			loaded = true;
 			// Replace all control codes except "\n" with a space
-			for (int c = 0; c < _size; c++)
+			for (unsigned int c = 0; c < _size; c++)
 			{
 				if (_text[c] < 32 && _text[c] != '\n') _text[c] = ' ';
 			}

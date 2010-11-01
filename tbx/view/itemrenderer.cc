@@ -49,10 +49,10 @@ void WimpFontItemRenderer::render(const ItemRenderer::Info &info)
 
 		if (info.selected)
 		{
-			font.set_font_colours(Colour::white, Colour::black);
+			font.set_colours(Colour::white, Colour::black);
 		} else
 		{
-			font.set_font_colours(Colour::black, Colour::white);
+			font.set_colours(Colour::black, Colour::white);
 		}
 		font.paint(info.screen.x, info.screen.y+8, t);
 	}

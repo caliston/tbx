@@ -163,7 +163,7 @@ void OSGraphics::rectangle(int xmin, int ymin, int xmax, int ymax)
 	plot(13 ,xmin, ymax);
 	plot(13, xmax, ymax);
 	plot(13, xmax, ymin);
-	plot(13, xmax, ymin);
+	plot(13, xmin, ymin);
 }
 
 /**
@@ -185,7 +185,7 @@ void OSGraphics::fill_rectangle(int xmin, int ymin, int xmax, int ymax)
 void OSGraphics::circle(int centre_x, int centre_y, int radius)
 {
 	move(centre_x,centre_y);
-	plot(146,centre_x+radius,centre_y+radius); // outline
+	plot(149,centre_x+radius,centre_y); // outline
 }
 
 /**
@@ -195,7 +195,7 @@ void OSGraphics::circle(int centre_x, int centre_y, int radius)
  * @param centre_y centre of circle
  * @param radius radius of the circle
  */
-void OSGraphics::circle_fill(int centre_x, int centre_y, int radius)
+void OSGraphics::fill_circle(int centre_x, int centre_y, int radius)
 {
 	move(centre_x,centre_y);
 	plot(157, centre_x+radius,centre_y);
@@ -280,7 +280,7 @@ void OSGraphics::ellipse(int centre_x, int centre_y, int intersect_x, int inters
  * @param high_y highest (or lowest) point on the ellipse
  */
 
-void OSGraphics::ellipse_fill(int centre_x, int centre_y, int intersect_x, int intersect_y, int high_x, int high_y)
+void OSGraphics::fill_ellipse(int centre_x, int centre_y, int intersect_x, int intersect_y, int high_x, int high_y)
 {
 	move(centre_x, centre_y);
 	move(intersect_x, intersect_y);
@@ -322,7 +322,7 @@ void OSGraphics::polygon(const Point *points, int num)
 	if (num < 3) throw std::domain_error("Too few points for polygon");
 	const Point *start = points;
 	move(points->x, points->y);
-	while (--num > 1)
+	while (--num > 0)
 	{
 		points++;
 		// plot 13 is line not including end point
@@ -372,6 +372,23 @@ void OSGraphics::text(int x, int y, const std::string &text)
 void OSGraphics::text(int x, int y, const std::string &text, const Font &font)
 {
 	font.paint(x,y, text, Font::FPF_OSUNITS);
+}
+
+/**
+ * Set the colours for the desktop font.
+ */
+void OSGraphics::text_colours(Colour foreground, Colour background)
+{
+	WimpFont wf;
+	wf.set_colours(foreground, background);
+}
+
+/**
+ * Set the colours for the given font
+ */
+void OSGraphics::text_colours(Font &font, Colour foreground, Colour background)
+{
+	font.set_colours(foreground, background);
 }
 
 /**
