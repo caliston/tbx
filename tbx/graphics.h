@@ -28,7 +28,7 @@
 #include "colour.h"
 #include "font.h"
 #include "bbox.h"
-#include "sprite.h"
+#include "image.h"
 #include <string>
 
 namespace tbx
@@ -103,9 +103,12 @@ namespace tbx
 		virtual void text(int x, int y, const std::string &text, const Font &font) = 0;
 		virtual void text_colours(Colour foreground, Colour background) = 0;
 		virtual void text_colours(Font &font, Colour foreground, Colour background) = 0;
+		virtual void text(const Point &pt, const std::string &str) {text(pt.x,pt.y,str);}
+		virtual void text(const Point &pt, const std::string &str, const Font &font) {text(pt.x,pt.y,str,font);}
 
-		// Sprites
-		virtual void sprite(int x, int y, const Sprite &sprite) = 0;
+		// Image
+		virtual void image(int x, int y, const Image &image) = 0;
+		virtual void image(const Point &pt, const Image &im) {image(pt.x, pt.y, im);}
 	};
 }
 

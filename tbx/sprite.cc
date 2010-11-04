@@ -38,14 +38,22 @@ using namespace tbx;
 /**
  * Plot sprite to screen.
  *
- * This is the Image::plot override so it just adds
- * the SPA_USE_MASK code to the normal plot of
- * the derived class.
+ * This is the Image::plot override
  */
 
-void Sprite::plot(const Point &pos, int code) const
+void Sprite::plot(const Point &pos) const
 {
-	plot_screen(pos, code | SPA_USE_MASK);
+	plot_screen(pos, SPA_USE_MASK);
+}
+
+/**
+ * Plot sprite to screen.
+ *
+ * This is the image::plot override
+ */
+void Sprite::plot(int x, int y) const
+{
+	plot_screen(x,y, SPA_USE_MASK);
 }
 
 /********************************************************/
@@ -225,6 +233,68 @@ void UserSprite::plot_screen(const Point &pos, int code /* = 8*/) const
     plot_scaled(pos, &scale, &table);
 }
 
+/**
+ * Plot this sprite at the given position with no scaling
+ * or colour conversions.
+ *
+*/
+
+void UserSprite::plot_raw(int x, int y, int code /* = 8 */) const
+{
+  _kernel_swi_regs in;
+
+  in.r[0] = 34 + 512;
+  in.r[1] = (int)(_area->pointer());
+  in.r[2] = (int)pointer();
+  in.r[3] = x;
+  in.r[4] = y;
+  in.r[5] = code;
+
+  swix_check(_kernel_swi(OS_SpriteOp, &in, &in));
+}
+
+/**
+ * Plot this sprite scaled using the given colour
+ * translation.
+ *
+ * \arg x os x position for plot
+ * \arg y os y position for plot
+ * \arg sf scale factors (0 = don't scale)
+ * \arg table colour translation table (0 = don't translate colours)
+ */
+void UserSprite::plot_scaled(int x, int y, const ScaleFactors *sf, const TranslationTable *tbl, int code /*=8*/) const
+{
+  _kernel_swi_regs in;
+
+  in.r[0] = 52 + 512;
+  in.r[1] = (int)(_area->pointer());
+  in.r[2] = (int)pointer();
+  in.r[3] = x;
+  in.r[4] = y;
+  in.r[5] = code;
+  in.r[6] = (int)sf;
+  in.r[7] = (int)(tbl ? tbl->data() : 0);
+
+  if (_offset) swix_check(_kernel_swi(OS_SpriteOp, &in, &in));
+}
+
+/**
+ * Plot sprite to screen.
+ *
+ * Calculates the translation table and scale factors for
+ * the current screen and plots the sprite
+ */
+
+void UserSprite::plot_screen(int x, int y, int code /* = 8*/) const
+{
+    TranslationTable table;
+    ScaleFactors scale;
+
+    table.create(this);
+    get_wimp_scale(scale);
+
+    plot_scaled(x, y, &scale, &table);
+}
 
 /********************************************************/
 /*                                                      */
@@ -1021,7 +1091,7 @@ bool SpriteCapture::capture()
     if (_capturing) return true;
 
     _capturing = (_swix(OS_SpriteOp, _INR(0,3)|_OUTR(0,3),
-         _save_regs[0]+512, // Output to mask or sprite op
+         _save_regs[0]|512, // Output to mask or sprite op
          _sprite->get_sprite_area()->pointer(),
          _sprite->pointer(),
          _save_area,
@@ -1179,6 +1249,69 @@ void WimpSprite::plot_screen(const Point &pos, int code /* = 8*/) const
     get_wimp_scale(scale);
 
     plot_scaled(pos, &scale, &table, code);
+}
+
+/**
+ * Plot this sprite at the given position with no scaling
+ * or colour conversions.
+ *
+*/
+
+void WimpSprite::plot_raw(int x, int y, int code /* = 8 */) const
+{
+  _kernel_swi_regs in;
+
+  in.r[0] = 34;
+  in.r[1] = 0;
+  in.r[2] = (int)_name.c_str();
+  in.r[3] = x;
+  in.r[4] = y;
+  in.r[5] = code;
+
+  _kernel_swi(Wimp_SpriteOp, &in, &in);
+}
+
+/**
+ * Plot this sprite scaled using the given colour
+ * translation.
+ *
+ * \arg x os x position for plot
+ * \arg y os y position for plot
+ * \arg sf scale factors (0 = don't scale)
+ * \arg table colour translation table (0 = don't translate colours)
+ */
+void WimpSprite::plot_scaled(int x, int y, const ScaleFactors *sf, const TranslationTable *tbl, int code /*=8*/) const
+{
+  _kernel_swi_regs in;
+
+  in.r[0] = 52;
+  in.r[1] = 0;
+  in.r[2] = (int)_name.c_str();
+  in.r[3] = x;
+  in.r[4] = y;
+  in.r[5] = code;
+  in.r[6] = (int)sf;
+  in.r[7] = (int)(tbl ? tbl->data() : 0);
+
+  swix_check(_kernel_swi(Wimp_SpriteOp, &in, &in));
+}
+
+/**
+ * Plot sprite to screen.
+ *
+ * Calculates the translation table and scale factors for
+ * the current screen and plots the sprite
+ */
+
+void WimpSprite::plot_screen(int x, int y, int code /* = 8*/) const
+{
+    TranslationTable table;
+    ScaleFactors scale;
+
+    table.create(this);
+    get_wimp_scale(scale);
+
+    plot_scaled(x, y, &scale, &table, code);
 }
 
 //@{

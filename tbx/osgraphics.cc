@@ -392,11 +392,11 @@ void OSGraphics::text_colours(Font &font, Colour foreground, Colour background)
 }
 
 /**
- * Draw sprite at given location
+ * Draw an image at given location
  */
-void OSGraphics::sprite(int x, int y, const Sprite &sprite)
+void OSGraphics::image(int x, int y, const Image &image)
 {
-	sprite.plot_screen(Point(x,y));
+	image.plot(x, y);
 }
 
 /**

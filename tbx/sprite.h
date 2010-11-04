@@ -26,9 +26,10 @@
 #define tbx_sprite_h
 
 #include "colour.h"
-//TODO: Image abstraction #include "image.h"
+#include "image.h"
 #include "point.h"
 #include "size.h"
+#include "scalefactors.h"
 
 #include <string>
 #include <map>
@@ -93,7 +94,7 @@ namespace tbx
 		   */
 		  TranslationTable() {_table = 0;_size = 0;};
 
-		  bool create(int mode, const ColourPalette *pal = NULL);
+		  bool create(int mode, const ColourPalette *pal = 0);
 		  bool create(const UserSprite *s);
 		  bool create(UserSprite *source, UserSprite *target);
 		  bool create(const WimpSprite *s);
@@ -111,54 +112,6 @@ namespace tbx
 		  int _size;
 	};
 
-	/**
-	 * Class for sprite ScaleFactors.
-	 *
-	 * ScaleFactors are used to scale a sprite using integer values
-	 *
-	 * The scaling is xmult()/xdiv() for the x direction
-	 * and            ymult()/ydiv() for the y direction
-	 */
-	class ScaleFactors
-	{
-		int _xmult;
-		int _ymult;
-		int _xdiv;
-		int _ydiv;
-	public:
-		/**
-		 * Constructor that creates the unit scale factors.
-		 * i.e. no scaling
-		 */
-		ScaleFactors() {_xmult=_ymult=_xdiv=_ydiv=1;}
-		/**
-		 * Constructor allowing the multipliers and dividers to be specified.
-		 */
-		ScaleFactors(int xm, int ym, int xd, int yd) {_xmult = xm; _ymult = ym; _xdiv = xd; _ydiv = yd;}
-		/**
-		 * Constructor for common multiplier/divider in x and y directions
-		 */
-		ScaleFactors(int mult, int div = 1) {_xmult = _ymult = mult; _xdiv = _ydiv = div;}
-
-		/**
-		 * Returns true if scale factors do not change a value
-		 */
-	    bool is_unit() const {return (_xmult == _xdiv && _ymult == _ydiv);};
-
-		int xmult() const {return _xmult;}
-		ScaleFactors &xmult(int x) {_xmult=x;return *this;}
-		int ymult() const {return _ymult;}
-		ScaleFactors &ymult(int y) {_ymult=y;return *this;}
-		int xdiv() const {return _xdiv;}
-		ScaleFactors &xdiv(int x) {_xdiv=x;return *this;}
-		int ydiv() const {return _ydiv;}
-		ScaleFactors &ydiv(int y) {_ydiv=y;return *this;}
-
-		/**
-		 * Return 4 integer array of scale factors
-		 */
-		int *as_array() {return &_xmult;}
-	};
 
 
 	/**
@@ -295,18 +248,22 @@ namespace tbx
 	 * Common base class for the UserSprite and WimpSprite
 	 * classes.
 	 */
-	class Sprite
+	class Sprite : public Image
 	{
 	public:
 		virtual ~Sprite() {};
 
 		// Image overrides
-		virtual void plot(const Point &pos, int code) const;
+		virtual void plot(int x, int y) const;
+		virtual void plot(const Point &pos) const;
 
 	   // Common sprite functions
 	   virtual void plot_raw(const Point &pos, int code = SPA_USE_MASK) const = 0;
-	   virtual void plot_scaled(const Point &pos, const ScaleFactors *sf, const TranslationTable *tt = NULL, int code = SPA_USE_MASK) const = 0;
+	   virtual void plot_scaled(const Point &pos, const ScaleFactors *sf, const TranslationTable *tt = 0, int code = SPA_USE_MASK) const = 0;
 	   virtual void plot_screen(const Point &pos, int code = SPA_USE_MASK) const = 0;
+	   virtual void plot_raw(int x, int y, int code = SPA_USE_MASK) const = 0;
+	   virtual void plot_scaled(int x, int y, const ScaleFactors *sf, const TranslationTable *tt = 0, int code = SPA_USE_MASK) const = 0;
+	   virtual void plot_screen(int x, int y, int code = SPA_USE_MASK) const = 0;
 
 	   virtual std::string name() const = 0;
 	   virtual bool info(Size *pixel_size, int *mode  = NULL, bool *mask = NULL) const = 0;
@@ -358,8 +315,11 @@ namespace tbx
 		   bool rename(const std::string &name);
 
 		   virtual void plot_raw(const Point &pos, int code = SPA_USE_MASK) const;
-		   virtual void plot_scaled(const Point &pos, const ScaleFactors *sf, const TranslationTable *tt = NULL, int code = SPA_USE_MASK) const;
+		   virtual void plot_scaled(const Point &pos, const ScaleFactors *sf, const TranslationTable *tt = 0, int code = SPA_USE_MASK) const;
 		   virtual void plot_screen(const Point &pos, int code = SPA_USE_MASK) const;
+		   virtual void plot_raw(int x, int y, int code = SPA_USE_MASK) const;
+		   virtual void plot_scaled(int x, int y, const ScaleFactors *sf, const TranslationTable *tt = 0, int code = SPA_USE_MASK) const;
+		   virtual void plot_screen(int x, int y, int code = SPA_USE_MASK) const;
 
 		   virtual std::string name() const;
 		   virtual bool info(Size *pixel_size, int *mode  = NULL, bool *mask = NULL) const;
@@ -446,6 +406,9 @@ namespace tbx
 	   virtual void plot_raw(const Point &pos, int code = SPA_USE_MASK) const ;
 	   virtual void plot_scaled(const Point &pos, const ScaleFactors *sf, const TranslationTable *tt = NULL, int code = SPA_USE_MASK) const;
 	   virtual void plot_screen(const Point &pos, int code = SPA_USE_MASK) const;
+	   virtual void plot_raw(int x, int y, int code = SPA_USE_MASK) const ;
+	   virtual void plot_scaled(int x, int y, const ScaleFactors *sf, const TranslationTable *tt = NULL, int code = SPA_USE_MASK) const;
+	   virtual void plot_screen(int x, int y, int code = SPA_USE_MASK) const;
 
 	   virtual std::string name() const {return _name;}
 	   virtual bool info(Size *pixel_size, int *mode  = NULL, bool *mask = NULL) const;

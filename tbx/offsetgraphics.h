@@ -69,9 +69,8 @@ namespace tbx
 		virtual void text(int x, int y, const std::string &text) {OSGraphics::text(x + _offset_x, y + _offset_y, text);}
 		virtual void text(int x, int y, const std::string &text, const Font &font) {OSGraphics::text(x + _offset_x, y + _offset_y, text, font);}
 
-		// Sprites
-		virtual void sprite(int x, int y, const Sprite &sprite) {OSGraphics::sprite(x + _offset_x, y + _offset_y, sprite);}
-
+		// Images
+		virtual void image(int x, int y, const Image &image) {OSGraphics::image(x + _offset_x, y + _offset_y, image);}
 	};
 }
 

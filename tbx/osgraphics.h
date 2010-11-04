@@ -89,8 +89,8 @@ namespace tbx
 		virtual void text_colours(Font &font, Colour foreground, Colour background);
 
 
-		// Sprites
-		virtual void sprite(int x, int y, const Sprite &sprite);
+		// Images
+		virtual void image(int x, int y, const Image &image);
 
 		// OS Graphics specific functions
 		void clear();
