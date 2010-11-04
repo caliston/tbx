@@ -14,4 +14,5 @@ The examples are:
 !Reverser - Show how to use objects and events
 !StopWatch - use of a timer
 !IconView - A simple application showing how to create a "filer-like" view
-!TbxDocEx - Shows a document type application.
+!TbxDocEx - Shows a document type application
+!Graphics - Shows use of OffsetGraphics class to draw shapes, text and images
