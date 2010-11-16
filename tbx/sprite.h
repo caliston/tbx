@@ -52,9 +52,17 @@ namespace tbx
 	{
 	   public:
 		  ColourPalette(int size = 0);
+		  ColourPalette(const ColourPalette &other);
 		  ~ColourPalette();
 
 		  void resize(int new_size);
+
+		  ColourPalette &operator=(const ColourPalette &other);
+		  bool operator==(const ColourPalette &other);
+		  bool operator!=(const ColourPalette &other);
+
+		  Colour &operator[](int index) {return _palette[index];}
+		  const Colour &operator[](int index) const {return _palette[index];}
 
 		  /**
 		   * Set the specified index to the given colour
@@ -325,6 +333,12 @@ namespace tbx
 		   virtual bool info(Size *pixel_size, int *mode  = NULL, bool *mask = NULL) const;
 
 		   bool get_palette(ColourPalette &pal) const;
+		   bool set_palette(ColourPalette &pal);
+		   bool create_palette(bool col256 = false);
+		   bool create_palette(ColourPalette &pal);
+		   bool remove_palette();
+		   bool create_mask();
+		   bool remove_mask();
 
 		   /**
 		    * Return SpriteArea this sprite is from

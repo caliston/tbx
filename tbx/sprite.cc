@@ -382,6 +382,130 @@ bool UserSprite::get_palette(ColourPalette &pal) const
    return true;
 }
 
+/**
+ * Set the sprites palette.
+ *
+ * Note: Does not create a palette if there it not already one
+ *
+ * @param palette - new value for palette
+ * @returns true if palette set.
+ */
+bool UserSprite::set_palette(ColourPalette &pal)
+{
+   int *pos = pointer();
+   if (!pos || pos[8] == 0x2C) return false;
+
+   ModeInfo mi(pos[10]);
+   int num = pal.size();
+   if (num > mi.colours()) num = mi.colours();
+
+   Colour *col = (Colour *)(pos + 11);
+   for (int j = 0; j < num; j++)
+   {
+	   *col++ = pal.entry(j); // Double up - don't support flashing colours
+	   *col++ = pal.entry(j);
+   }
+
+   return true;
+}
+
+/**
+ * Create a palette for a sprite.
+ *
+ * Will only create a palette if one doesn't already exist
+ *
+ * @param use256 - use full 256 colour palette for 256 colour sprites
+ * @returns true if create is successful.
+ */
+bool UserSprite::create_palette(bool col256 /*= false*/)
+{
+   int *pos = pointer();
+   if (!pos || pos[8] != 0x2C) return false;
+
+   std::string n = name();
+
+   if (_swix(OS_SpriteOp, _INR(0,3), 37 + 512,
+		   _area->pointer(), pointer(),
+		   1 + (col256 ? (1<<31) : 0)) != 0) return false;
+
+   // Check pointer in case sprite has been moved.
+   int new_offset;
+   if (_swix(OS_SpriteOp, _INR(0,2)|_OUT(2), 24 + 256, _area->pointer(), n.c_str(), &new_offset) == 0)
+   {
+	   _offset = new_offset;
+	   return true;
+   } else
+   {
+	   return false;
+   }
+}
+
+/**
+ * Create a palette for a sprite.
+ *
+ * Will only create a palette if one doesn't already exist
+ *
+ * @param pal initial palette required
+ * @returns true if create is successful.
+ */
+bool UserSprite::create_palette(ColourPalette &pal)
+{
+   if (!create_palette((pal.size() == 256))) return false;
+   return set_palette(pal);
+}
+
+/**
+ * Remove palette from a sprite
+ */
+bool UserSprite::remove_palette()
+{
+   int *pos = pointer();
+   if (!pos || pos[8] == 0x2C) return false;
+
+   return (_swix(OS_SpriteOp, _INR(0,3), 37 + 512,
+		   _area->pointer(), pointer(),
+		   0) != 0);
+}
+
+/**
+ * Create a mask for the sprite.
+ *
+ * The mask is created all solid
+ *
+ * @returns true if mask created successfully
+ */
+bool UserSprite::create_mask()
+{
+   std::string n = name();
+
+   if (_swix(OS_SpriteOp, _INR(0,2), 29 + 512,
+		   _area->pointer(), pointer()
+	   ) != 0) return false;
+
+   // Check pointer in case sprite has been moved.
+   int new_offset;
+   if (_swix(OS_SpriteOp, _INR(0,2)|_OUT(2), 24 + 256, _area->pointer(), n.c_str(), &new_offset) == 0)
+   {
+	   _offset = new_offset;
+	   return true;
+   } else
+   {
+	   return false;
+   }
+}
+
+/**
+ * Remove sprite mask
+ *
+ * @returns true if mask removed successfully
+ */
+bool UserSprite::remove_mask()
+{
+	return (_swix(OS_SpriteOp, _INR(0,2), 30 + 512,
+			   _area->pointer(), pointer()
+		   ) == 0);
+}
+
 //@{
 //   Get scaling required to plot this sprite in the wimp
 //@}
@@ -1025,7 +1149,7 @@ int TranslationTable::initialise(int mode)
 
 ColourPalette::~ColourPalette()
 {
-  delete _palette;
+  delete [] _palette;
 }
 
 ColourPalette::ColourPalette(int size /* = 0 */)
@@ -1041,13 +1165,62 @@ ColourPalette::ColourPalette(int size /* = 0 */)
    }
 }
 
+ColourPalette::ColourPalette(const ColourPalette &other)
+{
+	_palette = 0;
+	_size = other._size;
+	if (_size)
+	{
+		_palette = new Colour[_size];
+		for (int j = 0; j < _size; j++)
+			_palette[j] = other._palette[j];
+	}
+}
+
+
 void ColourPalette::resize(int newsize)
 {
-   if (_palette) delete [] _palette;
+   delete [] _palette;
 
    _palette = new Colour[newsize];
    _size = newsize;
 }
+
+ColourPalette &ColourPalette::operator=(const ColourPalette &other)
+{
+   delete [] _palette;
+   _size = other._size;
+   if (_size)
+   {
+	   _palette = new Colour[_size];
+		for (int j = 0; j < _size; j++)
+			_palette[j] = other._palette[j];
+   } else
+   {
+	   _palette = 0;
+   }
+}
+
+bool ColourPalette::operator==(const ColourPalette &other)
+{
+	if (_size != other._size) return false;
+	for (int j = 0; j < _size; j++)
+	{
+		if (_palette[j] != other._palette[j]) return false;
+	}
+	return true;
+}
+
+bool ColourPalette::operator!=(const ColourPalette &other)
+{
+	if (_size != other._size) return true;
+	for (int j = 0; j < _size; j++)
+	{
+		if (_palette[j] != other._palette[j]) return true;
+	}
+	return false;
+}
+
 
 /**
  * Class to capture screen output to a sprite
