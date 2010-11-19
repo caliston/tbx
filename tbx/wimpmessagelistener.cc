@@ -54,6 +54,7 @@ WimpMessage::WimpMessage(const WimpMessage &other, int size_override /* = 0*/)
 	_message_block = new int[size_override];
 	_owns_block = true;
 	for (int j = 0; j < size; j++) _message_block[j] = other._message_block[j];
+	_message_block[0] = size_override * 4;
 }
 
 WimpMessage::WimpMessage(const WimpMessage &other, bool copy)
