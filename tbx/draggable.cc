@@ -30,6 +30,8 @@
  */
 
 #include "draggable.h"
+#include "pointerinfo.h"
+#include "iconbar.h"
 
 namespace tbx
 {
@@ -95,4 +97,40 @@ void Draggable::remove_mouse_click_listener(MouseClickListener *listener)
 {
 	remove_window_listener(6, listener);
 }
+
+
+PointerInfo DragEndedEvent::where() const
+{
+	int dest_window;
+	int dest_icon;
+
+	if (toolbox_ids())
+	{
+		Object obj = object();
+		if (obj.toolbox_class() == Iconbar::TOOLBOX_CLASS)
+		{
+			Iconbar ib(obj);
+			dest_window = -2;
+			dest_icon = ib.icon_handle();
+		} else if (obj.toolbox_class() == Window::TOOLBOX_CLASS)
+		{
+			Window w(obj);
+			dest_window = w.window_handle();
+			Gadget g(component());
+			if (g.null()) dest_icon = -1;
+			else
+			{
+				std::vector<IconHandle> icons = g.icon_list();
+				if (icons.size()) dest_icon = icons[0];
+			}
+		}
+	} else
+	{
+		dest_window = _data.word[4];
+		dest_icon = _data.word[5];
+	}
+
+	return PointerInfo(dest_window, dest_icon, x(), y(), 0);
+}
+
 }

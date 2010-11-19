@@ -41,6 +41,7 @@ namespace tbx
 
 class DragStartedListener;
 class DragEndedListener;
+class PointerInfo;
 
 /**
  * A Draggable is a gadget that shows 
@@ -264,6 +265,11 @@ public:
 	 * y coordinate of drag finish
 	 */
 	int y() const {return _data.word[7];}
+
+	/**
+	 * Return drag information as PointerInfo class
+	 */
+	PointerInfo where() const;
 };
 
 /**
@@ -273,7 +279,7 @@ class DragEndedListener : public Listener
 {
 public:
 	virtual ~DragEndedListener() {}
-	virtual void drag_ended(const DragEndedEvent &drag_started_event) = 0;
+	virtual void drag_ended(const DragEndedEvent &drag_ended_event) = 0;
 };
 
 }
