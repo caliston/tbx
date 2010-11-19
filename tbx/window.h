@@ -49,6 +49,7 @@ namespace tbx
 	class WindowInfo;
 	class Loader;
 	class DragHandler;
+	class Sprite;
 
 	namespace res
 	{
@@ -181,8 +182,34 @@ namespace tbx
 		void remove_loader(Loader *loader, int file_type = -2);
 
 		// Drags from the application
-		void drag_rubber_box_local(const Point &start, DragHandler *handler);
-		void cancel_drag();
+		void drag_point(DragHandler *handler) const;
+		void drag_point_local(DragHandler *handler) const;
+		void drag_point(const BBox &bounds, DragHandler *handler) const;
+
+		void drag_box(const BBox &box, DragHandler *handler) const;
+		void drag_box_local(const BBox &box, DragHandler *handler) const;
+		void drag_box(const BBox &box, const BBox &bounds, DragHandler *handler) const;
+
+		void drag_rubber_box(const Point &start, DragHandler *handler) const;
+		void drag_rubber_box_local(const Point &start, DragHandler *handler) const;
+		void drag_rubber_box(const Point &start, const BBox &bounds, DragHandler *handler) const;
+		void cancel_drag() const;
+
+		/**
+		 * Flags for drag_sprite
+		 */
+		enum DragSpriteFlags {DSFLAG_NONE = 0, //- No flags set sprite is in bottom left of box
+			DSFLAG_HCENTRE, //- Sprite is horizontally centred in box
+			DSFLAG_RIGHT,   //- Sprite is on the right of the box
+			DSFLAG_VCENTRE = 4, //- Sprite is vertically centred in box
+			DSFLAG_TOP = 8,     //- Sprite it at top of box
+			DSFLAG_BOUND_POINT = 64, //- Point is set to bounds, otherwise box
+			DSFLAG_DROP_SHADOW = 128 //- Sprite has drop shadow
+			};
+
+		void drag_sprite(const Sprite &sprite, const BBox &box, DragHandler *handler, int flags = 0) const;
+		void drag_sprite_local(const Sprite &sprite, const BBox &box, DragHandler *handler, int flags = 0) const;
+		void drag_sprite(const Sprite &sprite, const BBox &box, const BBox &bounds, DragHandler *handler, int flags = 0) const;
 	};
 
 	/**

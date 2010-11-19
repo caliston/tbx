@@ -90,7 +90,7 @@ private:
 	void add_null_event_command(Command *command);
 	void remove_null_event_command(Command *command);
 
-	void set_drag_handler(DragHandler *handler);
+	void set_drag_handler(DragHandler *handler, int drag_stop_swi = 0);
 	void cancel_drag();
 
 	void add_timer(int elapsed, Timer *timer);
@@ -163,6 +163,7 @@ private:
 	std::vector<Command *> *_null_event_commands;
 
 	DragHandler *_drag_handler;
+	int _drag_stop_swi;
 
 	struct TimerInfo
 	{

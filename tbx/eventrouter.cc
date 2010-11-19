@@ -145,6 +145,7 @@ void EventRouter::route_event(int event_code)
 		case 7: // Drag finished
 			if (_drag_handler)
 			{
+				if (_drag_stop_swi) _swix(_drag_stop_swi, 0);
 				BBox dest(_poll_block.word[0], _poll_block.word[1],
 						_poll_block.word[2], _poll_block.word[3]);
 				_drag_handler->drag_finished(dest);
@@ -1253,10 +1254,15 @@ void EventRouter::remove_message_listener(int message_id, WimpMessageListener *l
 
 /**
  * Set the handler for the next/current drag
+ *
+ * @param handler to call when drag finishes
+ * @param drag_drop_swi - switch to call (with no params) when drag ends or 0 for none.
+ * e.g. DragASprite_Stop, DragAnObject_Stop
  */
-void EventRouter::set_drag_handler(DragHandler *handler)
+void EventRouter::set_drag_handler(DragHandler *handler, int drag_stop_swi /*= 0*/)
 {
 	_drag_handler = handler;
+	_drag_stop_swi = drag_stop_swi;
 }
 
 /**
@@ -1268,6 +1274,7 @@ void EventRouter::cancel_drag()
 	{
 		_drag_handler->drag_cancelled();
 		_drag_handler = 0;
+		if (_drag_stop_swi) _swix(_drag_stop_swi, 0);
 	}
 }
 

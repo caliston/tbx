@@ -35,6 +35,8 @@
 #include "keylistener.h"
 #include "caretlistener.h"
 #include "loadermanager.h"
+#include "modeinfo.h"
+#include "sprite.h"
 #include "res/reswindow.h"
 #include "res/resgadget.h"
 #include "res/resshortcut.h"
@@ -988,13 +990,200 @@ void Window::remove_loader(Loader *loader, int file_type /*=-2*/)
 }
 
 /**
+ * Start drag operation of the mouse pointer.
+ *
+ * Usually called in response to a mouse drag
+ *
+ * handler is called when the drag finishes.
+ *
+ * @param handler handler to be called when drag finishes
+ */
+void Window::drag_point(DragHandler *handler) const
+{
+	ModeInfo m;
+	Size screen_size = m.screen_size();
+
+	int drag[10];
+	drag[0] = window_handle();
+	drag[1] = 7; // Drag point
+	drag[2] = 0; // Not used
+	drag[3] = 0; // Not used
+	drag[4] = 0; // Not used
+	drag[5] = 0; // Not used
+	drag[6] = 0; // Min screen x - inclusive
+	drag[7] = 0; // Min screen y - inclusive
+	drag[8] = screen_size.width; // Max screen X - exclusive
+	drag[9] = screen_size.height; // Max screen Y - exclusive
+
+	swix_check(_swix(Wimp_DragBox, _IN(1), drag));
+	event_router()->set_drag_handler(handler);
+}
+
+/**
+ * Drag mouse pointer constrained to this window
+ *
+ * @param handler handler to be called when drag finishes
+ */
+void Window::drag_point_local(DragHandler *handler) const
+{
+	WindowState state;
+	get_state(state);
+
+	int drag[10];
+	drag[0] = window_handle();
+	drag[1] = 7;
+	drag[2] = 0; // Not used
+	drag[3] = 0; // Not used
+	drag[4] = 0; // Not used
+	drag[5] = 0; // Not used
+	drag[6] = state.visible_area().bounds().min.x;
+	drag[7] = state.visible_area().bounds().min.y;
+	drag[8] = state.visible_area().bounds().max.x;
+	drag[9] = state.visible_area().bounds().max.y;
+
+	swix_check(_swix(Wimp_DragBox, _IN(1), drag));
+	event_router()->set_drag_handler(handler);
+}
+
+/**
+ * Drag mouse pointer constrained to given bounds
+ *
+ * @param bounds point is constrains in (screen coordinates)
+ * @param handler handler to be called when drag finishes
+ */
+void Window::drag_point(const BBox &bounds, DragHandler *handler) const
+{
+	int drag[10];
+	drag[0] = window_handle();
+	drag[1] = 7; // Drag point
+	drag[2] = 0; // Not used
+	drag[3] = 0; // Not used
+	drag[4] = 0; // Not used
+	drag[5] = 0; // Not used
+	drag[6] = bounds.min.x;
+	drag[7] = bounds.min.y;
+	drag[8] = bounds.max.x;
+	drag[9] = bounds.max.y;
+
+	swix_check(_swix(Wimp_DragBox, _IN(1), drag));
+	event_router()->set_drag_handler(handler);
+}
+
+/**
+ * Drag fixed rotating dots box
+ *
+ * @param box box to drag
+ * @param handler handler to be called when drag finishes
+ */
+
+void Window::drag_box(const BBox &box, DragHandler *handler) const
+{
+	ModeInfo m;
+	Size screen_size = m.screen_size();
+	int drag[10];
+	drag[0] = window_handle();
+	drag[1] = 5; // Drag box
+	drag[2] = box.min.x;
+	drag[3] = box.min.y;
+	drag[4] = box.max.x;
+	drag[5] = box.max.y;
+	drag[6] = 0; // Min screen x - inclusive
+	drag[7] = 0; // Min screen y - inclusive
+	drag[8] = screen_size.width; // Max screen X - exclusive
+	drag[9] = screen_size.height; // Max screen Y - exclusive
+
+	swix_check(_swix(Wimp_DragBox, _IN(1), drag));
+	event_router()->set_drag_handler(handler);
+}
+
+/**
+ * Drag fixed rotating dots box constrained to this window
+ *
+ * @param box box to drag
+ * @param handler handler to be called when drag finishes
+ */
+
+void Window::drag_box_local(const BBox &box, DragHandler *handler) const
+{
+	WindowState state;
+	get_state(state);
+
+	int drag[10];
+	drag[0] = window_handle();
+	drag[1] = 5;
+	drag[2] = box.min.x;
+	drag[3] = box.min.y;
+	drag[4] = box.max.x;
+	drag[5] = box.max.y;
+	drag[6] = state.visible_area().bounds().min.x;
+	drag[7] = state.visible_area().bounds().min.y;
+	drag[8] = state.visible_area().bounds().max.x;
+	drag[9] = state.visible_area().bounds().max.y;
+
+	swix_check(_swix(Wimp_DragBox, _IN(1), drag));
+	event_router()->set_drag_handler(handler);
+}
+
+/**
+ * Drag fixed rotating dots box constrained to given bounds
+ *
+ * @param box box to drag
+ * @param bounds box is constrains in (screen coordinates)
+ * @param handler handler to be called when drag finishes
+ */
+void Window::drag_box(const BBox &box, const BBox &bounds, DragHandler *handler) const
+{
+	int drag[10];
+	drag[0] = window_handle();
+	drag[1] = 5; // Drag box
+	drag[2] = box.min.x;
+	drag[3] = box.min.y;
+	drag[4] = box.max.x;
+	drag[5] = box.max.y;
+	drag[6] = bounds.min.x;
+	drag[7] = bounds.min.y;
+	drag[8] = bounds.max.x;
+	drag[9] = bounds.max.y;
+
+	swix_check(_swix(Wimp_DragBox, _IN(1), drag));
+	event_router()->set_drag_handler(handler);
+}
+
+/**
+ * Start dragging of rubber rotating dashes box.
+ *
+ * @param start point of box that is dragged in screen coordinates
+ * @param handler handler called when drag is finished
+ */
+
+void Window::drag_rubber_box(const Point &start, DragHandler *handler) const
+{
+	ModeInfo m;
+	Size screen_size = m.screen_size();
+	int drag[10];
+	drag[0] = window_handle();
+	drag[1] = 6;
+	drag[2] = start.x;
+	drag[3] = start.y;
+	drag[4] = start.x;
+	drag[5] = start.y;
+	drag[6] = 0; // Min screen x - inclusive
+	drag[7] = 0; // Min screen y - inclusive
+	drag[8] = screen_size.width; // Max screen X - exclusive
+	drag[9] = screen_size.height; // Max screen Y - exclusive
+
+	swix_check(_swix(Wimp_DragBox, _IN(1), drag));
+	event_router()->set_drag_handler(handler);
+}
+
+/**
  * Start dragging of rubber rotating dashes box confined
  * to inside the window.
  *
- * @param start point to start the drag in screen coordinates
+ * @param start point of box that is dragged in screen coordinates
  * @param handler handler called when drag is finished
  */
-void Window::drag_rubber_box_local(const Point &start, DragHandler *handler)
+void Window::drag_rubber_box_local(const Point &start, DragHandler *handler) const
 {
 	WindowState state;
 	get_state(state);
@@ -1016,11 +1205,92 @@ void Window::drag_rubber_box_local(const Point &start, DragHandler *handler)
 }
 
 /**
+ * Start dragging of rubber rotating dashes box confined
+ * to inside the window.
+ *
+ * @param start point of box that is dragged in screen coordinates
+ * @param bounds box is constrains in (screen coordinates)
+ * @param handler handler called when drag is finished
+ */
+void Window::drag_rubber_box(const Point &start, const BBox &bounds, DragHandler *handler) const
+{
+	int drag[10];
+	drag[0] = window_handle();
+	drag[1] = 6;
+	drag[2] = start.x;
+	drag[3] = start.y;
+	drag[4] = start.x;
+	drag[5] = start.y;
+	drag[6] = bounds.min.x;
+	drag[7] = bounds.min.y;
+	drag[8] = bounds.max.x;
+	drag[9] = bounds.max.y;
+
+	swix_check(_swix(Wimp_DragBox, _IN(1), drag));
+	event_router()->set_drag_handler(handler);
+}
+
+/**
  * Cancel current drag operation
  */
-void Window::cancel_drag()
+void Window::cancel_drag() const
 {
 	swix_check(_swix(Wimp_DragBox, _IN(1), 0));
 	event_router()->cancel_drag();
 }
 
+/**
+ * Drag a sprite in the desktop
+ *
+ * @param sprite the sprite to drag. A copy is made to it does not have to exist once this routine returns.
+ * @param box the box the sprite is contained within.
+ * @param handler the drag handler that will be notified when the drag finishes.
+ * @param flags location of sprite in the box and other sprite dragging options
+ */
+void Window::drag_sprite(const Sprite &sprite, const BBox &box, DragHandler *handler, int flags /*= 0*/) const
+{
+	swix_check(_swix(DragASprite_Start, _INR(0,4),
+			flags, sprite.area_id(), sprite.name().c_str(),
+			&box.min.x
+			));
+	event_router()->set_drag_handler(handler, DragASprite_Stop);
+}
+
+/**
+ * Drag a sprite within the window the pointer is in the desktop
+ *
+ * @param sprite the sprite to drag. A copy is made to it does not have to exist once this routine returns.
+ * @param box the box the sprite is contained within.
+ * @param handler the drag handler that will be notified when the drag finishes.
+ * @param flags location of sprite in the box and other sprite dragging options.
+ */
+
+void Window::drag_sprite_local(const Sprite &sprite, const BBox &box, DragHandler *handler, int flags /*= 0*/) const
+{
+	flags |= 16; // Restrict drag to local window flag
+	swix_check(_swix(DragASprite_Start, _INR(0,4),
+			flags, sprite.area_id(), sprite.name().c_str(),
+			&box.min.x, 0
+			));
+	event_router()->set_drag_handler(handler, DragASprite_Stop);
+}
+
+/**
+ * Drag a sprite within the specified bounds
+ *
+ * @param sprite the sprite to drag. A copy is made to it does not have to exist once this routine returns.
+ * @param box the box the sprite is contained within.
+ * @param bounds the bounding box the drag is restricted to.
+ * @param handler the drag handler that will be notified when the drag finishes.
+ * @param flags location of sprite in the box and other sprite dragging options.
+ */
+
+void Window::drag_sprite(const Sprite &sprite, const BBox &box, const BBox &bounds, DragHandler *handler, int flags /*= 0*/) const
+{
+	flags |= 32; // Restrict drag to specified window
+	swix_check(_swix(DragASprite_Start, _INR(0,4),
+			flags, sprite.area_id(), sprite.name().c_str(),
+			&box.min.x, &bounds.min.x
+			));
+	event_router()->set_drag_handler(handler, DragASprite_Stop);
+}
