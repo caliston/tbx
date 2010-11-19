@@ -57,7 +57,12 @@ public:
 	void remove_all_loaders(ObjectId handle, ComponentId id);
 
 private:
-	bool data_message(const WimpMessage &msg, bool load);
+	void start_loader(WimpMessageEvent &msg_event, int reply_to);
+	void process_dataload(WimpMessageEvent &event);
+	bool load_file(const WimpMessage &msg);
+	void ram_transmit(const WimpMessage &msg);
+	void find_loading(WimpMessageEvent &msg_event, int reply_to);
+
 
 	struct LoaderItem
 	{
@@ -69,6 +74,19 @@ private:
 	};
 
 	std::map<ObjectId, LoaderItem *> _loaders;
+
+	struct LoadingItem
+	{
+		Loader *_loader;
+		WimpMessage *_data_save_reply;
+		int _reply_to;
+		int _my_ref;
+		int _buffer_size;
+		LoadEvent *_load_event;
+
+		LoadingItem(Loader *loader) : _loader(loader), _data_save_reply(0), _load_event(0) {};
+		~LoadingItem() {delete _data_save_reply; delete _load_event;}
+	} *_loading;
 };
 
 }

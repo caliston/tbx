@@ -420,3 +420,15 @@ void Application::catch_poll_exceptions(bool on)
 {
 	event_router()->catch_exceptions(on);
 }
+
+/**
+ * Check if this application owns WIMP window/icon bar icon
+ *
+ * @param window_handle WIMP window handle to test or -2 to check an icon bar
+ * @param icon_handle to test (ignored if window handle is not -2)
+ */
+bool Application::owns_window(WindowHandle window_handle, IconHandle icon_handle /*= 0*/)
+{
+	WimpMessage msg(0,5);
+	return (msg.send(WimpMessage::Acknowledge, window_handle, icon_handle) == _task_handle);
+}

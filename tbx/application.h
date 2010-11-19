@@ -145,6 +145,8 @@ namespace tbx
 
 		void catch_poll_exceptions(bool on);
 
+		bool owns_window(WindowHandle window_handle, IconHandle icon_handle = 0);
+
 	private:
 		bool _running;
         int _task_handle;

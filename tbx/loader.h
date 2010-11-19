@@ -87,6 +87,75 @@ public:
 	 * Check if the load is from the filer.
 	 */
 	bool from_filer() const {return _from_filer;}
+
+	/**
+	 * Update file details for load.
+	 *
+	 * This is called automatically by the LoaderManager before a file load
+	 */
+	void update_file_details(const char *file_name, int size) {_file_name = file_name; _est_size = size;}
+};
+
+/**
+ * Class with details of buffer transferred from another application
+ */
+class DataReceivedEvent
+{
+private:
+	LoadEvent *_load_event;
+	void *_buffer;
+	int _buffer_size;
+	int _received;
+	bool _more;
+
+public:
+	/**
+	 * Construct with details of received buffer
+	 */
+	DataReceivedEvent(LoadEvent *event, void *buffer, int buffer_size, int received) :
+		_load_event(event),
+		_buffer(buffer),
+		_buffer_size(buffer_size),
+		_received(received)
+	{
+		_more = (_buffer_size >= _received);
+	}
+
+	/**
+	 * Return o LoadEvent that started the transfer
+	 */
+	const LoadEvent &load_event() const {return *_load_event;}
+
+	/**
+	 * Return the buffer the transmitted data has been copied too
+	 */
+	void *buffer() const {return _buffer;}
+
+	/**
+	 * Set the buffer address for the next bytes received
+	 */
+	void buffer(void *buf) {_buffer = buf;}
+
+	/**
+	 * Return the buffer size of the current buffer
+	 */
+	int buffer_size() const {return _buffer_size;}
+
+	/**
+	 * Set the buffer size for the next transmission from the
+	 * other application
+	 */
+	void buffer_size(int size) {_buffer_size = size;}
+
+	/**
+	 * Number of bytes received
+	 */
+	int received() const {return _received;}
+
+	/**
+	 * Return true if more data is to come.
+	 */
+	bool more() const {return _more;}
 };
 
 /**
@@ -118,6 +187,51 @@ public:
 	 * will be specified when adding the loader.
 	 */
 	virtual bool accept_file(LoadEvent &event) {return true;}
+
+	/**
+	 * Set up buffer for application to application data transfer
+	 *
+	 * Called after a file has been accepted so the loader can create a buffer
+	 * for the transfer or point to the location to load to.
+	 *
+	 * Return 0 (as the default does) if application to application data
+	 * transfer is not supported.
+	 *
+	 * @param event LoadEvent that started the data transfer
+	 * @param buffer_size size of the buffer returned (defaults to event.estimated_size())
+	 * @return buffer for data transfer or 0 if data transfer is not to be used.
+	 */
+	virtual void *data_buffer(const LoadEvent &event, int &buffer_size) {return 0;}
+
+	/**
+	 * Override to receive the file by in memory transfer from another
+	 * application.
+	 *
+	 * This routine may be called multiple times until all the data
+	 * is transferred.
+	 *
+	 * It is possible for the last packet transferred to contain zero
+	 * bytes if the penultimate call filled the buffer exactly.
+	 *
+	 * The DataReceivedEvent contains details of where the data was
+	 * copied and the number of bytes received. The more method returns
+	 * false when there is no more data to receive.
+	 *
+	 * By default this returns false as a loader can support transfer
+	 * by file only.
+	 *
+	 * @param event Details of buffer received
+	 * @returns true if buffer could be processed, false on error.
+	 */
+	virtual bool data_received(DataReceivedEvent &event) {return false;}
+
+	/**
+	 * Informs loader that an error occurred during application to application
+	 * data transfer.
+	 *
+	 * @param event load event that started the transfer
+	 */
+	virtual void data_error(const LoadEvent &event) {}
 };
 
 }

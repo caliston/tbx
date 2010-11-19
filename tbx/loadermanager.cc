@@ -29,6 +29,8 @@
 #include "iconbar.h"
 #include "string.h"
 
+#include <iostream>
+
 namespace tbx {
 
 LoaderManager *LoaderManager::_instance = 0;
@@ -36,13 +38,17 @@ LoaderManager *LoaderManager::_instance = 0;
 LoaderManager::LoaderManager()
 {
 	_instance = this;
+	_loading = 0;
 
 	// Register for messages we handle
 	app()->add_message_listener(1, this); // DataSave
 	app()->add_message_listener(3, this); // DataLoad
+	app()->add_message_listener(6, this); // RAMFetch
+	app()->add_message_listener(7, this); // RAMTransmit
 }
 
-LoaderManager::~LoaderManager() {
+LoaderManager::~LoaderManager()
+{
 }
 
 void LoaderManager::add_loader(ObjectId handle, ComponentId id, int file_type, Loader *loader)
@@ -178,17 +184,19 @@ void LoaderManager::remove_all_loaders(ObjectId handle, ComponentId id)
 
 void LoaderManager::user_message(WimpMessageEvent &event)
 {
+	std::cout << "User message    " << event.message().message_id() << std::endl;
+
     switch(event.message().message_id())
     {
     case 3: // Message DataLoad - should be sent recorded (see below, but
     	    // PRM says must allow for both types.
-    	if (data_message(event.message(), true))
+    	process_dataload(event);
+    	break;
+
+    case 7: // Message RAM_Transmit - last message of RAM transfer
+    	if (_loading && _loading->_my_ref == event.message().your_ref())
     	{
-    		if (strcasecmp(event.message().str(11), "<Wimp$Scrap>") == 0)
-    		{
-    			Path path("<Wimp$Scrap>");
-    			path.remove();
-    		}
+    		ram_transmit(event.message());
     		event.claim();
     	}
     	break;
@@ -197,60 +205,159 @@ void LoaderManager::user_message(WimpMessageEvent &event)
 
 void LoaderManager::user_message_recorded(WimpMessageEvent &event, int reply_to)
 {
+	std::cout << "User message rec " << event.message().message_id() << std::endl;
+	int my_ref = event.message().your_ref();
+
     switch(event.message().message_id())
     {
     case 1: // Message DataSave - file coming from another application
-    	if (data_message(event.message(), false))
+    	if (my_ref == 0)
     	{
-    		WimpMessage reply(event.message(), 12);
-    		reply.message_id(2); // DataSaveAck
-    		reply.your_ref(event.message().my_ref());
-    		strcpy(reply.str(11), "<Wimp$Scrap>");
-
-    		reply.send(WimpMessage::Acknowledge, reply_to);
-    		event.claim();
+    		start_loader(event, reply_to);
+    		if (_loading) event.claim();
     	}
     	break;
 
     case 3: // Message DataLoad
-    	if (data_message(event.message(), true))
+    	process_dataload(event);
+    	break;
+
+    case 7: // Message RAM_Transmit
+    	if (_loading && _loading->_my_ref == my_ref)
     	{
-    		if (strcasecmp(event.message().str(11), "<Wimp$Scrap>") == 0)
-    		{
-    			Path path("<Wimp$Scrap>");
-    			path.remove();
-    		}
-
-    		WimpMessage reply(event.message());
-    		reply.message_id(4); // DataLoadAck
-    		reply.your_ref(event.message().my_ref());
-
-    		reply.send(WimpMessage::Acknowledge, reply_to);
-    		event.claim();
+			ram_transmit(event.message());
+			event.claim();
     	}
     	break;
     }
 }
 
+/**
+ * Process user message acknowledge
+ */
 void LoaderManager::user_message_acknowledge(WimpMessageEvent &event)
 {
+	std::cout << "User message ack " << event.message().message_id() << std::endl;
+	if (event.message().message_id() == 6)
+	{
+		// RAMFetched was not acknowledged by the other application.
+		// - first time this means use file transfer instead.
+		// - after that is is an error
+		if (_loading)
+		{
+			if (_loading->_data_save_reply)
+			{
+				_loading->_data_save_reply->send(WimpMessage::User, _loading->_reply_to);
+				_loading->_my_ref = _loading->_data_save_reply->my_ref();
+	    		delete _loading->_data_save_reply;
+	    		_loading->_data_save_reply = 0;
+
+			} else
+			{
+				_loading->_loader->data_error(*(_loading->_load_event));
+			}
+			event.claim();
+		}
+	}
 }
 
 /**
- * Received data load message
+ * Process DataLoad message.
+ *
+ * It's either received directly from the filer or as part
+ * of the data being loaded from another application.
+ */
+void LoaderManager::process_dataload(WimpMessageEvent &event)
+{
+	int reply_to = event.message().sender_task_handle();
+	int my_ref = event.message().your_ref();
+	bool load = false;
+
+	if (my_ref == 0)
+	{
+		// First call - probably from filer
+		find_loading(event, reply_to);
+		load = (_loading != 0);
+	} else if (_loading && _loading->_my_ref == my_ref)
+	{
+		load = true;
+	}
+	if (load && load_file(event.message()))
+	{
+		if (strcasecmp(event.message().str(11), "<Wimp$Scrap>") == 0)
+		{
+			Path path("<Wimp$Scrap>");
+			path.remove();
+		}
+
+		WimpMessage reply(event.message());
+		reply.message_id(4); // DataLoadAck
+		reply.your_ref(event.message().my_ref());
+
+		reply.send(WimpMessage::User, reply_to);
+		event.claim();
+	}
+}
+
+/**
+ * Process DataSave message by starting the file/data
+ * loader if there is any that are appropriate for the
+ * message contents.
+ *
+ * Sends the acknowledgement message back to the application
+ * that is doing the data save if a loader to load the file/data
+ * is found.
  *
  * @param msg the wimp message for the transfer.
- * @param load true to load the file, false to just check it can be accepted.
- * @return true if file is loaded
  */
-bool LoaderManager::data_message(const WimpMessage &msg, bool load)
+void LoaderManager::start_loader(WimpMessageEvent &msg_event, int reply_to)
 {
+	const WimpMessage &msg = msg_event.message();
+
+	if (_loading) delete _loading;
+	_loading = 0;
+	find_loading(msg_event, reply_to);
+	if (_loading)
+	{
+		std::cout << "Loading found" << std::endl;
+		_loading->_data_save_reply = new WimpMessage(msg, 14);
+		_loading->_data_save_reply->message_id(2); // DataSaveAck
+		_loading->_data_save_reply->your_ref(msg.my_ref());
+		_loading->_data_save_reply->word(9) = -1; // Save is unsafe i.e. not to a filer
+		strcpy(_loading->_data_save_reply->str(11), "<Wimp$Scrap>");
+		void *buffer = _loading->_loader->data_buffer(*(_loading->_load_event), _loading->_buffer_size);
+		if (buffer)
+		{
+			std::cout << "Using buffer size " << _loading->_buffer_size << std::endl;
+			if (_loading->_buffer_size <= 0) _loading->_buffer_size = 256;
+			WimpMessage reply(msg, true);
+			reply.message_id(6); // RAMFetch
+			reply.your_ref(msg.my_ref());
+			reply.word(5) = (int)buffer;
+			reply.word(6) = _loading->_buffer_size;
+			reply.send(WimpMessage::Recorded, reply_to);
+			_loading->_my_ref = reply.my_ref();
+		}
+		else
+		{
+			std::cout << "Sending data save ack" << std::endl;
+			_loading->_data_save_reply->send(WimpMessage::User, reply_to);
+			_loading->_my_ref = _loading->_data_save_reply->my_ref();
+		}
+	}
+}
+
+/**
+ * Find the loader for this event and setup and return loading object
+ */
+void LoaderManager::find_loading(WimpMessageEvent &msg_event, int reply_to)
+{
+	const WimpMessage &msg = msg_event.message();
 	int dest_window = msg[5];
 	int dest_icon   = msg[6];
 
 	Object load_object;
 	Gadget load_gadget;
-	bool done = false;
 
 	if (dest_window == -2)
 	{
@@ -279,22 +386,85 @@ bool LoaderManager::data_message(const WimpMessage &msg, bool load)
 		{
 			LoaderItem *item = found->second;
 			ComponentId id = load_gadget.id();
-			LoadEvent event(load_object, load_gadget, msg[7], msg[8], msg[9], msg[10], msg.str(11), (msg.your_ref() == 0));
+			LoadEvent *event = new LoadEvent(load_object, load_gadget, msg[7], msg[8], msg[9], msg[10], msg.str(11), (msg.your_ref() == 0));
+			bool done = false;
 			while (item && !done)
 			{
 				if (item->id == id || item->id == NULL_ComponentId)
 				{
-					if (item->file_type == event.file_type() || item->file_type == -2)
+					if (item->file_type == event->file_type() || item->file_type == -2)
 					{
-						done = item->loader->accept_file(event);
-						if (done) done = item->loader->load_file(event);
+						done = item->loader->accept_file(*event);
+						if (done)
+						{
+							msg_event.claim();
+							_loading = new LoadingItem(item->loader);
+							_loading->_reply_to = reply_to;
+							_loading->_data_save_reply = 0;
+							_loading->_buffer_size = event->estimated_size();
+							_loading->_load_event = event;
+							event = 0; // Loading now owns event
+						}
 					}
 				}
 				item = item->next;
 			}
+
+			delete event;
 		}
 	}
+}
+
+/**
+ * Load file from disc from data load message
+ *
+ * @param msg the wimp message for the transfer.
+ * @return true if file is loaded
+ */
+bool LoaderManager::load_file(const WimpMessage &msg)
+{
+	if (!_loading) return false;
+
+	_loading->_load_event->update_file_details(msg.str(11), msg.word(9));
+
+	bool done = _loading->_loader->load_file(*(_loading->_load_event));
+	delete _loading;
+	_loading = 0;
 
 	return done;
 }
+
+/**
+ * RAM Transmit message received so process bytes received
+ */
+void LoaderManager::ram_transmit(const WimpMessage &msg)
+{
+	WimpMessage rep(msg, true);
+	rep.message_id(6); // RAMFetch
+	rep.your_ref(msg.my_ref());
+	bool reply = false;
+
+	if (_loading)
+	{
+		DataReceivedEvent event(_loading->_load_event, (void*)msg[5], msg[6], _loading->_buffer_size);
+		if (_loading->_loader->data_received(event))
+		{
+			// Update data transfer sizes
+			rep.word(5) = (int)event.buffer();
+			rep.word(6) = _loading->_buffer_size = event.buffer_size();
+			reply = event.more();
+		}
+	}
+	if (reply)
+	{
+		std::cout << "Sendinging reply " << std::endl;
+		rep.send(WimpMessage::Recorded, _loading->_reply_to);
+		_loading->_my_ref = rep.my_ref();
+	} else
+	{
+		delete _loading;
+		_loading = 0;
+	}
+}
+
 }
