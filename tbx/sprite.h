@@ -274,6 +274,7 @@ namespace tbx
 	   virtual void plot_screen(int x, int y, int code = SPA_USE_MASK) const = 0;
 
 	   virtual std::string name() const = 0;
+	   virtual int area_id() const = 0;
 	   virtual bool info(Size *pixel_size, int *mode  = NULL, bool *mask = NULL) const = 0;
 
 	   // Functions using a virtual call to the derived class
@@ -356,6 +357,12 @@ namespace tbx
 		   OsSpritePtr pointer() const	{return (OsSpritePtr)((char *)(_area->pointer()) + _offset);};
 
 		   /**
+		    * Return sprite area id used for calls that take an area pointer
+		    * or a special value for WIMP/System areas.
+		    */
+		   virtual int area_id() const {return (int)pointer();}
+
+		   /**
 		    * Returns true if this sprite has a palette
 		    */
 		   bool has_palette() const {return (*(pointer() + 8) > 0x2C);};
@@ -429,7 +436,16 @@ namespace tbx
 
 	   virtual void get_wimp_scale(ScaleFactors &factor) const;
 
+	   /**
+	    * Return sprite area id used for calls that take an area pointer
+	    * or a special value for WIMP/System areas.
+	    *
+	    * This is always 1 for the wimp sprite area.
+	    */
+	   virtual int area_id() const {return 1;}
+
 	   bool has_palette() const;
+
 
 	private:
 		std::string _name;
