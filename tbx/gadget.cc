@@ -145,6 +145,38 @@ void Gadget::focus()
 }
 
 /**
+ * Get list of icons used in this gadget
+ *
+ * @returns vector of icons used (could be empty)
+ */
+std::vector<IconHandle> Gadget::icon_list()
+{
+	std::vector<IconHandle> result;
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 68;
+    regs.r[3] = _id;
+    regs.r[4] = 0; // 0 to get size of buffer
+    regs.r[5] = 0;
+    // Run Toolbox_ObjectMiscOp - to get size of buffer
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    if (regs.r[5] > 0)
+    {
+    	int num = regs.r[5] / 4;
+    	IconHandle temp[num];
+    	regs.r[4] = (int)temp;
+        // Run Toolbox_ObjectMiscOp - to get read the icons
+        swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+        result.assign(temp, temp + num);
+    }
+
+    return result;
+}
+
+/**
  * Add a file loader.
  *
  * @param loader the loader to add

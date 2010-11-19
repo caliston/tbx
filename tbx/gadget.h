@@ -27,6 +27,7 @@
 
 #include "window.h"
 #include "component.h"
+#include <vector>
 
 namespace tbx
 {
@@ -142,6 +143,8 @@ namespace tbx
 		bool faded() const;
 
 		void focus();
+
+		std::vector<IconHandle> icon_list();
 
 		void add_loader(Loader *loader, int file_type = -2);
 		void remove_loader(Loader *loader, int file_type = -2);
