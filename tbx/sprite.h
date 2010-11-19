@@ -57,6 +57,8 @@ namespace tbx
 
 		  void resize(int new_size);
 
+		  void desktop_palette();
+
 		  ColourPalette &operator=(const ColourPalette &other);
 		  bool operator==(const ColourPalette &other);
 		  bool operator!=(const ColourPalette &other);

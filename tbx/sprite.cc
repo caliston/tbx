@@ -1186,6 +1186,21 @@ void ColourPalette::resize(int newsize)
    _size = newsize;
 }
 
+/**
+ * Convert this palette to the current desktop palette
+ */
+void ColourPalette::desktop_palette()
+{
+	if (_size != 16) resize(16);
+	// 0x45555254 = "TRUE" to return 24 bit palette
+	unsigned int pal[20]; // first 16 are desktop colours, last 4 are pointer colours
+	swix_check(_swix(Wimp_ReadPalette, _INR(1,2), pal, 0x45555254));
+	for (int j = 0; j < 16; j++)
+	{
+		_palette[j] = pal[j];
+	}
+}
+
 ColourPalette &ColourPalette::operator=(const ColourPalette &other)
 {
    delete [] _palette;
@@ -1199,6 +1214,8 @@ ColourPalette &ColourPalette::operator=(const ColourPalette &other)
    {
 	   _palette = 0;
    }
+
+   return *this;
 }
 
 bool ColourPalette::operator==(const ColourPalette &other)
