@@ -118,7 +118,7 @@ public:
 		_buffer_size(buffer_size),
 		_received(received)
 	{
-		_more = (_buffer_size >= _received);
+		_more = (_buffer_size == _received);
 	}
 
 	/**

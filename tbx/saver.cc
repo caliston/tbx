@@ -148,7 +148,6 @@ void Saver::SaverImpl::start()
  */
 void Saver::SaverImpl::user_message(WimpMessageEvent &event)
 {
-	std::cout << "SaverImpl user_message " << event.message().message_id() << std::endl;
 	if (event.message().your_ref() != _my_ref) return;
 
 	switch(event.message().message_id())
@@ -181,7 +180,6 @@ void Saver::SaverImpl::user_message(WimpMessageEvent &event)
  */
 void Saver::SaverImpl::user_message_recorded(WimpMessageEvent &event, int reply_to)
 {
-	std::cout << "SaverImpl user_message rec " << event.message().message_id() << std::endl;
 	if (event.message().your_ref() != _my_ref) return;
 	switch(event.message().message_id())
 	{
@@ -206,8 +204,6 @@ void Saver::SaverImpl::user_message_recorded(WimpMessageEvent &event, int reply_
  */
 void Saver::SaverImpl::user_message_acknowledge(WimpMessageEvent &event)
 {
-	std::cout << "SaverImpl user_message ack " << event.message().message_id() << std::endl;
-
 	if (event.message().your_ref() != _my_ref) return;
 
     switch(event.message().message_id())
@@ -253,8 +249,6 @@ void Saver::SaverImpl::finished(bool saved)
  */
 void Saver::SaverImpl::send_data_load(const std::string &file_name)
 {
-	std::cout << "SaverImpl::send_data_load " << file_name << std::endl;
-
 	WimpMessage data_load(3, 11 + ((file_name.size()+4)/4));
 	data_load.your_ref(_msg_ref);
 	data_load[5] = _where.window_handle();

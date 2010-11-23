@@ -29,8 +29,6 @@
 #include "iconbar.h"
 #include "string.h"
 
-#include <iostream>
-
 namespace tbx {
 
 LoaderManager *LoaderManager::_instance = 0;
@@ -184,8 +182,6 @@ void LoaderManager::remove_all_loaders(ObjectId handle, ComponentId id)
 
 void LoaderManager::user_message(WimpMessageEvent &event)
 {
-	std::cout << "User message    " << event.message().message_id() << std::endl;
-
     switch(event.message().message_id())
     {
     case 3: // Message DataLoad - should be sent recorded (see below, but
@@ -205,7 +201,6 @@ void LoaderManager::user_message(WimpMessageEvent &event)
 
 void LoaderManager::user_message_recorded(WimpMessageEvent &event, int reply_to)
 {
-	std::cout << "User message rec " << event.message().message_id() << std::endl;
 	int my_ref = event.message().your_ref();
 
     switch(event.message().message_id())
@@ -237,7 +232,6 @@ void LoaderManager::user_message_recorded(WimpMessageEvent &event, int reply_to)
  */
 void LoaderManager::user_message_acknowledge(WimpMessageEvent &event)
 {
-	std::cout << "User message ack " << event.message().message_id() << std::endl;
 	if (event.message().message_id() == 6)
 	{
 		// RAMFetched was not acknowledged by the other application.
@@ -319,7 +313,6 @@ void LoaderManager::start_loader(WimpMessageEvent &msg_event, int reply_to)
 	find_loading(msg_event, reply_to);
 	if (_loading)
 	{
-		std::cout << "Loading found" << std::endl;
 		_loading->_data_save_reply = new WimpMessage(msg, 14);
 		_loading->_data_save_reply->message_id(2); // DataSaveAck
 		_loading->_data_save_reply->your_ref(msg.my_ref());
@@ -328,7 +321,6 @@ void LoaderManager::start_loader(WimpMessageEvent &msg_event, int reply_to)
 		void *buffer = _loading->_loader->data_buffer(*(_loading->_load_event), _loading->_buffer_size);
 		if (buffer)
 		{
-			std::cout << "Using buffer size " << _loading->_buffer_size << std::endl;
 			if (_loading->_buffer_size <= 0) _loading->_buffer_size = 256;
 			WimpMessage reply(msg, true);
 			reply.message_id(6); // RAMFetch
@@ -340,7 +332,6 @@ void LoaderManager::start_loader(WimpMessageEvent &msg_event, int reply_to)
 		}
 		else
 		{
-			std::cout << "Sending data save ack" << std::endl;
 			_loading->_data_save_reply->send(WimpMessage::User, reply_to);
 			_loading->_my_ref = _loading->_data_save_reply->my_ref();
 		}
@@ -446,7 +437,7 @@ void LoaderManager::ram_transmit(const WimpMessage &msg)
 
 	if (_loading)
 	{
-		DataReceivedEvent event(_loading->_load_event, (void*)msg[5], msg[6], _loading->_buffer_size);
+		DataReceivedEvent event(_loading->_load_event, (void*)msg[5], _loading->_buffer_size, msg[6]);
 		if (_loading->_loader->data_received(event))
 		{
 			// Update data transfer sizes
@@ -457,7 +448,6 @@ void LoaderManager::ram_transmit(const WimpMessage &msg)
 	}
 	if (reply)
 	{
-		std::cout << "Sendinging reply " << std::endl;
 		rep.send(WimpMessage::Recorded, _loading->_reply_to);
 		_loading->_my_ref = rep.my_ref();
 	} else
