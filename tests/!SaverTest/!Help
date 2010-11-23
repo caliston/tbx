@@ -1,0 +1,7 @@
+This is a simple test program to test loading and saving
+of data using ram transfer (falling back to file transfer
+if necessary).
+
+To use just drag a text file to the icon bar icon and
+then drag the DragText icon on the Window that appears
+to the application you want to save it to or the filer.
