@@ -123,7 +123,7 @@ namespace tbx
 		virtual void pre_quit(PreQuitEvent &event) = 0;
 	};
 
-	class PreQuitManager : public WimpMessageListener
+	class PreQuitManager : public WimpRecordedMessageListener
 	{
 		static PreQuitManager *_instance;
 		std::vector<PreQuitListener *> _listeners;
@@ -135,7 +135,7 @@ namespace tbx
 		void add_listener(PreQuitListener *listener);
 		void remove_listener(PreQuitListener *listener);
 
-		virtual void user_message_recorded(WimpMessageEvent &event, int reply_to);
+		virtual void recorded_message(WimpMessageEvent &event, int reply_to);
 	};
 
 }

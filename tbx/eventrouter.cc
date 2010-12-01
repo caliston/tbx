@@ -36,6 +36,7 @@
 #include "keylistener.h"
 #include "draghandler.h"
 #include "caretlistener.h"
+#include "scrollrequestlistener.h"
 #include "command.h"
 #include "loadermanager.h"
 #include "swixcheck.h"
@@ -161,15 +162,13 @@ void EventRouter::route_event(int event_code)
 		// No window handle so we need to route it via the application
 		break;
 
-//TODO:		case 10: process_scroll_request(); break;
+		case 10: process_scroll_request(); break;
 		case 11: process_lose_caret(); break;
 		case 12: process_gain_caret(); break;
 
-		case 17: // User_Message
-		case 18: // User_Message_Recorded
-		case 19: // User_Message_Acknowledge
-			process_wimp_message(event_code);
-		break;
+		case 17: process_user_message(); break;
+		case 18: process_recorded_message(); break;
+		case 19: process_acknowledge_message(); break;
 
 		default:
 		// Others require no special processing
@@ -828,6 +827,27 @@ void EventRouter::process_key_pressed()
 }
 
 /**
+ * Proecss scroll request event
+ */
+void EventRouter::process_scroll_request()
+{
+	WindowEventListenerItem *item = find_window_event_listener(_id_block.self_object_id, 10);
+	if (item)
+	{
+		ScrollRequestEvent event(_id_block, _poll_block);
+		while (item)
+		{
+			_running_window_event_item = item;
+			static_cast<ScrollRequestListener *>(item->listener)->scroll_request(event);
+			item = item->next;
+			if (_remove_running) remove_running_window_event_listener(_id_block.self_object_id, 11);
+		}
+		_running_window_event_item = 0;
+	}
+
+}
+
+/**
  * Process lose caret event
  */
 void EventRouter::process_lose_caret()
@@ -1132,14 +1152,14 @@ void EventRouter::remove_null_event_command(Command *command)
 	}
 }
 
-void EventRouter::process_wimp_message(int event_code)
+void EventRouter::process_user_message()
 {
 	int message_id = _poll_block.word[4];
 
-	if (_message_listeners != 0)
+	if (_message_listeners != 0 && _message_listeners[0] != 0)
 	{
-		std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners->find(message_id);
-		if (found != _message_listeners->end())
+		std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners[0]->find(message_id);
+		if (found != _message_listeners[0]->end())
 		{
 			WimpMessageListenerItem *item = found->second;
 			WimpMessageEvent event(_poll_block);
@@ -1147,13 +1167,7 @@ void EventRouter::process_wimp_message(int event_code)
 			while (item && !event.claimed())
 			{
 				_running_message_item = item;
-				switch(event_code)
-				{
-				case 17: item->listener->user_message(event); break;
-				case 18: item->listener->user_message_recorded(event, _reply_to); break;
-				case 19: item->listener->user_message_acknowledge(event); break;
-				}
-
+				static_cast<WimpUserMessageListener *>(item->listener)->user_message(event);
 				item = item->next;
 
 				if (_remove_running)
@@ -1161,7 +1175,7 @@ void EventRouter::process_wimp_message(int event_code)
 					WimpMessageListenerItem *remove_item = _running_message_item;
 					_remove_running = false;
 					_running_message_item = 0;
-					remove_message_listener(message_id, remove_item->listener);
+					remove_message_listener(17, message_id, remove_item->listener);
 				} else
 				{
 					_running_message_item = 0;
@@ -1174,19 +1188,95 @@ void EventRouter::process_wimp_message(int event_code)
 	if (message_id == 0) app()->quit();
 }
 
-
-void EventRouter::add_message_listener(int message_id, WimpMessageListener *listener)
+void EventRouter::process_recorded_message()
 {
-	if (_message_listeners == 0) _message_listeners = new std::map<int, WimpMessageListenerItem *>();
+	int message_id = _poll_block.word[4];
+
+	if (_message_listeners != 0 && _message_listeners[1] != 0)
+	{
+		std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners[1]->find(message_id);
+		if (found != _message_listeners[1]->end())
+		{
+			WimpMessageListenerItem *item = found->second;
+			WimpMessageEvent event(_poll_block);
+
+			while (item && !event.claimed())
+			{
+				_running_message_item = item;
+				static_cast<WimpRecordedMessageListener *>(item->listener)->recorded_message(event, _reply_to);
+				item = item->next;
+
+				if (_remove_running)
+				{
+					WimpMessageListenerItem *remove_item = _running_message_item;
+					_remove_running = false;
+					_running_message_item = 0;
+					remove_message_listener(18, message_id, remove_item->listener);
+				} else
+				{
+					_running_message_item = 0;
+				}
+			}
+		}
+	}
+
+	// Must always quit on message code 0
+	if (message_id == 0) app()->quit();
+}
+
+void EventRouter::process_acknowledge_message()
+{
+	int message_id = _poll_block.word[4];
+
+	if (_message_listeners != 0 && _message_listeners[2] != 0)
+	{
+		std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners[2]->find(message_id);
+		if (found != _message_listeners[2]->end())
+		{
+			WimpMessageListenerItem *item = found->second;
+			WimpMessageEvent event(_poll_block);
+
+			while (item && !event.claimed())
+			{
+				_running_message_item = item;
+				static_cast<WimpAcknowledgeMessageListener *>(item->listener)->acknowledge_message(event);
+
+				item = item->next;
+
+				if (_remove_running)
+				{
+					WimpMessageListenerItem *remove_item = _running_message_item;
+					_remove_running = false;
+					_running_message_item = 0;
+					remove_message_listener(19, message_id, remove_item->listener);
+				} else
+				{
+					_running_message_item = 0;
+				}
+			}
+		}
+	}
+}
+
+
+void EventRouter::add_message_listener(int type, int message_id, WimpMessageListener *listener)
+{
+	if (_message_listeners == 0)
+	{
+		_message_listeners = new std::map<int, WimpMessageListenerItem *>*[3];
+		_message_listeners[0] = _message_listeners[1] = _message_listeners[2] = 0;
+	}
+	type -= 17;
+	if (_message_listeners[type] == 0) _message_listeners[type] = new std::map<int, WimpMessageListenerItem *>();
 
 	WimpMessageListenerItem *new_item = new WimpMessageListenerItem;
 	new_item->listener = listener;
 	new_item->next = 0;
 
-	std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners->find(message_id);
-	if (found == _message_listeners->end())
+	std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners[type]->find(message_id);
+	if (found == _message_listeners[type]->end())
 	{
-		(*_message_listeners)[message_id] = new_item;
+		(*_message_listeners[type])[message_id] = new_item;
 	} else
 	{
 		WimpMessageListenerItem *item = found->second;
@@ -1202,7 +1292,7 @@ void EventRouter::add_message_listener(int message_id, WimpMessageListener *list
 		} else if (prev == 0)
 		{
 			new_item->next = item;
-			(*_message_listeners)[message_id] = new_item;
+			(*_message_listeners[type])[message_id] = new_item;
 		} else
 		{
 			new_item->next = item;
@@ -1212,12 +1302,14 @@ void EventRouter::add_message_listener(int message_id, WimpMessageListener *list
 
 }
 
-void EventRouter::remove_message_listener(int message_id, WimpMessageListener *listener)
+void EventRouter::remove_message_listener(int type, int message_id, WimpMessageListener *listener)
 {
 	if (_message_listeners == 0) return;
+	type -= 17;
+	if (_message_listeners[type] == 0) return;
 
-	std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners->find(message_id);
-	if (found != _message_listeners->end())
+	std::map<int, WimpMessageListenerItem *>::iterator found = _message_listeners[type]->find(message_id);
+	if (found != _message_listeners[type]->end())
 	{
 		WimpMessageListenerItem *item = found->second;
 		WimpMessageListenerItem *prev = 0;
@@ -1236,10 +1328,10 @@ void EventRouter::remove_message_listener(int message_id, WimpMessageListener *l
 				{
 					if (item->next == 0)
 					{
-						_message_listeners->erase(message_id);
+						_message_listeners[type]->erase(message_id);
 					} else
 					{
-						(*_message_listeners)[message_id] = item->next;
+						(*_message_listeners[type])[message_id] = item->next;
 					}
 				} else
 				{

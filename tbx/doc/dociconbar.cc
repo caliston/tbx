@@ -72,6 +72,9 @@ void DocIconbar::auto_created(std::string template_name, tbx::Object object)
 
 	// Add loader to load a new document
 	iconbar.add_loader(manager->file_loader(), manager->file_type());
+
+	// Add opener to open a new document
+	tbx::app()->add_opener(manager->file_loader(), manager->file_type());
 }
 
 }

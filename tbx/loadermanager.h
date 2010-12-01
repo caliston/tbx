@@ -35,7 +35,10 @@ namespace tbx {
  * Internal class to managed file/data loaders
  */
 
-class LoaderManager: public tbx::WimpMessageListener
+class LoaderManager:
+	public tbx::WimpUserMessageListener,
+	public tbx::WimpRecordedMessageListener,
+	public tbx::WimpAcknowledgeMessageListener
 {
 private:
 	static LoaderManager *_instance;
@@ -47,8 +50,8 @@ public:
 	static LoaderManager* instance() {return _instance;}
 
 	virtual void user_message(WimpMessageEvent &event);
-	virtual void user_message_recorded(WimpMessageEvent &event, int reply_to);
-	virtual void user_message_acknowledge(WimpMessageEvent &event);
+	virtual void recorded_message(WimpMessageEvent &event, int reply_to);
+	virtual void acknowledge_message(WimpMessageEvent &event);
 
 	void add_loader(ObjectId handle, ComponentId id, int file_type, Loader *loader);
 	void remove_loader(ObjectId handle, ComponentId id, int file_type, Loader *loader);

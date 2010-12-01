@@ -32,7 +32,11 @@
 namespace tbx {
 
 /**
- * Class with details of a file load operation
+ * Class with details of a file load operation.
+ *
+ * This event is also used with the file open
+ * operation, but in this case only the file type,
+ * file name and from filer fields have a value.
  */
 class LoadEvent
 {
@@ -87,6 +91,12 @@ public:
 	 * Check if the load is from the filer.
 	 */
 	bool from_filer() const {return _from_filer;}
+
+	/**
+	 * Returns true if this event is from an opener added
+	 * to the main application.
+	 */
+	bool opener() const {return _object.null();}
 
 	/**
 	 * Update file details for load.

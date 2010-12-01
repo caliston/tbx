@@ -48,6 +48,7 @@ ItemView::ItemView(Window window) :
 		_flags(ItemView::AUTO_SIZE | ItemView::SELECT_DRAG )
 {
 	_window.add_redraw_listener(this);
+	_window.add_scroll_request_listener(this);
 }
 
 /**
@@ -56,6 +57,7 @@ ItemView::ItemView(Window window) :
 ItemView::~ItemView()
 {
 	_window.remove_redraw_listener(this);
+	_window.remove_scroll_request_listener(this);
 	if (_selection || _click_listeners)
 	{
 		if (_selection) _selection->remove_listener(this);
@@ -69,6 +71,7 @@ ItemView::~ItemView()
  * Set the selection model to use for the item view.
  *
  * @param selection Selection model to use for selecting items in the list
+ * or 0 to disable selection.
  */
 void ItemView::selection(Selection *selection)
 {
@@ -192,6 +195,89 @@ void ItemView::margin(const tbx::Margin &margin)
 	update_window_extent();
 	refresh();
 }
+
+/**
+ * Process scroll requests.
+ *
+ * This allows page clicks on the scroll bar to take into account
+ * the margins.
+ *
+ * It makes line clicks on the scroll bar move 32 units left/right
+ * and 40 OS units up/down.
+ *
+ * The appropriate flag in the window must be set for this event
+ * to be generated.
+ *
+ * Override this to customise the scrolling behaviour.
+ */
+void ItemView::scroll_request(const tbx::ScrollRequestEvent &event)
+{
+	tbx::WindowOpenInfo new_open = event.open_info();
+
+	printf("xscroll %d yscroll %d\n", event.x_scroll(), event.y_scroll());
+
+	switch(event.x_scroll())
+	{
+	case tbx::ScrollRequestEvent::LEFT:
+		new_open.visible_area().scroll().x -= 32;
+		break;
+	case tbx::ScrollRequestEvent::RIGHT:
+		new_open.visible_area().scroll().x += 32;
+		break;
+
+	case tbx::ScrollRequestEvent::PAGE_LEFT:
+		{
+			int width = new_open.visible_area().bounds().width();
+			width -= (_margin.left + _margin.right);
+			new_open.visible_area().scroll().x -= width;
+		}
+		break;
+	case tbx::ScrollRequestEvent::PAGE_RIGHT:
+		{
+			int width = new_open.visible_area().bounds().width();
+			width -= (_margin.left + _margin.right);
+			new_open.visible_area().scroll().x += width;
+		}
+		break;
+
+	case tbx::ScrollRequestEvent::NONE_X:
+		// Do nothing - stops compiler warning
+		break;
+	}
+
+	switch(event.y_scroll())
+	{
+	case tbx::ScrollRequestEvent::DOWN:
+		new_open.visible_area().scroll().y -= 40;
+		break;
+	case tbx::ScrollRequestEvent::UP:
+		new_open.visible_area().scroll().y += 40;
+		break;
+
+	case tbx::ScrollRequestEvent::PAGE_DOWN:
+		{
+			int height = new_open.visible_area().bounds().height();
+			height -= (_margin.top + _margin.bottom);
+			new_open.visible_area().scroll().y -= height;
+		}
+		break;
+	case tbx::ScrollRequestEvent::PAGE_UP:
+		{
+			int height = new_open.visible_area().bounds().height();
+			height -= (_margin.top + _margin.bottom);
+			new_open.visible_area().scroll().y += height;
+		}
+		break;
+
+	case tbx::ScrollRequestEvent::NONE_Y:
+		// Do nothing - stops compiler warning
+		break;
+	}
+
+	_window.open_window(new_open);
+
+}
+
 
 /**
  * Mouse clicked on window containing list view.

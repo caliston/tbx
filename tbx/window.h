@@ -44,7 +44,9 @@ namespace tbx
 	class KeyListener;
 	class LoseCaretListener;
 	class GainCaretListener;
+	class ScrollRequestListener;
 
+	class WindowOpenInfo;
 	class WindowState;
 	class WindowInfo;
 	class Loader;
@@ -135,7 +137,7 @@ namespace tbx
 		void update(const BBox &bounds, RedrawListener **redrawers, int redrawer_count);
 		void get_state(WindowState &state) const;
 		void get_info(WindowInfo &info) const;
-		void open_window(const WindowState &state);
+		void open_window(const WindowOpenInfo &open_info);
 		void scroll(int x, int y);
 		void scroll(const Point &pos);
 		Point scroll() const;
@@ -176,6 +178,8 @@ namespace tbx
 		void remove_lose_caret_listener(LoseCaretListener *listener);
 		void add_gain_caret_listener(GainCaretListener *listener);
 		void remove_gain_caret_listener(GainCaretListener *listener);
+		void add_scroll_request_listener(ScrollRequestListener *listener);
+		void remove_scroll_request_listener(ScrollRequestListener *listener);
 
 		// Listeners - drag and drop between applications
 		void add_loader(Loader *loader, int file_type = -2);
@@ -213,16 +217,16 @@ namespace tbx
 	};
 
 	/**
-	 * Window state structure for the Window get_state method
+	 * Class with details of window location on screen.
+	 *
+	 * Used to reposition/scroll window or open it initially
 	 */
-	class WindowState
+	class WindowOpenInfo
 	{
-	private:
+	protected:
 		WindowHandle _window_handle;
 		VisibleArea _visible_area;
 		WindowHandle _window_handle_in_front;
-		unsigned int _flags;
-
 		friend class Window;
 
 	public:
@@ -241,11 +245,23 @@ namespace tbx
 		 */
 		VisibleArea &visible_area() {return _visible_area;}
 
-
 		/**
 		 * WIMP handle of window on top of this window or -1 for none
 		 */
 		WindowHandle window_handle_in_front() const {return _window_handle_in_front;}
+	};
+
+	/**
+	 * Window state structure for the Window get_state method
+	 */
+	class WindowState : public WindowOpenInfo
+	{
+	private:
+		unsigned int _flags;
+
+		friend class Window;
+
+	public:
 
 		/**
 		 * Window flags
@@ -311,12 +327,9 @@ namespace tbx
 	/**
 	 * Window Information structure for the Window get_info method
 	 */
-	class WindowInfo
+	class WindowInfo : public WindowOpenInfo
 	{
 	private:
-		WindowHandle _window_handle;
-		VisibleArea _visible_area;
-		WindowHandle _window_handle_in_front;
 		unsigned int _flags;
 		unsigned int _colours1;
 		unsigned int _colours2;
@@ -331,21 +344,6 @@ namespace tbx
 		friend class Window;
 
 	public:
-		/**
-		 * WIMP window handle of this window
-		 */
-		WindowHandle window_handle() const {return _window_handle;}
-
-		/**
-		 * Visible area of this window
-		 */
-		const VisibleArea &visible_area() const {return _visible_area;}
-
-		/**
-		 * WIMP handle of window on top of this window or -1 for none
-		 */
-		WindowHandle window_handle_in_front() const {return _window_handle_in_front;}
-
 		/**
 		 * Window flags
 		 *

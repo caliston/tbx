@@ -60,7 +60,10 @@ class SaverFinishedHandler;
 class Saver
 {
 	// Reference counted structure so Saver does not need to be saved
-	class SaverImpl : WimpMessageListener
+	class SaverImpl :
+	   public WimpUserMessageListener,
+	   public WimpRecordedMessageListener,
+	   public WimpAcknowledgeMessageListener
 	{
 		int _ref_count;
 		int _reply_to;
@@ -75,8 +78,8 @@ class Saver
 		virtual ~SaverImpl() {}
 
 		virtual void user_message(WimpMessageEvent &event);
-		virtual void user_message_recorded(WimpMessageEvent &event, int reply_to);
-		virtual void user_message_acknowledge(WimpMessageEvent &event);
+		virtual void recorded_message(WimpMessageEvent &event, int reply_to);
+		virtual void acknowledge_message(WimpMessageEvent &event);
 
 	public:
 		PointerInfo _where;

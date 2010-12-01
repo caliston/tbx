@@ -35,11 +35,16 @@ namespace tbx
 {
 	class AutoCreateListener;
 	class Command;
-	class WimpMessageListener;
+	class WimpUserMessageListener;
+	class WimpRecordedMessageListener;
+	class WimpAcknowledgeMessageListener;
 	class PreQuitListener;
 	class QuitListener;
+	class ModeChangedListener;
+	class PaletteChangedListener;
 	class SpriteArea;
 	class Timer;
+	class Loader;
 
 	namespace res
 	{
@@ -104,8 +109,12 @@ namespace tbx
 		void add_idle_command(Command *command);
 		void remove_idle_command(Command *command);
 
-		void add_message_listener(int message_id, WimpMessageListener *listener);
-		void remove_message_listener(int message_id, WimpMessageListener *listener);
+		void add_user_message_listener(int message_id, WimpUserMessageListener *listener);
+		void remove_user_message_listener(int message_id, WimpUserMessageListener *listener);
+		void add_recorded_message_listener(int message_id, WimpRecordedMessageListener *listener);
+		void remove_recorded_message_listener(int message_id, WimpRecordedMessageListener *listener);
+		void add_acknowledge_message_listener(int message_id, WimpAcknowledgeMessageListener *listener);
+		void remove_acknowledge_message_listener(int message_id, WimpAcknowledgeMessageListener *listener);
 
 		void add_prequit_listener(PreQuitListener *listener);
 		void remove_prequit_listener(PreQuitListener *listener);
@@ -113,8 +122,18 @@ namespace tbx
 		void add_quit_listener(QuitListener *listener);
 		void remove_quit_listener(QuitListener *listener);
 
+		void add_mode_changed_listener(ModeChangedListener *listener);
+		void remove_mode_changed_listener(ModeChangedListener *listener);
+
+		void add_palette_changed_listener(PaletteChangedListener *listener);
+		void remove_palette_changed_listener(PaletteChangedListener *listener);
+
 		void add_timer(int elapsed, Timer *timer);
 		void remove_timer(Timer *timer);
+
+		void add_opener(Loader *loader, int file_type);
+		void remove_opener(Loader *loader, int file_type);
+
 
 		res::ResObject resource(std::string template_name);
 

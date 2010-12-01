@@ -39,10 +39,15 @@ LoaderManager::LoaderManager()
 	_loading = 0;
 
 	// Register for messages we handle
-	app()->add_message_listener(1, this); // DataSave
-	app()->add_message_listener(3, this); // DataLoad
-	app()->add_message_listener(6, this); // RAMFetch
-	app()->add_message_listener(7, this); // RAMTransmit
+	// User messages
+	app()->add_user_message_listener(3, this); // DataLoad
+	app()->add_user_message_listener(7, this); // RAMTransmit
+	// Recorded messages
+	app()->add_recorded_message_listener(1, this); // DataSave
+	app()->add_recorded_message_listener(3, this); // DataLoad
+	app()->add_recorded_message_listener(7, this); // RAMTransmit
+	// Acknowledge messages
+	app()->add_acknowledge_message_listener(6, this); // RAMFetch
 }
 
 LoaderManager::~LoaderManager()
@@ -199,7 +204,7 @@ void LoaderManager::user_message(WimpMessageEvent &event)
     }
 }
 
-void LoaderManager::user_message_recorded(WimpMessageEvent &event, int reply_to)
+void LoaderManager::recorded_message(WimpMessageEvent &event, int reply_to)
 {
 	int my_ref = event.message().your_ref();
 
@@ -230,7 +235,7 @@ void LoaderManager::user_message_recorded(WimpMessageEvent &event, int reply_to)
 /**
  * Process user message acknowledge
  */
-void LoaderManager::user_message_acknowledge(WimpMessageEvent &event)
+void LoaderManager::acknowledge_message(WimpMessageEvent &event)
 {
 	if (event.message().message_id() == 6)
 	{

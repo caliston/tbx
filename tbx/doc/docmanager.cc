@@ -55,9 +55,6 @@ DocManager::DocManager(DocCreatorBase *doc_creator)
    _instance = this;
    _doc_creator = doc_creator;
    tbx::app()->add_prequit_listener(this);
-   // Listen for message data open
-   tbx::app()->add_message_listener(5, &_data_open);
-
 }
 
 DocManager::~DocManager()
@@ -261,29 +258,6 @@ bool DocManager::load_file(const std::string &file_name, int estimated_size /* =
 	if (!loaded) delete doc;
 
 	return loaded;
-}
-
-
-/**
- * Process data open message to load file when clicked from filer
- */
-void DocManager::DataOpen::user_message_recorded(tbx::WimpMessageEvent &event, int reply_to)
-{
-	DocManager *doc_manager = DocManager::instance();
-	int file_type = event.message().word(10);
-
-	if (file_type == doc_manager->doc_creator()->file_type())
-	{
-		// It's what we are interested in
-		tbx::WimpMessage reply(event.message());
-		reply.message_id(4); // DataLoadAck
-		reply.your_ref(event.message().my_ref());
-
-		reply.send(tbx::WimpMessage::Acknowledge, reply_to);
-		event.claim();
-
-		doc_manager->load_file(event.message().str(11));
-	}
 }
 
 }

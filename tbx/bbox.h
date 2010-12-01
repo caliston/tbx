@@ -140,6 +140,34 @@ public:
 	void move_down(int by) {min.y-=by; max.y-=by;}
 
 	/**
+	 * Move box to position without resizing
+	 *
+	 * @param x new minimum x position
+	 * @param y new minimum y position
+	 */
+	void move_to(int x, int y)
+	{
+		max.x = x + max.x - min.x;
+		max.y = y + max.y - min.y;
+		min.x = x;
+		min.y = y;
+	}
+
+	/**
+	 * Move box to position without resizing
+	 *
+	 * @param pos new minimum x/y position of box
+	 */
+	void move_to(const Point &pos)
+	{
+		max.x = pos.x + max.x - min.x;
+		max.y = pos.y + max.y - min.y;
+		min.x = pos.x;
+		min.y = pos.y;
+	}
+
+
+	/**
 	 * Increase bounds to cover given box
 	 */
 	void cover(const BBox &to_cover)

@@ -36,7 +36,6 @@
 #include "../quit.h"
 #include "../command.h"
 #include "../loader.h"
-#include "../wimpmessagelistener.h"
 
 namespace tbx
 {
@@ -139,16 +138,6 @@ private:
 		virtual ~FileLoader() {}
 		bool load_file(tbx::LoadEvent &event);
 	} _file_loader;
-
-	/**
-	 * Class to handle wimp data open message
-	 */
-	class DataOpen : public tbx::WimpMessageListener
-	{
-	public:
-		virtual ~DataOpen() {}
-		virtual void user_message_recorded(tbx::WimpMessageEvent &event, int reply_to);
-	} _data_open;
 
 	void add_document(Document *doc);
 	void remove_document(Document *doc);

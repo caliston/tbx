@@ -47,7 +47,7 @@ public:
 	bool operator==(const Point &other) const {return (x==other.x) && (y==other.y);}
 	bool operator!=(const Point &other) const {return (x!=other.x) || (y!=other.y);}
 
-	Size operator-(const Point &other) const {return Size(other.x - x, other.y - y);}
+	Size operator-(const Point &other) const {return Size(x - other.x, y - other.y);}
 
 	bool operator<(const Point &other) const {return x < other.x && y < other.y;}
 	bool operator<=(const Point &other) const {return x <= other.x && y <= other.y;}

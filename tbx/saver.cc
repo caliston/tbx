@@ -116,12 +116,12 @@ Saver::SaverImpl::SaverImpl() :
  */
 void Saver::SaverImpl::start()
 {
-	app()->add_message_listener(1, this); // DataSave
-	app()->add_message_listener(2, this); // DataSaveAck
-	app()->add_message_listener(3, this); // DataLoad
-	app()->add_message_listener(4, this); // DataLoadAck
-	app()->add_message_listener(6, this); // RAMFetch
-	app()->add_message_listener(7, this); // RAMTransmit
+	app()->add_user_message_listener(2, this); // DataSaveAck
+	app()->add_user_message_listener(4, this); // DataLoadAck
+	app()->add_recorded_message_listener(6, this); // RAMFetch
+	app()->add_acknowledge_message_listener(1, this); // DataSave
+	app()->add_acknowledge_message_listener(3, this); // DataLoad
+	app()->add_acknowledge_message_listener(7, this); // RAMTransmit
 
 	_safe = 0;
 	_source_buffer = 0;
@@ -178,7 +178,7 @@ void Saver::SaverImpl::user_message(WimpMessageEvent &event)
 /**
  * Recorded messages
  */
-void Saver::SaverImpl::user_message_recorded(WimpMessageEvent &event, int reply_to)
+void Saver::SaverImpl::recorded_message(WimpMessageEvent &event, int reply_to)
 {
 	if (event.message().your_ref() != _my_ref) return;
 	switch(event.message().message_id())
@@ -202,12 +202,17 @@ void Saver::SaverImpl::user_message_recorded(WimpMessageEvent &event, int reply_
 /**
  * Acknowledgements from other application
  */
-void Saver::SaverImpl::user_message_acknowledge(WimpMessageEvent &event)
+void Saver::SaverImpl::acknowledge_message(WimpMessageEvent &event)
 {
 	if (event.message().your_ref() != _my_ref) return;
 
     switch(event.message().message_id())
     {
+    case 1: // DataSave came back so target didn't accept file
+    	event.claim();
+    	finished(false);
+    	break;
+
 	case 3: // Message DataLoad - we didn't receive a reply from our dataload
 		    // so delete WIMP scrap.
 		if (strcasecmp(event.message().str(11), "<Wimp$Scrap>") == 0)
@@ -229,12 +234,12 @@ void Saver::SaverImpl::user_message_acknowledge(WimpMessageEvent &event)
 
 void Saver::SaverImpl::finished(bool saved)
 {
-	app()->remove_message_listener(1, this); // DataSave
-	app()->remove_message_listener(2, this); // DataSaveAck
-	app()->remove_message_listener(3, this); // DataLoad
-	app()->remove_message_listener(4, this); // DataLoadAck
-	app()->remove_message_listener(6, this); // RAMFetch
-	app()->remove_message_listener(7, this); // RAMTransmit
+	app()->remove_user_message_listener(2, this); // DataSaveAck
+	app()->remove_user_message_listener(4, this); // DataLoadAck
+	app()->remove_recorded_message_listener(6, this); // RAMFetch
+	app()->remove_acknowledge_message_listener(1, this); // DataSave
+	app()->remove_acknowledge_message_listener(3, this); // DataLoad
+	app()->remove_acknowledge_message_listener(7, this); // RAMTransmit
 	if (_finished_handler)
 	{
 		Saver saver(this);

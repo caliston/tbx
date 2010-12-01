@@ -34,6 +34,7 @@
 #include "mouseclicklistener.h"
 #include "keylistener.h"
 #include "caretlistener.h"
+#include "scrollrequestlistener.h"
 #include "loadermanager.h"
 #include "modeinfo.h"
 #include "sprite.h"
@@ -557,12 +558,12 @@ void Window::get_info(WindowInfo &info) const
  *
  * Note that all coordinates are rounded down to whole numbers of pixels
  *
- * @param New state required for the window
+ * @param New information to be used by the for the window
  * @throws OsError if unable to open the window
  */
-void Window::open_window(const WindowState &state)
+void Window::open_window(const WindowOpenInfo &open_info)
 {
-	swix_check(_swix(Wimp_OpenWindow, _IN(1), &(state._window_handle)));
+	swix_check(_swix(Wimp_OpenWindow, _IN(1), &(open_info._window_handle)));
 }
 
 /**
@@ -959,6 +960,25 @@ void Window::add_gain_caret_listener(GainCaretListener *listener)
 void Window::remove_gain_caret_listener(GainCaretListener *listener)
 {
 	event_router()->remove_window_event_listener(_handle, 12, listener);
+}
+
+/**
+ * Add listener for when a click has occurred on a window's scroll bar.
+ *
+ * The appropriate flag must of been set in the window when it was
+ * created for this event to be generated.
+ */
+void Window::add_scroll_request_listener(ScrollRequestListener *listener)
+{
+	event_router()->add_window_event_listener(_handle, 10, listener);
+}
+
+/**
+ * Remove listener for when a click has occurred on a window's scroll bar.
+ */
+void Window::remove_scroll_request_listener(ScrollRequestListener *listener)
+{
+	event_router()->remove_window_event_listener(_handle, 10, listener);
 }
 
 /**

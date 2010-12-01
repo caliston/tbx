@@ -175,31 +175,68 @@ public:
 };
 
 /**
- * Listener for wimp messages
+ * Base for listener for wimp messages
  */
-class WimpMessageListener {
+class WimpMessageListener
+{
 public:
 	/**
 	 * Destructor
 	 */
 	virtual ~WimpMessageListener() {};
+};
+
+/**
+ * Listener to handle WimpUserMessages (event code 17)
+ */
+class WimpUserMessageListener : public WimpMessageListener
+{
+public:
+	/**
+	 * Destructor does nothing
+	 */
+	virtual ~WimpUserMessageListener() {}
 
 	/**
 	 * Override this to process user messages
 	 */
 	virtual void user_message(WimpMessageEvent &event) {}
+};
+
+/**
+ * Listener to handle WimpRecordedMessages (event code 18)
+ */
+class WimpRecordedMessageListener : public WimpMessageListener
+{
+public:
+	/**
+	 * Destructor does nothing
+	 */
+	virtual ~WimpRecordedMessageListener() {}
+
 
 	/**
 	 * Override this to process recorded user messages.
 	 *
 	 * These are message that require an acknowledgement.
 	 */
-	virtual void user_message_recorded(WimpMessageEvent &event, int reply_to) {}
+	virtual void recorded_message(WimpMessageEvent &event, int reply_to) {}
+};
 
+/**
+ * Listener to handle WimpAcnowledgeMessages (event code 19)
+ */
+class WimpAcknowledgeMessageListener : public WimpMessageListener
+{
+public:
+	/**
+	 * Destructor does nothing
+	 */
+	virtual ~WimpAcknowledgeMessageListener() {}
 	/**
 	 * Override this to process an acknowledgement.
 	 */
-	virtual void user_message_acknowledge(WimpMessageEvent &event) {}
+	virtual void acknowledge_message(WimpMessageEvent &event) {}
 };
 
 }

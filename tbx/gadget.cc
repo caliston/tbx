@@ -177,6 +177,177 @@ std::vector<IconHandle> Gadget::icon_list()
 }
 
 /**
+ * Get the bounding box of the gadget
+ */
+BBox Gadget::bounds() const
+{
+	BBox bounds;
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 72;
+    regs.r[3] = _id;
+    regs.r[4] = reinterpret_cast<int>(&bounds.min.x);
+    // Run Toolbox_ObjectMiscOp - to get bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    return bounds;
+}
+
+/**
+ * Set the bounds of the gadget.
+ *
+ * This can move and resize the gadget.
+ *
+ * @param bounds - new bounds for gadget
+ */
+void Gadget::bounds(const BBox &bounds)
+{
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 71;
+    regs.r[3] = _id;
+    regs.r[4] = reinterpret_cast<int>(&bounds.min.x);
+    // Run Toolbox_ObjectMiscOp - to set bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+}
+
+/**
+ * Return bottom_left location of gadget
+ */
+Point Gadget::bottom_left() const
+{
+	BBox bounds;
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 72;
+    regs.r[3] = _id;
+    regs.r[4] = reinterpret_cast<int>(&bounds.min.x);
+    // Run Toolbox_ObjectMiscOp - to get bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    return bounds.min;
+}
+
+Point Gadget::top_left() const
+{
+	BBox bounds;
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 72;
+    regs.r[3] = _id;
+    regs.r[4] = reinterpret_cast<int>(&bounds.min.x);
+    // Run Toolbox_ObjectMiscOp - to get bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    return Point(bounds.min.x, bounds.max.y);
+}
+
+/**
+ * Move gadget (without resizing)
+ *
+ * @param pos - new bottom left of gadget
+ */
+void Gadget::move_to(const Point &pos)
+{
+	BBox bounds;
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 72;
+    regs.r[3] = _id;
+    regs.r[4] = reinterpret_cast<int>(&bounds.min.x);
+    // Run Toolbox_ObjectMiscOp - to get bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    bounds.move_to(pos);
+    regs.r[2] = 71;
+    // Run Toolbox_ObjectMiscOp - to set bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Move gadget without resizing
+ *
+ * @param x new minimum x coordinate
+ * @param y new minimum y coordinate
+ */
+void Gadget::move_to(int x, int y)
+{
+	BBox bounds;
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 72;
+    regs.r[3] = _id;
+    regs.r[4] = reinterpret_cast<int>(&bounds.min.x);
+    // Run Toolbox_ObjectMiscOp - to get bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    bounds.move_to(x,y);
+
+    regs.r[2] = 71;
+    // Run Toolbox_ObjectMiscOp - to get bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Return the size of the gadget
+ *
+ * @returns size of gadget
+ */
+Size Gadget::size() const
+{
+	BBox bounds;
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 72;
+    regs.r[3] = _id;
+    regs.r[4] = reinterpret_cast<int>(&bounds.min.x);
+    // Run Toolbox_ObjectMiscOp - to get bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    return bounds.size();
+}
+
+/**
+ * Set size of gadget without moving it
+ *
+ * @param size new size of gadget
+ */
+void Gadget::size(const Size &sz)
+{
+	BBox bounds;
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 72;
+    regs.r[3] = _id;
+    regs.r[4] = reinterpret_cast<int>(&bounds.min.x);
+    // Run Toolbox_ObjectMiscOp - to get bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    bounds.size(sz);
+
+    regs.r[2] = 71;
+    // Run Toolbox_ObjectMiscOp - to set bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
  * Add a file loader.
  *
  * @param loader the loader to add

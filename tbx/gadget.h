@@ -146,6 +146,15 @@ namespace tbx
 
 		std::vector<IconHandle> icon_list();
 
+		BBox bounds() const;
+		void bounds(const BBox &bounds);
+		Point bottom_left() const;
+		Point top_left() const;
+		void move_to(const Point &pos);
+		void move_to(int x, int y);
+		Size size() const;
+		void size(const Size &sz);
+
 		void add_loader(Loader *loader, int file_type = -2);
 		void remove_loader(Loader *loader, int file_type = -2);
 

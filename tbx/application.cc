@@ -27,11 +27,14 @@
 #include "autocreatelistener.h"
 #include "prequitlistener.h"
 #include "quitlistener.h"
+#include "modechangedlistener.h"
+#include "palettechangedlistener.h"
 #include "command.h"
 #include "commandrouter.h"
 #include "reporterror.h"
 #include "swixcheck.h"
 #include "sprite.h"
+#include "openermanager.h"
 #include "res/resobject.h"
 #include <swis.h>
 
@@ -217,26 +220,71 @@ void Application::remove_idle_command(Command *command)
 }
 
 /**
- * Add a listener for the given wimp message.
+ * Add a listener for the given user message (event code 17)
  *
  * @param message code to listen for.
  * @param listener to execute.
  */
-void Application::add_message_listener(int message_id, WimpMessageListener *listener)
+void Application::add_user_message_listener(int message_id, WimpUserMessageListener *listener)
 {
-	event_router()->add_message_listener(message_id, listener);
+	event_router()->add_message_listener(17, message_id, listener);
 }
 
 /**
- * Remove a listener for the given wimp message.
+ * Remove a listener for the given user message.
  *
  * @param message code to remove
  * @param listener to remove.
  */
-void Application::remove_message_listener(int message_id, WimpMessageListener *listener)
+void Application::remove_user_message_listener(int message_id, WimpUserMessageListener *listener)
 {
-	event_router()->remove_message_listener(message_id, listener);
+	event_router()->remove_message_listener(17, message_id, listener);
 }
+
+/**
+ * Add a listener for the given recorded message (event code 18)
+ *
+ * @param message code to listen for.
+ * @param listener to execute.
+ */
+void Application::add_recorded_message_listener(int message_id, WimpRecordedMessageListener *listener)
+{
+	event_router()->add_message_listener(18, message_id, listener);
+}
+
+/**
+ * Remove a listener for the given recorded message.
+ *
+ * @param message code to remove
+ * @param listener to remove.
+ */
+void Application::remove_recorded_message_listener(int message_id, WimpRecordedMessageListener *listener)
+{
+	event_router()->remove_message_listener(18, message_id, listener);
+}
+
+/**
+ * Add a listener for the given acknowledge message (event code 18)
+ *
+ * @param message code to listen for.
+ * @param listener to execute.
+ */
+void Application::add_acknowledge_message_listener(int message_id, WimpAcknowledgeMessageListener *listener)
+{
+	event_router()->add_message_listener(19, message_id, listener);
+}
+
+/**
+ * Remove a listener for the given acknowledge message.
+ *
+ * @param message code to remove
+ * @param listener to remove.
+ */
+void Application::remove_acknowledge_message_listener(int message_id, WimpAcknowledgeMessageListener *listener)
+{
+	event_router()->remove_message_listener(19, message_id, listener);
+}
+
 
 /**
  * Add a listener for the pre quit message sent (usually) by the desktop.
@@ -248,7 +296,7 @@ void Application::add_prequit_listener(PreQuitListener *listener)
 {
 	if (PreQuitManager::instance() == 0)
 	{
-		event_router()->add_message_listener(8, new PreQuitManager());
+		event_router()->add_message_listener(18, 8, new PreQuitManager());
 	}
 	PreQuitManager::instance()->add_listener(listener);
 }
@@ -277,7 +325,7 @@ void Application::remove_prequit_listener(PreQuitListener *listener)
  */
 void Application::add_quit_listener(QuitListener *listener)
 {
-	event_router()->add_message_listener(0, &(listener->_message_listener));
+	event_router()->add_message_listener(18, 0, &(listener->_message_listener));
 }
 
 /**
@@ -287,8 +335,62 @@ void Application::add_quit_listener(QuitListener *listener)
  */
 void Application::remove_quit_listener(QuitListener *listener)
 {
-	event_router()->remove_message_listener(0, &(listener->_message_listener));
+	event_router()->remove_message_listener(18, 0, &(listener->_message_listener));
 }
+
+/**
+ * Listen for changes to the Desktop mode.
+ *
+ * This message is used if you need to know anything about changes to the
+ * screen.
+ *
+ * When the mode changes the WIMP redraws all the windows so this event
+ * normally only used when sizes depend on pixel rather than OS sizes or
+ * eigen factors or colours are cached.
+ */
+void Application::add_mode_changed_listener(ModeChangedListener *listener)
+{
+	event_router()->add_message_listener(17, 0x400C1, &(listener->_message_listener));
+}
+
+/**
+ * Remove mode changed listener
+ */
+void Application::remove_mode_changed_listener(ModeChangedListener *listener)
+{
+	event_router()->remove_message_listener(17, 0x400C1, &(listener->_message_listener));
+}
+
+/**
+ * Add listener for changes to desktop palette.
+ *
+ * This message is sent if the desktop palette utility changes
+ * the colour palette.
+ *
+ * It it normally only needed if an application has to change
+ * internal colour tables.
+ *
+ * Note though that the palette utility automatically forces a redraw of
+ * the whole screen if any of the WIMP's standard colours change their
+ * logical mapping, so applications don't have to take further action
+ * if they are just using WIMP colours.
+ *
+ * It is not generated on a mode change so you need to listen to that
+ * event as well.
+ */
+void Application::add_palette_changed_listener(PaletteChangedListener *listener)
+{
+	event_router()->add_message_listener(17, 9, &(listener->_message_listener));
+}
+
+/**
+ * Remove listener for changes to the desktop palette
+ */
+void Application::remove_palette_changed_listener(PaletteChangedListener *listener)
+{
+	event_router()->remove_message_listener(17, 9, &(listener->_message_listener));
+}
+
 
 /**
  * Add a timer to the application that will be called at a
@@ -313,6 +415,46 @@ void Application::add_timer(int elapsed, Timer *timer)
 void Application::remove_timer(Timer *timer)
 {
 	event_router()->remove_timer(timer);
+}
+
+/**
+ * Add a file opener.
+ *
+ * A file opener is called when a file of a given type is
+ * double clicked in the filer.
+ *
+ * The file opener uses the same Loader class as a file
+ * loader so the same loader can be shared, but note it
+ * only fills in the file type, file name and from filer
+ * fields.
+ *
+ * If the type is set to -2 you must implement the accept_file
+ * member of the Loader or this application will intercept
+ * all files.
+ *
+ * @param loader the loader used to open the file
+ * @param the file type for the loader or -2 for
+ *        any type.
+ */
+void Application::add_opener(Loader *loader, int file_type)
+{
+	OpenerManager *manager = OpenerManager::instance();
+	if (manager == 0) manager = new OpenerManager();
+	manager->add_opener(file_type, loader);
+}
+
+/**
+ * Remove a file opener.
+ *
+ * @param loader the loader used to open the file to remove
+ * @param the file type for the loader or -2 for
+ *        any type.
+ */
+void Application::remove_opener(Loader *loader, int file_type)
+{
+	OpenerManager *manager = OpenerManager::instance();
+	if (manager != 0)
+		manager->remove_opener(file_type, loader);
 }
 
 /**

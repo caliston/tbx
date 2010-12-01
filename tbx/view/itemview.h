@@ -38,6 +38,7 @@
 #include "../draghandler.h"
 #include "../safelist.h"
 #include "../hasbeenhiddenlistener.h"
+#include "../scrollrequestlistener.h"
 #include "itemrenderer.h"
 #include "selection.h"
 
@@ -61,24 +62,31 @@ class ItemViewClickListener;
  */
 class ItemView :
 	public RedrawListener,
+	public ScrollRequestListener,
 	public MouseClickListener,
 	public SelectionListener
 {
 protected:
-	Window _window;
-	Margin _margin;
-	Selection *_selection;
+	Window _window; ///< Window displaying this view
+	Margin _margin; ///< Margin around areas displaying items
+	Selection *_selection; ///< Selection model
+	/// Listeners for a mouse click on the view
 	SafeList<ItemViewClickListener> *_click_listeners;
-	unsigned int _count;
-	enum ViewFlags {NONE = 0,
-					AUTO_SIZE = 1,
-					SELECT_DRAG = 2, SELECT_DRAG_ON_ITEM = 4,
-					SELECT_MENU = 8,
-					AUTO_SIZE_CHECKED = 0x100, // Removing or changing called
-					WANT_AUTO_SIZE = 0x200,    // Need to auto size on removed called
-					LAST_SELECT_MENU = 0x400   // Last selection was caused by menu button
+	unsigned int _count; ///< Number of items displayed in this view
+
+	/**
+	 * Internal view flags enum, can be one or more of the following
+	 */
+	enum ViewFlags {NONE = 0,       ///< No flags size
+					AUTO_SIZE = 1,  ///< Autosizing on
+					SELECT_DRAG = 2, ///< Select by dragging box allowed
+					SELECT_DRAG_ON_ITEM = 4, ///< Select by dragging box starting on an item allowed
+					SELECT_MENU = 8, ///< Menu button selects item if no others selected
+					AUTO_SIZE_CHECKED = 0x100, ///< Removing or changing called
+					WANT_AUTO_SIZE = 0x200,    ///< Need to auto size on removed called
+					LAST_SELECT_MENU = 0x400   ///< Last selection was caused by menu button
 				   };
-	unsigned int _flags;
+	unsigned int _flags; ///< Internal view flags
 
 public:
 	ItemView(Window window);
@@ -90,6 +98,13 @@ public:
 	 * hit testing.
 	 */
 	static const unsigned int NO_INDEX = -1;
+
+	/**
+	 * Return the Window that this item view is attached
+	 * to.
+	 */
+	tbx::Window &window() {return _window;}
+
 
 	/**
 	 * Return the margin around the data in the window.
@@ -117,7 +132,18 @@ public:
 	unsigned int count() const {return _count;}
 
 	void selection(Selection *selection);
+
+	/**
+	 * Get the selection model used for selecting items in the list
+	 *
+	 * @returns selection model or 0 if selection is not allowed
+	 */
 	Selection *selection() const {return _selection;}
+	/**
+	 * Get the selection model used for selecting items in the list
+	 *
+	 * @returns selection model or 0 if selection is not allowed
+	 */
 	Selection *selection() {return _selection;}
 
 	void add_click_listener(ItemViewClickListener *listener);
@@ -135,6 +161,9 @@ public:
 	 * the items in the view.
 	 */
 	virtual void redraw(const tbx::RedrawEvent &event) = 0;
+
+	// Scroll request override
+	virtual void scroll_request(const tbx::ScrollRequestEvent &event);
 
 	// Mouse click listener override
 	virtual void mouse_click(tbx::MouseClickEvent &event);
@@ -250,6 +279,7 @@ protected:
 	void process_mouse_click(int index, MouseClickEvent &event);
 
 private:
+	/// @cond INTERNAL
 	/**
 	 * Class to handle selecting items after a rubber box drag
 	 */
@@ -263,6 +293,7 @@ private:
 		virtual void drag_finished(const tbx::BBox &final);
 		virtual void drag_cancelled();
 	};
+	/// @endcond
 
 };
 

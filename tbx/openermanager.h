@@ -23,49 +23,47 @@
  */
 
 /*
- * quitlistener.h
+ * openermanager.h
  *
- *  Created on: 09-Jun-2009
+ *  Created on: 23 Nov 2010
  *      Author: alanb
  */
 
-#ifndef TBX_QUITLISTENER_H_
-#define TBX_QUITLISTENER_H_
+#ifndef TBX_OPENERMANAGER_H_
+#define TBX_OPENERMANAGER_H_
 
 #include "wimpmessagelistener.h"
+#include "loader.h"
 
 namespace tbx {
 
-class Application;
 /**
- * Class to simplify handling of Quit WIMP message.
- *
- * Normally used internally by Application::add_quit_listener
+ * Internal class to help implement data openers
  */
-class QuitListener : public Listener
+class OpenerManager: public tbx::WimpRecordedMessageListener
 {
-private:
-	class MessageQuitListener : public WimpRecordedMessageListener
+	static OpenerManager *_instance;
+	struct OpenerItem
 	{
-		QuitListener *_quit_listener;
-	public:
-		MessageQuitListener(QuitListener *ql) : _quit_listener(ql) {};
-		virtual ~MessageQuitListener() {};
-		// Just forward all messages to the QuitListener quit
-		virtual void recorded_message(WimpMessageEvent &event) {_quit_listener->quit();}
+		int file_type;
+		Loader *loader;
+		OpenerItem *next;
+	} *_first;
 
-	} _message_listener;
-	friend class tbx::Application;
 public:
-	QuitListener() : _message_listener(this) {};
-	virtual ~QuitListener() {};
+	OpenerManager();
+	virtual ~OpenerManager();
 
-	/**
-	 * Called when the application has be told to quit by the desktop.
-	 */
-	virtual void quit() = 0;
+	static OpenerManager *instance() {return _instance;}
+
+	virtual void recorded_message(WimpMessageEvent &event, int reply_to);
+
+	void add_opener(int file_type, Loader *loader);
+	void remove_opener(int file_type, Loader *loader);
+
+
 };
 
 }
 
-#endif /* TBX_QUITLISTENER_H_ */
+#endif /* OPENERMANAGER_H_ */

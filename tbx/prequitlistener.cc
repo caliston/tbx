@@ -135,7 +135,7 @@ void PreQuitManager::remove_listener(PreQuitListener *listener)
 	if (found != _listeners.end())_listeners.erase(found);
 }
 
-void PreQuitManager::user_message_recorded(WimpMessageEvent &event, int reply_to)
+void PreQuitManager::recorded_message(WimpMessageEvent &event, int reply_to)
 {
 	PreQuitEvent pqe(event.message(), reply_to);
 	for (std::vector<PreQuitListener *>::iterator i = _listeners.begin();

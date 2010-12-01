@@ -84,8 +84,8 @@ private:
 	void set_autocreate_listener(std::string template_name, AutoCreateListener *listener);
 	void clear_autocreate_listener(std::string template_name);
 
-	void add_message_listener(int message_id, WimpMessageListener *listener);
-	void remove_message_listener(int message_id, WimpMessageListener *listener);
+	void add_message_listener(int type, int message_id, WimpMessageListener *listener);
+	void remove_message_listener(int type, int message_id, WimpMessageListener *listener);
 
 	void add_null_event_command(Command *command);
 	void remove_null_event_command(Command *command);
@@ -110,10 +110,13 @@ private:
     void process_pointer_entering_window();
 	void process_mouse_click();
 	void process_key_pressed();
+	void process_scroll_request();
 	void process_lose_caret();
 	void process_gain_caret();
 
-	void process_wimp_message(int event_code);
+	void process_user_message();
+	void process_recorded_message();
+	void process_acknowledge_message();
 
 private:
 	IdBlock _id_block;
@@ -157,7 +160,7 @@ private:
 
 	std::map<ObjectId, ObjectListenerItem *> _object_listeners;
 	std::map<std::string, AutoCreateListener*> *_autocreate_listeners;
-	std::map<int, WimpMessageListenerItem *> *_message_listeners;
+	std::map<int, WimpMessageListenerItem *> **_message_listeners;
 	std::map<ObjectId, WindowEventListenerItem **> *_window_event_listeners;
 
 	std::vector<Command *> *_null_event_commands;
