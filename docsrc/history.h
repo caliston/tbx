@@ -18,4 +18,20 @@
  * - Desktop font item rendering and textview rendering modifed to use 40 os units for the height.
  * - Added key pressed event processing to Window object.
  * - Fixed bug where command added to application could be executed multiple times
+ *
+ * <B>0.3 Alpha December 2010</B>
+ * - Release so version used with latest PackIt is available
+ * - Added res namespace containing Toolbox Resource file/object/gadget handling
+ * - WriteableField renamed to WritableField.
+ * - Method/parameter names for file names modified to have consistent naming throughout the library
+ * - Added functions to support message files
+ * - Added doc namespace containing classes to help in writing document based applications
+ * - Added static methods for accessing/setting a files file type.
+ * - Added Opener handlers to application to be used for opening a file double clicked in the filer.
+ * - Added Window scroll request listener
+ * - Split out Wimp Message Listener to use listeners explicit for the three message types.
+ * - Added drag methods to Window
+ * - Updated ItemView to improve paging. 
+ * - Added mode changed and palette changed listeners to application.
+ * - Various minor API and documentation fixes/improvements.
  */
