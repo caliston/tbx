@@ -101,8 +101,8 @@ void Draggable::remove_mouse_click_listener(MouseClickListener *listener)
 
 PointerInfo DragEndedEvent::where() const
 {
-	int dest_window;
-	int dest_icon;
+	int dest_window = -1;
+	int dest_icon = -1;
 
 	if (toolbox_ids())
 	{
