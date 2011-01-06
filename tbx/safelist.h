@@ -52,6 +52,13 @@ template<class T> class SafeList
       };
 
    public:
+      /**
+       * Simple class to iterate through the list.
+       *
+       * Only one iterator can be used on the list at a time.
+       * Items can be safely removed from the list while progressing
+       * through the iterator.
+       */
       class Iterator
       {
          friend class SafeList;

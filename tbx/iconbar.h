@@ -38,10 +38,9 @@ namespace tbx
 	    class ResIconbar;
 	}
 
-	//@{
-	// Class to represent toolbox iconbar.
-	//
-	//@}
+	/**
+	 * Class to represent toolbox iconbar icon.
+	 */
 	class Iconbar : public Object
 	{
 	public:

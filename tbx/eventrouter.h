@@ -35,6 +35,9 @@
 namespace tbx
 {
 
+// This class is internal to the workings of TBX
+//! @cond INTERNAL
+
 class Application;
 class Object;
 class Component;
@@ -193,5 +196,7 @@ private:
 inline EventRouter *event_router() {return EventRouter::instance();}
 
 }
+
+//! @endcond
 
 #endif

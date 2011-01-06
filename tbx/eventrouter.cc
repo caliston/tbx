@@ -51,6 +51,9 @@
 
 using namespace tbx;
 
+// This class is internal to the workings of TBX
+//! @cond INTERNAL
+
 EventRouter *EventRouter::_instance = 0;
 
 // Maximum window event in window event map
@@ -1435,6 +1438,8 @@ void EventRouter::add_timer_info(TimerInfo *info)
 		}
 	}
 }
+
+//! @endcond
 
 /**
  * Construct IdBlock with details from the given object

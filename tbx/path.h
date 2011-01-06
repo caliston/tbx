@@ -41,16 +41,13 @@ namespace tbx
 	 */
 	const int FILE_TYPE_APPLICATION = 0x2000;
 
-	///////////////////////////////////////////////////////////
-	//@{
-	//   Class to handle the 5 byte times.
-	//
-	//  The 5 byte time is used for time/date stamps on files
-	//  on RISCOS. It is the number of centi-seconds from
-	//  Midnight on 1st Jan 1900.
-	//@}
-	//////////////////////////////////////////////////////////
-
+	/**
+	 *  Class to handle the 5 byte times.
+	 *
+	 *  The 5 byte time is used for time/date stamps on files
+	 *  on RISCOS. It is the number of centi-seconds from
+	 *  Midnight on 1st Jan 1900.
+	 */
 	class UTCTime
 	{
 	public:
@@ -84,12 +81,9 @@ namespace tbx
 
 	class Path;
 
-	////////////////////////////////////////////////////////////////
-	//@{
-	//   Class to hold the catalog information for a file.
-	//@}
-	///////////////////////////////////////////////////////////////
-
+	/**
+	 * Class to hold the catalogue information for a file.
+	 */
 	class PathInfo
 	{
 	public:
@@ -197,12 +191,9 @@ namespace tbx
 		int _file_type;
 	};
 
-	///////////////////////////////////////////////////////////////////
-	//@{
-	//   Class to manipulate RISC OS file and directory path names.
-	//@}
-	//////////////////////////////////////////////////////////////////
-
+	/**
+	 * Class to manipulate RISC OS file and directory path names.
+	 */
 	class Path
 	{
 	public:
