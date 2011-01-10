@@ -31,6 +31,7 @@
 
 namespace tbx {
 
+//! @cond INTERNAL
 /*
  * Internal class to managed file/data loaders
  */
@@ -91,6 +92,8 @@ private:
 		~LoadingItem() {delete _data_save_reply; delete _load_event;}
 	} *_loading;
 };
+
+//! @endcond
 
 }
 

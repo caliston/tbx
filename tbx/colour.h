@@ -28,6 +28,18 @@
 
 namespace tbx
 {
+
+/**
+ * Class to represent a RGB colour.
+ *
+ * The colour is stored as an unsigned integer
+ * in the format 0xbbggrrxx
+ *   where xx is normally 0
+ *         rr is the red component
+ *         gg is the green component
+ *         bb is the blue component.
+ * All components set to 0xFF (255) is used to represent no colour.
+ */
 class Colour
 {
   union {
@@ -57,6 +69,10 @@ public:
 	 no_colour = 0xFFFFFFFF };
 };
 
+/**
+ * Class to represent a standard desktop WIMP colour.
+ * This is an integer from 0 to 15 or -1 for no colour.
+ */
 class WimpColour
 {
   int _colour;

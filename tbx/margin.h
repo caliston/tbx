@@ -28,6 +28,9 @@
 namespace tbx
 {
 
+/**
+ * Class to represent a margin around an area
+ */
 class Margin
 {
 public:

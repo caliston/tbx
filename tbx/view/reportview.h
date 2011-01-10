@@ -38,6 +38,10 @@ namespace tbx {
 
 namespace view {
 
+/**
+ * Class to handle the display/interaction with a list
+ * of items presented in columns.
+ */
 class ReportView : public ItemView
 {
 private:

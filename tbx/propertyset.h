@@ -31,58 +31,57 @@
 
 namespace tbx {
 
-//@{
-// Maintain a simple set of string properties with
-// their values.
-//
-// The property names are case sensitive
-//@}
-
+/**
+* Maintain a simple set of string properties with
+* their values.
+*
+* The property names are case sensitive
+*/
 class PropertySet {
 public:
 
-	//@{
-	// Check if property is a member of this property set
-	//@}
+	/**
+	* Check if property is a member of this property set
+	*/
 	bool exists(std::string name) const;
 
-	//@{
-	// Set the value of a string property.
-	//@}
+	/**
+	* Set the value of a string property.
+	*/
 	void set(std::string name, std::string value);
 
-	//@{
-	// Get the value of a property as a string
-	//
-	//@return value of string property returns the default value if property does not exist
-	//@}
+	/**
+	* Get the value of a property as a string
+	*
+	*@return value of string property returns the default value if property does not exist
+	*/
 	std::string get(std::string name, const char *def ="") const;
 
-	//@{
-	// Set the value of an integer property
-	//@}
+	/**
+	* Set the value of an integer property
+	*/
 	void set(std::string name, int value);
 	int get(std::string name, int def) const;
 
-	//@{
-	// Set the value of a bool property
-	//@}
+	/**
+	* Set the value of a bool property
+	*/
 	void set(std::string name, bool value);
 	bool get(std::string name, bool def) const;
 
-	//@{
-	// erases a property from the set.
-	//
-	//@return true if property existed in the set
-	//@}
+	/**
+	* erases a property from the set.
+	*
+	*@return true if property existed in the set
+	*/
 	bool erase(std::string name);
 
-	//@{
-	// Set an indexed property
-	//
-	// Short cut that just appends the index to the property name
-	// before using it in the above routines.
-	//@}
+	/**
+	* Set an indexed property
+	*
+	* Short cut that just appends the index to the property name
+	* before using it in the above routines.
+	*/
 	void set_indexed(std::string name, int index, std::string value);
 	std::string get_indexed(std::string name, int index, const char *def = "") const;
 	void set_indexed(std::string name, int index, int value);
@@ -92,24 +91,24 @@ public:
 	bool exists_indexed(std::string name, int index);
 	bool erase_indexed(std::string name, int index);
 
-	//@{
-	// Writes the property list to a stream
-	//@}
+	/**
+	* Writes the property list to a stream
+	*/
 	bool write(std::ostream &os) const;
 
-	//@{
-	// Reads the properties from a stream
-	//
-	// Property list is assumed to continue until the end of the stream
-	//
-	// Note: Any string property values will have leading and
-	// trailing spaces removed.
-	//@}
+	/**
+	* Reads the properties from a stream
+	*
+	* Property list is assumed to continue until the end of the stream
+	*
+	* Note: Any string property values will have leading and
+	* trailing spaces removed.
+	*/
 	bool read(std::istream &is);
 
-	//@{
-	// Remove all properties from the property set
-	//@}
+	/**
+	* Remove all properties from the property set
+	*/
 	void clear();
 	bool empty();
 

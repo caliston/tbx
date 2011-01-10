@@ -36,8 +36,10 @@
 namespace tbx
 {
 
+//! @cond INTERNAL
+// Instance variable for pre quit listener managment
 PreQuitManager *PreQuitManager::_instance = 0;
-
+//! @endcond
 
 /**
  * Construct a quit restarter that will just close the
@@ -118,6 +120,8 @@ void PreQuitEvent::cancel_quit()
 	_message.send(WimpMessage::Acknowledge, _reply_to);
 }
 
+// Internal class handling prequit events
+//! @cond INTERNAL
 
 PreQuitManager::PreQuitManager()
 {
@@ -144,5 +148,7 @@ void PreQuitManager::recorded_message(WimpMessageEvent &event, int reply_to)
 		(*i)->pre_quit(pqe);
 	}
 }
+
+//! @endcond
 
 }

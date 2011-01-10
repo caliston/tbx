@@ -38,24 +38,40 @@ public:
 	ObjectClassError() : std::invalid_argument("C++ object/toolbox object class mismatch") {}
 };
 
+/**
+ * Exception thrown when an underlying toolbox gadget id doesn't
+ * match the C++ class used to represent the toolbox gadget
+ */
 class GadgetClassError : public std::invalid_argument
 {
 public:
 	GadgetClassError() : std::invalid_argument("C++ gadget/toolbox gadget class mismatch") {}
 };
 
+/**
+ * Exception thrown when a C++ object representing a toolbox object
+ * uses a method that requires a non-null toolbox handle.
+ */
 class ObjectNullError : public std::invalid_argument
 {
 public:
 	ObjectNullError() : std::invalid_argument("NULL toolbox object handle") {};
 };
 
+/**
+ * Exception thrown when a C++ object representing a toolbox gadget
+ * uses a method that requires a non-null gadget id.
+ */
 class ComponentNullError : public std::invalid_argument
 {
 public:
 	ComponentNullError() : std::invalid_argument("NULL gagdet id") {};
 };
 
+/**
+ * Exception thrown is a component id does not refer to an item in
+ * a menu resource.
+ */
 class ResMenuItemError : public std::invalid_argument
 {
 public:

@@ -38,6 +38,10 @@
 
 namespace tbx
 {
+	/**
+	 * Structure used to specify exact position and size for an
+	 * object derived from tbx::ShowFullObject.
+	 */
 	struct ShowFullSpec
 	{
 	public:

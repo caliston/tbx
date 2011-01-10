@@ -28,6 +28,9 @@
 namespace tbx
 {
 
+/**
+ * Class to represent a two-dimensional size
+ */
 class Size
 {
 public:

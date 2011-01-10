@@ -33,6 +33,9 @@
 namespace tbx
 {
 
+/**
+ * Class to return information on a screen mode
+ */
 class ModeInfo
 {
   public:

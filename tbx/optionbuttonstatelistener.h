@@ -65,12 +65,18 @@ public:
 	bool select() const {return (_data.word[3] & 4) != 0;}
 };
 
+/**
+ * Listener for changes to the state of an option button.
+ */
 class OptionButtonStateListener : public Listener
 {
 public:
 	OptionButtonStateListener() {}
 	virtual ~OptionButtonStateListener() {}
 
+	/**
+	 * Option button state has changed
+	 */
 	virtual void option_button_state_changed(OptionButtonStateEvent &event) = 0;
 };
 

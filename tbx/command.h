@@ -43,7 +43,7 @@ namespace tbx
 	};
 
 
-	/***
+	/**
 	 * Template to create a command that calls a member function
 	 */
 	template<class T> class CommandMethod : public Command

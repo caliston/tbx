@@ -65,6 +65,9 @@ namespace tbx
 		Component ancestor_component() const;
 	};
 
+	/**
+	 * Structure holding the raw data from a call to Wimp_Poll.
+	 */
 	struct PollBlock
 	{
 		int word[64];

@@ -39,11 +39,23 @@
 namespace tbx
 {
 
+    /**
+     * Listener for toolbox object deleted event.
+     *
+     * A listener of this type is added to any tbx::Object
+     * to detect when the underlying toolbox object has
+     * been deleted.
+     */
 	class ObjectDeletedListener: public tbx::Listener {
 	public:
 		ObjectDeletedListener() {}
 		virtual ~ObjectDeletedListener() {}
 
+		/**
+		 * Called when the toolbox object has been deleted.
+		 *
+		 * @param object toolbox object that has been deleted.
+		 */
 		virtual void object_deleted(Object &object) = 0;
 
 	private:

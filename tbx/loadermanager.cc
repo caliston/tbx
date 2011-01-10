@@ -31,6 +31,9 @@
 
 namespace tbx {
 
+// Internal class not included in documentation
+//! @cond INTERNAL
+
 LoaderManager *LoaderManager::_instance = 0;
 
 LoaderManager::LoaderManager()
@@ -462,4 +465,5 @@ void LoaderManager::ram_transmit(const WimpMessage &msg)
 	}
 }
 
+//! @endcond
 }

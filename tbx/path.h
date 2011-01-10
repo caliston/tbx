@@ -122,7 +122,12 @@ namespace tbx
 		int length() const;
 		int attributes() const;
 
-		// Iterate through a folder
+		/**
+		 * Iterator used to iterate through a directory
+		 *
+		 * use the tbx::PathInfo::begin and tbx::PathInfo::end methods
+		 * to return this iterator
+		 */
 		class Iterator
 		{
 		protected:
@@ -149,6 +154,9 @@ namespace tbx
 		protected:
 			PathInfo *_info;
 
+			/**
+			 * Low level class to deal with the file iteration kernel calls
+			 */
 			class IterBlock
 			{
 			public:
@@ -275,7 +283,12 @@ namespace tbx
 
 		//Operators
 
-
+		/**
+		 * Iterator to step through files in a folder.
+		 *
+		 * This is return by the tbx::Path::begin and tbx::Path::end
+		 * methods.
+		 */
 		class Iterator
 		{
 		protected:
@@ -301,6 +314,9 @@ namespace tbx
 		// Variables
 			std::string _name;
 
+			/**
+			 * Low level class to deal with the file iteration kernel calls
+			 */
 			class IterBlock
 			{
 			public:

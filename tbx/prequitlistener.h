@@ -123,6 +123,10 @@ namespace tbx
 		virtual void pre_quit(PreQuitEvent &event) = 0;
 	};
 
+//! @cond INTERNAL
+	/**
+	 * Internal class to handle prequit listeners
+	 */
 	class PreQuitManager : public WimpRecordedMessageListener
 	{
 		static PreQuitManager *_instance;
@@ -137,6 +141,7 @@ namespace tbx
 
 		virtual void recorded_message(WimpMessageEvent &event, int reply_to);
 	};
+//! @endcond
 
 }
 
