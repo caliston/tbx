@@ -58,15 +58,84 @@ class FontMenu : public tbx::ShowPointObject
 public:
 	enum { TOOLBOX_CLASS = 0x82a40 };
 
+	/**
+	 * Construct creates an unassigned FontMenu.
+	 *
+	 * It must be assigned to a value before the other methods can be used.
+	 */
 	FontMenu() {};
+	/**
+	 * Construct a FontMenu from another FontMenu.
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other FontMenu
+	 *
+	 * @param other FontMenu to copy.
+	 */
 	FontMenu(const FontMenu &other) : ShowPointObject(other._handle) {}
+	/**
+	 * Construct a FontMenu from an Object that refers to a FontMenu
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a FontMenu
+	 */
 	FontMenu(const Object &other) : ShowPointObject(other)	{check_toolbox_class(FontMenu::TOOLBOX_CLASS);}
+	/**
+	 * Create a FontMenu from the named template
+	 *
+	 * @param template_name The name of the template to create the object from
+	 * @throws OsError if an object cannot be created from the named template
+	 * @throws ObjectClassException if the template is not for a FontMenu
+	 */
 	FontMenu(const std::string &template_name) : ShowPointObject(template_name)	{check_toolbox_class(FontMenu::TOOLBOX_CLASS);}
+	/**
+	 * Create a FontMenu from an in memory template resource
+	 *
+	 * @param object_template The template to create the object from
+	 * @throws OsError if an object cannot be created from the template
+	 */
 	FontMenu(const res::ResFontMenu &object_template);
 
+	/**
+	 * Assign this FontMenu from another.
+	 *
+	 * Both objects will then refer to the same underlying toolbox object
+	 *
+	 * @param other FontMenu to copy
+	 * @returns reference to this FontMenu
+	 */
 	FontMenu &operator=(const FontMenu &other) {_handle = other.handle(); return *this;}
+	/**
+	 * Assign this FontMenu from an Object that refers to a FontMenu
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @returns reference to this FontMenu
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a FontMenu
+	 */
 	FontMenu &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}
+	/**
+	 * Check if this FontMenu refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they refer to the same underlying toolbox object
+	 */
 	bool operator==(const Object &other) const {return (_handle == other.handle());}
+	/**
+	 * Check if this FontMenu does not refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they do not refer to the same underlying toolbox object
+	 */
 	bool operator!=(const Object &other) const {return (_handle != other.handle());}
 
 

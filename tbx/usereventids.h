@@ -34,20 +34,40 @@
 
 namespace tbx
 {
-	// IDs available for user events unique to the program
+	/**
+     * First event ID available to be used in any application
+     */
 	const int FIRST_USER_EID = 1;
+	/**
+     * Last event ID available to be used in any application
+     */
 	const int LAST_USER_EID = 0x4FFF;
 
-	// IDs available to share between multiple applications
+	/**
+     * First event ID available to be shared between multiple applications
+     */
 	const int FIRST_SHARE_EID = 0x5000;
+	/**
+     * Last event ID available to be shared between multiple applications
+     */
 	const int LAST_SHARE_EID = 0x5FFF;
 
-	// IDs range for dynamically allocated ids
+	/**
+     * First event ID for dynamically allocated IDs
+     */
 	const int FIRST_DYNAMIC_EID = 0x6000;
+	/**
+     * Last event ID for dynamically allocated IDs
+     */
 	const int LAST_DYNAMIC_EID = 0x6FFF;
 
-	// IDs for the ATB library
+	/**
+	 * First event ID reserved for the TBX library
+	 */
 	const int FIRST_TBX_EID = 0x7000;
+	/**
+	 * Last event ID reserved for the TBX library
+	 */
 	const int LAST_TBX_EID = 0x7FFF;
 }
 

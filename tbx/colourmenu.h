@@ -58,21 +58,92 @@ class ColourMenu : public tbx::ShowPointObject
 public:
 	enum { TOOLBOX_CLASS = 0x82980 };
 
+	/**
+	 * Construct creates an unassigned ColourMenu.
+	 *
+	 * It must be assigned to a value before the other methods can be used.
+	 */
 	ColourMenu() {};
+	/**
+	 * Construct a ColourMenu from another ColourMenu.
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other ColourMenu
+	 *
+	 * @param other ColourMenu to copy.
+	 */
 	ColourMenu(const ColourMenu &other) : ShowPointObject(other._handle) {}
+	/**
+	 * Construct a ColourMenu from an Object that refers to a ColourMenu
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a ColourMenu
+	 */
 	ColourMenu(const Object &other) : ShowPointObject(other)	{check_toolbox_class(ColourMenu::TOOLBOX_CLASS);}
+	/**
+	 * Create a ColourMenu from the named template
+	 *
+	 * @param template_name The name of the template to create the object from
+	 * @throws OsError if an object cannot be created from the named template
+	 * @throws ObjectClassException if the template is not for a ColourMenu
+	 */
 	ColourMenu(const std::string &template_name) : ShowPointObject(template_name)	{check_toolbox_class(ColourMenu::TOOLBOX_CLASS);}
+	/**
+	 * Create a ColourMenu from an in memory template resource
+	 *
+	 * @param object_template The template to create the object from
+	 * @throws OsError if an object cannot be created from the template
+	 */
 	ColourMenu(const res::ResColourMenu &object_template);
 
+	/**
+	 * Assign this ColourMenu from another.
+	 *
+	 * Both objects will then refer to the same underlying toolbox object
+	 *
+	 * @param other ColourMenu to copy
+	 * @returns reference to this ColourMenu
+	 */
 	ColourMenu &operator=(const ColourMenu &other) {_handle = other.handle(); return *this;}
+	/**
+	 * Assign this ColourMenu from an Object that refers to a ColourMenu
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @returns reference to this ColourMenu
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a ColourMenu
+	 */
 	ColourMenu &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}
+	/**
+	 * Check if this ColourMenu refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they refer to the same underlying toolbox object
+	 */
 	bool operator==(const Object &other) const {return (_handle == other.handle());}
+	/**
+	 * Check if this ColourMenu does not refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they do not refer to the same underlying toolbox object
+	 */
 	bool operator!=(const Object &other) const {return (_handle != other.handle());}
 
 	// Properties
 
 	/**
 	 * Set selected colour for menu
+	 *
+	 * @param colour new colour for menu
 	 */
 	void colour(WimpColour colour) {int_property(0, (int)colour);}
 
@@ -83,6 +154,8 @@ public:
 
 	/**
 	 * Set if "no colour" is available
+	 *
+	 * @param allow_none true to allow no colour
 	 */
 	void none_available(bool allow_none) {bool_property(2, allow_none);}
 
@@ -94,6 +167,8 @@ public:
 
 	/**
 	 * Set Title
+	 *
+	 * @param msg new title for the menu
 	 */
 	void title(std::string msg) {string_property(4, msg);}
 

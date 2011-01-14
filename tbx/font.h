@@ -102,13 +102,67 @@ namespace tbx
     // Notes: assumes 180 os units per inch - also rounds down
 	//        1 points is 1/72 of an inch
 
+	/**
+	 * Convert from OS units to points
+	 *
+     * Note:  assumes 180 OS units per inch - also rounds down
+	 *        1 points is 1/72 of an inch
+	 *
+	 * @param os OS units to convert
+	 * @returns number of points equivalent
+	 */
     inline int os_to_points(int os)              {return (os<<1) / 5;}
+	/**
+	 * Convert from points to OS units
+	 *
+     * Note:  assumes 180 OS units per inch - also rounds down
+	 *        1 points is 1/72 of an inch
+	 *
+	 * @param points number of points to convert
+	 * @returns number of OS units equivalent
+	 */
     inline int points_to_os(int points)         {return (5 * points) >> 1;}
 
+	/**
+	 * Convert from OS units to 16th of a point
+	 *
+     * Note:  assumes 180 os units per inch - also rounds down
+	 *        1 points is 1/72 of an inch
+	 *
+	 * @param os OS units to convert
+	 * @returns number of 16ths of a point equivalent
+	 */
     inline int os_to_points_16th(int os)          {return (os<<5) / 5;}
+	/**
+	 * Convert from 16ths of a point to OS units
+	 *
+     * Note:  assumes 180 OS units per inch - also rounds down
+	 *        1 points is 1/72 of an inch
+	 *
+	 * @param point16th number of 16ths of a points to convert
+	 * @returns number of OS units equivalent
+	 */
     inline int points_16th_to_os(int point16th)   {return (5 * point16th) >> 5;}
 
+	/**
+	 * Convert from OS units to millipoints
+	 *
+     * Note:  assumes 180 os units per inch - also rounds down
+	 *        1 points is 1/72 of an inch
+	 *
+	 * @param os OS units to convert
+	 * @returns number of millipoints equivalent
+	 */
     inline int os_to_millipoints(int os)         {return 400 * os;}
+	/**
+	 * Convert from millipoints to OS units
+	 *
+     * Note:  assumes 180 OS units per inch - also rounds down
+	 *        1 points is 1/72 of an inch
+	 *
+	 * @param millipoint number of millipoints to convert
+	 * @returns number of OS units equivalent
+	 */
     inline int millipoints_to_os(int millipoint) {return millipoint / 400;}
 
     /**

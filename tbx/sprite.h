@@ -41,6 +41,10 @@ namespace tbx
 	class UserSprite;
 	class WimpSprite;
 
+	/**
+	 * Maximum length of a sprite name including a terminating
+	 * character 0.
+	 */
 	const int SPRITE_NAMELEN = 13;
 
 	/**
@@ -154,15 +158,14 @@ namespace tbx
 		SC_Colour16M = 6
 	};
 
-	//@{
-	//   Return new format sprite mode.
-	//
-	//   Can only be used in Risc OS 3.5 and later.
-	//@param colours constant to specify number of colours
-	//@param horzDpi - horizontal dots per inch
-	//@param vertDpi - vertical dots per inch
-	//@}
-
+	/**
+	 *  Return new format sprite mode.
+	 *
+	 *   Can only be used in Risc OS 3.5 and later.
+	 * @param colours constant to specify number of colours
+	 * @param horzDpi - horizontal dots per inch
+	 * @param vertDpi - vertical dots per inch
+	 */
 	inline int sprite_mode(SpriteColours colours, int horzDpi = 90, int vertDpi = 90)
 	{
 		return (colours << 27) | (horzDpi << 1) | (vertDpi << 14) | 1;

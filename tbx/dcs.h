@@ -64,15 +64,84 @@ class DCS : public tbx::ShowFullObject
 public:
 	enum { TOOLBOX_CLASS = 0x82a80 };
 
+	/**
+	 * Construct creates an unassigned DCS.
+	 *
+	 * It must be assigned to a value before the other methods can be used.
+	 */
 	DCS() {};
+	/**
+	 * Construct a DCS from another DCS.
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other DCS
+	 *
+	 * @param other DCS to copy.
+	 */
 	DCS(const DCS &other) : ShowFullObject(other._handle) {}
+	/**
+	 * Construct a DCS from an Object that refers to a DCS
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a DCS
+	 */
 	DCS(const Object &other) : ShowFullObject(other)	{check_toolbox_class(DCS::TOOLBOX_CLASS);}
+	/**
+	 * Create a DCS from the named template
+	 *
+	 * @param template_name The name of the template to create the object from
+	 * @throws OsError if an object cannot be created from the named template
+	 * @throws ObjectClassException if the template is not for a DCS
+	 */
 	DCS(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(DCS::TOOLBOX_CLASS);}
+	/**
+	 * Create a DCS from an in memory template resource
+	 *
+	 * @param object_template The template to create the object from
+	 * @throws OsError if an object cannot be created from the template
+	 */
 	DCS(const res::ResDCS &object_template);
 
+	/**
+	 * Assign this DCS from another.
+	 *
+	 * Both objects will then refer to the same underlying toolbox object
+	 *
+	 * @param other DCS to copy
+	 * @returns reference to this DCS
+	 */
 	DCS &operator=(const DCS &other) {_handle = other.handle(); return *this;}
+	/**
+	 * Assign this DCS from an Object that refers to a DCS
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @returns reference to this DCS
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a DCS
+	 */
 	DCS &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}
+	/**
+	 * Check if this DCS refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they refer to the same underlying toolbox object
+	 */
 	bool operator==(const Object &other) const {return (_handle == other.handle());}
+	/**
+	 * Check if this DCS does not refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they do not refer to the same underlying toolbox object
+	 */
 	bool operator!=(const Object &other) const {return (_handle != other.handle());}
 
 

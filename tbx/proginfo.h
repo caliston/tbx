@@ -58,15 +58,84 @@ class ProgInfo : public tbx::ShowFullObject
 public:
 	enum { TOOLBOX_CLASS = 0x82b40 };
 
+	/**
+	 * Construct creates an unassigned ProgInfo.
+	 *
+	 * It must be assigned to a value before the other methods can be used.
+	 */
 	ProgInfo() {};
+	/**
+	 * Construct a ProgInfo from another ProgInfo.
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other ProgInfo
+	 *
+	 * @param other ProgInfo to copy.
+	 */
 	ProgInfo(const ProgInfo &other) : ShowFullObject(other._handle) {}
+	/**
+	 * Construct a ProgInfo from an Object that refers to a ProgInfo
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a ProgInfo
+	 */
 	ProgInfo(const Object &other) : ShowFullObject(other)	{check_toolbox_class(ProgInfo::TOOLBOX_CLASS);}
+	/**
+	 * Create a ProgInfo from the named template
+	 *
+	 * @param template_name The name of the template to create the object from
+	 * @throws OsError if an object cannot be created from the named template
+	 * @throws ObjectClassException if the template is not for a ProgInfo
+	 */
 	ProgInfo(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(ProgInfo::TOOLBOX_CLASS);}
+	/**
+	 * Create a ProgInfo from an in memory template resource
+	 *
+	 * @param object_template The template to create the object from
+	 * @throws OsError if an object cannot be created from the template
+	 */
 	ProgInfo(const res::ResProgInfo &object_template);
 
+	/**
+	 * Assign this ProgInfo from another.
+	 *
+	 * Both objects will then refer to the same underlying toolbox object
+	 *
+	 * @param other ProgInfo to copy
+	 * @returns reference to this ProgInfo
+	 */
 	ProgInfo &operator=(const ProgInfo &other) {_handle = other.handle(); return *this;}
+	/**
+	 * Assign this ProgInfo from an Object that refers to a ProgInfo
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @returns reference to this ProgInfo
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a ProgInfo
+	 */
 	ProgInfo &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}
+	/**
+	 * Check if this ProgInfo refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they refer to the same underlying toolbox object
+	 */
 	bool operator==(const Object &other) const {return (_handle == other.handle());}
+	/**
+	 * Check if this ProgInfo does not refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they do not refer to the same underlying toolbox object
+	 */
 	bool operator!=(const Object &other) const {return (_handle != other.handle());}
 
 

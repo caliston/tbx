@@ -29,10 +29,16 @@
 namespace tbx
 {
 
+//! @cond INTERNAL
+/**
+ * Internal class to run a command on an event
+ */
 void command_router(IdBlock &id_block, PollBlock &data, Listener *command)
 {
 	static_cast<Command *>(command)->execute();
 }
+
+//! @endcond
 
 }
 

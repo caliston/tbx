@@ -40,6 +40,12 @@ namespace tbx
 	{
 
 	public:
+		/**
+		 * Construct from toolbox event information
+		 *
+		 * @param id_block Object/component data
+		 * @param poll_block event information
+		 */
 		CaretEvent(IdBlock &id_block, PollBlock &poll_block) :
 			EventInfo(id_block, poll_block)
 			{}

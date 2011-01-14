@@ -31,7 +31,13 @@
 
 namespace tbx
 {
+//! @cond INTERNAL
+/**
+ * Internal function to route events to commands
+ */
 	void command_router(IdBlock &id_block, PollBlock &data, Listener *command);
+
+//! @endcond
 }
 
 #endif

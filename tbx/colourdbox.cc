@@ -41,6 +41,8 @@ ColourDbox::ColourDbox(const res::ResColourDbox &object_template) : ShowPointObj
 /**
  * This event is raised just before the ColourDbox underlying window is
  * about to be shown.
+ *
+ * @param listener listener for about to be shown events
  */
 void ColourDbox::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
@@ -49,31 +51,43 @@ void ColourDbox::add_about_to_be_shown_listener(AboutToBeShownListener *listener
 
 /**
  * Remove about to be shown listener
+ *
+ * @param listener listener for about to be shown events
  */
 void ColourDbox::remove_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
 	remove_listener(0x829C0, listener);
 }
 
+//! @cond INTERNAL
 static void colourdbox_dialog_completed_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
 	ColourDbox dbox(id_block.self_object());
     static_cast<ColourDboxDialogueCompletedListener*>(listener)->colourdbox_dialogue_completed(dbox, (data.word[3]&1)!=0);
 }
+//! @endcond
 
 /***
  * Add listener to be called when the dialogue has been completed
+ *
+ * @param listener listener for dialogue completed events
  */
 void ColourDbox::add_dialogue_completed_listener(ColourDboxDialogueCompletedListener *listener)
 {
 	add_listener(0x829c1, listener, colourdbox_dialog_completed_router);
 }
 
+/***
+ * Remove listener to be called when the dialogue has been completed
+ *
+ * @param listener listener for dialogue completed events
+ */
 void ColourDbox::remove_dialogue_completed_listener(ColourDboxDialogueCompletedListener *listener)
 {
 	remove_listener(0x829c1, listener);
 }
 
+//! @cond INTERNAL
 static void colourdbox_colour_selected_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
 	ColourSelectedEvent ev(id_block.self_object(),
@@ -82,10 +96,13 @@ static void colourdbox_colour_selected_router(IdBlock &id_block, PollBlock &data
 			);
     static_cast<ColourSelectedListener*>(listener)->colour_selected(ev);
 }
+//! @endcond
 
 /**
  * Add listener to report colour select when dialog is finished
  * with OK.
+ *
+ * @param listener listener for colour selected events
  */
 void ColourDbox::add_colour_selected_listener(ColourSelectedListener *listener)
 {
@@ -94,12 +111,21 @@ void ColourDbox::add_colour_selected_listener(ColourSelectedListener *listener)
 
 /**
  * Remove the colour selected listener
+ *
+ * @param listener listener for colour selected events
  */
 void ColourDbox::remove_colour_selected_listener(ColourSelectedListener *listener)
 {
 	remove_listener(0x829c2, listener);
 }
 
+/**
+ * Construct a colour selected event from event data
+ *
+ * @param cbox ColourDbox event occurred upon
+ * @param none true if no colour option is provided
+ * @param block selected colour details
+ */
 ColourSelectedEvent::ColourSelectedEvent(ColourDbox cbox, bool none, const unsigned char *block)
    : _colour_dbox(cbox), _none(none)
 {
@@ -111,6 +137,11 @@ ColourSelectedEvent::ColourSelectedEvent(ColourDbox cbox, bool none, const unsig
 	std::memcpy(_block, block, 12 + remainder_size);
 }
 
+/**
+ * Construct from anothe ColourSelectedEvent
+ *
+ * @param other ColourSelectedEvent to copy
+ */
 ColourSelectedEvent::ColourSelectedEvent(const ColourSelectedEvent &other)
 {
 	_colour_dbox = other._colour_dbox;
@@ -124,6 +155,12 @@ ColourSelectedEvent::ColourSelectedEvent(const ColourSelectedEvent &other)
 	std::memcpy(_block, other._block, 12 + remainder_size);
 }
 
+/**
+ * Make this object to another ColourSelectedEvent object
+ *
+ * @param other ColourSelectedEvent to copy
+ * @returns this object reference
+ */
 ColourSelectedEvent &ColourSelectedEvent::operator=(const ColourSelectedEvent &other)
 {
 	_colour_dbox = other._colour_dbox;

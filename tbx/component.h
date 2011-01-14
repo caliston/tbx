@@ -53,7 +53,23 @@ public:
 	 * it is used.
 	 */
 	Component() : _handle(NULL_ObjectId), _id(NULL_ComponentId) {}
+	/**
+	 * Construct a component from an object and component id
+	 *
+	 * Note: There is no checking of the object or id for validity
+	 *
+	 * @param obj object that contains the component
+	 * @param id toolbox component id
+	 */
 	Component(Object obj, ComponentId id) : _handle(obj.handle()), _id(id) {}
+	/**
+	 * Construct a component from an object handle and component id
+	 *
+	 * Note: There is no checking of the object handle or id for validity
+	 *
+	 * @param handle Object toolbox handle
+	 * @param id toolbox component id
+	 */
 	Component(ObjectId handle, ComponentId id) : _handle(handle), _id(id) {}
 
 	/**

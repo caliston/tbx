@@ -585,7 +585,7 @@ const std::string &TagDoc::attribute_name(int id) const
 //@}
 //////////////////////////////////////////////////////////////////////
 
-istream &operator>>(istream &is, TagDoc &doc)
+std::istream &operator>>(std::istream &is, TagDoc &doc)
 {
 	doc.read_tag(is);
 	return is;
@@ -597,7 +597,7 @@ istream &operator>>(istream &is, TagDoc &doc)
  * @param is input stream to read data from
  * @throws TagException if read fails or there is a syntax error
  */
-void TagDoc::read_tag(istream &is)
+void TagDoc::read_tag(std::istream &is)
 {
 	Tag *tag = this;
 	string tag_name;
@@ -688,7 +688,7 @@ void TagDoc::read_tag(istream &is)
  * @param os stream to write to
  * @param doc Tag document to write
  */
-ostream &operator<<(ostream &os, TagDoc &doc)
+std::ostream &operator<<(std::ostream &os, TagDoc &doc)
 {
 	Tag *child = doc.first_child();
 	while (child)
@@ -707,7 +707,7 @@ ostream &operator<<(ostream &os, TagDoc &doc)
  * @param tag to write
  * @param indent number of spaces to indent the tag (default to 0)
  */
-void TagDoc::write_tag(ostream &os, Tag *tag, int indent /* = 0*/)
+void TagDoc::write_tag(std::ostream &os, Tag *tag, int indent /* = 0*/)
 {
 	int j;
 	for (j = 0; j < indent; j++) os << ' ';

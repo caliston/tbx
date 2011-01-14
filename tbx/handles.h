@@ -27,15 +27,27 @@
 
 namespace tbx
 {
+	/** Type for underlying toolbox object id */
 	typedef unsigned int ObjectId;
+	 /** Type for underlying toolbox component id */
 	typedef int ComponentId;
+	/** Type for WIMP windows handle */
 	typedef int WindowHandle;
+	/** Type for WIMP icon handle */
 	typedef int IconHandle;
 
-	// Useful constants
+	/**
+	 * NULL object id.
+	 */
 	const ObjectId NULL_ObjectId = ObjectId(0);
+	/**
+	 * NULL component id.
+	 */
 	const ComponentId NULL_ComponentId = ComponentId(-1);
 
+	/**
+	 * Type for Resource handle return from the toolbox
+	 */
 	typedef void *ResHandle;
 }
 

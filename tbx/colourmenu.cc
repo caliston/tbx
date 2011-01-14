@@ -41,6 +41,8 @@ ColourMenu::ColourMenu(const res::ResColourMenu &object_template) : ShowPointObj
 /**
  * This event is raised just before the ColourMenu underlying window is
  * about to be shown.
+ *
+ * @param listener about to be shown listener to add
  */
 void ColourMenu::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
@@ -49,6 +51,8 @@ void ColourMenu::add_about_to_be_shown_listener(AboutToBeShownListener *listener
 
 /**
  * Remove about to be shown listener
+ *
+ * @param listener about to be shown listener to remove
  */
 void ColourMenu::remove_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
@@ -57,6 +61,8 @@ void ColourMenu::remove_about_to_be_shown_listener(AboutToBeShownListener *liste
 
 /**
  * This event is raised after the ColourMenu dialog has been completed
+ *
+ * @param listener has been hidden listener to add
  */
 void ColourMenu::add_has_been_hidden_listener(HasBeenHiddenListener *listener)
 {
@@ -65,20 +71,26 @@ void ColourMenu::add_has_been_hidden_listener(HasBeenHiddenListener *listener)
 
 /**
  * Remove has been hidden listener
+ *
+ * @param listener has been hidden listener to remove
  */
 void ColourMenu::remove_has_been_hidden_listener(HasBeenHiddenListener *listener)
 {
 	remove_listener(0x82981, listener);
 }
 
+//! @cond INTERNAL
 static void colourmenu_selection_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
 	ColourMenu cm(id_block.self_object());
     static_cast<ColourMenuSelectionListener*>(listener)->colourmenu_selection(cm, WimpColour(data.word[4]));
 }
+//! @endcond
 
 /**
  * Add listener to be called when the a colour has been selected from the menu.
+ *
+ * @param listener colour selected listener to add
  */
 void ColourMenu::add_selection_listener(ColourMenuSelectionListener *listener)
 {
@@ -87,6 +99,8 @@ void ColourMenu::add_selection_listener(ColourMenuSelectionListener *listener)
 
 /**
  * Remove listener for menu colour selection
+ *
+ * @param listener colour selected listener to remove
  */
 void ColourMenu::remove_selection_listener(ColourMenuSelectionListener *listener)
 {

@@ -151,16 +151,16 @@ void Component::remove_window_listener(int event_code, Listener *listener)
 	event_router()->remove_window_event_listener(_handle, _id, event_code, listener);
 }
 
-//@{
-//  Get an integer property from the toolbox Component.
-//
-//  Helper function to implement specific properties in subclasses.
-//  Calls Toolbox_ObjectMiscOp and returns value in r0.
-//
-// @param property_id the method code to get the property
-// @returns value of property
-// @throws  OsError
-//@}
+/**
+ *  Get an integer property from the toolbox Component.
+ *
+ *  Helper function to implement specific properties in subclasses.
+ *  Calls Toolbox_ObjectMiscOp and returns value in r0.
+ *
+ * @param property_id the method code to get the property
+ * @returns value of property
+ * @throws  OsError
+*/
 
 int Component::int_property(int property_id) const
 {
@@ -176,15 +176,15 @@ int Component::int_property(int property_id) const
     return regs.r[0];
 }
 
-//@{
-//  Set an integer property from the toolbox object.
-//
-//  Helper function to implement specific properties in subclasses.
-//  Calls Toolbox_ObjectMiscOp and with value in r4.
-//
-// @param property_id the method code to get the property
-// @throws  OsError
-//@}
+/**
+ *  Set an integer property from the toolbox object.
+ *
+ *  Helper function to implement specific properties in subclasses.
+ *  Calls Toolbox_ObjectMiscOp and with value in r4.
+ *
+ * @param property_id the method code to get the property
+ * @throws  OsError
+*/
 
 void Component::int_property(int property_id, int value)
 {
@@ -199,16 +199,16 @@ void Component::int_property(int property_id, int value)
     swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
-//@{
-//  Get a boolean property from the toolbox Component.
-//
-//  Helper function to implement specific properties in subclasses.
-//  Calls Toolbox_ObjectMiscOp and returns value in r0.
-//
-// @param property_id the method code to get the property
-// @returns value of property
-// @throws  OsError
-//@}
+/**
+ *  Get a boolean property from the toolbox Component.
+ *
+ *  Helper function to implement specific properties in subclasses.
+ *  Calls Toolbox_ObjectMiscOp and returns value in r0.
+ *
+ * @param property_id the method code to get the property
+ * @returns value of property
+ * @throws  OsError
+*/
 
 bool Component::bool_property(int property_id) const
 {
@@ -224,15 +224,15 @@ bool Component::bool_property(int property_id) const
     return (regs.r[0] != 0);
 }
 
-//@{
-//  Set a boolean property from the toolbox object.
-//
-//  Helper function to implement specific properties in subclasses.
-//  Calls Toolbox_ObjectMiscOp and with value in r4.
-//
-// @param property_id the method code to get the property
-// @throws  OsError
-//@}
+/**
+ *  Set a boolean property from the toolbox object.
+ *
+ *  Helper function to implement specific properties in subclasses.
+ *  Calls Toolbox_ObjectMiscOp and with value in r4.
+ *
+ * @param property_id the method code to get the property
+ * @throws  OsError
+*/
 
 void Component::bool_property(int property_id, bool value)
 {
@@ -247,16 +247,16 @@ void Component::bool_property(int property_id, bool value)
     swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
-//@{
-//  Get a string property from the toolbox object.
-//
-//  Helper function to implement specific properties in subclasses.
-//  Calls Toolbox_ObjectMiscOp and with buffer for return in r4, size in r5.
-//
-// @param property_id the method code to get the property
-// @returns The value from the property
-// @throws  OsError
-//@}
+/**
+ *  Get a string property from the toolbox object.
+ *
+ *  Helper function to implement specific properties in subclasses.
+ *  Calls Toolbox_ObjectMiscOp and with buffer for return in r4, size in r5.
+ *
+ * @param property_id the method code to get the property
+ * @returns The value from the property
+ * @throws  OsError
+*/
 
 std::string Component::string_property(int property_id) const
 {
@@ -288,16 +288,16 @@ std::string Component::string_property(int property_id) const
     return value;
 }
 
-//@{
-//  Get a the length of a string property from the toolbox object.
-//
-//  Helper function to implement specific properties in subclasses.
-//  Calls Toolbox_ObjectMiscOp and with buffer for return in r3, size in r4.
-//
-// @param property_id the method code to get the property
-// @returns The length of the property
-// @throws  OsError
-//@}
+/**
+ *  Get a the length of a string property from the toolbox object.
+ *
+ *  Helper function to implement specific properties in subclasses.
+ *  Calls Toolbox_ObjectMiscOp and with buffer for return in r3, size in r4.
+ *
+ * @param property_id the method code to get the property
+ * @returns The length of the property
+ * @throws  OsError
+*/
 
 int Component::string_property_length(int property_id) const
 {
@@ -316,15 +316,15 @@ int Component::string_property_length(int property_id) const
 }
 
 
-//@{
-//  Set a string property in the toolbox object.
-//
-//  Helper function to implement specific properties in subclasses.
-//  Calls Toolbox_ObjectMiscOp and with value pointed to by r3.
-//
-// @param property_id the method code to get the property
-// @throws  OsError
-//@}
+/**
+ *  Set a string property in the toolbox object.
+ *
+ *  Helper function to implement specific properties in subclasses.
+ *  Calls Toolbox_ObjectMiscOp and with value pointed to by r3.
+ *
+ * @param property_id the method code to get the property
+ * @throws  OsError
+*/
 
 void Component::string_property(int property_id, const std::string &value)
 {

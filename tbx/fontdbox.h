@@ -59,15 +59,84 @@ class FontDbox : public tbx::ShowFullObject
 public:
 	enum { TOOLBOX_CLASS = 0x82a00 };
 
+	/**
+	 * Construct creates an unassigned FontDbox.
+	 *
+	 * It must be assigned to a value before the other methods can be used.
+	 */
 	FontDbox() {};
+	/**
+	 * Construct a FontDbox from another FontDbox.
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other FontDbox
+	 *
+	 * @param other FontDbox to copy.
+	 */
 	FontDbox(const FontDbox &other) : ShowFullObject(other._handle) {}
+	/**
+	 * Construct a FontDbox from an Object that refers to a FontDbox
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a FontDbox
+	 */
 	FontDbox(const Object &other) : ShowFullObject(other)	{check_toolbox_class(FontDbox::TOOLBOX_CLASS);}
+	/**
+	 * Create a FontDbox from the named template
+	 *
+	 * @param template_name The name of the template to create the object from
+	 * @throws OsError if an object cannot be created from the named template
+	 * @throws ObjectClassException if the template is not for a FontDbox
+	 */
 	FontDbox(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(FontDbox::TOOLBOX_CLASS);}
+	/**
+	 * Create a FontDbox from an in memory template resource
+	 *
+	 * @param object_template The template to create the object from
+	 * @throws OsError if an object cannot be created from the template
+	 */
 	FontDbox(const res::ResFontDbox &object_template);
 
+	/**
+	 * Assign this FontDbox from another.
+	 *
+	 * Both objects will then refer to the same underlying toolbox object
+	 *
+	 * @param other FontDbox to copy
+	 * @returns reference to this FontDbox
+	 */
 	FontDbox &operator=(const FontDbox &other) {_handle = other.handle(); return *this;}
+	/**
+	 * Assign this FontDbox from an Object that refers to a FontDbox
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @returns reference to this FontDbox
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a FontDbox
+	 */
 	FontDbox &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}
+	/**
+	 * Check if this FontDbox refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they refer to the same underlying toolbox object
+	 */
 	bool operator==(const Object &other) const {return (_handle == other.handle());}
+	/**
+	 * Check if this FontDbox does not refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they do not refer to the same underlying toolbox object
+	 */
 	bool operator!=(const Object &other) const {return (_handle != other.handle());}
 
 

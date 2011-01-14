@@ -110,21 +110,25 @@ public:
 	 */
 	bool operator!=(const Gadget &other) const {return (_handle != other.handle() || _id != other.id());}
 
-	//@{
-	//  Set the the text to display
-	//@}
+	/**
+	 *  Set the the text to display
+	 *
+	 *  @param value new value for text
+	 */
 	void text(const std::string &value) {string_property(448, value);}
 
-	//@{
-	//   Get the the text this is being displayed
-	//@}
+	/**
+	 * Get the the text this is being displayed
+	 *
+	 * @returns text of display field
+	 */
 	std::string text() const {return string_property(449);}
 
-	//@{
-	//   Get the length of the text property
-	//
-	//@returns Number of characters for this property
-	//@}
+	/**
+	 *   Get the length of the text property
+	 *
+	 *@returns Number of characters for this property
+	 */
 	int text_length() const {return string_property_length(449);}
 
 	void font(const std::string &name, int width, int height);

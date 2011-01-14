@@ -69,10 +69,46 @@ namespace tbx
 	public:
 		enum { TOOLBOX_CLASS = 0x82880 };
 
+		/**
+		 * Construct creates an unassigned Window.
+		 *
+		 * It must be assigned to a value before the other methods can be used.
+		 */
 		Window() {};
+		/**
+		 * Construct a Window from another Window.
+		 *
+		 * This class then refers to the same underlying toolbox object
+		 * as the other Window
+		 *
+		 * @param other Window to copy.
+		 */
 		Window(const Window &other) : ShowFullObject(other._handle) {}
+		/**
+		 * Construct a Window from an Object that refers to a Window
+		 *
+		 * This class then refers to the same underlying toolbox object
+		 * as the other object
+		 *
+		 * @param other Object to copy.
+		 * @throws ObjectNullException if the other object refers to a null object handle
+		 * @throws ObjectClassException if the other object is not a Window
+		 */
 		Window(const Object &other) : ShowFullObject(other)	{check_toolbox_class(Window::TOOLBOX_CLASS);}
+		/**
+		 * Create a Window from the named template
+		 *
+		 * @param template_name The name of the template to create the object from
+		 * @throws OsError if an object cannot be created from the named template
+		 * @throws ObjectClassException if the template is not for a Window
+		 */
 		Window(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(Window::TOOLBOX_CLASS);}
+		/**
+		 * Create a Window from an in memory template resource
+		 *
+		 * @param object_template The template to create the object from
+		 * @throws OsError if an object cannot be created from the template
+		 */
 		Window(const res::ResWindow &object_template);
 
 		Window &operator=(const Window &other) {_handle = other.handle(); return *this;}
@@ -304,6 +340,9 @@ namespace tbx
 		bool force_to_screen() const {return (_flags & (1<<21));}
 	};
 
+	/**
+	 * Enumeration of the button types for the work area
+	 */
 	enum ButtonType
 	{
 		BUTTONTYPE_IGNORE_CLICKS,

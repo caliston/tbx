@@ -29,12 +29,16 @@
 
 namespace tbx {
 
+//! @cond INTERNAL
+/**
+ * Router for value changed events
+ */
 void value_changed_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
  	 ValueChangedEvent event(id_block, data);
  	 static_cast<ValueChangedListener *>(listener)->value_changed(event);
 }
-
+//! @endcond
 
 /**
  * Add listener for when the value of the number range changes

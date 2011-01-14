@@ -42,7 +42,7 @@ namespace tbx
 class AdjusterClickedListener;
 
 /**
- * A Adjuster is a gadget that shows two arrows facing
+ * An Adjuster is a gadget that shows two arrows facing
  * in opposite directions either vertically or horizontally.
  */
 class Adjuster: public tbx::Gadget
@@ -131,6 +131,9 @@ public:
 class AdjusterClickedEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct from toolbox event information
+	 */
 	AdjusterClickedEvent(IdBlock &id_block, PollBlock &data) :
 	  EventInfo(id_block, data) {}
 

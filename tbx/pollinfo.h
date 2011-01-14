@@ -73,6 +73,9 @@ namespace tbx
 		int word[64];
 	};
 
+	/**
+	 * Function type for handlers of raw (unprocessed) toolbox events.
+	 */
 	typedef void (*RawToolboxEventHandler)(IdBlock &id_block, PollBlock &data, Listener *listener);
 }
 

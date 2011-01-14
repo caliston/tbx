@@ -40,9 +40,17 @@ namespace tbx
 	{
 		T *_class_to_delete;
 	public:
+		/**
+		 * Constructor parsing object to delete when the toolbox object
+		 * is hidden.
+		 *
+		 * @param class_to_delete C++ object to delete.
+		 */
 		DeleteClassOnHidden(T *class_to_delete) : _class_to_delete(class_to_delete) {}
 		/**
 		 * Delete the given C++ class and this object on event received
+		 *
+		 * @param hidden_event details of the has been hidden event
 		 */
 		virtual void has_been_hidden(const EventInfo &hidden_event)
 		{
@@ -60,6 +68,12 @@ namespace tbx
 	class DeleteObjectOnHidden  : public tbx::HasBeenHiddenListener
 	{
 	public:
+		/**
+		 * Overridden has_been_hidden call back to delete the toolbox
+		 * object that raised the event
+		 *
+		 * @param hidden_event details of the has been hidden event
+		 */
 		virtual void has_been_hidden(const EventInfo &hidden_event)
 		{
 			hidden_event.id_block().self_object().delete_object();

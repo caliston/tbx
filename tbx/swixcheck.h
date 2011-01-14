@@ -36,6 +36,12 @@
 
 namespace tbx
 {
+	/**
+	 * Simple function to throw an OsError exception if an OS returned
+	 * error values is not 0.
+	 *
+	 * @param err error number to check or convert to an exception if not 0
+	 */
 	inline void swix_check(_kernel_oserror *err)
 	{
 		if (err) raise_os_error(err);

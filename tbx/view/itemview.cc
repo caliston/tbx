@@ -336,6 +336,7 @@ void ItemView::mouse_click(MouseClickEvent &event)
 	}
 }
 
+//! @cond INTERNAL
 /**
  * Drag has been finished so select items in final box
  * and self destruct
@@ -354,6 +355,7 @@ void ItemView::Selector::drag_cancelled()
 	delete this;
 }
 
+//! @endcond
 
 /**
  * Helper function to process mouse clicks

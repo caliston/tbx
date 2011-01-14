@@ -201,7 +201,7 @@ void Application::remove_command(int command_id, Command *command)
 /**
  * Add a command to be run when no events are being received from the desktop.
  *
- * @param Command to add
+ * @param command The command to add
  */
 void Application::add_idle_command(Command *command)
 {
@@ -211,7 +211,7 @@ void Application::add_idle_command(Command *command)
 /**
  * Remove a command to be run when no events are being received from the desktop.
  *
- * @param Command to remove
+ * @param command the command to remove
  */
 
 void Application::remove_idle_command(Command *command)
@@ -222,7 +222,7 @@ void Application::remove_idle_command(Command *command)
 /**
  * Add a listener for the given user message (event code 17)
  *
- * @param message code to listen for.
+ * @param message_id code to listen for.
  * @param listener to execute.
  */
 void Application::add_user_message_listener(int message_id, WimpUserMessageListener *listener)
@@ -233,7 +233,7 @@ void Application::add_user_message_listener(int message_id, WimpUserMessageListe
 /**
  * Remove a listener for the given user message.
  *
- * @param message code to remove
+ * @param message_id code to remove
  * @param listener to remove.
  */
 void Application::remove_user_message_listener(int message_id, WimpUserMessageListener *listener)
@@ -244,7 +244,7 @@ void Application::remove_user_message_listener(int message_id, WimpUserMessageLi
 /**
  * Add a listener for the given recorded message (event code 18)
  *
- * @param message code to listen for.
+ * @param message_id code to listen for.
  * @param listener to execute.
  */
 void Application::add_recorded_message_listener(int message_id, WimpRecordedMessageListener *listener)
@@ -255,7 +255,7 @@ void Application::add_recorded_message_listener(int message_id, WimpRecordedMess
 /**
  * Remove a listener for the given recorded message.
  *
- * @param message code to remove
+ * @param message_id code to remove
  * @param listener to remove.
  */
 void Application::remove_recorded_message_listener(int message_id, WimpRecordedMessageListener *listener)
@@ -266,7 +266,7 @@ void Application::remove_recorded_message_listener(int message_id, WimpRecordedM
 /**
  * Add a listener for the given acknowledge message (event code 18)
  *
- * @param message code to listen for.
+ * @param message_id code to listen for.
  * @param listener to execute.
  */
 void Application::add_acknowledge_message_listener(int message_id, WimpAcknowledgeMessageListener *listener)
@@ -277,7 +277,7 @@ void Application::add_acknowledge_message_listener(int message_id, WimpAcknowled
 /**
  * Remove a listener for the given acknowledge message.
  *
- * @param message code to remove
+ * @param message_id code to remove
  * @param listener to remove.
  */
 void Application::remove_acknowledge_message_listener(int message_id, WimpAcknowledgeMessageListener *listener)
@@ -291,6 +291,8 @@ void Application::remove_acknowledge_message_listener(int message_id, WimpAcknow
  *
  * This message gives the application a chance to refuse to quit if
  * it has unsaved documents.
+ *
+ * @param listener the prequit listener to add
  */
 void Application::add_prequit_listener(PreQuitListener *listener)
 {
@@ -303,6 +305,8 @@ void Application::add_prequit_listener(PreQuitListener *listener)
 
 /**
  * Remove a prequit listener
+ *
+ * @param listener the prequit listener to remove
  */
 void Application::remove_prequit_listener(PreQuitListener *listener)
 {
@@ -321,7 +325,7 @@ void Application::remove_prequit_listener(PreQuitListener *listener)
  *
  * Use a prequit listener to object to the desktop closing down the application.
  *
- * @param quit listener to add
+ * @param listener quit listener to add
  */
 void Application::add_quit_listener(QuitListener *listener)
 {
@@ -347,6 +351,8 @@ void Application::remove_quit_listener(QuitListener *listener)
  * When the mode changes the WIMP redraws all the windows so this event
  * normally only used when sizes depend on pixel rather than OS sizes or
  * eigen factors or colours are cached.
+ *
+ * @param listener listener for mode change events
  */
 void Application::add_mode_changed_listener(ModeChangedListener *listener)
 {
@@ -355,6 +361,8 @@ void Application::add_mode_changed_listener(ModeChangedListener *listener)
 
 /**
  * Remove mode changed listener
+
+ * @param listener previously added listener for mode change events
  */
 void Application::remove_mode_changed_listener(ModeChangedListener *listener)
 {
@@ -377,6 +385,8 @@ void Application::remove_mode_changed_listener(ModeChangedListener *listener)
  *
  * It is not generated on a mode change so you need to listen to that
  * event as well.
+ *
+ * @param listener listener for palette change events
  */
 void Application::add_palette_changed_listener(PaletteChangedListener *listener)
 {
@@ -385,6 +395,8 @@ void Application::add_palette_changed_listener(PaletteChangedListener *listener)
 
 /**
  * Remove listener for changes to the desktop palette
+ *
+ * @param listener previously added listener for palette change events
  */
 void Application::remove_palette_changed_listener(PaletteChangedListener *listener)
 {
@@ -433,7 +445,7 @@ void Application::remove_timer(Timer *timer)
  * all files.
  *
  * @param loader the loader used to open the file
- * @param the file type for the loader or -2 for
+ * @param file_type the file type for the loader or -2 for
  *        any type.
  */
 void Application::add_opener(Loader *loader, int file_type)
@@ -447,7 +459,7 @@ void Application::add_opener(Loader *loader, int file_type)
  * Remove a file opener.
  *
  * @param loader the loader used to open the file to remove
- * @param the file type for the loader or -2 for
+ * @param file_type the file type for the loader or -2 for
  *        any type.
  */
 void Application::remove_opener(Loader *loader, int file_type)

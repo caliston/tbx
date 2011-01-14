@@ -37,17 +37,33 @@ namespace tbx
 	class AboutToBeShownEvent : public EventInfo
 	{
 	public:
+		/**
+		 * Construct from information returned from the toolbox poll
+		 *
+		 * @param id_block block containing relevant object/component ids
+		 * @param data data for the event that raised the event.
+		 */
 		AboutToBeShownEvent(IdBlock &id_block, PollBlock &data) :
 			EventInfo(id_block, data)
 		{
 		}
 
+		/** How the object has been shown */
 		enum ShowType {SHOW_DEFAULT = 0, SHOW_FULL_SPEC = 1, SHOW_TOP_LEFT = 2};
+		/** Return how the object has been shown */
 		ShowType show_type() const {return ShowType(_data.word[4]);}
 
+		/** Return the top left coordinate where the object will be shown */
 		Point &top_left() const {return reinterpret_cast<Point &>(_data.word[5]);}
+		/** Return a reference to the top left coordinate */
 		Point &top_left() {return reinterpret_cast<Point &>(_data.word[5]);}
 
+		/**
+		 * Return a reference to the Full specification of where the object
+		 * has been shown.
+		 *
+		 * show_type() must be SHOW_FULL_SPEC for this to be valid.
+		 */
 		ShowFullSpec &full_spec() {return reinterpret_cast<ShowFullSpec &>(_data.word[5]);}
 	};
 
@@ -63,10 +79,15 @@ namespace tbx
 		AboutToBeShownListener() {}
 		virtual ~AboutToBeShownListener() {}
 
+		/**
+		 * Called when an object is about to be shown.
+		 */
 		virtual void about_to_be_shown(AboutToBeShownEvent &event) = 0;
 	};
 
+	//! @cond INTERNAL
 	void about_to_be_shown_router(IdBlock &id_block, PollBlock &data, Listener *listener);
+	//! @endcond
 }
 
 #endif

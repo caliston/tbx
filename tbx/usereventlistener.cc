@@ -26,10 +26,17 @@
 
 namespace tbx {
 
+//! @cond INTERNAL
+
+/**
+ * Internal function to route user events
+ */
 void user_event_router(IdBlock &id_block, PollBlock &data, Listener *listener)
 {
 	UserEvent event(id_block, data);
 	static_cast<UserEventListener *>(listener)->user_event(event);
 }
+
+//! @endcond
 
 }

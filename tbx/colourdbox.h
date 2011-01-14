@@ -61,17 +61,87 @@ class ColourDbox : public tbx::ShowPointObject
 public:
 	enum { TOOLBOX_CLASS = 0x829C0 };
 
+	/**
+	 * Construct creates an unassigned ColourDbox.
+	 *
+	 * It must be assigned to a value before the other methods can be used.
+	 */
 	ColourDbox() {};
+	/**
+	 * Construct a ColourDbox from another ColourDbox.
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other ColourDbox
+	 *
+	 * @param other ColourDbox to copy.
+	 */
 	ColourDbox(const ColourDbox &other) : ShowPointObject(other._handle) {}
+	/**
+	 * Construct a ColourDbox from an Object that refers to a ColourDbox
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a ColourDbox
+	 */
 	ColourDbox(const Object &other) : ShowPointObject(other)	{check_toolbox_class(ColourDbox::TOOLBOX_CLASS);}
+	/**
+	 * Create a ColourDbox from the named template
+	 *
+	 * @param template_name The name of the template to create the object from
+	 * @throws OsError if an object cannot be created from the named template
+	 * @throws ObjectClassException if the template is not for a ColourDbox
+	 */
 	ColourDbox(const std::string &template_name) : ShowPointObject(template_name)	{check_toolbox_class(ColourDbox::TOOLBOX_CLASS);}
+	/**
+	 * Create a ColourDbox from an in memory template resource
+	 *
+	 * @param object_template The template to create the object from
+	 * @throws OsError if an object cannot be created from the template
+	 */
 	ColourDbox(const res::ResColourDbox &object_template);
 
+	/**
+	 * Assign this ColourDbox from another.
+	 *
+	 * Both objects will then refer to the same underlying toolbox object
+	 *
+	 * @param other ColourDbox to copy
+	 * @returns reference to this ColourDbox
+	 */
 	ColourDbox &operator=(const ColourDbox &other) {_handle = other.handle(); return *this;}
-	ColourDbox &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}
-	bool operator==(const Object &other) const {return (_handle == other.handle());}
-	bool operator!=(const Object &other) const {return (_handle != other.handle());}
 
+	/**
+	 * Assign this ColourDbox from an Object that refers to a ColourDbox
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @returns reference to this ColourDbox
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a ColourDbox
+	 */
+	ColourDbox &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}
+
+	/**
+	 * Check if this ColourDbox refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they refer to the same underlying toolbox object
+	 */
+	bool operator==(const Object &other) const {return (_handle == other.handle());}
+	/**
+	 * Check if this ColourDbox does not refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they do not refer to the same underlying toolbox object
+	 */
+	bool operator!=(const Object &other) const {return (_handle != other.handle());}
 
 	// Properties
 	/**
@@ -84,6 +154,9 @@ public:
 	 */
 	int dialog_handle() const {return int_property(1);}
 
+	/**
+	 * Enumeration for the colour models
+	 */
 	enum ColourModel {RGB, CYMK, HSV};
 
 	/**

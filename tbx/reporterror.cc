@@ -33,6 +33,19 @@ using namespace std;
 namespace tbx
 {
 
+/**
+ * Report an error using Wimp_ReportError to give the standard
+ * WIMP error reporting dialogue.
+ *
+ * This dialogue stops interaction with the desktop until it is dismissed
+ * so it is not recommended for general error reporting.
+ *
+ * @param err An error block (usually return from an OS call) for the error message
+ * @param title the caption for the error dialogue
+ * @param flags one or more of the ReportErrorFlags enum (default 0 show OK button)
+ *
+ * @returns A value from ReportErrorReply specifying how the error box was closed.
+ */
 ReportErrorReply report_error(_kernel_oserror *err, const char *title, int flags /*= 0*/)
 {
 	if (!err) return NONE;
@@ -48,6 +61,20 @@ ReportErrorReply report_error(_kernel_oserror *err, const char *title, int flags
 	return ReportErrorReply(regs.r[1]);
 }
 
+/**
+ * Report an error using Wimp_ReportError to give the standard
+ * WIMP error reporting dialogue.
+ *
+ * This dialogue stops interaction with the desktop until it is dismissed
+ * so it is not recommended for general error reporting.
+ *
+ * This version uses the application name as the title.
+ *
+ * @param err An error block (usually return from an OS call) for the error message
+ * @param flags one or more of the ReportErrorFlags enum (default 0 show OK button)
+ *
+ * @returns A value from ReportErrorReply specifying how the error box was closed.
+ */
 ReportErrorReply report_error(_kernel_oserror *err, int flags /*= 0*/)
 {
 	if (!err) return NONE;
@@ -64,8 +91,20 @@ ReportErrorReply report_error(_kernel_oserror *err, int flags /*= 0*/)
     return report_error(err, appName, flags);
 }
 
-//****************************************************************************
-
+/**
+ * Report an error using Wimp_ReportError to give the standard
+ * WIMP error reporting dialogue.
+ *
+ * This dialogue stops interaction with the desktop until it is dismissed
+ * so it is not recommended for general error reporting.
+ *
+ * This version uses the application name as the title.
+ *
+ * @param msg Text for the error message (this will be truncated to 251 characters)
+ * @param flags one or more of the ReportErrorFlags enum (default 0 show OK button)
+ *
+ * @returns A value from ReportErrorReply specifying how the error box was closed.
+ */
 ReportErrorReply report_error(const char* msg, int flags /* = 0*/)
 {
 	_kernel_oserror err;
@@ -76,6 +115,19 @@ ReportErrorReply report_error(const char* msg, int flags /* = 0*/)
 	return report_error(&err);
 }
 
+/**
+ * Report an error using Wimp_ReportError to give the standard
+ * WIMP error reporting dialogue.
+ *
+ * This dialogue stops interaction with the desktop until it is dismissed
+ * so it is not recommended for general error reporting.
+ *
+ * @param msg Text for the error message (this will be truncated to 251 characters)
+ * @param title the caption for the error dialogue
+ * @param flags one or more of the ReportErrorFlags enum (default 0 show OK button)
+ *
+ * @returns A value from ReportErrorReply specifying how the error box was closed.
+ */
 ReportErrorReply report_error(const char *msg, const char *title, int flags /*= 0*/)
 {
 	_kernel_oserror err;
@@ -86,6 +138,20 @@ ReportErrorReply report_error(const char *msg, const char *title, int flags /*= 
 	return report_error(&err, title, flags);
 }
 
+/**
+ * Report an error using Wimp_ReportError to give the standard
+ * WIMP error reporting dialogue.
+ *
+ * This dialogue stops interaction with the desktop until it is dismissed
+ * so it is not recommended for general error reporting.
+ *
+ * This version uses the application name as the title.
+ *
+ * @param msg Text for the error message (this will be truncated to 251 characters)
+ * @param flags one or more of the ReportErrorFlags enum (default 0 show OK button)
+ *
+ * @returns A value from ReportErrorReply specifying how the error box was closed.
+ */
 ReportErrorReply report_error(const std::string &msg, int flags /* = 0*/)
 {
 	_kernel_oserror err;
@@ -96,6 +162,19 @@ ReportErrorReply report_error(const std::string &msg, int flags /* = 0*/)
 	return report_error(&err);
 }
 
+/**
+ * Report an error using Wimp_ReportError to give the standard
+ * WIMP error reporting dialogue.
+ *
+ * This dialogue stops interaction with the desktop until it is dismissed
+ * so it is not recommended for general error reporting.
+ *
+ * @param msg Text for the error message (this will be truncated to 251 characters)
+ * @param title the caption for the error dialogue
+ * @param flags one or more of the ReportErrorFlags enum (default 0 show OK button)
+ *
+ * @returns A value from ReportErrorReply specifying how the error box was closed.
+ */
 ReportErrorReply report_error(const std::string &msg, const std::string &title, int flags /*= 0*/)
 {
 	_kernel_oserror err;
@@ -104,6 +183,22 @@ ReportErrorReply report_error(const std::string &msg, const std::string &title, 
 	err.errmess[251] = 0;
 
 	return report_error(&err, title.c_str(), flags);
+}
+
+/**
+ * Close the report error dialogue.
+ *
+ * The report error dialogue would be left open if the REF_LEAVE_OPEN
+ * flag had been specified in a call to report_error.
+ * In this case you must call report_error_close before the next call
+ * to WIMP_Poll.
+ */
+void report_error_close(ReportErrorReply reply)
+{
+	_kernel_oserror err;
+	err.errnum = 0;
+	strcpy(err.errmess, "Closing");
+	report_error(&err, reply | REF_CLOSE);
 }
 
 }

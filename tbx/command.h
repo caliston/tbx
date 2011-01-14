@@ -39,6 +39,9 @@ namespace tbx
 		Command() {}
 		virtual ~Command() {};
 
+		/**
+		 * This method is call to execute the command
+		 */
 		virtual void execute() = 0;
 	};
 
@@ -52,8 +55,18 @@ namespace tbx
 		void (T::*_method)();
 
 	public:
+		/**
+		 * Construct the Command method for the given object and method
+		 * on it.
+		 *
+		 * @param call The object the method will be called on
+		 * @parma method The method on the object to call
+		 */
 		CommandMethod(T *call, void (T::*method)()) : _call(call), _method(method) {}
 
+		/**
+		 * Calls the method on the object given in the constructor
+		 */
 		virtual void execute()
 		{
 			(_call->*_method)();

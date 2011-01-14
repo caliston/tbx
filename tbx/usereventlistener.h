@@ -69,7 +69,9 @@ public:
 	virtual void user_event(UserEvent &event) = 0;
 };
 
+//! @cond INTERNAL
 void user_event_router(IdBlock &id_block, PollBlock &data, Listener *listener);
+//! @endcond
 
 }
 

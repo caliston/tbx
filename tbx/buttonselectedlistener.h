@@ -81,6 +81,9 @@ public:
  */
 class ButtonSelectedListener: public tbx::Listener {
 public:
+	/**
+	 * Called when the button is selected.
+	 */
 	virtual void button_selected(ButtonSelectedEvent &event) = 0;
 };
 

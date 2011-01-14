@@ -37,16 +37,22 @@
 
 namespace tbx
 {
+    /**
+     * Values returned from report error
+     */
 	enum ReportErrorReply {NONE, OK, CANCEL};
+	/**
+	 * Flags for report error
+	 */
 	enum ReportErrorFlags
 	{
-		REF_OK_BUTTON,
-		REF_CANCEL_BUTTON,
-		REF_HIGHLIGHT_CANCEL,
-		REF_NO_RETURN_TO_CONTINUE,
-		REF_NO_ERROR_FROM_PREFIX,
-		REF_LEAVE_OPEN,
-		REF_CLOSE
+		REF_OK_BUTTON = 1, /**< Provide an OK button */
+		REF_CANCEL_BUTTON = 2, /**< Provide a Cancel button */
+		REF_HIGHLIGHT_CANCEL = 4, /**< Highlight the cancel button */
+		REF_NO_SPACE_TO_CONTINUE = 8, /**< In a text-style window do not prompt to continue */
+		REF_NO_TITLE_PREFIX = 16, /**< Don't prefix application name with error from title bar */
+		REF_LEAVE_OPEN = 32, /**< Return immediately leaving window open - Note you must close the box before the next WIMP poll */
+		REF_CLOSE = 64 /**< Select one box depending on bit 0 and 1 and close window */
 	};
 
 	ReportErrorReply report_error(_kernel_oserror *err, const char *title, int flags = 0);

@@ -113,7 +113,7 @@ std::string IconItemRenderer::text(unsigned int index) const
  * By default uses the value provider from the constructor
  * Override to get the value in a different way
  */
-std::string IconItemRenderer::IconItemRenderer::sprite_name(unsigned int index) const
+std::string IconItemRenderer::sprite_name(unsigned int index) const
 {
 	if (_sprite_name_provider) return _sprite_name_provider->value(index);
 	else return text(index);
