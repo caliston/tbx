@@ -177,6 +177,13 @@ public:
 class DragStartedEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct a drag started event from the information returned
+	 * for the toolbox
+	 *
+	 * @param id_block Block containing objects/components for the event
+	 * @param data Additional data for the event.
+	 */
 	DragStartedEvent(IdBlock &id_block, PollBlock &data) :
 	  EventInfo(id_block, data) {}
 
@@ -208,6 +215,12 @@ class DragStartedListener : public Listener
 {
 public:
 	virtual ~DragStartedListener() {}
+
+	/**
+	 * Function called when the drag is started from the draggable.
+	 *
+	 * @param drag_started_event information on the drag start.
+	 */
 	virtual void drag_started(const DragStartedEvent &drag_started_event) = 0;
 };
 
@@ -223,6 +236,12 @@ public:
 class DragEndedEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct the event from the information returned by the toolbox
+	 *
+	 * @param id_block Block containing objects/components for the event
+	 * @param data Additional data for the event.
+	 */
 	DragEndedEvent(IdBlock &id_block, PollBlock &data) :
 	  EventInfo(id_block, data) {}
 
@@ -279,6 +298,11 @@ class DragEndedListener : public Listener
 {
 public:
 	virtual ~DragEndedListener() {}
+	/**
+	 * Method called when the drag has finished
+	 *
+	 * @param drag_ended_event details of where the drag ended.
+	 */
 	virtual void drag_ended(const DragEndedEvent &drag_ended_event) = 0;
 };
 

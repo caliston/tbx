@@ -50,7 +50,7 @@ namespace tbx
 	private:
 		const IdBlock &_id_block;
 	protected:
-		PollBlock &_data;
+		PollBlock &_data; //!< raw data from the event
 
 	public:
 		/**

@@ -185,7 +185,9 @@ class ColourDboxDialogueCompletedListener : public Listener
 {
 public:
 	/**
-	 * Called when dialog has be closed
+	 * Called when dialogue has be closed
+	 *
+	 * @param colour_dbox The dialogue that generated the event.
 	 * @param colour_selected true if the dialogue box was closed after a colour was selected.
 	 * This value will also be false if a colour was selected by a click on OK with adjust
 	 * and then cancelling the dialogue box.

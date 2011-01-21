@@ -59,12 +59,12 @@ namespace tbx
 	class DrawTransform
 	{
 	public:
-		int a;
-		int b;
-		int c;
-		int d;
-		int e;
-		int f;
+		int a; //!< Fixed 16.16 top left of transform matrix
+		int b; //!< Fixed 16.16 top middle of transform matrix
+		int c; //!< Fixed 16.16 middle left of transform matrix
+		int d; //!< Fixed 16.16 middle of transform matrix
+		int e; //!< Translation in x direction in 256th of an OS unit
+		int f; //!< Translation in y direction in 256th of an OS unit
 
 		/**
 		 * Create the identity draw transform.

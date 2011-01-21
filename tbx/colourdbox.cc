@@ -67,7 +67,7 @@ static void colourdbox_dialog_completed_router(IdBlock &id_block, PollBlock &dat
 }
 //! @endcond
 
-/***
+/**
  * Add listener to be called when the dialogue has been completed
  *
  * @param listener listener for dialogue completed events
@@ -77,7 +77,7 @@ void ColourDbox::add_dialogue_completed_listener(ColourDboxDialogueCompletedList
 	add_listener(0x829c1, listener, colourdbox_dialog_completed_router);
 }
 
-/***
+/**
  * Remove listener to be called when the dialogue has been completed
  *
  * @param listener listener for dialogue completed events

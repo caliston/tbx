@@ -60,7 +60,7 @@ namespace tbx
 		 * on it.
 		 *
 		 * @param call The object the method will be called on
-		 * @parma method The method on the object to call
+		 * @param method The method on the object to call
 		 */
 		CommandMethod(T *call, void (T::*method)()) : _call(call), _method(method) {}
 

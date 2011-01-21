@@ -183,6 +183,7 @@ int Component::int_property(int property_id) const
  *  Calls Toolbox_ObjectMiscOp and with value in r4.
  *
  * @param property_id the method code to get the property
+ * @param value the new value for the property
  * @throws  OsError
 */
 
@@ -231,9 +232,9 @@ bool Component::bool_property(int property_id) const
  *  Calls Toolbox_ObjectMiscOp and with value in r4.
  *
  * @param property_id the method code to get the property
+ * @param value The new value for the property
  * @throws  OsError
 */
-
 void Component::bool_property(int property_id, bool value)
 {
     _kernel_swi_regs regs;
@@ -257,7 +258,6 @@ void Component::bool_property(int property_id, bool value)
  * @returns The value from the property
  * @throws  OsError
 */
-
 std::string Component::string_property(int property_id) const
 {
     _kernel_swi_regs regs;
@@ -323,6 +323,7 @@ int Component::string_property_length(int property_id) const
  *  Calls Toolbox_ObjectMiscOp and with value pointed to by r3.
  *
  * @param property_id the method code to get the property
+ * @param value the new string value for the property
  * @throws  OsError
 */
 
@@ -367,7 +368,7 @@ bool Component::flag_property(int property_id, int flag) const
  * @param property_id - property id to get the flags,
  *    property_id+1 must be the id to set the flags
  * @param flag	- flag value to set
- * @param true - set the flag, false clear it
+ * @param value - true set the flag, false clear it
  * @throws OsError
  */
 void Component::flag_property(int property_id, int flag, bool value)

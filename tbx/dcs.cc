@@ -143,7 +143,7 @@ static void dcs_cancel_router(IdBlock &id_block, PollBlock &data, Listener *list
 }
 //! @endcond
 
-/***
+/**
  * Add listener to be called when cancel is selected from the dialogue
  *
  * @param listener cancel selected listener to add
@@ -153,7 +153,7 @@ void DCS::add_cancel_listener(DCSCancelListener *listener)
 	add_listener(0x82a84, listener, dcs_cancel_router);
 }
 
-/***
+/**
  * Remove listener to be called when cancel is selected from the dialogue
  *
  * @param listener cancel selected listener to remove

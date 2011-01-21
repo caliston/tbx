@@ -38,12 +38,25 @@ Font::FontRef *Font::s_desktop_font_ref = new FontRef(0);
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+/**
+ * Construct an uninitialised font.
+ *
+ * Copy another font to it or use the find method before using
+ * the font.
+ */
 Font::Font()
 {
 	_font_ref = s_invalid_font_ref; // Null constructor gives system font
 	_font_ref->add_ref();
 }
 
+/**
+ * Construct a font from another font.
+ *
+ * This object will become a reference to the same OS font as the
+ * other font.
+ * @param other the font to copy
+ */
 Font::Font(const Font &other)
 {
 	_font_ref->release();
@@ -51,6 +64,15 @@ Font::Font(const Font &other)
 	_font_ref->add_ref();
 }
 
+/**
+ * Construct a font with the given name and size.
+ *
+ * You can call the is_valid method to check the font was found.
+ *
+ * @param fontName name of the font to find
+ * @param width - width of the font
+ * @param height - height of the font or -1 for same as width
+ */
 Font::Font(const std::string &fontName, int width, int height /*= -1*/)
 {
 	_font_ref = s_invalid_font_ref; // Null constructor gives system font
@@ -58,26 +80,26 @@ Font::Font(const std::string &fontName, int width, int height /*= -1*/)
 	find(fontName, width, height);
 }
 
+/**
+ * Destructor release the OS Font if no other font objects
+ * are using it.
+ */
 Font::~Font()
 {
 	_font_ref->release();
 }
 
-
-//
-//@{
-//  Find the specified font and attach it to this object.
-//
-//  If the font is not found then the currently attached
-//  font is unchanged.
-//
-// @param fontName name of the font to find
-// @param width - width of the font
-// @param height - height of the font or -1 for same as width
-// @returns true if the font has found.
-//@}
-//
-
+/**
+ *  Find the specified font and attach it to this object.
+ *
+ *  If the font is not found then the currently attached
+ *  font is unchanged.
+ *
+ * @param fontName name of the font to find
+ * @param width - width of the font
+ * @param height - height of the font or -1 for same as width
+ * @returns true if the font has found.
+ */
 bool Font::find(const std::string &fontName, int width, int height /*= -1*/)
 {
 	_kernel_swi_regs regs;
@@ -123,20 +145,17 @@ bool Font::desktop_font()
 	return false;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//@{
-//   Paint the font to the screen.
-//
-//@param x left position
-//@param y position of base line
-//@param text text to paint to the screen
-//@param flags paint flags, can NONE or one or more of the following:
-//   JUSTIFY - justify the text between x,y and the last graphics move position
-//   RUBOUT	 - rub out area behind text, defined be last two graphics move positions
-//   OSUNITS - x and y are specified as OS units, if not they are in millipoints
-//@}
-/////////////////////////////////////////////////////////////////////////
-
+/**
+ *   Paint the font to the screen.
+ *
+ *@param x left position
+ *@param y position of base line
+ *@param text text to paint to the screen
+ *@param flags paint flags, can NONE or one or more of the following:
+ *   JUSTIFY - justify the text between x,y and the last graphics move position
+ *   RUBOUT	 - rub out area behind text, defined be last two graphics move positions
+ *   OSUNITS - x and y are specified as OS units, if not they are in millipoints
+ */
 void Font::paint(int x, int y, const std::string &text, int flags /*= Font::NONE*/) const
 {
 	_kernel_swi_regs regs;
@@ -151,21 +170,18 @@ void Font::paint(int x, int y, const std::string &text, int flags /*= Font::NONE
 	swix_check(_kernel_swi(0x40086, &regs, &regs));
 }
 
-/////////////////////////////////////////////////////////////////////////
-//@{
-//   Paint the font to the screen.
-//
-//@param x left position
-//@param y position of base line
-//@param text text to paint to the screen
-//@param length length of text to paint or -1 for all
-//@param flags paint flags, can NONE or one or more of the following:
-//   JUSTIFY - justify the text between x,y and the last graphics move position
-//   RUBOUT	 - rub out area behind text, defined be last two graphics move positions
-//   OSUNITS - x and y are specified as OS units, if not they are in millipoints
-//@}
-/////////////////////////////////////////////////////////////////////////
-
+/**
+ *   Paint the font to the screen.
+ *
+ *@param x left position
+ *@param y position of base line
+ *@param text text to paint to the screen
+ *@param length length of text to paint or -1 for all
+ *@param flags paint flags, can NONE or one or more of the following:
+ *   JUSTIFY - justify the text between x,y and the last graphics move position
+ *   RUBOUT	 - rub out area behind text, defined be last two graphics move positions
+ *   OSUNITS - x and y are specified as OS units, if not they are in millipoints
+ */
 void Font::paint(int x, int y, const char *text, int length /*= -1*/, int flags /*= Font::NONE*/) const
 {
 	if (length > 0) flags |= (1<<7); // Use string length
@@ -184,15 +200,12 @@ void Font::paint(int x, int y, const char *text, int length /*= -1*/, int flags 
 }
 
 
-//////////////////////////////////////////////////////////
-//@{
-//   Get the width of a string.
-//
-//@param text the string to measure
-//@returns length of string in millipoints
-//@}
-/////////////////////////////////////////////////////////
-
+/**
+ *   Get the width of a string.
+ *
+ *@param text the string to measure
+ *@returns length of string in millipoints
+ */
 int Font::string_width_mp(const std::string &text)
 {
 	_kernel_swi_regs regs;
@@ -232,15 +245,12 @@ int Font::string_width_mp(const char *text, int length /*= -1*/)
 	return regs.r[7];
 }
 
-//////////////////////////////////////////////////////////
-//@{
-//   Get the width of a string.
-//
-//@param text the string to measure
-//@returns length of string in OS units
-//@}
-/////////////////////////////////////////////////////////
-
+/**
+ *   Get the width of a string.
+ *
+ *@param text the string to measure
+ *@returns length of string in OS units
+ */
 int Font::string_width_os(const std::string &text)
 {
 	_kernel_swi_regs regs;
@@ -325,12 +335,11 @@ int Font::find_split_os(const char *text, int length, int width, int split_char 
  * caret position.
  *
  * @param text text to measure
- * @param length to text or -1 to measure all
- * @param width to fit text in in os units
- * @param split_char character that causes a split before the line end
- *         or -1 if none.
+ * @param length to text or -1 if text is zero terminated
+ * @param x x position relative to beginning of string in OS units.
+ * @param y y position relative to beginning of string in OS units.
  *
- * @returns offset of character for split
+ * @returns index in string of the given position.
  */
 int Font::find_index_xy_os(const char *text, int length, int x, int y)
 {
@@ -351,6 +360,20 @@ int Font::find_index_xy_os(const char *text, int length, int x, int y)
 	return (unsigned int)regs.r[1] - (unsigned int)text;
 }
 
+/**
+ * Set the colours used to paint this font.
+ *
+ * The call creates a gradient of colours from the foreground colour in
+ * the centre of the letters to the background colour from the current
+ * palette.
+ * The shades between the colours are used for anti-aliasing which improves
+ * the look of the edges on the screen.
+ *
+ * @param fore The foreground colour
+ * @param back The background colour
+ * @param colour_offset The number of colours between the foreground and
+ * the background. Defaults to 14 (the maximum).
+ */
 void Font::set_colours(Colour fore, Colour back, int colour_offset /*= 14*/)
 {
 	_kernel_swi_regs regs;
@@ -363,7 +386,12 @@ void Font::set_colours(Colour fore, Colour back, int colour_offset /*= 14*/)
 	swix_check(_kernel_swi(0x4074F, &regs, &regs));
 }
 
-
+/**
+ * Assign a font to the same OS font as another Font object
+ *
+ * @param other font to copy
+ * @returns reference to this object
+ */
 Font &Font::operator=(const Font &other)
 {
 	other._font_ref->add_ref(); // Add Ref first in case setting font to itself
@@ -373,19 +401,34 @@ Font &Font::operator=(const Font &other)
 	return *this;
 }
 
+/**
+ * Check if this object refers to the same OS font as another object.
+ *
+ * @param other font to compare with
+ * @returns true if this font refers to the same font as the other
+ */
 bool Font::operator==(const Font &other)
 {
 	return (_font_ref->handle == other._font_ref->handle);
 }
 
+/**
+ * Check if this object does not refer to the same OS font as another object.
+ *
+ * @param other font to compare with
+ * @returns true if this font does not refer to the same font as the other
+ */
 bool Font::operator!=(const Font &other)
 {
 	return (_font_ref->handle != other._font_ref->handle);
 }
 
-//@{
-//   Get bounding box for a character in millipoints
-//@}
+/**
+ *   Get bounding box for a character in millipoints
+ *
+ *   @param bounds bounding box to update with the character size
+ *   @param c character to get the size for.
+ */
 void Font::get_char_bounds_mp(BBox &bounds, char c)
 {
 	_kernel_swi_regs regs;
@@ -402,17 +445,19 @@ void Font::get_char_bounds_mp(BBox &bounds, char c)
 	bounds.max.y = regs.r[4]; // maximum y of bounding box (exclusive)
 }
 
-//@{
-//   Get bounding box for a character in OS Units
-//@}
-
+/**
+ *   Get bounding box for a character in OS Units
+ *
+ *   @param bounds bounding box to update with the character size
+ *   @param c character to get the size for.
+ */
 void Font::get_char_bounds_os(BBox &bounds, char c)
 {
 	_kernel_swi_regs regs;
 
 	regs.r[0] = _font_ref->handle;
 	regs.r[1] = c;
-	regs.r[2] = (1 << 4); // return in millipoints
+	regs.r[2] = (1 << 4); // return in OS units
 
 	swix_check(_kernel_swi(0x4008E, &regs, &regs));
 
@@ -423,12 +468,11 @@ void Font::get_char_bounds_os(BBox &bounds, char c)
 }
 
 //
-//@{
-//   Get the size of the font
-//
-//@returns size of the font in 16ths of a point
-//@}
-
+/**
+ *   Get the size of the font
+ *
+ * @returns size of the font in 16ths of a point
+ */
 Size Font::size() const
 {
 	Size sz;
@@ -447,11 +491,11 @@ Size Font::size() const
 }
 
 
-//@{
-//    Get the height of the font
-//
-//@returns the height in 1/16th points
-//@}
+/**
+ *    Get the height of the font
+ *
+ *@returns the height in 1/16th points
+ */
 int Font::height() const
 {
 	_kernel_swi_regs regs;
@@ -466,11 +510,11 @@ int Font::height() const
 }
 
 
-//@{
-//    Get the width of the font
-//
-//@returns the width in 1/16th points
-//@}
+/**
+ *    Get the width of the font
+ *
+ *@returns the width in 1/16th points
+ */
 int Font::width() const
 {
 	_kernel_swi_regs regs;
@@ -484,12 +528,11 @@ int Font::width() const
 	return regs.r[2];
 }
 
-//
-//@{
-//   Get the size of the font
-//
-//@returns size of the font in OS Units
-//@}
+/**
+ *   Get the size of the font
+ *
+ *@returns size of the font in OS Units
+ */
 
 Size Font::size_os() const
 {
@@ -509,11 +552,11 @@ Size Font::size_os() const
 }
 
 
-//@{
-//    Get the height of the font
-//
-//@returns the height in OS units
-//@}
+/**
+ *    Get the height of the font
+ *
+ *@returns the height in OS units
+ */
 int Font::height_os() const
 {
 	_kernel_swi_regs regs;
@@ -528,11 +571,11 @@ int Font::height_os() const
 }
 
 
-//@{
-//    Get the width of the font
-//
-//@returns the width in OS units
-//@}
+/**
+ *    Get the width of the font
+ *
+ *@returns the width in OS units
+ */
 int Font::width_os() const
 {
 	_kernel_swi_regs regs;
@@ -610,6 +653,9 @@ Font::FontRef::~FontRef()
  *
  * Note: If the current WIMP font is the system font this will
  * change the colours for following graphics methods.
+ *
+ * @param foreground foreground colour for the font
+ * @param background background colour the font is going to be painted on.
  */
 void WimpFont::set_colours(Colour foreground, Colour background)
 {

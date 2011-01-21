@@ -204,7 +204,7 @@ public:
 	 * Called when colour selected from menu
 	 *
 	 * @param colour_menu Menu colour was selected from
-	 * @param WimpColour selected. Can be WimpColour::no_colour if none was selected.
+	 * @param colour WimpColour selected. Can be WimpColour::no_colour if none was selected.
 	 */
 	virtual void colourmenu_selection(ColourMenu colour_menu, WimpColour colour) = 0;
 };

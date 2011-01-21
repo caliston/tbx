@@ -234,6 +234,12 @@ public:
 class FontDboxApplyEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct the event from the details return by the toolbox
+	 *
+	 * @param id_block block holding the toolbox object/components
+	 * @param data raw event data.
+	 */
 	FontDboxApplyEvent(const IdBlock &id_block, PollBlock &data) :
 		EventInfo(id_block, data) {}
 
@@ -262,6 +268,11 @@ class FontDboxApplyListener : public Listener
 public:
 	~FontDboxApplyListener() {};
 
+	/**
+	 * Method called when apply button is clicked on the FontDbox
+	 *
+	 * @param apply_event details of the current selected font
+	 */
 	virtual void fontdbox_apply(const FontDboxApplyEvent &apply_event) = 0;
 };
 

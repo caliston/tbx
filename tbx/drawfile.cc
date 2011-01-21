@@ -188,6 +188,7 @@ void DrawFile::render(DrawTransform *dt /*= 0*/, BBox *clip /*= 0*/, int flatnes
  * loaded.
  *
  * @param bounds bounds to return - note the coordinates return are in 256ths of an os unit
+ * @param dt Transformation applied to the drawing.
  */
 void DrawFile::bounds(BBox &bounds, DrawTransform *dt /* = 0*/) const
 {

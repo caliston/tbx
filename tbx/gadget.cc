@@ -37,6 +37,13 @@
 
 using namespace tbx;
 
+/**
+ * Check the underlying gadget class for this object has
+ * the given class id.
+ *
+ * @param class_id class id to check
+ * @throws GadgetClassError if gadget class id is different or NULL.
+ */
 void Gadget::check_toolbox_class(int class_id) const
 {
 	if (_id == NULL_ComponentId) throw GadgetClassError();
@@ -50,6 +57,11 @@ void Gadget::check_toolbox_class(int class_id) const
 }
 
 
+/**
+ * Return the gadget flags.
+ *
+ * @returns the current flags for the gadget
+ */
 unsigned int Gadget::flags() const
 {
     _kernel_swi_regs regs;
@@ -64,7 +76,11 @@ unsigned int Gadget::flags() const
     return regs.r[0];
 }
 
-
+/**
+ * Sets bits in the gadgets flags
+ *
+ * @param set the flags to set
+ */
 void Gadget::set_flag(unsigned int set)
 {
 	_kernel_swi_regs regs;
@@ -84,6 +100,11 @@ void Gadget::set_flag(unsigned int set)
     swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Clear bits in the gadget flags
+ *
+ * @param clear flags to clear
+ */
 void Gadget::clear_flag(unsigned int clear)
 {
 	_kernel_swi_regs regs;
@@ -103,23 +124,38 @@ void Gadget::clear_flag(unsigned int clear)
     swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Fade the gadget
+ */
 void Gadget::fade()
 {
 	set_flag(1<<31);
 }
 
+/**
+ * Clear the gadgets fade state
+ */
 void Gadget::unfade()
 {
 	clear_flag(1<<31);
 }
 
+/**
+ * Fade/unfade the gadget
+ *
+ * @param fade true to fade the gadget/false to unfade it.
+ */
 void Gadget::fade(bool fade)
 {
 	if (fade) set_flag(1<<31);
 	else clear_flag(1<<31);
 }
 
-
+/**
+ * Check if the gadget is faded
+ *
+ * @returns true if the gadget is faded
+ */
 bool Gadget::faded() const
 {
 	return (flags() & (1 << 31)) != 0;
@@ -217,7 +253,9 @@ void Gadget::bounds(const BBox &bounds)
 }
 
 /**
- * Return bottom_left location of gadget
+ * Get the bottom left location of gadget
+ *
+ * @returns Point containing bottom left of the gadget
  */
 Point Gadget::bottom_left() const
 {
@@ -235,6 +273,11 @@ Point Gadget::bottom_left() const
     return bounds.min;
 }
 
+/**
+ * Get the top left location of gadget
+ *
+ * @returns Point containing top left of the gadget
+ */
 Point Gadget::top_left() const
 {
 	BBox bounds;
@@ -325,7 +368,7 @@ Size Gadget::size() const
 /**
  * Set size of gadget without moving it
  *
- * @param size new size of gadget
+ * @param sz new size of gadget
  */
 void Gadget::size(const Size &sz)
 {
@@ -351,7 +394,7 @@ void Gadget::size(const Size &sz)
  * Add a file loader.
  *
  * @param loader the loader to add
- * @param the file type for the loader or -2 (the default) for
+ * @param file_type the file type for the loader or -2 (the default) for
  *        any type.
  */
 void Gadget::add_loader(Loader *loader, int file_type /*=-2*/)
@@ -365,7 +408,7 @@ void Gadget::add_loader(Loader *loader, int file_type /*=-2*/)
  * Remove a file loader.
  *
  * @param loader the loader to remove
- * @param the file type for the loader or -2 (the default) for
+ * @param file_type the file type for the loader or -2 (the default) for
  *        any type.
  */
 void Gadget::remove_loader(Loader *loader, int file_type /*=-2*/)

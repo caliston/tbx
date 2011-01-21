@@ -178,6 +178,12 @@ public:
 class FontMenuSelectionEvent : public EventInfo
 {
 public:
+	/**
+	 * Constructor from event data returned from the toolbox
+	 *
+	 * @param id_block Objects/Components where the event was generated
+	 * @param data raw data of the event
+	 */
 	FontMenuSelectionEvent(IdBlock &id_block, PollBlock & data) :
 		EventInfo(id_block, data) {}
 
@@ -195,6 +201,11 @@ class FontMenuSelectionListener : public Listener
 public:
 	~FontMenuSelectionListener() {};
 
+	/**
+	 * Called when a menu option has been selected.
+	 *
+	 * @param font_selected Information on the font selected
+	 */
 	virtual void fontmenu_selection(const FontMenuSelectionEvent &font_selected) = 0;
 };
 

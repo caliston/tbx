@@ -43,7 +43,11 @@ namespace tbx
 		Font(const Font &other);
 		virtual ~Font();
 
-		// Attributes
+		/**
+		 * Check if this object is assigned to an outline font on the system
+		 *
+		 * @returns true if this is valid
+		 */
 		bool is_valid() const {return (_font_ref->handle != 0);}
 		void set_colours(Colour fore, Colour back, int colourOffset = 14);
 		Size size() const;
@@ -57,6 +61,9 @@ namespace tbx
 		bool find(const std::string &font_name, int width, int height = -1);
 		bool desktop_font();
 
+		/**
+		 * Flags to control font painting operation
+		 */
 		enum PaintFlags {FPF_NONE = 0, FPF_JUSTIFY=1, FPF_RUBOUT= 2, FPF_OSUNITS=16};
 		void paint(int x, int y, const std::string &text, int flags = Font::FPF_NONE) const;
 		void paint(int x, int y, const char *text, int length = -1, int flags = Font::FPF_NONE) const;
@@ -174,9 +181,17 @@ namespace tbx
     public:
     	void set_colours(Colour foreground, Colour background);
 
+    	/**
+    	 * Return height of the font
+    	 *
+    	 * @returns height of font in OS units
+    	 */
     	int height_os() const {return 32;}
     	int string_width_os(const std::string &text, int num_chars = 0);
 
+    	/**
+    	 * Flags used for painting the WimpFont
+    	 */
     	enum PaintFlags {WFPF_NONE, WFPF_VCENTRE = (1<<30), WFPF_RJUSTIFY = (1<<31)};
     	void paint(int x, int y, const std::string &text, int flags = WimpFont::WFPF_NONE) const;
     	void paint(int x, int y, const char *text, int length = -1, int flags = WimpFont::WFPF_NONE) const;
