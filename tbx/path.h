@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2011 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -111,6 +111,7 @@ namespace tbx
 		// File type format
 		bool has_file_type() const;
 		int file_type() const;
+		int raw_file_type() const;
 		UTCTime modified_time() const;
 
 		// Load/Executable format
@@ -245,6 +246,7 @@ namespace tbx
 		bool file_type(int type);
 		static int file_type(const std::string &file_name);
 		static bool file_type(const std::string &file_name, int type);
+		int raw_file_type() const;
 
 		UTCTime modified_time() const;
 //TODO:		bool modified_time(const UTCTime &utcTime);

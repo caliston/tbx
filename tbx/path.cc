@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2011 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -258,6 +258,25 @@ bool Path::file_type(const std::string &file_name, int type)
 
 	return (_kernel_swi(OS_File, &regs, &regs) == 0);
 }
+
+/**
+ * Return the file type from the load/exec address.
+ *
+ * For image FS files it will return the actual file type
+ * of the image file whereas file_type returns 0x1000 (directory).
+ *
+ * The return value is undefined for directories/applications
+ * or files that do not have file types.
+ *
+ * @return raw file type.
+ */
+int Path::raw_file_type() const
+{
+	PathInfo info;
+	info.read(_name);
+	return info.raw_file_type();
+}
+
 
 /**
  * Return the modified time from the file in the path.
@@ -937,6 +956,23 @@ int PathInfo::file_type() const
 {
 	return _file_type;
 }
+
+/**
+ * Return the file type from the load/exec address.
+ *
+ * For image FS files it will return the actual file type
+ * of the image file whereas file_type returns 0x1000 (directory).
+ *
+ * The return value is undefined for directories/applications
+ * or files that do not have file types.
+ *
+ * @return raw file type.
+ */
+int PathInfo::raw_file_type() const
+{
+	return (_load_address & 0xFFF00) >> 8;
+}
+
 
 UTCTime PathInfo::modified_time() const
 {
