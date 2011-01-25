@@ -7,5 +7,6 @@ Apps/Library/!TBX/HelpText
 Apps/Library/!TBX/html/*
 Apps/Library/!TBX/libtbx.a
 Apps/Library/!TBX/tbx/h/*
+Apps/Library/!TBX/tbx/doc/h/*
 Apps/Library/!TBX/tbx/res/h/*
 Apps/Library/!TBX/tbx/view/h/*

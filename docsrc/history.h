@@ -19,14 +19,15 @@
  * - Added key pressed event processing to Window object.
  * - Fixed bug where command added to application could be executed multiple times
  *
- * <B>0.3 Alpha December 2010</B>
- * - Release so version used with latest PackIt is available
+ * <B>0.3 Alpha January 2011</B>
+ * - Release so version used with PackIt 0.2 is available
  * - Added res namespace containing Toolbox Resource file/object/gadget handling
  * - WriteableField renamed to WritableField.
  * - Method/parameter names for file names modified to have consistent naming throughout the library
  * - Added functions to support message files
  * - Added doc namespace containing classes to help in writing document based applications
  * - Added static methods for accessing/setting a files file type.
+ * - Added raw_file_type Path/PathInfo method to get file type for ImageFS files
  * - Added Opener handlers to application to be used for opening a file double clicked in the filer.
  * - Added Window scroll request listener
  * - Split out Wimp Message Listener to use listeners explicit for the three message types.
