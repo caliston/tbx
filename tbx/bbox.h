@@ -67,6 +67,27 @@ public:
 	Point max;
 
 	/**
+	 * Get the bottom left of the box.
+	 *
+	 * This is the same as min
+	 */
+	const Point &bottom_left() const {return min;}
+	/**
+	 * Set the bottom left of the box
+	 */
+	void bottom_left(const Point &pos) {min=pos;}
+	/**
+	 * Get the top right of the box.
+	 *
+	 * This is the same as max
+	 */
+	const Point &top_right() const {return max;}
+	/**
+	 * Set the top right of the box
+	 */
+	void top_right(const Point &pos) {max = pos;}
+
+	/**
 	 * Get top left of box
 	 */
 	Point top_left() const {return Point(min.x,max.y);}
@@ -74,6 +95,14 @@ public:
 	 * Set top left of box
 	 */
 	void top_left(const Point &pos) {min.x = pos.x; max.y = pos.y;}
+	/**
+	 * Get bottom right of box
+	 */
+	Point bottom_right() const {return Point(max.x,min.y);}
+	/**
+	 * Set bottom right of box
+	 */
+	void bottom_right(const Point &pos) {max.x = pos.x; min.y = pos.y;}
 
 	/**
 	 * Assign value from another bounding box
