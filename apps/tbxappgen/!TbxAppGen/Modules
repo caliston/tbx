@@ -1,0 +1,26 @@
+<Modules>
+  <Common>
+    <Module Name = "Toolbox" Version = "1.36" />
+  </Common>
+  <Objects>
+      <Object ID = "0x829C0" Name = "ColourDbox" Version="0.19"/>
+      <Object ID = "0x82980" Name = "ColourMenu" Version="0.21"/>
+      <Object ID = "0x82a80" Name = "DCS" Module = "DCS_Quit" Version="1.12" />
+      <Object ID = "0x82a90" Name = "Quit" Module = "DCS_Quit" Version="1.12"/>
+      <Object ID = "0x82ac0" Name = "FileInfo" Version="0.19"/>
+      <Object ID = "0x82a00" Name = "FontDbox" Version="0.18"/>
+      <Object ID = "0x82a40" Name = "FontMenu" Version="0.24"/>
+      <Object ID = "0x82900" Name = "IconBar" Version="1.12"/>
+      <Object ID = "0x828c0" Name = "Menu" Version="0.24"/>
+      <Object ID = "0x82b00" Name = "PrintDbox" Version="0.16"/>
+      <Object ID = "0x82b40" Name = "ProgInfo" Version="0.09"/>
+      <Object ID = "0x82bc0" Name = "SaveAs" Version="0.19"/>
+      <Object ID = "0x82c00" Name = "Scale" Version= "0.15"/>
+      <Object ID = "0x82880" Name = "Window" Version="1.31" />
+  </Objects>
+  <Gadgets>
+      <Gadget ID = "0x401a" Name = "ScrollList" Module = "TextGadgets" Version = "0.19" />
+      <Gadget ID = "0x4018" Name = "TextArea" Module = "TextGadgets" Version = "0.19" />
+      <Gadget ID = "0x4014" Name = "ToolAction" Module = "ToolAction" Version = "0.15" />
+  </Gadgets>
+</Modules>

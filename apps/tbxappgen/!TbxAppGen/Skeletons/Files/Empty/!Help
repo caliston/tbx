@@ -1,0 +1,8 @@
+This is an empty TbxAppGen Generated application.
+
+It includes:
+  !Boot a simple boot file
+  !Run a simple run file that defines the application directory
+  !Sprites the application sprite
+  Messages a minimal messages file
+

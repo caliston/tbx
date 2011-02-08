@@ -1,0 +1,20 @@
+Format of index file
+
+<Skeletons> outer tag for whole file
+<Skeleton> individual skeleton information.
+   Text inside this tag it the full description shown in the app info window.
+   Attributes:
+     ID  subdirectory in "Files" directory that contains the files for the skeleton.
+     Name name shown in drop down list on dialog box
+     MakeFile - use this to use the standard makefile.
+     FileType [="ReadOnly"] used on its own the attribute means include full information for a filetype. The Readonly setting means the filetype is used, but not owned by the application. i.e. sprites and system variables are not set up.
+
+
+The source files (in cc or h directory), the Makefile and the help file have the following text substitutions.
+
+%APPNAME% - application name
+%APPNAME_LC% - application name in lower case
+%TASKNAME% - task name
+%FILETYPE% - file type in hex (e.g. 0x123)
+
+The source files are also renamed so that any file beginning with APPNAME_ will have the APPNAME_ replaced with the name of the application.

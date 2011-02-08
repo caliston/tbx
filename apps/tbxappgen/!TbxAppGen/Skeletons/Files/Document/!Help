@@ -1,0 +1,30 @@
+This is TbxAppGen generated application.
+
+This creates an application that uses the tbx::doc namespace and classes derived from it to create a document handling information.
+
+The application incorporates and iconbar that when clicked shows a new document. A file dropped on it will load the document as will double clicking on a file with the correct type in the filer.
+
+It implements the SaveAs, Quit, DCS and FileInfo processing using the tbx::doc classes allowing just the document data and window to be coded without having to do all the plumbing.
+
+It includes:
+  !Boot a boot file that sets up the file type and other
+  variables.
+  !Run a file that runs the application.
+  !Sprites the application sprite
+  Messages a minimal messages file
+  Res the toolbox resources file
+  cc.main the c++ source for the main entry point
+  h.%APPNAME%Doc, cc.%APPNAME%Doc - a class derived from tbx::doc::Document where you put the data structures for the document. At a minimum you need to finish the document_size, load and save members.
+  h.%APPNAME%Wnd, cc.%APPNAME%Wnd - a class derived from tbx::doc::DocWindow which is used to show the contents fo the document and allow editing of it. Edit the constructor to show the initial document and set up listeners/gadget to do the editing.
+  h.%APPNAME%FileType - a file with the documents file type. If you need to change the file type used, change this file and the !Boot file.
+
+  Makefile a makefile to build the project
+
+Things that need to be done
+  Design you own sprite
+  Update the Program Information dialogue
+  Modify the Window resource to be suitable for your application.
+  Add code to the %APPNAME%Doc and %APPNAME%Wnd class to do your processing including loading of the file.
+  Replace the !Help file with your own content.
+  Set the Wimpslot in the !Run file to a sensible value
+

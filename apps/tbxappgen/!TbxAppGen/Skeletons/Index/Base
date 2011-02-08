@@ -1,0 +1,30 @@
+<Skeletons>
+  <Skeleton ID="Empty" Name = "Empty">
+     The Empty type creates a minimal application that just contains the
+     basis of an application with an iconbar with no source
+     code.
+  </Skeleton>
+  <Skeleton ID="IconbarOnly" Name = "Iconbar only" MakeFile>
+     The Iconbar only type creates an application that only has an iconbar.
+  </Skeleton>
+  <Skeleton ID="OneWindow" Name = "Single Window" MakeFile>
+     The Single Window type creates an applicaton that shows a single
+     shared window when the iconbar is clicked.
+  </Skeleton>
+  <Skeleton ID="MultiWindow" Name = "Multiple Windows" MakeFile>
+     The Multiple Windows type creates an application that shows a
+     new window for each click on the iconbar.
+  </Skeleton>
+  <Skeleton ID="Viewer" Name = "Viewer" FileType="ReadOnly" MakeFile>
+     The Viewer type creates an application that shows a view of
+     a file dropped on to the iconbar.
+  </Skeleton>
+  <Skeleton ID="Document" Name="Document" FileType="" MakeFile>
+     The Document type creates an application that loads and
+     saves a document.
+
+     This includes all the code to show SaveAs, DCS, FileInfo and Quit
+     dialogue boxes when appropriate.
+  </Skeleton>
+</Skeletons>
+

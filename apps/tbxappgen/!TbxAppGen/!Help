@@ -1,0 +1,41 @@
+TbxAppGen
+=========
+
+Generate skeleton applications that use the tbx library.
+
+Click on the iconbar to show the generate application screen.
+
+The fields are:
+
+File name
+
+The name of the application. This is the name of the folder the application will be saved as.
+
+Task name
+
+The task name of the application. This is the name that is shown in the tasks display.
+
+Application type
+
+This drop down list gives a list of the type of application that can be created.
+
+The "?" button gives more information on the current application type.
+
+If the application type requires a file type, the file type fields are enabled so you can enter the file type and file type description for the files used by the application.
+
+Drag the folder icon to the location you want to create the application in. Alternatively if you can type the full path to the application in the file name box and press the "Generate" button.
+
+Contact details
+===============
+
+This application was written by Alan Buckley. I can be reached with comments/queries and bug report by email:
+
+alan_baa@hotmail.com
+
+
+Copyright
+=========
+
+The program is released under the X11 licence (see the file
+COPYING for details).
+

@@ -1,0 +1,11 @@
+This is TbxAppGen generated application that just shows an icon on the iconbar and allows you to exit the application.
+
+It includes:
+  !Boot a simple boot file
+  !Run a simple run file that defines the application directory
+  !Sprites the application sprite
+  Messages a minimal messages file
+  Res the toolbox resources file
+  cc.main the c++ source for the main entry point and iconbar icon
+  Makefile a makefile to build the project
+

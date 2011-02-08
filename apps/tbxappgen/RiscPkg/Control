@@ -1,0 +1,16 @@
+Source: TBX
+Version: 0.3-1
+Section: Development
+Priority: Optional
+Maintainer: Alan Buckley <alan_baa@hotmail.com>
+Standards-Version: 0.1.0
+Licence: Free
+Description: Generate skeleton applications that use the TBX C++ library
+ This package installs TbxAppGen that allows the simple creation of
+ skeleton applications that the TBX C++ library.
+ These skeleton applications can then be expanded to create full RISC OS
+ applications with the help of the TBX library available in the TBX-Dev
+ package.
+
+Package: TbxAppGen
+Recommends: TBX-Dev

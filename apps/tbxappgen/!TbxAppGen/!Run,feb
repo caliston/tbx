@@ -1,0 +1,22 @@
+|Run file for TbxAppGen
+
+IconSprites <Obey$Dir>.!Sprites
+
+RMEnsure Toolbox     0.00 System:Modules.Toolbox.Toolbox
+RMEnsure Toolbox     0.00 Error You need the Toolbox
+RMENSURE Window  0.00  RMLOAD System:modules.toolbox.window
+RMENSURE Window  1.17  ERROR You need window 1.17 or later
+RMENSURE Menu  0.00  RMLOAD System:modules.toolbox.menu
+RMENSURE Menu  0.13  ERROR You need menu 0.13 or later
+RMENSURE ProgInfo  0.00  RMLOAD System:modules.toolbox.proginfo
+RMENSURE Proginfo  0.00  ERROR You need proginfo
+RMENSURE IconBar  0.00  RMLOAD System:modules.toolbox.IconBar
+RMENSURE IconBar  0.00  ERROR You need IconBar
+RMENSURE SaveAs  0.00  RMLOAD System:modules.toolbox.SaveAs
+RMENSURE SaveAs  0.00  ERROR You need SaveAs
+
+Set TbxAppGen$Dir <Obey$Dir>
+
+WimpSlot -min 1024K -max 1024K
+
+Run <Obey$Dir>.!RunImage

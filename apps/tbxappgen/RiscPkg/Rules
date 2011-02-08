@@ -1,0 +1,31 @@
+VERSION = 0.3-1
+PACKAGES = \
+ TbxAppGen_$(VERSION)
+INSTALL_TO=Temp/Apps/Development
+
+all: build pkg
+
+build:
+	make -C !TbxAppGen/src
+
+
+pkg:
+	rm -rf Temp
+	mkdir -p Temp/RiscPkg
+	cp RiscPkg/Control Temp/RiscPkg
+	mkdir -p $(INSTALL_TO)
+	svn export !TbxAppGen  $(INSTALL_TO)/!TbxAppGen
+	rm -rf $(INSTALL_TO)/!TbxAppGen/src
+	cp -f !TbxAppGen/!RunImage $(INSTALL_TO)/!TbxAppGen
+	make -C Temp -f ../RiscPkg/Rules $(PACKAGES)
+	rm -rf Temp
+
+.PHONY: $(PACKAGES)
+$(PACKAGES): %:
+	riscpkg-gencontrol $(firstword $(subst _, ,$@)) < ../RiscPkg/Control > RiscPkg/Control
+	rm -f ../RiscPkg/$@
+	set StoreSuffix <UnixEnv$$zip$$sfix>
+	set UnixEnv$$zip$$sfix \"\"
+	zip -r ../RiscPkg/$@ * -i@../RiscPkg/$(firstword $(subst _, ,$@)).inc
+	set UnixEnv$$zip$$sfix <StoreSuffix>
+	unset StoreSuffix
