@@ -16,5 +16,8 @@ OBJECTS = $(CCSRC:.cc=.o)
 !RunImage,e1f:	$(OBJECTS)
 	$(LD) $(LDFLAGS) -o !RunImage,e1f $(OBJECTS)
 
+clean:
+	rm -f $(OBJECTS) ^.!RunImage !RunImage,e1f
+
 # IF you have fix deps uncomment following line
 # #include $(CCSRC:.cc=.d)
