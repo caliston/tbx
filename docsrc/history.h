@@ -19,8 +19,8 @@
  * - Added key pressed event processing to Window object.
  * - Fixed bug where command added to application could be executed multiple times
  *
- * <B>0.3 Alpha January 2011</B>
- * - Release so version used with PackIt 0.2 is available
+ * <B>0.3 Alpha February 2011</B>
+ * - Release so version used with PackIt 0.3 is available
  * - Added res namespace containing Toolbox Resource file/object/gadget handling
  * - WriteableField renamed to WritableField.
  * - Method/parameter names for file names modified to have consistent naming throughout the library
@@ -35,4 +35,7 @@
  * - Updated ItemView to improve paging. 
  * - Added mode changed and palette changed listeners to application.
  * - Various minor API and documentation fixes/improvements.
+ * - fixed equals_ignore_case function as it failed when both parameters were strings.
+ * - Added defer_delete template function to delay deletion of an object until the next null poll.
+ * - Added UserSprite methods to set and get pixels.
  */
