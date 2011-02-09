@@ -506,6 +506,133 @@ bool UserSprite::remove_mask()
 		   ) == 0);
 }
 
+/**
+ * Get pixel at given location.
+ *
+ * The returned pixel colour is from 0 to number of colours in the
+ * sprite -1.
+ * For a 256 colour sprite this will only return 0-63, for full colour
+ * information use pixel(x,y,&tint) to return the tint information as
+ * well.
+ *
+ * @param x x coordinate to get the pixel for in pixels
+ * @param y y coordinate to  get the pixel for in pixels
+ * @returns gcol pixel value in sprite
+ * @throws OSError failed to retrieve pixel
+ */
+int UserSprite::pixel(int x, int y) const
+{
+	int gcol, tint;
+	swix_check(_swix(OS_SpriteOp, _INR(0,4)|_OUTR(5,6), 41 + 512,
+			   _area->pointer(), pointer(),
+			   x, y,
+			   &gcol, &tint));
+
+	return gcol;
+}
+
+/**
+ * Get pixel at given location.
+ *
+ * The returned pixel colour is from 0 to number of colours in the
+ * sprite -1.
+ * For a 256 colour sprite this will only return 0-63, and the
+ * tint of the colour is return in tint
+ *
+ * @param x x coordinate to get the pixel for in pixels
+ * @param y y coordinate to  get the pixel for in pixels
+ * @param tint value to receive tint
+ *  (0, 64, 128 or 192 in 256 colour modes, 0 in all other modes)
+ * @returns gcol pixel value in sprite
+ * @throws OSError failed to retrieve pixel
+ */
+int UserSprite::pixel(int x, int y, int *tint) const
+{
+	int gcol;
+	swix_check(_swix(OS_SpriteOp, _INR(0,4)|_OUTR(5,6), 41 + 512,
+			   _area->pointer(), pointer(),
+			   x, y,
+			   &gcol,tint));
+
+	return gcol;
+}
+
+
+/**
+ * Set pixel at given location
+ *
+ * For a 256 colour sprite the gcol parameter is 0-63, and the
+ * tint is set to 0, use pixel(x,y,gcol, tint) to set the tint
+ * information as well.
+ *
+ * @param x x coordinate to set the pixel for in pixels
+ * @param y y coordinate to  set the pixel for in pixels
+ * @returns gcol pixel value to set from 0 to number colours in sprite-1
+ * @throws OSError failed to set pixel
+ */
+void UserSprite::pixel(int x, int y, int gcol)
+{
+	swix_check(_swix(OS_SpriteOp, _INR(0,6), 42 + 512,
+			   _area->pointer(), pointer(),
+			   x, y,
+			   gcol, 0));
+}
+
+/**
+ * Set pixel at given location
+ *
+ * For a 256 colour sprite the gcol parameter is 0-63 and the tint
+ * is also used.
+ *
+ * @param x x coordinate to set the pixel for in pixels
+ * @param y y coordinate to  set the pixel for in pixels
+ * @returns gcol pixel value to set from 0 to number colours in sprite-1
+ * @param tint value to of tint (0, 64, 128 or 192 in 256 colour modes, ignored in all other modes)
+ * @throws OSError failed to set pixel
+ */
+void UserSprite::pixel(int x, int y, int gcol, int tint)
+{
+	swix_check(_swix(OS_SpriteOp, _INR(0,6), 42 + 512,
+			   _area->pointer(), pointer(),
+			   x, y,
+			   gcol, 0));
+}
+
+/**
+ * Check is mask pixel is set at given location
+ *
+ * @param x x coordinate to get the mask pixel for in pixels
+ * @param y y coordinate to  get the mask pixel for in pixels
+ * @returns true if mask pixel is set
+ * @throws OSError failed to retrieve mask pixel
+ */
+bool UserSprite::mask_pixel(int x, int y) const
+{
+	int set;
+	swix_check(_swix(OS_SpriteOp, _INR(0,4)|_OUT(5), 43 + 512,
+			   _area->pointer(), pointer(),
+			   x, y,
+			   &set));
+	return (set != 0);
+}
+
+/**
+ * Set or clear mask pixel is at given location
+ *
+ * @param x x coordinate to set the mask pixel for in pixels
+ * @param y y coordinate to  set the mask pixel for in pixels
+ * @returns true to set the mask pixel, false to unset it
+ * @throws OSError failed to set mask pixel
+ */
+
+void UserSprite::mask_pixel(int x, int y, bool on)
+{
+	swix_check(_swix(OS_SpriteOp, _INR(0,5), 44 + 512,
+			   _area->pointer(), pointer(),
+			   x, y,
+			   (int)on));
+}
+
 //@{
 //   Get scaling required to plot this sprite in the wimp
 //@}

@@ -346,6 +346,14 @@ namespace tbx
 		   bool create_mask();
 		   bool remove_mask();
 
+		   int pixel(int x, int y) const;
+		   void pixel(int x, int y, int gcol);
+		   void pixel(int x, int y, int gcol, int tint);
+		   int pixel(int x, int y, int *tint) const;
+
+		   bool mask_pixel(int x, int y) const;
+		   void mask_pixel(int x, int y, bool on);
+
 		   /**
 		    * Return SpriteArea this sprite is from
 		    */
