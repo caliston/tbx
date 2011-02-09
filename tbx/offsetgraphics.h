@@ -71,6 +71,7 @@ namespace tbx
 
 		// Images
 		virtual void image(int x, int y, const Image &image) {OSGraphics::image(x + _offset_x, y + _offset_y, image);}
+		virtual void image(const Point &pt, const Image &im) {OSGraphics::image(pt.x + _offset_x, pt.y + _offset_y, im);}
 	};
 }
 
