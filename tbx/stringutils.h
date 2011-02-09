@@ -91,7 +91,7 @@ inline std::string to_lower(const std::string &value)
 inline bool equals_ignore_case(const std::string &s1, const std::string &s2)
 {
 	if (s1.length() != s2.length()) return false;
-	std::string::const_iterator i1, i2;
+	std::string::const_iterator i1, i2 = s2.begin();
 	for (i1 = s1.begin(); i1 != s1.end(); ++i1, ++i2)
 		if (std::tolower(*i1) != std::tolower(*i2)) return false;
 	return true;
