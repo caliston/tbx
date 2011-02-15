@@ -20,7 +20,7 @@
  * - Fixed bug where command added to application could be executed multiple times
  *
  * <B>0.3 Alpha February 2011</B>
- * - Release so version used with PackIt 0.3 is available
+ * - Release so version used with PackIt 0.2 is available
  * - Added res namespace containing Toolbox Resource file/object/gadget handling
  * - WriteableField renamed to WritableField.
  * - Method/parameter names for file names modified to have consistent naming throughout the library
@@ -32,7 +32,7 @@
  * - Added Window scroll request listener
  * - Split out Wimp Message Listener to use listeners explicit for the three message types.
  * - Added drag methods to Window
- * - Updated ItemView to improve paging. 
+ * - Updated ItemView to improve paging.
  * - Added mode changed and palette changed listeners to application.
  * - Various minor API and documentation fixes/improvements.
  * - fixed equals_ignore_case function as it failed when both parameters were strings.

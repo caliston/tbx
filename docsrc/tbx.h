@@ -9,9 +9,9 @@
  * it can be freely modified and used by anyone.
  *
  * @author Alan Buckley.
- * <i>July 2010</i>
+ * <i>February 2011</i>
  *
- * @section Alpha Alpha Version 0.2
+ * @section Alpha Alpha Version 0.3
  * The current release is an alpha version with some ommissions and
  * possibly a few bugs too!
  *
