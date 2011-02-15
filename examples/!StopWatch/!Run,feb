@@ -14,6 +14,6 @@ RMEnsure ProgInfo 0.09 Error This application needs ProgInfo 0.09 or later.
 RMEnsure Window 0.00 RMLoad System:Modules.Toolbox.Window
 RMEnsure Window 1.31 Error This application needs Window 1.31 or later.
 
-Wimpslot -min 2048K -max 2048K
+Wimpslot -min 832K -max 832K
 
 Run <StopWatch$Dir>.!RunImage %*0
