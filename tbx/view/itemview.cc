@@ -214,8 +214,6 @@ void ItemView::scroll_request(const tbx::ScrollRequestEvent &event)
 {
 	tbx::WindowOpenInfo new_open = event.open_info();
 
-	printf("xscroll %d yscroll %d\n", event.x_scroll(), event.y_scroll());
-
 	switch(event.x_scroll())
 	{
 	case tbx::ScrollRequestEvent::LEFT:
