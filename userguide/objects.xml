@@ -1,0 +1,73 @@
+<chapter>
+<title>The core TBX classes</title>
+<section><title>The Application class</title>
+<para>
+The tbx has one main class that is used to setup and run a Toolbox application the <classname>Application</classname>. This class is used to setup the application and
+initialise the Toolbox, and run the main polling loop that is the heart of any
+desktop application.
+</para>
+<para>A tbx application has a <function>main</function> subroutine that
+creates an application object and then runs it.</para>
+<example><title>Common contents of the <function>main</function> for a tbx routine</title>
+<programlisting>
+int main()
+{
+    tbx::Application my_app("&lt;MyApp$Dir&gt;");
+
+    // Set up handlers required for the main application
+    
+    my_app.run();
+}
+</programlisting>
+</example>
+</section>
+
+<section><title>Toolbox objects</title>
+<para>
+The tbx library provides a light wrapper around the Toolbox objects,
+gadgets and menu items.
+</para>
+<para>
+ The classes to manipulate the toolbox objects can be treated as
+ references to the underlying toolbox object.
+</para>
+<para>
+ Copying the C++ classes does not make a copy of the object, rather it
+ copies the reference so both classes refer to the same object.
+</para>
+<para>
+ To associate a toolbox class with a C++ class you can either create
+ the toolbox class from the C++ class by using the constructor that
+ takes a template name or use the set_autocreate_listener on the
+ Application class which will be triggered when an object is auto-created
+ by the toolbox.
+</para>
+<para>
+ You can then add a listener for the has been deleted event if the toolbox
+ object is deleted automatically or you can delete the toolbox object
+ from the C++ class by calling the delete_object method.
+</para>
+<para>
+ A MatchLifetime templated class provides a convenient way to match
+ the life time of a C++ object with a toolbox object. If its constructor
+ is provided with a template name it will automatically add the above
+ listeners for you.
+</para>
+</section>
+
+<section>
+<title>Menu items</title>
+<para>
+MenuItems are retrieved with the <classname>Menu</classname> class <function>item</function> method passing the
+menu item component id.
+</para>
+</section>
+
+<section>
+<title>Gadgets</title>
+<para>
+Gadgets are retrieved using the <classname>Window</classname> class <function>gadget</function> method.
+</para>
+</section>
+
+</chapter>

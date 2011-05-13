@@ -9,20 +9,9 @@
  * it can be freely modified and used by anyone.
  *
  * @author Alan Buckley.
- * <i>February 2011</i>
- *
- * @section Alpha Alpha Version 0.3
- * The current release is an alpha version with some ommissions and
- * possibly a few bugs too!
- *
- * However it does have enough functionality to write full applications.
- * If you try to use the library and need something that is missing please
- * get in touch with me (alan_baa@hotmail.com).
  *
  * @section Contents
- * - @ref using
- * - @ref toolbox
- * - @ref events
+ * - <A HREF="../userguide/index.html">User Guide</A>
  * - @ref copyright
  * - @ref examples
  * - @ref source

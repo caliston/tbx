@@ -21,7 +21,8 @@ pkg:
 	rm -rf $(INSTALL_TO)/!TBX/tbx/res/cc
 	set UnixEnv$$cp$$sfix f:for:F:fpp:cc:cxx:cpp:c++:C:i:ii:rpo:c:m:h:hh:s:S:xrb:xrs:l:o:y:tcc:cmhg:adb:ads:ali
 	cp libtbx.a $(INSTALL_TO)/!TBX
-	cp -R docs/html $(INSTALL_TO)/!TBX/html
+	cp -R docs/html $(INSTALL_TO)/!TBX/html/refguide
+        cp -R userguide/html $(INSTALL_TO)/!TBX/html/userguide
 	make -C Temp -f ../RiscPkg/Rules $(PACKAGES)
 	set UnixEnv$$rm$$sfix f:for:F:fpp:cc:cxx:cpp:c++:C:i:ii:rpo:c:m:h:hh:s:S:xrb:xrs:l:o:y:tcc:cmhg:adb:ads:ali
 	rm -rf Temp
