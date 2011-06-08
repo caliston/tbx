@@ -3,10 +3,24 @@
 <para>
 The events in a tbx application can be categorised into three types:
 <itemizedlist>
-<listitem><para>Object/Gadget default events</para></listitem>
-<listitem><para>User events</para></listitem>
-<listitem><para>Commands</para></listitem>
+<listitem>Object/Gadget default events</listitem>
+<listitem>User events</listitem>
+<listitem>Commands</listitem>
 </itemizedlist>
+</para>
+<para>
+ The information for the event listeners is help separately
+ from any C++ object/gadget/menu item class instance that
+ has been created and is not affected by these being deleted
+ or going out of scope. All event listeners are automatically
+ removed when the underlying toolbox object that the events
+ are on is destroyed.
+</para>
+<para>
+ All event listening routines are given a pointer to the C++
+ class instance that handles the event, so it is important
+ that the handler class is not deleted before the event has
+ been removed.
 </para>
 
   <section>
@@ -23,11 +37,10 @@ The events in a tbx application can be categorised into three types:
         <programlisting>
           w.add_text_changed_listener(&amp;my_listener);
         </programlisting>
-      </example>
-
       The my_listener object is derived from a TextChangedListener and
       has its text_changed member called when the writeable field text
       changes.
+      </example>
     </para>
     <para>
       You can add multiple listeners to the same event.

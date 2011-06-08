@@ -28,7 +28,7 @@ _TaskSprite:!tbxmin
 <listitem>Edit the iconbar icon definition so that it's sprite is set to "!tbxmin" and it has a menu named "IBMenu".</listitem>
 <listitem>Add a menu and rename it to "IBMenu".</listitem>
 <listitem>Add a menu item with the text "Info" that shows the object "ProgInfo" as a submenu.</listitem>
-<listitem>Add a menu item with the text "Quit" that raises the event &amp;82a91. When the tbx application receives this event number it know it must quit.</listitem>
+<listitem>Add a menu item with the text "Quit" that raises the event &amp;82a91. When the tbx application receives this event number it knows it must quit.</listitem>
 <listitem>Finally add a proginfo dialogue.</listitem>
 </orderedlist>
 </para>
@@ -49,7 +49,7 @@ Wimpslot -min 2048K -max 2048K                                           <co id=
 
 Set TbxMin$Dir &lt;Obey$Dir&gt;                                                <co id="run.directory"/>
 
-Run &lt;TbxMin$Dir&gt;.!RunImage %*0					                                 <co id="run.run"/>
+Run &lt;TbxMin$Dir&gt;.!RunImage %*0                                           <co id="run.run"/>
 </programlisting>
 <calloutlist>
 <callout arearefs="run.comment">
@@ -133,7 +133,7 @@ The application is run here. The Toolbox and Wimp events are all routed here. Th
 <para>
 <command>gcc</command> -o^.!RunImage -ITBX: -LTBX: -ltbx main.cc
 </para>
-<para>To save type download and use Make (available from www.riscos.info). And create the following makefile
+<para>To save typing download and use Make (available from www.riscos.info). And create the following makefile
 <programlisting>
 # Makefile for TBX Min
 
