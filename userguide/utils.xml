@@ -13,7 +13,7 @@
  on the storage they are saved in.
 </para>
 <para>
- One function that is most likely to be use in any application that
+ One function that is most likely to be used in any application that
  manipulates a RISC OS file is the <function>Path::file_type</function>
  method that sets the file type of a RISC OS file.
 </para>
@@ -24,7 +24,7 @@
 </para>
 <para>
  A directory can be easily iterated using the <classname>Path::Iterator</classname>
- that is return from the <function>begin</function> and <function>end</function>
+ that is returned from the <function>begin</function> and <function>end</function>
  methods.
 </para>
 <para>
@@ -42,7 +42,7 @@
  <classname>TagDoc</classname> is worth considering.
 </para>
 <para>
- It is also worth investigating the classes in the <namespace>tbx::doc</namespace>
+ It is also worth investigating the classes in the <package>tbx::doc</package>
  if you are writing a document based application.
 </para>
 </section>

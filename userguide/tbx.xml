@@ -6,6 +6,11 @@
 <!ENTITY objects SYSTEM "objects.xml">
 <!ENTITY events SYSTEM "events.xml">
 <!ENTITY utils SYSTEM "utils.xml">
+<!ENTITY simpleapp SYSTEM "simpleapp.xml">
+<!ENTITY docapp SYSTEM "docapp.xml">
+<!ENTITY graphics SYSTEM "graphics.xml">
+<!ENTITY views SYSTEM "views.xml">
+<!ENTITY res SYSTEM "res.xml">
 ]
 >
 <book xmlns="http://docbook.org/ns/docbook" version="5.0">
@@ -17,5 +22,10 @@
 &objects;
 &events;
 &utils;
+&simpleapp;
+&docapp;
+&graphics;
+&views;
+&res;
 
 </book>
