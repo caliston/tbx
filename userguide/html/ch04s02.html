@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Toolbox objects</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"><link rel="home" href="index.html" title="TBX C++ toolbox library"><link rel="up" href="ch04.html" title="Chapter 4. The core TBX classes"><link rel="prev" href="ch04.html" title="Chapter 4. The core TBX classes"><link rel="next" href="ch04s03.html" title="Menu items"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Toolbox objects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><th width="60%" align="center">Chapter 4. The core TBX classes</th><td width="20%" align="right"> <a accesskey="n" href="ch04s03.html">Next</a></td></tr></table><hr></div><div class="section" title="Toolbox objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1372044"></a>Toolbox objects</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Toolbox objects</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"><link rel="home" href="index.html" title="TBX C++ toolbox library"><link rel="up" href="ch04.html" title="Chapter 4. The core TBX classes"><link rel="prev" href="ch04.html" title="Chapter 4. The core TBX classes"><link rel="next" href="ch04s03.html" title="Menu items"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Toolbox objects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><th width="60%" align="center">Chapter 4. The core TBX classes</th><td width="20%" align="right"> <a accesskey="n" href="ch04s03.html">Next</a></td></tr></table><hr></div><div class="section" title="Toolbox objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1352968"></a>Toolbox objects</h2></div></div></div><p>
 The tbx library provides a light wrapper around the Toolbox objects,
 gadgets and menu items.
 </p><p>
@@ -7,7 +7,7 @@ gadgets and menu items.
 </p><p>
  Copying the C++ classes does not make a copy of the object, rather it
  copies the reference so both classes refer to the same object.
-</p><div class="example"><a name="id1372060"></a><p class="title"><b>Example 4.2. Multiple C++ instances refer to one Toolbox object</b></p><div class="example-contents"><pre class="programlisting">
+</p><div class="example"><a name="id1352984"></a><p class="title"><b>Example 4.2. Multiple C++ instances refer to one Toolbox object</b></p><div class="example-contents"><pre class="programlisting">
 tbx::Window w1("Window"); // Creates a C++ class instance and the underlying toolbox object
 tbx::Window w2 = w1;      // Creates a new C++ class instance, but refers to the same toolbox object
 
@@ -31,10 +31,10 @@ w2.title("Even newer title"); // "Window" toolbox item title has been changed ag
  Application class which will be triggered when an object is auto-created
  by the toolbox, or get it from a property or method of another toolbox
  object that returns an object.
-</p><div class="example"><a name="id1372102"></a><p class="title"><b>Example 4.3. Creating a toolbox object in code</b></p><div class="example-contents"><pre class="programlisting">
+</p><div class="example"><a name="id1353026"></a><p class="title"><b>Example 4.3. Creating a toolbox object in code</b></p><div class="example-contents"><pre class="programlisting">
 // Create the toolbox object named "Window" defined in the "Res" file.
 tbx::Window main_window("Window");
-</pre></div></div><br class="example-break"><div class="example"><a name="id1372111"></a><p class="title"><b>Example 4.4. Getting a reference to a toolbox object when it is autocreated</b></p><div class="example-contents"><pre class="programlisting">
+</pre></div></div><br class="example-break"><div class="example"><a name="id1353035"></a><p class="title"><b>Example 4.4. Getting a reference to a toolbox object when it is autocreated</b></p><div class="example-contents"><pre class="programlisting">
 // Class to get reference to toolbox object
 class GetMainWindow : tbx::AutoCreateListener
 {
@@ -51,7 +51,7 @@ public:
 // Code fragment from main setting up the listener for toolbox object "Window"
 GetMainWindow get_main_window;
 test_app.set_autocreate_listener("Window", &amp;get_main_window);
-</pre></div></div><br class="example-break"><div class="example"><a name="id1372127"></a><p class="title"><b>Example 4.5. Getting a reference toolbox object from another toolbox object</b></p><div class="example-contents"><pre class="programlisting">
+</pre></div></div><br class="example-break"><div class="example"><a name="id1353051"></a><p class="title"><b>Example 4.5. Getting a reference toolbox object from another toolbox object</b></p><div class="example-contents"><pre class="programlisting">
 // main_window is a tbx::Window instance
 tbx::Menu main_menu = main_window.menu();
 </pre></div></div><br class="example-break"><p>
