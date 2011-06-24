@@ -256,61 +256,6 @@ public:
 	*/
 };
 
-/**
- * Menu item resource definition.
- *
- * This class is used to add menu items to a menu.
- * It can either be initialised by hand or retrieved from an existing
- * menu template using Menu::resource_item.
- */
-class ResMenuItem
-{
-private:
-	int _flags;
-	ComponentId _id;
-	char *_text;
-	int _max_text;
-	char *_click_show;
-	char *_submenu_show;
-	int _submenu_event;
-	int _click_event;
-	char *_help_message;
-	int _max_help;
-
-	friend class Menu;
-
-public:
-	ResMenuItem();
-	ResMenuItem(std::string text);
-	ResMenuItem(const ResMenuItem &other);
-	~ResMenuItem();
-
-	ResMenuItem &operator=(const ResMenuItem &other);
-
-	/**
-	 * Set the ID for the added item.
-	 *
-	 * Use NULL_ComponentId (or -1) for the menu to assign the lowest
-	 * available value when the ResMenuItem is added to the menu.
-	 *
-	 * @see Menu::add
-	 * @see Menu::insert
-	 */
-	void id(ComponentId id) {_id = id;}
-	ComponentId id() const {return _id;}
-
-	void text(std::string text);
-	const char *text() const {return _text;}
-	void max_text(int max);
-	int max_text() const {return _max_text;}
-
-	//TODO: The rest
-private:
-	void copy_strings();
-	void clear_strings();
-	void copy_string(char *&str);
-};
-
 }
 
 #endif /* TBX_MENU_H_ */
