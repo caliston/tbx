@@ -68,7 +68,19 @@ namespace tbx
 		 * @throws ObjectClassError The object assigned to does not refer to a toolbox Iconbar
 		 */
 		Iconbar(const Object &other) : Object(other)	{check_toolbox_class(Iconbar::TOOLBOX_CLASS);}
+
+		/**
+		 * Construct a iconbar creating a toolbox iconbar object
+		 *
+		 * @param template_name name of icon bar template to use
+		 */
 		Iconbar(const char *template_name) : Object(template_name)	{check_toolbox_class(Iconbar::TOOLBOX_CLASS);}
+
+		/**
+		 * Construct an iconbar creating a toolbox iconbar object
+		 *
+		 * @param object_template in memory template used to create the toolbox iconbar
+		 */
 		Iconbar(const res::ResIconbar &object_template);
 
 		/**
@@ -114,10 +126,9 @@ namespace tbx
 		void  sprite(const std::string &value);
 		std::string sprite() const;
 		int sprite_length() const;
-// Methods
-		void select_show(Object showObject);
+		void select_show(Object show_object);
 		Object  select_show();
-		void adjust_show(Object showObject);
+		void adjust_show(Object show_object);
 		Object adjust_show();
 
 //TODO: void show(...) - priority show
@@ -125,16 +136,12 @@ namespace tbx
 // Listeners
 		void add_click_listener(IconbarClickListener *listener);
 		void remove_click_listener(IconbarClickListener *listener);
-
 		void add_click_command(Command *command);
 		void remove_click_command(Command *command);
-
 		void add_select_command(Command *command);
 		void remove_select_command(Command *command);
-
 		void add_adjust_command(Command *command);
 		void remove_adjust_command(Command *command);
-
 		void add_loader(Loader *loader, int file_type = -2);
 		void remove_loader(Loader *loader, int file_type = -2);
 	};

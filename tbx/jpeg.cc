@@ -182,8 +182,7 @@ void JPEG::plot(int x, int y) const
 /**
  * Plot jpeg to screen
  *
- * @param x x coordinate in os units
- * @param y y coordinate in os units
+ * @param pos point to plot the jpeg in in os units
  */
 void JPEG::plot(const Point &pos) const
 {
@@ -261,5 +260,27 @@ void JPEG::plot(const DrawTransform &dt)
 	_kernel_swi(0x49984, &regs, &regs);
 }
 */
+
+/**
+ * Set flag to control dithering when plotting
+ *
+ * @param dither true to dither image
+ */
+void JPEG::dithered(bool dither)
+{
+	if (dither) _plot_flags |=1 ;
+	else plot_flags &=~1;
+}
+
+/**
+ * Set flag to control error defusion when plotting
+ *
+ * @param error_defused true to use error defusion when plotting
+ */
+void JPEG::error_defused(bool error_defused)
+{
+	if (error_defused) _plot_flags |=2;
+	else plot_flags &=~2;
+}
 
 }

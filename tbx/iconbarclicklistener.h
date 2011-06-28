@@ -58,6 +58,12 @@ public:
  */
 class IconbarClickListener: public tbx::Listener {
 public:
+	/**
+	 * Method called when a click occurs on the icon bar
+	 *
+	 * @param event Information on icon bar and which mouse button
+	 *              was used for the click.
+	 */
 	virtual void iconbar_clicked(IconbarClickEvent &event) = 0;
 };
 

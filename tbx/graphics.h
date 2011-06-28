@@ -63,14 +63,14 @@ namespace tbx
 		/**
 		 * Convert from OS units to logical x value
 		 *
-		 * @param logical_x value to convert
+		 * @param os_x value to convert
 		 * @returns equivalent value in logical units
 		 */
 		virtual int logical_x(int os_x) const = 0;
-		/*
+		/**
 		 * Convert from OS units to logical y value
 		 *
-		 * @param logical_x value to convert
+		 * @param os_y value to convert
 		 * @returns equivalent value in logical units
 		 */
 		virtual int logical_y(int os_y) const = 0;
@@ -99,7 +99,7 @@ namespace tbx
 		/**
 		 * Convert from OS units to logical coordinates
 		 *
-		 * @param pt value to convert
+		 * @param b value to convert
 		 * @returns equivalent value in logical units
 		 */
 		virtual BBox logical(const BBox &b) {BBox o;o.min = logical(b.min);o.max = logical(b.max);return o;}
@@ -153,8 +153,8 @@ namespace tbx
 		 * Draw a line from the last point visited to
 		 * the given location
 		 *
-		 * @param x coordinate of end of line
-		 * @param y coordinate of end of line
+		 * @param tx coordinate of end of line
+		 * @param ty coordinate of end of line
 		 */
 		virtual void line(int tx, int ty) = 0;
 
@@ -298,14 +298,14 @@ namespace tbx
 		/**
 		 * Draw a point at the given location.
 		 *
-		 * @param point coordinates to draw point
+		 * @param pt coordinates to draw point
 		 */
 	    virtual void point(const Point &pt) {point(pt.x,pt.y);}
 		/**
 		 * Draw a line from the last point visited to
 		 * the given location
 		 *
-		 * @param point coordinates to draw line to
+		 * @param to_point coordinates to draw line to
 		 */
 		virtual void line(const Point &to_point) {line(to_point.x,to_point.y);}
 		/**
@@ -433,14 +433,14 @@ namespace tbx
 		 * Draw text at the given location in the current WIMP font
 		 *
 		 * @param pt coordinates for base line and left of text
-		 * @param text text to draw
+		 * @param str text to draw
 		 */
 		virtual void text(const Point &pt, const std::string &str) {text(pt.x,pt.y,str);}
 		/**
 		 * Draw text at the given location in the given font
 		 *
 		 * @param pt coordinates for base line and left of text
-		 * @param text text to draw
+		 * @param str text to draw
 		 * @param font font to use to draw the text
 		 */
 		virtual void text(const Point &pt, const std::string &str, const Font &font) {text(pt.x,pt.y,str,font);}
@@ -458,7 +458,7 @@ namespace tbx
 		 * Draw an image.
 		 *
 		 * @param pt coordinates for bottom left of image
-		 * @param image Image to draw
+		 * @param im Image to draw
 		 */
 		virtual void image(const Point &pt, const Image &im) {image(pt.x, pt.y, im);}
 	};

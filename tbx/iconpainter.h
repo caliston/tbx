@@ -98,16 +98,58 @@ public:
 	 */
 	IconPainter &border(bool f) 		{if (f) _flags |= 4; else _flags &=~4; return *this;}
 	/**
-	 * Icon is horizontally centered
+	 * Set horizontally centred flag
+	 *
+	 * @param f true to horizontally centre the icon
 	 */
 	IconPainter &hcentred(bool f) 		{if (f) _flags |= 8; else _flags &=~8; return *this;}
+	/**
+	 * Set vertically centred flag
+	 *
+	 * @param f true to vertically centre the icon
+	 */
 	IconPainter &vcentred(bool f) 		{if (f) _flags |= (1<<4); else _flags &=~(1<<4); return *this;}
+	/**
+	 * Set filled flag
+	 *
+	 * @param f true to fill the icon
+	 */
 	IconPainter &filled(bool f) 		{if (f) _flags |= (1<<5); else _flags &=~(1<<5); return *this;}
+	/**
+	 * Set right justified flag
+	 *
+	 * @param f true to right justify the icon
+	 */
 	IconPainter &rjust(bool f) 			{if (f) _flags |= (1<<9); else _flags &=~(1<<9); return *this;}
+	/**
+	 * Set show sprite at half size flag
+	 *
+	 * @param f true to show the sprite half size
+	 */
 	IconPainter &half_sprite(bool f) 	{if (f) _flags |= (1<<11); else _flags &=~(1<<11); return *this;}
+	/**
+	 * Set inverted flag
+	 *
+	 * @param f true to show icon inverted
+	 */
 	IconPainter &inverted(bool f) 		{if (f) _flags |= (1<<21); else _flags &=~(1<<21); return *this;}
+	/**
+	 * Set shaded flag
+	 *
+	 * @param f true to show the icon shaded
+	 */
 	IconPainter &shaded(bool f) 		{if (f) _flags |= (1<<22); else _flags &=~(1<<28); return *this;}
+	/**
+	 * Set foreground colour of sprite
+	 *
+	 * @param col WimpColour for foreground
+	 */
 	IconPainter &foreground(unsigned int col)	{_flags = (_flags & ~0x0F000000) | (col << 24); return *this;}
+	/**
+	 * Set background colour of sprite
+	 *
+	 * @param col WimpColour for background
+	 */
 	IconPainter &background(unsigned int col)	{_flags = (_flags & ~0xF0000000) | (col << 28); return *this;}
 
 	/**
