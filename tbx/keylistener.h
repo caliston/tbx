@@ -48,6 +48,12 @@ namespace tbx
 		bool _used;
 
 	public:
+		/**
+		 * Construct KeyEvent from information returned from the WIMP
+		 *
+		 * @param id_block Toolbox ID block
+		 * @param poll_block WIMP message block
+		 */
 		KeyEvent(IdBlock &id_block, PollBlock &poll_block) :
 			EventInfo(id_block, poll_block), _used(false)
 			{}

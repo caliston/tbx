@@ -53,19 +53,71 @@ namespace tbx
 		Object(const res::ResObject &object_template);
 
 	public:
+		/**
+		 * Constructs an object unattached to a toolbox object
+		 *
+		 * This object should be assigned to an object that is
+		 * attached before calling any of its methods apart from
+		 * null()
+		 */
 		Object() : _handle(NULL_ObjectId) {}
+
+		/**
+		 * Construct an object referencing the given toolbox object
+		 *
+		 * @param handle ObjectId of the toolbox object to reference
+		 */
 		Object(ObjectId handle) : _handle(handle) {};
+
+		/**
+		 * Construct an object referencing the same toolbox object as
+		 * another
+		 */
 		Object(const Object &other) : _handle(other._handle) {};
+
 		Object(const std::string &template_name);
 
 		void delete_object();
 
+		/**
+		 * Check if object has been initialised
+		 *
+		 * @returns true if the object has not been initialised
+		 */
 		bool null() const {return (_handle == NULL_ObjectId);}
+		/**
+		 * Return the underlying toolbox object id this object references
+		 *
+		 * @returns ObjectId of the toolbox object
+		 */
 		ObjectId handle() const {return _handle;}
 
+		/**
+		 * Assign this object to reference the same toolbox object as another
+		 *
+		 * @param other object to assign reference from
+		 */
 		Object &operator=(const Object &other) {_handle = other._handle; return *this;}
+		/**
+		 * Check if this object references the same toolbox object as another
+		 *
+		 * @param other object to compare against
+		 * @returns true if both objects refer to the same toolbox object
+		 */
 		bool operator==(const Object &other) const {return (_handle == other._handle);}
+		/**
+		 * Check if this object does not reference the same toolbox object as another
+		 *
+		 * @param other object to compare against
+		 * @returns true if the objects refer to different toolbox object
+		 */
 		bool operator!=(const Object &other) const {return (_handle != other._handle);}
+
+		/**
+		 * Operator to check if an object has been initialised
+		 *
+		 * @returns true if the object has been initialised
+		 */
 		operator bool() const {return (_handle != NULL_ObjectId);}
 
 		int toolbox_class() const;
@@ -114,6 +166,9 @@ namespace tbx
 	    void bool_property(int property_id, bool value);
 
 	protected:
+	    /**
+	     * Handle for toolbox object
+	     */
 		ObjectId _handle;
 	};
 }

@@ -45,21 +45,48 @@ MenuItem Menu::item(ComponentId id)
 	return MenuItem(_handle, id);
 }
 
+/**
+ * Add listener triggered when a menu is about to be shown
+ *
+ * This event is only triggered if the menu has been set to deliver
+ * the default event before showing.
+ *
+ * @param listener to add
+ */
 void Menu::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
 	add_listener(0x828c0, listener, about_to_be_shown_router);
 }
 
+/**
+ * Remover listener triggered when a menu is about to be shown
+ *
+ * @param listener to remove
+ */
 void Menu::remove_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
 	remove_listener(0x828c0, listener);
 }
+
+/**
+ * Add listener triggered when a menu is hidden
+ *
+ * This event is only triggered if the menu has been set to deliver
+ * the default event when hidden.
+ *
+ * @param listener to add
+ */
 
 void Menu::add_has_been_hidden_listener(HasBeenHiddenListener *listener)
 {
 	add_listener(0x828c1, listener, has_been_hidden_router);
 }
 
+/**
+ * Remove listener triggered when a menu is about to be shown
+ *
+ * @param listener to remove
+ */
 void Menu::remove_has_been_hidden_listener(HasBeenHiddenListener *listener)
 {
 	remove_listener(0x828c1, listener);

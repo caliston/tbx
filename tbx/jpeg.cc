@@ -269,7 +269,7 @@ void JPEG::plot(const DrawTransform &dt)
 void JPEG::dithered(bool dither)
 {
 	if (dither) _plot_flags |=1 ;
-	else plot_flags &=~1;
+	else _plot_flags &=~1;
 }
 
 /**
@@ -280,7 +280,7 @@ void JPEG::dithered(bool dither)
 void JPEG::error_defused(bool error_defused)
 {
 	if (error_defused) _plot_flags |=2;
-	else plot_flags &=~2;
+	else _plot_flags &=~2;
 }
 
 }

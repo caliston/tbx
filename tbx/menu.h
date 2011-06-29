@@ -71,6 +71,13 @@ public:
 	 * @throws ObjectClassError The object assigned to does not refer to a toolbox menu
 	 */
 	Menu(const Object &other) : Object(other)	{check_toolbox_class(Menu::TOOLBOX_CLASS);}
+	/**
+	 * Create the toolbox object with the given name from the Toolbox resources
+	 * for the application and assign a reference to it to this application.
+	 *
+	 * @throws OsError The toolbox object could not be created from the tmeplate
+	 * @throws ObjectClassError The created object is not a Toolbox menu
+	 */
 	Menu(const char *template_name) : Object(template_name)	{check_toolbox_class(Menu::TOOLBOX_CLASS);}
 
 	/**

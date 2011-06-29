@@ -34,14 +34,29 @@ namespace tbx
 	 * Templated object deleted listener to delete a C++ object when a
 	 * toolbox object gets deleted
 	 *
+	 * e.g.
+	 * @code
+	 *   // Delete this C++ object of type MainWindow when the toolbox object is deleted
+	 *   window.add_object_deleted_listener(new ObjectDeleteClass<MainWindow>(this));
+	 * @endcode
 	 */
 	template<class T> class ObjectDeleteClass : public tbx::ObjectDeletedListener
 	{
 		T *_class_to_delete;
 	public:
+		/**
+		 * Constructor with C++ object to delete.
+		 *
+		 * This should always be allocated using the new operator as this
+		 * class is automatically deleted when the listener is triggered.
+		 *
+		 * @param class_to_delete instance of C++ object to delete
+		 */
 		ObjectDeleteClass(T *class_to_delete) : _class_to_delete(class_to_delete) {}
 		/**
 		 * Delete the given C++ class and this object on event received
+		 *
+		 * @param object object that has been deleted.
 		 */
 		virtual void object_deleted(Object &object)
 		{

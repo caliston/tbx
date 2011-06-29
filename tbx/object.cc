@@ -38,6 +38,13 @@
 
 using namespace tbx;
 
+/**
+ * Create a toolbox object with the given name in the application
+ * resources and assign a reference to it in this object.
+ *
+ * @param template_name name of template used to create the object
+ * @throws OsError creation of the toolbox object failed
+ */
 Object::Object(const std::string &template_name)
 {
 	_handle = NULL_ObjectId;
@@ -71,7 +78,7 @@ Object::Object(const res::ResObject &object_template)
  * that will remove all the listeners on this
  * object.
  *
- * Once delete the internal object handle is
+ * Once deleted the internal object handle is
  * set to NULL so that all methods will throw
  * an exception until it is assigned to another
  * live object.
@@ -123,6 +130,8 @@ void Object::check_toolbox_class(int class_id) const
 
 /**
  * Return user defined handle stored against this object.
+ *
+ * @returns void pointer to client handle
  */
 void *Object::client_handle() const
 {
@@ -136,6 +145,8 @@ void *Object::client_handle() const
 
 /**
  * Set a user defined handle for this object.
+ *
+ * @param client_handle void pointer to client handle
  */
 void Object::client_handle(void *client_handle)
 {
@@ -322,24 +333,46 @@ void Object::add_user_event_listener(int event_id, UserEventListener *listener)
  * @param event_id The event id that was associated with the listener.
  * @param listener The listener to remove.
  * @throws ObjectNullError toolbox handle is NULL_ObjectId
- */void Object::remove_user_event_listener(int event_id, UserEventListener *listener)
+ */
+void Object::remove_user_event_listener(int event_id, UserEventListener *listener)
 {
 	if (_handle == NULL_ObjectId) throw ObjectNullError();
 
 	event_router()->remove_object_listener(_handle, NULL_ComponentId, event_id, listener);
 }
 
-
+/**
+ * Add listener for when the toolbox object referenced by this object
+ * has been deleted.
+ *
+ * @param listener listener to add
+ */
 void Object::add_object_deleted_listener(ObjectDeletedListener *listener)
 {
 	add_listener(0x44EC2, listener, ObjectDeletedListener::handler);
 }
 
+/**
+ * Remove listener for when the toolbox object referenced by this object
+ * has been deleted.
+ *
+ * @param listener listener to remove
+ */
 void Object::remove_object_deleted_listener(ObjectDeletedListener *listener)
 {
 	remove_listener(0x44EC2, listener);
 }
 
+/**
+ * Add a listener for the given toolbox event.
+ *
+ * This is a helper function that can be called from derived classes
+ * to implement there toolbox event listeners
+ *
+ * @param action Toolbox event id
+ * @param listener listener to add
+ * @param handler function to translate event to listener to the event id.
+ */
 void Object::add_listener( int action, Listener *listener, RawToolboxEventHandler handler)
 {
 	if (_handle == NULL_ObjectId) throw ObjectNullError();
@@ -347,6 +380,12 @@ void Object::add_listener( int action, Listener *listener, RawToolboxEventHandle
 	event_router()->add_object_listener(_handle, NULL_ComponentId, action, listener, handler);
 }
 
+/**
+ * Remove listener for toolbox event
+ *
+ * @param action toolbox event id for listener
+ * @param listener listener to remove
+ */
 void Object::remove_listener(int action, Listener *listener)
 {
 	if (_handle == NULL_ObjectId) throw ObjectNullError();
@@ -354,13 +393,29 @@ void Object::remove_listener(int action, Listener *listener)
 	event_router()->remove_object_listener(_handle, NULL_ComponentId, action, listener);
 }
 
+/**
+ * Set handler for an event that should not have more than one listener
+ *
+ * @param action toolbox event id
+ * @param listener listener to set
+ * @param handler function to translate event to specific listener for the event id
+ */
 void Object::set_handler(int action, Listener *listener, RawToolboxEventHandler handler)
 {
 	event_router()->set_object_handler(_handle, action, listener, handler);
 }
 
-
-// Helper functions for derived classes
+/**
+ * Return the value of a property that returns an integer
+ *
+ * This is a helper function for derived classes to make it
+ * easy to implement a wrapper to a toolbox property.
+ *
+ * @param property_id ID of property to return
+ * @returns integer value of the property
+ * @throws ObjectNullError this is an uninitialised object
+ * @throws OsError failed to retrieve property from toolbox object
+ */
 int Object::int_property(int property_id) const
 {
 	if (_handle == NULL_ObjectId) throw ObjectNullError();
@@ -373,6 +428,17 @@ int Object::int_property(int property_id) const
     return value;
 }
 
+/**
+ * Set the value of a property that requires an integer
+ *
+ * This is a helper function for derived classes to make it
+ * easy to implement a wrapper to a toolbox property.
+ *
+ * @param property_id ID of property to set
+ * @param value the new value for the property
+ * @throws ObjectNullError this is an uninitialised object
+ * @throws OsError failed to set the property on the toolbox object
+ */
 void Object::int_property(int property_id, int value)
 {
 	if (_handle == NULL_ObjectId) throw ObjectNullError();
@@ -381,6 +447,17 @@ void Object::int_property(int property_id, int value)
     swix_check(_swix(0x44ec6, _INR(0,3), 0, _handle, property_id, value));
 }
 
+/**
+ * Return the value of a property that returns text
+ *
+ * This is a helper function for derived classes to make it
+ * easy to implement a wrapper to a toolbox property.
+ *
+ * @param property_id ID of property to return
+ * @returns string value of the property
+ * @throws ObjectNullError this is an uninitialised object
+ * @throws OsError failed to retrieve property from toolbox object
+ */
 std::string Object::string_property(int property_id) const
 {
 	if (_handle == NULL_ObjectId) throw ObjectNullError();
@@ -403,6 +480,17 @@ std::string Object::string_property(int property_id) const
     return value;
 }
 
+/**
+ * Set the value of a property that requires a string
+ *
+ * This is a helper function for derived classes to make it
+ * easy to implement a wrapper to a toolbox property.
+ *
+ * @param property_id ID of property to set
+ * @param value the new value for the property
+ * @throws ObjectNullError this is an uninitialised object
+ * @throws OsError failed to set the property on the toolbox object
+ */
 void Object::string_property(int property_id, const std::string &value)
 {
 	if (_handle == NULL_ObjectId) throw ObjectNullError();
@@ -412,6 +500,17 @@ void Object::string_property(int property_id, const std::string &value)
     		reinterpret_cast<int>(const_cast<char *>(value.c_str()))));
 }
 
+/**
+ * Gets the size of a string properties buffer
+ *
+ * This is a helper function for derived classes to make it
+ * easy to implement a wrapper to a toolbox property.
+ *
+ * @param property_id ID of property to return buffer size for
+ * @returns string buffer size of the property
+ * @throws ObjectNullError this is an uninitialised object
+ * @throws OsError failed to retrieve property from toolbox object
+ */
 int Object::string_property_length(int property_id) const
 {
 	if (_handle == NULL_ObjectId) throw ObjectNullError();
@@ -425,17 +524,16 @@ int Object::string_property_length(int property_id) const
 }
 
 
-//@{
-//  Get a boolean property from the toolbox Cobject.
-//
-//  Helper function to implement specific properties in subclasses.
-//  Calls Toolbox_ObjectMiscOp and returns value in r0.
-//
-// @param property_id the method code to get the property
-// @returns value of property
-// @throws  OsError
-//@}
-
+/**
+ *  Get a boolean property from the toolbox Cobject.
+ *
+ *  Helper function to implement specific properties in subclasses.
+ *  Calls Toolbox_ObjectMiscOp and returns value in r0.
+ *
+ * @param property_id the method code to get the property
+ * @returns value of property
+ * @throws  OsError failed to retrieve the property from the toolbox object
+ */
 bool Object::bool_property(int property_id) const
 {
     _kernel_swi_regs regs;
@@ -449,16 +547,16 @@ bool Object::bool_property(int property_id) const
     return (regs.r[0] != 0);
 }
 
-//@{
-//  Set a boolean property from the toolbox object.
-//
-//  Helper function to implement specific properties in subclasses.
-//  Calls Toolbox_ObjectMiscOp and with value in r4.
-//
-// @param property_id the method code to get the property
-// @throws  OsError
-//@}
-
+/**
+ *  Set a boolean property from the toolbox object.
+ *
+ *  Helper function to implement specific properties in subclasses.
+ *  Calls Toolbox_ObjectMiscOp and with value in r4.
+ *
+ * @param property_id the method code to get the property
+ * @param value new value for the property
+ * @throws OsError failed to set the property on the toolbox object
+ */
 void Object::bool_property(int property_id, bool value)
 {
     _kernel_swi_regs regs;

@@ -35,23 +35,80 @@ namespace tbx
 
 /**
  * Class to return information on a screen mode
+ *
+ * The mode number referred to in this class is either
+ * the standard screen mode number or for RISC OS 3.5 and
+ * above can be a mode specifier or a sprite mode word.
  */
 class ModeInfo
 {
   public:
+	/**
+	 * Constructor to retrieve information about the current screen mode
+	 */
      ModeInfo()              {_mode = -1;};
+     /**
+      * Constructor to retrieve information about the given screen mode
+      *
+      * @param mode screen mode number
+      */
      ModeInfo(int mode)      {_mode = mode;};
+
+     /**
+      * Set the mode to return information about
+      *
+      * @param mode screen mode number
+      */
      void set_mode(int mode = -1) {_mode = mode;};
 
+     /**
+      * Get the mode number information will be returned about
+      */
      int get_mode() const {return _mode;};
 
+     /**
+      * Return the number of colours for the mode
+      *
+      * @returns number of colours
+      */
      inline int colours() const;
+
+     /**
+      * Return the eigen factors for the mode
+      *
+      * The eigen factors are the binary shift to convert from
+      * screen pixels to OS units.
+      *
+      * e.g. and eigen factor of 2 will give 1 pixels = 1<<2 or 4 os units
+      *
+      * @returns eigin factors in a point
+      */
 	 inline Point eig() const;
+
+	 /**
+	  * Get the size of one pixel in OS units
+	  *
+	  * @returns Size containing the size of one pixel in OS units
+	  */
 	 inline Size screen_unit() const;
+
+	 /**
+	  * Get the screen size in pixels
+	  *
+	  * @returns screen size in pixels
+	  */
      inline Size pixel_size() const;
+     /**
+      * Get the screen size in OS units
+      *
+      * @returns screen size in OS units
+      */
      inline Size screen_size() const;
 
   protected:
+     /**
+      * Screen mode number interrogated for details
+      */
      int _mode;
 };
 
