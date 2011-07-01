@@ -40,15 +40,64 @@ namespace tbx
 		int _offset_x;
 		int _offset_y;
 	public:
+		/**
+		 * Construct with no offset
+		 */
 		OffsetGraphics() {_offset_x = 0; _offset_y = 0;}
+		/**
+		 * Construct with given offsets
+		 *
+		 * @param offset_x x offset in OS units
+		 * @param offset_y y offset in OS units
+		 */
 		OffsetGraphics(int offset_x, int offset_y) {_offset_x = offset_x; _offset_y = offset_y;}
+
+		/**
+		 * Construct from a visible area.
+		 *
+		 * This constructor calculates its offsets required to plot
+		 * in a visible area.
+		 *
+		 * @param area visible area to retrieve offsets from
+		 */
 		OffsetGraphics(const VisibleArea &area) {_offset_x = area.screen_x(0); _offset_y = area.screen_y(0);}
 
+		/**
+		 * Set the horizontal offset
+		 *
+		 * @param new_x new value for horizontal offset in OS units
+		 */
 		void offset_x(int new_x) {_offset_x = new_x;}
+		/**
+		 * Get the horizontal offset
+		 *
+		 * @returns horizontal offset in OS units
+		 */
 		int offset_x() const {return _offset_x;}
+		/**
+		 * Set the vertical offset
+		 *
+		 * @param new_y new value for vertical offset in OS units
+		 */
 		void offset_y(int new_y) {_offset_y = new_y;}
+		/**
+		 * Get the vertical offset
+		 *
+		 * @returns vertical offset in OS units
+		 */
 		int offset_y() const {return _offset_y;}
+
+		/**
+		 * Get the offsets as a point
+		 *
+		 * @returns current offsets in a Point
+		 */
 		Point offset() const {return Point(_offset_x, _offset_y);}
+		/**
+		 * Set both offsets from a point
+		 *
+		 * @param new_offset Point containing the new horizontal and vertical offset in OS units
+		 */
 		void offset(const Point &new_offset) {_offset_x = new_offset.x; _offset_y = new_offset.y;}
 
 		// Override plot to take into account offset

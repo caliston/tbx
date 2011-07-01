@@ -63,9 +63,24 @@ namespace tbx
 		std::string text() const;
 		std::string text(const std::string &format) const;
 
+		/**
+		 * Get the low 4 bytes of the UTC time
+		 *
+		 * @returns the low 4 bytes as a 32 bit integer
+		 */
 		unsigned int low_word() const {return (unsigned int)(_centiseconds & 0xFFFFFFFF);}
+		/**
+		 * Get the high byte of the UTC time
+		 *
+		 * @return the 8 bits of the high byte
+		 */
 		unsigned char high_byte() const {return (unsigned char)((_centiseconds >> 32) & 0xFF);}
 
+		/**
+		 * Get the UTC time as centiseconds
+		 *
+		 * @returns number of centiseconds since Midnight Jan 1st 1900
+		 */
 		long long centiseconds() const {return _centiseconds;}
 
 		/**
@@ -73,9 +88,17 @@ namespace tbx
 		 * This is used for calls to the OS that pass a UTC.
 		 */
 		unsigned char *buffer() {return (unsigned char *)&_centiseconds;}
+
+		/**
+		 * Pointer to start of time in memory
+		 * This is used for calls to the OS that pass a UTC.
+		 */
 		unsigned char *buffer() const {return (unsigned char *)&_centiseconds;}
 
 	protected:
+		/**
+		 * Number of centiseconds since Midnight Jan 1st 1900
+		 */
 		long long _centiseconds;
 	};
 
@@ -96,16 +119,31 @@ namespace tbx
 
 		bool read(const Path &path);
 
-		enum ObjectType {NOT_FOUND, FILE, DIRECTORY, IMAGE_FILE};
+		/*! Type of an object */
+		enum ObjectType
+		{
+			NOT_FOUND, /*!< Path does not exist on disc */
+			FILE,	   /*!< Path is a file */
+			DIRECTORY, /*!< Path is a directory */
+			IMAGE_FILE /*!< Path is an image file */
+		};
 
-		//@- Returns the child/leaf name of the object the information if for
+		/**
+		 * Get the leaf name of the object the information if for
+		 *
+		 * @returns leaf name of the object
+		 */
 		const std::string &name() const	{return _name;}
 
 		// Object type
 		ObjectType object_type() const;
+		/*! Returns true if object exists on the file system */
 		bool exists() const			{return (_object_type != NOT_FOUND);}
+		/*! Returns true if object is a file on the file system */
 		bool file() const			{return (_object_type == FILE);}
+		/*! Returns true if object is a directory on the file system */
 		bool directory() const	{return (_object_type == DIRECTORY);}
+		/*! Returns true if object is am image file on the file system */
 		bool image_file() const	{return (_object_type == IMAGE_FILE);}
 
 		// File type format
@@ -191,13 +229,13 @@ namespace tbx
 		static PathInfo::Iterator end();
 
 	protected:
-		std::string _name;
-		ObjectType _object_type;
-		unsigned int _load_address;
-		unsigned int _exec_address;
-		int _length;
-		int _attributes;
-		int _file_type;
+		std::string _name; /*!< Name of the file system object */
+		ObjectType _object_type; /*!< Object type */
+		unsigned int _load_address; /*!< Load address */
+		unsigned int _exec_address; /*!< Executable address */
+		int _length; /*!< Length of object */
+		int _attributes; /*!< object attributes */
+		int _file_type;  /*!< object file type */
 	};
 
 	/**

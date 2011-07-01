@@ -34,21 +34,40 @@ const char PathDelim = '.';
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+/**
+ * Construct an empty path object
+ */
 Path::Path()
 {
 
 }
 
+/**
+ * Construct a path from the given path string
+ *
+ * @param name string representing path name
+ */
 Path::Path(const std::string &name)
 {
 	_name = name;
 }
 
+/**
+ * Copy constructor
+ *
+ * @param other Path to copy
+ */
 Path::Path(const Path &other)
 {
 	_name = other._name;
 }
 
+/**
+ * Construct a path to a child of another path
+ *
+ * @param other Path for parent directory
+ * @param child name of the child item in the directory
+ */
 Path::Path(const Path &other, const std::string &child)
 {
 	_name = other._name;
@@ -56,24 +75,44 @@ Path::Path(const Path &other, const std::string &child)
 	_name += child;
 }
 
-
+/**
+ * Path destructor
+ */
 Path::~Path()
 {
 
 }
 
+/**
+ * Assign to another path
+ *
+ * @param other Path to copy
+ * @returns *this
+ */
 Path &Path::operator=(const Path &other)
 {
 	_name = other._name;
 	return *this;
 }
 
+/**
+ * Assign a path to a string
+ *
+ * @param name path name as a string
+ */
 Path &Path::operator=(const std::string &name)
 {
 	_name = name;
 	return *this;
 }
 
+/**
+ * Set path to a child of another path
+ *
+ * @param other parent directory
+ * @param child name of child in the directory
+ * @returns *this
+ */
 Path &Path::set(const Path &other, const std::string &child)
 {
 	_name = other._name;
@@ -83,27 +122,54 @@ Path &Path::set(const Path &other, const std::string &child)
 	return *this;
 }
 
+/**
+ * Get path as a string
+ *
+ * @returns path name as a string
+ */
 Path::operator const std::string&() const
 {
 	return _name;
 }
 
+/**
+ * Get path as a C string
+ *
+ * @param returns path name as a null terminated C string
+ */
 Path::operator const char *() const
 {
 	return _name.c_str();
 }
 
+/**
+ * Get path object for given child name
+ *
+ * @param child name of child of the current path
+ * @returns new Path for the child
+ */
 Path Path::child(const std::string &child) const
 {
 	return Path(*this, child);
 }
 
+/**
+ * Get parent of this path
+ *
+ * @param returns new path for the parent
+ */
 Path Path::parent() const
 {
 	Path pp(*this);
 	return pp.up();
 }
 
+/**
+ * Updates path to the given child
+ *
+ * @param child name of child to update path to
+ * @returns *this
+ */
 Path &Path::down(const std::string &child)
 {
 	_name += PathDelim;
@@ -112,6 +178,11 @@ Path &Path::down(const std::string &child)
 	return *this;
 }
 
+/**
+ * Updates this path to it's parent
+ *
+ * @returns *this
+ */
 Path &Path::up()
 {
 	std::string::size_type idx = _name.rfind(PathDelim);
@@ -122,20 +193,17 @@ Path &Path::up()
 	return *this;
 }
 
-///////////////////////////////////////////////////////////////
-//@{
-// Change the leaf name part of the path.
-//
-// The leaf name part is the last path of the path after the
-// directory delimiter.
-//
-// If a directory delimiter is not found the child is appended
-// to the path.
-//
-//@param child The new leaf name part of the path.
-//@}
-///////////////////////////////////////////////////////////////
-
+/**
+ * Change the leaf name part of the path.
+ *
+ * The leaf name part is the last path of the path after the
+ * directory delimiter.
+ *
+ * If a directory delimiter is not found the child is appended
+ * to the path.
+ *
+ * @param child The new leaf name part of the path.
+ **/
 void tbx::Path::leaf_name(const std::string &child)
 {
 	std::string::size_type idx = _name.rfind(PathDelim);
@@ -147,17 +215,14 @@ void tbx::Path::leaf_name(const std::string &child)
 		_name.replace(idx+1, _name.length(), child);
 }
 
-//////////////////////////////////////////////////////////////
-//@{
-// Get the leaf name part of the path.
-//
-// The leaf name part is the last part of the path after
-// the final directory delimiter in the path.
-//
-//@retuns leaf name part or "" string if it can't be determined
-//@}
-//////////////////////////////////////////////////////////////
-
+/**
+ * Get the leaf name part of the path.
+ *
+ * The leaf name part is the last part of the path after
+ * the final directory delimiter in the path.
+ *
+ * @returns leaf name part or "" string if it can't be determined
+ */
 std::string tbx::Path::leaf_name() const
 {
 	std::string child;
@@ -171,6 +236,10 @@ std::string tbx::Path::leaf_name() const
 	return child;
 }
 
+/**
+ * Check the File system to determine the type of
+ * this object this path refers to
+ */
 PathInfo::ObjectType Path::object_type() const
 {
 	PathInfo info;
@@ -178,13 +247,19 @@ PathInfo::ObjectType Path::object_type() const
 	return info.object_type();
 }
 
+/**
+ * Read the catalogue information for this path
+ *
+ * @param info PathInfo updated with the information
+ * @returns true if the path is on the file system
+ */
 bool Path::path_info(PathInfo &info) const
 {
 	return info.read(_name);
 }
 
 /**
- * Check if path exists on disc.
+ * Check if path exists on the file system
  *
  * @returns true if the path exists.
  */
@@ -195,7 +270,9 @@ bool Path::exists() const
 }
 
 /**
- * Check if path is a file on the disc.
+ * Check if path is a file on the file system
+ *
+ * @return true if the path refers to a file
  */
 bool Path::file() const
 {
@@ -205,7 +282,9 @@ bool Path::file() const
 }
 
 /**
- * Check if path is a directory on disc.
+ * Check if path is a directory on the file system
+ *
+ * @returns true if the path refers to a directory
  */
 bool Path::directory() const
 {
@@ -214,6 +293,11 @@ bool Path::directory() const
 	return info.directory();
 }
 
+/**
+ * Check if path is a image file system on the file system
+ *
+ * @return true if the path refers to a image file system
+ */
 bool Path::image_file() const
 {
 	PathInfo info;
@@ -221,7 +305,11 @@ bool Path::image_file() const
 	return info.image_file();
 }
 
-// File information
+/**
+ * Read the file type for this path
+ *
+ * @returns the file type (or -2 if could not be read)
+ */
 int Path::file_type() const
 {
 	PathInfo info;
@@ -229,6 +317,12 @@ int Path::file_type() const
 	return info.file_type();
 }
 
+/**
+ * Set the file type for this path
+ *
+ * @param file_type new file type
+ * @returns true if file type set successfully
+ */
 bool Path::file_type(int type)
 {
 	_kernel_swi_regs regs;
@@ -240,7 +334,12 @@ bool Path::file_type(int type)
 	return (_kernel_swi(OS_File, &regs, &regs) == 0);
 }
 
-// File information
+/**
+ * Get the file type of the named file
+ *
+ * @param file_name name of file to return type for
+ * @returns the file type (or -2 if could not be read)
+ */
 int Path::file_type(const std::string &file_name)
 {
 	PathInfo info;
@@ -248,6 +347,13 @@ int Path::file_type(const std::string &file_name)
 	return info.file_type();
 }
 
+/**
+ * Set the file type for the named file
+ *
+ * @param file_name path to file to set type
+ * @param file_type new file type
+ * @returns true if file type set successfully
+ */
 bool Path::file_type(const std::string &file_name, int type)
 {
 	_kernel_swi_regs regs;
@@ -306,7 +412,12 @@ bool Path::SetModifiedTime(const UTCTime &utcTime)
 */
 
 
-// Creation
+/**
+ * Create an empty file of the given file type
+ *
+ * @param type file type for the new file
+ * @returns true if file created successfully
+ */
 bool Path::create_file(int type) const
 {
 	_kernel_swi_regs regs;
@@ -379,7 +490,6 @@ bool Path::rename(const std::string &new_name)
  * @param options bitwise or of flags from CopyOption enum.
  * @returns true if copy succeeds
  */
-
 bool Path::copy(const std::string &copyto, unsigned int options)
 {
 	_kernel_swi_regs regs;
@@ -407,7 +517,6 @@ bool Path::copy(const std::string &copyto, unsigned int options)
  * @param size size of buffer to use
  * @returns true if copy succeeds
  */
-
 bool Path::copy(const std::string &copyto, unsigned int options, void *buffer, unsigned int size)
 {
 	unsigned int descriptor[2];
@@ -439,7 +548,6 @@ bool Path::copy(const std::string &copyto, unsigned int options, void *buffer, u
  * @param options bitwise or of flags from CopyOption enum.
  * @returns true if move succeeds
  */
-
 bool Path::move(const std::string &copyto, unsigned int options)
 {
 	_kernel_swi_regs regs;
@@ -471,7 +579,6 @@ bool Path::move(const std::string &copyto, unsigned int options)
  * @param size size of buffer to use
  * @returns true if move succeeds
  */
-
 bool Path::move(const std::string &copyto, unsigned int options, void *buffer, unsigned int size)
 {
 	unsigned int descriptor[2];
@@ -492,9 +599,6 @@ bool Path::move(const std::string &copyto, unsigned int options, void *buffer, u
 
 	return (_kernel_swi(OS_FSControl, &regs, &regs) == 0);
 }
-
-
-
 
 /**
  * Load this file into a character array
@@ -552,6 +656,11 @@ bool Path::save_file(const char *data, int length, int file_type) const
 	return (_kernel_swi(OS_File, &regs, &regs) == 0);
 }
 
+/**
+ * Set the OS current directory to this path
+ *
+ * @returns true if successful
+ */
 bool Path::set_current_directory() const
 {
 	_kernel_swi_regs regs;
@@ -565,6 +674,7 @@ bool Path::set_current_directory() const
  * Create an iterator to search the current directory.
  *
  * @param wild_card Wildcard to use for search.
+ * @returns iterator for the directory
  */
 Path::Iterator Path::begin(const std::string &wild_card)
 {
@@ -573,6 +683,8 @@ Path::Iterator Path::begin(const std::string &wild_card)
 
 /**
  * Create an iterator to scan the whole directory.
+ *
+ * @returns iterator for first item in the directory
  */
 Path::Iterator Path::begin()
 {
@@ -581,13 +693,17 @@ Path::Iterator Path::begin()
 
 /**
  * End iterator.
+ *
+ * @returns end iterator for the directory in this path
  */
 Path::Iterator Path::end()
 {
 	return Iterator();
 }
 
-
+/**
+ * Construct a path iterator from a directory name and wild card
+ */
 Path::Iterator::Iterator(const std::string &dirName, const char *wildCard)
 {
 	_iterBlock = new IterBlock(dirName, wildCard);
@@ -726,27 +842,52 @@ bool Path::Iterator::IterBlock::next()
 }
 
 
+/**
+ * Construct UTC time for Midnight, 1st Jan 1990
+ */
 UTCTime::UTCTime()
 {
 	_centiseconds = 0;
 }
 
+/**
+ * Construct a UTC time for the given number of centiseconds
+ *
+ * @param csecs number of centiseconds since Midnight, 1st Jan 1990
+ */
 UTCTime::UTCTime(long long csecs) : _centiseconds(csecs)
 {
 
 }
 
+/**
+ * Construct a UTC time give file system catalog information
+ *
+ * @param load_address load address of the file
+ * @param exec_address execute address of the file
+ */
 UTCTime::UTCTime(unsigned int load_address, unsigned int exec_address)
 {
 	_centiseconds = exec_address
 			| ((long long)(load_address & 0xFF) << 32);
 }
 
+/**
+ * Copy constructor
+ *
+ * @param other UTCTime to copy
+ */
 UTCTime::UTCTime(const UTCTime &other)
 {
 	_centiseconds = other._centiseconds;
 }
 
+/**
+ * Assign to value fo another UTCTime
+ *
+ * @param other UTCTime to copy
+ * @returns *this
+ */
 UTCTime &UTCTime::operator=(const UTCTime &other)
 {
 	_centiseconds = other._centiseconds;
@@ -754,6 +895,11 @@ UTCTime &UTCTime::operator=(const UTCTime &other)
 	return *this;
 }
 
+/**
+ * Get a UTCTime representing the current time
+ *
+ * @returns a new UTCTime for now
+ */
 UTCTime UTCTime::now()
 {
    UTCTime now;
@@ -768,17 +914,14 @@ UTCTime UTCTime::now()
    return now;
 }
 
-///////////////////////////////////////////////////////////
-//@{
-//  Get time/date as text in standard format.
-//
-// The standard format is read from the system variable
-// Sys$DateFormat
-//
-//@returns string with formatted date
-//@}
-//////////////////////////////////////////////////////////
-
+/**
+ *  Get time/date as text in standard format.
+ *
+ * The standard format is read from the system variable
+ * Sys$DateFormat
+ *
+ * @returns string with formatted date
+*/
 std::string UTCTime::text() const
 {
 	char dateText[32];
@@ -794,40 +937,37 @@ std::string UTCTime::text() const
    return std::string(dateText);
 }
 
-///////////////////////////////////////////////////////////
-//@{
-//  Get time/date as text in specified format.
-//
-// Text from the format is copied directly into the result
-// unless it starts with a "%" in which case the following
-// is substituted.
-//    CS Centiseconds
-//    SE Seconds
-//    MI Minutes
-//    12 Hours in 12 hour format
-//    24 Hours in 24 hour format
-//    AM AM or PM indicator (in local language)
-//    PM AM or PM indicator (in local language)
-//    WE Weekday - full (in local language)
-//    W3 Weekday - short (in local language)
-//    WN Weekday - number
-//    DY Day of the month (in local language)
-//    ST Ordinal pre/suffix (in local language) (e.g st nd rd th)
-//    MO Month name - full (in local language)
-//    M3 Month name - short (in local language)
-//    MN Month - numbe
-//    CE Century
-//    YR Year within century
-//    WK Week of year (using local start of week)
-//    DN Day of the year
-//    TZ Timezone
-//    0  Insert an ASCII 0 zero byte
-//    %  Insert a '%'
-//
-//@returns string with formatted date
-//@}
-//////////////////////////////////////////////////////////
-
+/**
+ * Get time/date as text in specified format.
+ *
+ * Text from the format is copied directly into the result
+ * unless it starts with a "%" in which case the following
+ * is substituted.
+ *   CS Centiseconds
+ *   SE Seconds
+ *   MI Minutes
+ *   12 Hours in 12 hour format
+ *   24 Hours in 24 hour format
+ *   AM AM or PM indicator (in local language)
+ *   PM AM or PM indicator (in local language)
+ *   WE Weekday - full (in local language)
+ *   W3 Weekday - short (in local language)
+ *   WN Weekday - number
+ *   DY Day of the month (in local language)
+ *   ST Ordinal pre/suffix (in local language) (e.g st nd rd th)
+ *   MO Month name - full (in local language)
+ *   M3 Month name - short (in local language)
+ *   MN Month - number
+ *   CE Century
+ *   YR Year within century
+ *   WK Week of year (using local start of week)
+ *   DN Day of the year
+ *   TZ Timezone
+ *   0  Insert an ASCII 0 zero byte
+ *   %  Insert a '%'
+ *
+ *@returns string with formatted date
+ */
 std::string UTCTime::text(const std::string &format) const
 {
    _kernel_swi_regs in,out;
@@ -845,7 +985,9 @@ std::string UTCTime::text(const std::string &format) const
    return std::string(buffer.get());
 }
 
-
+/**
+ * Construct and empty PathInfo not referring to any file
+ */
 PathInfo::PathInfo()
 {
 	_object_type = NOT_FOUND;
@@ -857,6 +999,11 @@ PathInfo::PathInfo()
 	_attributes	= 0;
 }
 
+/**
+ * Copy constructor
+ *
+ * @param other PathInfo to copy
+ */
 PathInfo::PathInfo(const PathInfo &other)
 {
 	_name			= other._name;
@@ -868,6 +1015,12 @@ PathInfo::PathInfo(const PathInfo &other)
 	_file_type		= other._file_type;
 }
 
+/**
+ * Assign to the value of another PathInfo
+ *
+ * @param other PathInfo to copy
+ * @returns *this
+ */
 PathInfo &PathInfo::operator=(const PathInfo &other)
 {
 	_name			= other._name;
@@ -881,6 +1034,14 @@ PathInfo &PathInfo::operator=(const PathInfo &other)
 	return *this;
 }
 
+/**
+ * Checks if this path info is identical to another
+ *
+ * Note: name check is case-sensitive
+ *
+ * @param other PathInfo to check
+ * @returns true if PathInfos are the same
+ */
 bool PathInfo::operator==(const PathInfo &other)
 {
 	return (_name == other._name)
@@ -892,6 +1053,14 @@ bool PathInfo::operator==(const PathInfo &other)
 		&& (_file_type	== other._file_type);
 }
 
+/**
+ * Checks if this path info is different to another
+ *
+ * Note: name check is case-sensitive
+ *
+ * @param other PathInfo to check
+ * @returns true if PathInfos are different
+ */
 bool PathInfo::operator!=(const PathInfo &other)
 {
 	return (_object_type != other._object_type)
@@ -903,7 +1072,12 @@ bool PathInfo::operator!=(const PathInfo &other)
 		|| (_name != other._name);
 }
 
-
+/**
+ * Read catalogue information for the given path
+ *
+ * @param path Path referring to a location on a file system
+ * @returns true if information read
+ */
 bool PathInfo::read(const Path &path)
 {
 	_kernel_swi_regs regs;
@@ -931,27 +1105,35 @@ bool PathInfo::read(const Path &path)
 	return (_object_type != NOT_FOUND);
 }
 
+/**
+ * Return the object type read for this path
+ *
+ * @returns object type
+ */
 PathInfo::ObjectType PathInfo::object_type() const
 {
 	return _object_type;
 }
 
-// File type format
+/**
+ * Check if this path info has file type information
+ *
+ * @returns true if the object has a file type
+ */
 bool PathInfo::has_file_type() const
 {
 	return (_file_type >= 0);
 }
 
-//@{
-//   Get the file type of the object.
-//
-//@returns The file type of the object or
-//  -2 if invalid object
-//  -1 if the object doesn't have a file type
-//  0x1000 if the object is a directory
-//  0x2000 if the object is an application directory
-//@}
-
+/**
+ * Get the file type of the object.
+ *
+ * @returns The file type of the object or
+ *  -2 if invalid object
+ *  -1 if the object doesn't have a file type
+ *  0x1000 if the object is a directory
+ *  0x2000 if the object is an application directory
+ */
 int PathInfo::file_type() const
 {
 	return _file_type;
@@ -973,7 +1155,11 @@ int PathInfo::raw_file_type() const
 	return (_load_address & 0xFFF00) >> 8;
 }
 
-
+/**
+ * Return the modification time of the file if it has it
+ *
+ * @returns modified time or UTCTime()
+ */
 UTCTime PathInfo::modified_time() const
 {
 	if (has_file_type()) return UTCTime(_load_address, _exec_address);
@@ -981,49 +1167,96 @@ UTCTime PathInfo::modified_time() const
 }
 
 
-// Load/Executable format
+/**
+ * Check if path info has a load address and executable address
+ *
+ * @returns true if this object has a load address
+ */
 bool PathInfo::has_load_address() const
 {
 	return (_file_type == -1);
 }
 
+/**
+ * Get the load address for this PathInfo
+ *
+ * This value only refers to a real load address if has_load_address is true
+ *
+ * @returns load address of this object
+ */
 unsigned int PathInfo::load_address() const
 {
 	return _load_address;
 }
 
+/**
+ * Get the executable address for this PathInfo
+ *
+ * This value only refers to a real executable address if has_load_address is true
+ *
+ * @returns executable address for this object
+ */
 unsigned int PathInfo::exec_address() const
 {
 	return _exec_address;
 }
 
-// All formats
+/**
+ * Get the length of this object on the file system
+ *
+ * @returns the object length in number of bytes
+ */
 int PathInfo::length() const
 {
 	return _length;
 }
 
+/**
+ * Return the objects file attributes
+ *
+ * @returns file attributes of the object
+ */
 int PathInfo::attributes() const
 {
 	return _attributes;
 }
 
-
+/**
+ * Returns an iterator for the given path that will return the PathInfo
+ * information for each object matched.
+ *
+ * @param path directory to iterate
+ * @param wildCard wild carded string for iteration
+ *
+ * @returns iterator
+ */
 PathInfo::Iterator PathInfo::begin(const Path &path, const std::string &wildCard)
 {
 	return Iterator(path.name(), wildCard.c_str());
 }
 
+/**
+ * Returns an iterator for the given path that will return the PathInfo
+ * information for all objects in the directory
+ *
+ * @param path directory to iterate
+ *
+ * @returns iterator
+ */
 PathInfo::Iterator PathInfo::begin(const Path &path)
 {
 	return Iterator(path.name(), 0);
 }
 
+/**
+ * Get iterator for checking end of iteration of a path
+ *
+ * @returns end of directory iterator
+ */
 PathInfo::Iterator PathInfo::end()
 {
 	return Iterator();
 }
-
 
 PathInfo::Iterator::Iterator(const std::string &dirName, const char *wildCard)
 {

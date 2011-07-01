@@ -39,9 +39,16 @@ namespace tbx
 		OSGraphics();
 
 		virtual void plot(int code, int x, int y);
-		// plot action
-		enum PlotAction {ACTION_OVERWRITE, ACTION_OR, ACTION_AND, ACTION_XOR,
-			ACTION_INVERT, ACTION_NONE, ACTION_AND_NOT, ACTION_OR_NOT};
+		/*! Enum for how to combine plotted graphics with the screen */
+		enum PlotAction {
+			ACTION_OVERWRITE, 	/*!< overwrite the screen */
+			ACTION_OR, 			/*!< Or the colour with the screen */
+			ACTION_AND, 		/*!< And the colour with the screen */
+			ACTION_XOR,			/*!< Exclusive Or the colour with the screen */
+			ACTION_INVERT, 		/*!< invert the screen colour*/
+			ACTION_NONE, 		/*!< Do not change the screen */
+			ACTION_AND_NOT, 	/*!< And Not the colour with the screen */
+			ACTION_OR_NOT}; 	/*!< Or Not the colour with the screen */
 
 		void plot_action(PlotAction action);
 
@@ -96,6 +103,9 @@ namespace tbx
 		void clear();
 
 	protected:
+		/**
+		 * Stores the current Plot action
+		 */
 		int _plot_action;
 	};
 }

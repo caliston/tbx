@@ -45,6 +45,8 @@ static void option_button_state_router(IdBlock &id_block, PollBlock &data, Liste
 /**
  * Add listener for option button state changed.
  * i.e. goes from on to off or off to on
+ *
+ * @param listener listener to add
  */
 void OptionButton::add_state_listener(OptionButtonStateListener *listener)
 {
@@ -53,6 +55,8 @@ void OptionButton::add_state_listener(OptionButtonStateListener *listener)
 
 /**
  * Remove listener for option button state changed
+ *
+ * @param listener listener to remove
  */
 void OptionButton::remove_state_listener(OptionButtonStateListener *listener)
 {

@@ -113,40 +113,52 @@ public:
 	 */
 	bool operator!=(const Gadget &other) const {return (_handle != other.handle() || _id != other.id());}
 
-	//@{
-	//  Set the the label
-	//@}
+	/**
+	 * Set the the label
+	 *
+	 * @param value new value for the label
+	 */
 	void label(const std::string &value) {string_property(192, value);}
 
-	//@{
-	//   Get the the label
-	//@}
+	/**
+	 * Get the the label
+	 *
+	 * @returns current value for the label
+	 */
 	std::string label() const {return string_property(193);}
 
-	//@{
-	//   Get the length of the label
-	//
-	//@returns Number of characters for this property
-	//@}
+	/**
+	 *  Get the length of the label
+	 *
+	 * @returns Number of characters for the label buffer
+	 */
 	int label_length() const {return string_property_length(193);}
 
 	/**
 	 * Set the event to be raised when this option button is clicked.
+	 *
+	 * @param code New event code
 	 */
 	void event(int code) {int_property(194, code);}
 
 	/**
 	 * Get the event that will be raised when this option button is clicked.
+	 *
+	 * @returns event code
 	 */
 	int event() const {return int_property(195);}
 
 	/**
 	 * Turn option button on or off
+	 *
+	 * @param value true to turn the option button on
 	 */
 	void on(bool value) {bool_property(196, value);}
 
 	/**
 	 * Check if option button is on
+	 *
+	 * @returns true if the option button is on
 	 */
 	bool on() const {return bool_property(197); }
 

@@ -54,6 +54,12 @@ public:
 	OpenerManager();
 	virtual ~OpenerManager();
 
+	/**
+	 * Get the single instance of the opener manager
+	 * used for this application
+	 *
+	 * @returns the OpenerManager instance
+	 */
 	static OpenerManager *instance() {return _instance;}
 
 	virtual void recorded_message(WimpMessageEvent &event, int reply_to);

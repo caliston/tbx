@@ -39,6 +39,12 @@ namespace tbx
 	class OpenWindowEvent : EventInfo
 	{
 	public:
+		/**
+		 * Constructs the event from the information returned by the WIMP
+		 *
+		 * @param id_block Toolbox ID block
+		 * @param poll_block WIMP poll information
+		 */
 		OpenWindowEvent(IdBlock &id_block, PollBlock &poll_block) :
 			EventInfo(id_block, poll_block) {}
 
