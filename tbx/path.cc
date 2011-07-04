@@ -135,7 +135,7 @@ Path::operator const std::string&() const
 /**
  * Get path as a C string
  *
- * @param returns path name as a null terminated C string
+ * @returns path name as a null terminated C string
  */
 Path::operator const char *() const
 {
@@ -156,7 +156,7 @@ Path Path::child(const std::string &child) const
 /**
  * Get parent of this path
  *
- * @param returns new path for the parent
+ * @returns new path for the parent
  */
 Path Path::parent() const
 {
@@ -320,7 +320,7 @@ int Path::file_type() const
 /**
  * Set the file type for this path
  *
- * @param file_type new file type
+ * @param type new file type
  * @returns true if file type set successfully
  */
 bool Path::file_type(int type)
@@ -351,7 +351,7 @@ int Path::file_type(const std::string &file_name)
  * Set the file type for the named file
  *
  * @param file_name path to file to set type
- * @param file_type new file type
+ * @param type new file type
  * @returns true if file type set successfully
  */
 bool Path::file_type(const std::string &file_name, int type)
@@ -703,6 +703,9 @@ Path::Iterator Path::end()
 
 /**
  * Construct a path iterator from a directory name and wild card
+ *
+ * @param dirName name of directory to iterate
+ * @param wildCard wild card to match against file names to return
  */
 Path::Iterator::Iterator(const std::string &dirName, const char *wildCard)
 {
@@ -725,6 +728,11 @@ Path::Iterator::Iterator()
 	_iterBlock = 0;
 }
 
+/**
+ * Copy constructor
+ *
+ * @param other Iterator to copy
+ */
 Path::Iterator::Iterator(const Iterator &other)
 {
 	_name = other._name;
@@ -732,6 +740,12 @@ Path::Iterator::Iterator(const Iterator &other)
 	if (_iterBlock) _iterBlock->add_ref();
 }
 
+/**
+ * Assign this iterator as the value of another
+ *
+ * @param other iterator to copy
+ * @returns *this
+ */
 Path::Iterator &Path::Iterator::operator=(const Iterator &other)
 {
 	_name = other._name;
@@ -741,22 +755,44 @@ Path::Iterator &Path::Iterator::operator=(const Iterator &other)
 	return *this;
 }
 
+/**
+ * Check if this iterator is the same as another
+ *
+ * @param other Iterator to compare to
+ * @returns true if iterator are the same
+ */
 bool Path::Iterator::operator==(const Iterator &other)
 {
 	return (_iterBlock == other._iterBlock && _name == other._name);
 }
 
+/**
+ * Check if this iterator is different from another
+ *
+ * @param other Iterator to compare to
+ * @returns true if iterator are different
+ */
 bool Path::Iterator::operator!=(const Iterator &other)
 {
 	return (_iterBlock != other._iterBlock || _name != other._name);
 }
 
+/**
+ * Move iterator to next item
+ *
+ * @returns *this
+ */
 Path::Iterator &Path::Iterator::operator++()
 {
 	next();
 	return *this;
 }
 
+/**
+ * Move iterator to next item
+ *
+ * @returns copy of iterator before the move
+ */
 Path::Iterator Path::Iterator::operator++(int)
 {
 	Iterator retCopy(*this);
@@ -764,6 +800,9 @@ Path::Iterator Path::Iterator::operator++(int)
 	return retCopy;
 }
 
+/**
+ * Moves iterator on to the next item
+ */
 void Path::Iterator::next()
 {
 	_name = "";
@@ -786,6 +825,12 @@ void Path::Iterator::next()
 	}
 }
 
+/**
+ * Construct internal iterator block
+ *
+ * @param dirName name of directory
+ * @param wildCard wild card string
+ */
 Path::Iterator::IterBlock::IterBlock(const std::string &dirName, const char *wildCard)
 {
 	_ref = 1;
@@ -812,6 +857,11 @@ Path::Iterator::IterBlock::IterBlock(const std::string &dirName, const char *wil
 	next();
 }
 
+/**
+ * Move to next record in iterator block
+ *
+ * @returns true if there are more items
+ */
 bool Path::Iterator::IterBlock::next()
 {
 	if (_toRead == 0)
@@ -1258,6 +1308,14 @@ PathInfo::Iterator PathInfo::end()
 	return Iterator();
 }
 
+/**
+ * Construct new iterator to iterate through a directory
+ *
+ * Call the PathInfo::begin method to get this
+ *
+ * @param dirName directory name to iterate
+ * @param wildCard wild card to select certain paths
+ */
 PathInfo::Iterator::Iterator(const std::string &dirName, const char *wildCard)
 {
 	_info = new PathInfo;
@@ -1280,6 +1338,11 @@ PathInfo::Iterator::Iterator()
 	_info = new PathInfo;
 }
 
+/**
+ * Construct an the iterator as a copy of another
+ *
+ * @param other Iterator to copy
+ */
 PathInfo::Iterator::Iterator(const Iterator &other)
 {
 	*_info = *(other._info);
@@ -1293,6 +1356,12 @@ PathInfo::Iterator::~Iterator()
 	delete _info;
 }
 
+/**
+ * Assign this iterator to another
+ *
+ * @param other Iterator to copy
+ * @returns *this
+ */
 PathInfo::Iterator &PathInfo::Iterator::operator=(const Iterator &other)
 {
 	*_info = *(other._info);
@@ -1302,22 +1371,44 @@ PathInfo::Iterator &PathInfo::Iterator::operator=(const Iterator &other)
 	return *this;
 }
 
+/**
+ * Check if this iterator is the same as another
+ *
+ * @param other iterator to compare to
+ * @returns true if iterators are the same
+ */
 bool PathInfo::Iterator::operator==(const Iterator &other)
 {
 	return (_iterBlock == other._iterBlock && *_info == *(other._info));
 }
 
+/**
+ * Check if this iterator and another are different
+ *
+ * @param other iterator to compare to
+ * @returns true if iterators are not the same
+ */
 bool PathInfo::Iterator::operator!=(const Iterator &other)
 {
 	return (_iterBlock != other._iterBlock || *_info != *(other._info));
 }
 
+/**
+ * Move iterator to next item
+ *
+ * @returns *this
+ */
 PathInfo::Iterator &PathInfo::Iterator::operator++()
 {
 	next();
 	return *this;
 }
 
+/**
+ * Move iterator to next item
+ *
+ * @returns copy of iterator before it was moved
+ */
 PathInfo::Iterator PathInfo::Iterator::operator++(int)
 {
 	Iterator retCopy(*this);
@@ -1325,6 +1416,9 @@ PathInfo::Iterator PathInfo::Iterator::operator++(int)
 	return retCopy;
 }
 
+/**
+ * Move iterator to next item
+ */
 void PathInfo::Iterator::next()
 {
 	if (_iterBlock == 0)
@@ -1347,11 +1441,22 @@ void PathInfo::Iterator::next()
 	}
 }
 
+/**
+ * Get the PathInfo for the iterator
+ *
+ * @returns PathInfo for the iterators current position
+ */
 PathInfo &PathInfo::Iterator::operator*()
 {
 	return *_info;
 }
 
+/**
+ * Constructe Iterator block for given directory and file name
+ *
+ * @param dirName directory name
+ * @param wildCard Wild card for search
+ */
 PathInfo::Iterator::IterBlock::IterBlock(const std::string &dirName, const char *wildCard)
 {
 	_ref = 1;
@@ -1378,6 +1483,11 @@ PathInfo::Iterator::IterBlock::IterBlock(const std::string &dirName, const char 
 	next();
 }
 
+/**
+ * Move to next record returned from OS
+ *
+ * @returns true if more data to read
+ */
 bool PathInfo::Iterator::IterBlock::next()
 {
 	if (_toRead == 0)
@@ -1408,6 +1518,12 @@ bool PathInfo::Iterator::IterBlock::next()
 	return true;
 }
 
+/**
+ * Get path information for iterator block
+ *
+ * @param info updated with path information if any
+ * @returns true if there is more path information
+ */
 bool PathInfo::Iterator::IterBlock::info(PathInfo &info)
 {
 	if (_nextRecord == 0) return false;

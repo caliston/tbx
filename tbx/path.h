@@ -191,7 +191,7 @@ namespace tbx
 
 		// Variables
 		protected:
-			PathInfo *_info;
+			PathInfo *_info; /*!< Information on item iterator is pointing to */
 
 			/**
 			 * Low level class to deal with the file iteration kernel calls
@@ -203,21 +203,32 @@ namespace tbx
 				~IterBlock()	{delete _dirName; delete _wildCard;}
 
 				bool next();
+				/**
+				 * Return next record from iteration block
+				 */
 				const char *next_record() const	{return _nextRecord;}
 				bool info(PathInfo &info);
 
+				/**
+				 * Increase reference count on this block
+				 */
 				void add_ref() {_ref++;}
+				/**
+				 * Decrease reference count on this block.
+				 *
+				 * If the reference count reaches zero it will be deleted
+				 */
 				void release() {if (--_ref == 0) delete this;}
 
 				// Variables
-				int _ref;
-				_kernel_swi_regs _regs;
-				char *_dirName;
-				char *_wildCard;
-				enum {_readSize = 2048};
-				char _readData[_readSize];
-				int _toRead;
-				char *_nextRecord;
+				int _ref; 				/*!< Reference count */
+				_kernel_swi_regs _regs;	/*!< registers for swi calls */
+				char *_dirName;       	/*!< Directory name */
+				char *_wildCard;		/*!< Wild card for searching */
+				enum {_readSize = 2048};/*!< Size of data to read with swi call */
+				char _readData[_readSize];/*!< Buffer for read data */
+				int _toRead;			  /*!< Bytes left to read */
+				char *_nextRecord;        /*!< Next record in buffer */
 
 			} *_iterBlock;
 		};
@@ -257,6 +268,11 @@ namespace tbx
 		Path &set(const Path &other, const std::string &child);
 
 		// Attributes
+		/**
+		 * Get file name of path
+		 *
+		 * @returns file name
+		 */
 		const std::string &name() const	{return _name;}
 
 		operator const std::string&() const;
@@ -299,7 +315,11 @@ namespace tbx
 		// Simple renaming
 		bool rename(const std::string &new_name);
 
-		// Copying
+		/**
+		 * Enumeration to options for copy method.
+		 *
+		 * These flags can be combined
+		 */
 		enum CopyOption {
 			COPY_RECURSE=1, // Recursively copy
             COPY_ALLOW_PRINT = 0x100u, // Allow copy to printer
@@ -347,11 +367,19 @@ namespace tbx
 			Iterator &operator++();
 			Iterator operator++(int);
 
+			/**
+			 * Get file name for current iterator
+			 *
+			 * @returns file name
+			 */
 			std::string &operator*()	{return _name;};
 
 			void next();
 
 		// Variables
+			/**
+			 * Variable for current file name
+			 */
 			std::string _name;
 
 			/**
@@ -364,22 +392,34 @@ namespace tbx
 				~IterBlock()	{delete _dirName; delete _wildCard;}
 
 				bool next();
+
+				/**
+				 * Get next name
+				 *
+				 * @returns next name found
+				 */
 				const char *next_name() const	{return _nextName;}
 
+				/**
+				 * Increase reference count on this block
+				 */
 				void add_ref() {_ref++;}
+				/**
+				 * Decrease reference count on this block.
+				 *
+				 * If the reference count reaches zero it will be deleted
+				 */
 				void release() {if (--_ref == 0) delete this;}
 
 				// Variables
-				int _ref;
-
-				_kernel_swi_regs _regs;
-				char *_dirName;
-				char *_wildCard;
-				enum {_readSize = 2048};
-				char _readData[_readSize];
-				int _toRead;
-				char *_nextName;
-
+				int _ref; 				/*!< Reference count */
+				_kernel_swi_regs _regs;	/*!< registers for swi calls */
+				char *_dirName;       	/*!< Directory name */
+				char *_wildCard;		/*!< Wild card for searching */
+				enum {_readSize = 2048};/*!< Size of data to read with swi call */
+				char _readData[_readSize];/*!< Buffer for read data */
+				int _toRead;			  /*!< Bytes left to read */
+				char *_nextName;        /*!< Next name in the buffer */
 			} *_iterBlock;
 		};
 
@@ -388,6 +428,9 @@ namespace tbx
 		Path::Iterator end();
 
 	protected:
+		/**
+		 * File name this path refers to
+		 */
 		std::string _name;
 	};
 
