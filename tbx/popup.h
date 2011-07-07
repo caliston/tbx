@@ -142,6 +142,9 @@ public:
 class PopUpAboutToBeShownEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct the event from information returned from the Toolbox/WIMP
+	 */
 	PopUpAboutToBeShownEvent(IdBlock &id_block, PollBlock &data) :
 	  EventInfo(id_block, data) {}
 
@@ -158,6 +161,11 @@ class PopUpAboutToBeShownListener : public Listener
 {
 public:
 	virtual ~PopUpAboutToBeShownListener() {}
+	/**
+	 * Method called when the popup menu is about to be shown
+	 *
+	 * @param popup_event information on which popup menu is about to be shown
+	 */
 	virtual void popup_about_to_be_shown(const PopUpAboutToBeShownEvent &popup_event) = 0;
 };
 

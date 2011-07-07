@@ -99,6 +99,12 @@ void QuitRestarter::restart_quit()
 	}
 }
 
+/**
+ * Construct PreQuitEvent from prequit message received from the WIMP
+ *
+ * @param m WimpMessage from prequit event
+ * @param reply_to task to reply to to prevent the quit
+ */
 PreQuitEvent::PreQuitEvent(const WimpMessage &m, int reply_to) :
 	_message(m),
 	_reply_to(reply_to),

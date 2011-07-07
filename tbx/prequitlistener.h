@@ -58,7 +58,7 @@ namespace tbx
 		 * Set the QuitRestarter to close this application and not continue
 		 * a desktop shutdown.
 		 *
-		 * @param true to close this application only. It should only be set
+		 * @param close_only true to close this application only. It should only be set
 		 * to false if the QuitRestarter was created as part of a prequit
 		 * message.
 		 */

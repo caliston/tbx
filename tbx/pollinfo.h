@@ -70,11 +70,14 @@ namespace tbx
 	 */
 	struct PollBlock
 	{
+		/**
+		 * Array containing information return from Wimp_Poll
+		 */
 		int word[64];
 	};
 
 	/**
-	 * Function type for handlers of raw (unprocessed) toolbox events.
+	 * Function type for handlers of raw (unprocessed) Toolbox events.
 	 */
 	typedef void (*RawToolboxEventHandler)(IdBlock &id_block, PollBlock &data, Listener *listener);
 }

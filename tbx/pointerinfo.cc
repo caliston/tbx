@@ -34,11 +34,31 @@
 
 namespace tbx {
 
+/**
+ * Constructor to optionally get the current pointer position
+ *
+ * @param update_now true (the default) to get the current pointer position
+ * @param get_objects true (the default) to get toolbox objects instead of WIMP handles.
+ *  get_objects is only used if update_now is true.
+ */
 PointerInfo::PointerInfo(bool update_now /*= true */, bool get_objects /* = true */)
 {
 	if (update_now) Update(get_objects);
 }
 
+/**
+ * Construct by giving it the pointer position and state
+ *
+ * @param window_handle WIMP window handle pointer is over
+ * @param icon_handle WIMP icon handle pointer is over or -1 if none.
+ * @param dest_x x position of pointer on screen in OS units
+ * @param dest_y y position of pointer on screen in OS units
+ * @param buttons the current state of the pointer buttons
+ *    The bits of the button state are:
+ *       0 adjust button pressed
+ *       1 menu button pressed
+ *       2 select button pressed
+ */
 PointerInfo::PointerInfo(WindowHandle window_handle, IconHandle icon_handle, int dest_x, int dest_y, int buttons)
 {
 	_block[3] = window_handle;
@@ -53,6 +73,11 @@ PointerInfo::~PointerInfo()
 
 }
 
+/**
+ * Update to current location of mouse
+ *
+ * @param get_objects true (the default) to get toolbox objects instead of WIMP handles.
+ */
 void PointerInfo::Update(bool get_objects /* = true */)
 {
 	_kernel_swi_regs regs;
@@ -73,6 +98,13 @@ void PointerInfo::Update(bool get_objects /* = true */)
 	}
 }
 
+/**
+ * Return object the pointer is over
+ *
+ * This only applies if get_objects was set to true in the constructor or update call.
+ *
+ * @returns Object (will be null object if get_objects was false or it's not over an object)
+ */
 Object PointerInfo::object() const
 {
 	Object obj;
@@ -80,6 +112,13 @@ Object PointerInfo::object() const
 	return obj;
 }
 
+/**
+ * Return gadget the pointer is over
+ *
+ * This only applies if get_objects was set to true in the constructor or update call.
+ *
+ * @returns Gadget (will be null gadget if get_objects was false or it's not over an object)
+ */
 Gadget PointerInfo::gadget() const
 {
 	Gadget gadget;
