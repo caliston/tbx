@@ -41,6 +41,8 @@ Quit::Quit(const res::ResQuit &object_template) : ShowFullObject(object_template
 /**
  * This event is raised just before the Quit underlying window is
  * about to be shown.
+ *
+ * @param listener listener to add
  */
 void Quit::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
@@ -49,6 +51,8 @@ void Quit::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
 
 /**
  * Remove about to be shown listener
+ *
+ * @param listener listener to remove
  */
 void Quit::remove_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
@@ -57,6 +61,8 @@ void Quit::remove_about_to_be_shown_listener(AboutToBeShownListener *listener)
 
 /**
  * This event is raised after the Quit dialog has been completed
+ *
+ * @param listener listener to add
  */
 void Quit::add_has_been_hidden_listener(HasBeenHiddenListener *listener)
 {
@@ -65,6 +71,8 @@ void Quit::add_has_been_hidden_listener(HasBeenHiddenListener *listener)
 
 /**
  * Remove has been hidden listener
+ *
+ * @param listener listener to remove
  */
 void Quit::remove_has_been_hidden_listener(HasBeenHiddenListener *listener)
 {
@@ -77,14 +85,21 @@ static void quit_quit_router(IdBlock &id_block, PollBlock &data, Listener *liste
     static_cast<QuitQuitListener*>(listener)->quit_quit(ev);
 }
 
-/***
- * Add listener to be called when discard is selected from the dialogue
+/**
+ * Add listener to be called when quit is selected from the dialogue
+ *
+ * @param listener listener to add
  */
 void Quit::add_quit_listener(QuitQuitListener *listener)
 {
 	add_listener(0x82a91, listener, quit_quit_router);
 }
 
+/**
+ * Remove listener called when quit is selected from the dialogue
+ *
+ * @param listener listener to remove
+ */
 void Quit::remove_quit_listener(QuitQuitListener *listener)
 {
 	remove_listener(0x82a91, listener);
@@ -96,14 +111,21 @@ static void quit_cancel_router(IdBlock &id_block, PollBlock &data, Listener *lis
     static_cast<QuitCancelListener*>(listener)->quit_cancel(ev);
 }
 
-/***
+/**
  * Add listener to be called when cancel is selected from the dialogue
+ *
+ * @param listener listener to add
  */
 void Quit::add_cancel_listener(QuitCancelListener *listener)
 {
 	add_listener(0x82a93, listener, quit_cancel_router);
 }
 
+/**
+ * Remove listener called when cancel is selected from the dialogue
+ *
+ * @param listener listener to remove
+ */
 void Quit::remove_cancel_listener(QuitCancelListener *listener)
 {
 	remove_listener(0x82a93, listener);

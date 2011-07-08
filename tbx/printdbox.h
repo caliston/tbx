@@ -245,6 +245,12 @@ public:
 class PrintDboxSetupAboutToBeShownEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct setup about to be shown event from Toolbox and WIMP information
+	 *
+	 * @param id_block Toolbox information
+	 * @param data WIMP event information
+	 */
 	PrintDboxSetupAboutToBeShownEvent(IdBlock &id_block, PollBlock &data) :
 		EventInfo(id_block, data)
 	{
@@ -255,12 +261,44 @@ public:
 	 */
 	Window setup_window() const {return tbx::Window((ObjectId)_data.word[4]);}
 
-	enum ShowType {SHOW_DEFAULT = 0, SHOW_FULL_SPEC = 1, SHOW_TOP_LEFT = 2};
+	/**
+	 * Enumeration describing how the setup box is about to be shown
+	 */
+	enum ShowType
+	{
+		SHOW_DEFAULT = 0, //!< Shown in default place
+		SHOW_FULL_SPEC = 1, //!< Full details of window used
+		SHOW_TOP_LEFT = 2 //<! Shown with top left corner as specified point
+	};
+
+	/**
+	 * Get how the setup windows was shown
+	 *
+	 * @returns show type enumeration value
+	 */
 	ShowType show_type() const {return ShowType(_data.word[5]);}
 
+	/**
+	 * Get top left coordinate of where the window will be shown
+	 *
+	 * @returns top left window coordinate
+	 */
 	Point &top_left() const {return reinterpret_cast<Point &>(_data.word[6]);}
+
+	/**
+	 * Get reference to top left coordinate so it can be changed
+	 * in the event
+	 *
+	 * @returns Point reference to coordinate to allow it to be changed
+	 */
 	Point &top_left() {return reinterpret_cast<Point &>(_data.word[6]);}
 
+	/**
+	 * Get reference to the full specification for the show so
+	 * it can be modified.
+	 *
+	 * @returns reference to the full show specification
+	 */
 	ShowFullSpec &full_spec() {return reinterpret_cast<ShowFullSpec &>(_data.word[6]);}
 };
 
@@ -272,6 +310,11 @@ class PrintDboxSetupAboutToBeShownListener : public Listener
 public:
 	virtual ~PrintDboxSetupAboutToBeShownListener() {};
 
+	/**
+	 * Method called by the listener when the setup dialog is about to be shown
+	 *
+	 * @param ev information on the event
+	 */
 	virtual void printdbox_setup_about_to_be_shown(const PrintDboxSetupAboutToBeShownEvent &ev) = 0;
 };
 
@@ -281,6 +324,12 @@ public:
 class PrintDboxPrintEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct the PrintDboxEvent from the information returned by the Toolbox/WIMP
+	 *
+	 * @param id_block information on Toolbox objects affected
+	 * @param data WIMP information on the event
+	 */
 	PrintDboxPrintEvent(IdBlock &id_block, PollBlock &data) :
 		EventInfo(id_block, data) {}
 
@@ -323,6 +372,11 @@ class PrintDboxPrintListener : public Listener
 public:
 	virtual ~PrintDboxPrintListener() {}
 
+	/**
+	 * Method called when the print button is selected
+	 *
+	 * @param event information on what to print
+	 */
 	virtual void printdbox_print(const PrintDboxPrintEvent &event) = 0;
 };
 
@@ -334,17 +388,27 @@ class PrintDboxSaveListener : public Listener
 public:
 	virtual ~PrintDboxSaveListener() {}
 
+	/**
+	 * Method called when the save button is selected
+	 *
+	 * @param event the settings to save
+	 */
 	virtual void printdbox_save(const PrintDboxPrintEvent &event) = 0;
 };
 
 /**
- * Listener for Setup presses when there is not dialog associated with the button
+ * Listener for Setup presses when there is not dialogue associated with the button
  */
 class PrintDboxSetupListener : public Listener
 {
 public:
 	virtual ~PrintDboxSetupListener() {}
 
+	/**
+	 * Method called when setup is clicked if there is no dialogue
+	 *
+	 * @param setup_event information on the object involved with this event
+	 */
 	virtual void printdbox_setup(const EventInfo &setup_event) = 0;
 }
 ;
