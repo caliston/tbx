@@ -40,10 +40,15 @@ namespace tbx {
 /**
  * StringSet text change event
  */
-
 class StringSetTextChangedEvent : public TextChangedEvent
 {
 public:
+	/**
+	 * Construct the event from Toolbox and WIMP event data
+	 *
+	 * @param id_block Toolbox IDs for this event
+	 * @param data Information returned from the WIMP for this event
+	 */
 	StringSetTextChangedEvent(IdBlock &id_block, PollBlock &data) :
 		TextChangedEvent(id_block, data)
 	{

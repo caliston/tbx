@@ -175,6 +175,12 @@ public:
 class RadioButtonStateChangedEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct the event from Toolbox and WIMP event data
+	 *
+	 * @param id_block Toolbox IDs for this event
+	 * @param data Information returned from the WIMP for this event
+	 */
 	RadioButtonStateChangedEvent(IdBlock &id_block, PollBlock &data) :
 	  EventInfo(id_block, data) {}
 
@@ -206,6 +212,11 @@ class RadioButtonStateChangedListener : public Listener
 {
 public:
 	virtual ~RadioButtonStateChangedListener() {}
+	/**
+	 * Method called when radio button state changes
+	 *
+	 * @param state_changed_event details on the state change
+	 */
 	virtual void radiobutton_state_changed(const RadioButtonStateChangedEvent &state_changed_event) = 0;
 };
 

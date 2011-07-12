@@ -40,11 +40,22 @@
 
 namespace tbx {
 
+/**
+ * Constructor for an uninitialised save operation
+ */
 Saver::Saver()
 {
 	_impl = new SaverImpl();
 }
 
+/**
+ * Constructor from another Saver
+ *
+ * This constructer shares a reference counted internal representation
+ * of the save operations
+ *
+ * @param other Saver to share save implementation with.
+ */
 Saver::Saver(const Saver &other)
 {
 	_impl = other._impl;
@@ -59,6 +70,14 @@ Saver::Saver(SaverImpl *impl)
 }
 
 
+/**
+ * Assign this saver from another
+ *
+ * The assignment shares a reference counted internal representation
+ * of the save operations
+ *
+ * @param other Saver to share save implementation with.
+ */
 Saver &Saver::operator=(const Saver &other)
 {
 	SaverImpl *imp = _impl;
@@ -70,6 +89,11 @@ Saver &Saver::operator=(const Saver &other)
 
 /**
  * Start the save
+ *
+ * @param where Location to save to
+ * @param leaf_name leaf_name of the file to save
+ * @param file_type file type for the saved file
+ * @param file_size estimated file size for the saved file
  */
 void Saver::save(const PointerInfo &where, const std::string &leaf_name, int file_type, int file_size)
 {
@@ -81,6 +105,13 @@ void Saver::save(const PointerInfo &where, const std::string &leaf_name, int fil
 	_impl->start();
 }
 
+/**
+ * Call in a RAM transfer when another buffer has been made
+ * available.
+ *
+ * @param buffer new buffer to transfer
+ * @param size size of data in the buffer
+ */
 void Saver::buffer_filled(void *buffer, int size)
 {
 	_impl->transfer_data(buffer, size);
@@ -92,7 +123,6 @@ void Saver::buffer_filled(void *buffer, int size)
  * @param successful set to true if save was successful
  * @param file_name actual file name client saved to.
  */
-
 void Saver::file_save_completed(bool successful, std::string file_name)
 {
 	if (successful)

@@ -45,7 +45,7 @@ class SaverSaveCompletedHandler;
 class SaverFinishedHandler;
 
 /**
- * Class to show the give the same interface to saving
+ * Class to give the same interface to saving
  * to an external application as the SaveAs dialogue.
  *
  * This allows a convenient interface to save to another
@@ -111,10 +111,16 @@ public:
 
 	/**
 	 * Check if two savers are the same underlying save operation
+	 *
+	 * @param other Saver to compare with
+	 * @return true if they are the same save operation
 	 */
 	bool operator==(const Saver &other) const {return _impl == other._impl;}
 	/**
 	 * Check if two savers are not the same underlying save operation
+	 *
+	 * @param other Saver to compare with
+	 * @return true if they are not the same save operation
 	 */
 	bool operator!=(const Saver &other) const {return _impl != other._impl;}
 
@@ -136,26 +142,34 @@ public:
 	int file_size() const {return _impl->_file_size;}
 
 
-	void set_data_address(void *data, int size);
+//TODO: See if this is needed: void set_data_address(void *data, int size);
 	void buffer_filled(void *buffer, int size);
 	void file_save_completed(bool successful, std::string file_name);
 
 	/**
 	 * Handler called when the save operation has completed.
+	 *
+	 * @param handler object to call when save has finished
 	 */
 	void set_finished_handler(SaverFinishedHandler *handler) {_impl->_finished_handler = handler;}
 	/**
 	 * Handler called if the save completed successfully
+	 *
+	 * @param handler object to call if save completed successfully
 	 */
 	void set_save_completed_handler(SaverSaveCompletedHandler *handler) {_impl->_completed_handler = handler;}
 
 	/**
 	 * Handler called to save to a file
+	 *
+	 * @param handler object to call to save the file
 	 */
 	void set_save_to_file_handler(SaverSaveToFileHandler *handler) {_impl->_save_to_file_handler = handler;}
 
 	/**
-	 * Handler called for
+	 * Handler called to fill the buffers for a RAM transfer
+	 *
+	 * @param handler object to call to fill a buffer
 	 */
 	void set_fill_buffer_handler(SaverFillBufferHandler *handler) {_impl->_fill_buffer_handler = handler;}
 
@@ -169,6 +183,12 @@ class SaverFinishedEvent
 	Saver _saver;
 	bool _save_done;
 public:
+	/**
+	 * Construct event from a Saver
+	 *
+	 * @param saver for this save
+	 * @param saved true if save completed successully
+	 */
 	SaverFinishedEvent(Saver &saver, bool saved) : _saver(saver), _save_done(saved) {}
 
 	/**
@@ -176,7 +196,7 @@ public:
 	 */
 	const Saver &saver() const {return _saver;}
 
-	/*
+	/**
 	 * save_done true if the save was successful
 	 */
 	bool save_done() const	{return _save_done;}
@@ -193,7 +213,7 @@ public:
 	/**
 	 * Called when the saver has finished
 	 *
-	 * @param event has Saver for this save and flag if a save was successful
+	 * @param finished information on how this save finished
 	 */
 	virtual void saver_finished(const SaverFinishedEvent &finished) = 0;
 };
@@ -208,6 +228,13 @@ class SaverSaveCompletedEvent
 	bool _safe;
 	std::string _file_name;
 public:
+	/**
+	 * Construct save completed event
+	 *
+	 * @param saver Saver for this save
+	 * @param safe true if save was to a safe location
+	 * @param file_name full name where file was saved
+	 */
 	SaverSaveCompletedEvent(const Saver &saver, bool safe, const std::string &file_name) :
 		_saver(saver), _safe(safe), _file_name(file_name)
 	{}
@@ -232,6 +259,8 @@ public:
 	virtual ~SaverSaveCompletedHandler() {}
 	/**
 	 * Called when a save has been successful
+	 *
+	 * @param event details of successful save
 	 */
 	virtual void saver_save_completed(SaverSaveCompletedEvent &event) = 0;
 };

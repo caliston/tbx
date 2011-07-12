@@ -42,10 +42,10 @@ namespace tbx
 	{
 	public:
 		/**
-		 * Contstruct the event.
+		 * Construct the event from Toolbox and WIMP event data
 		 *
-		 * @param source The gadget that generated the event
-		 * @param value The new value in the gadget
+		 * @param id_block Toolbox IDs for this event
+		 * @param data Information returned from the WIMP for this event
 		 */
 		ValueChangedEvent(IdBlock &id_block, PollBlock &data) :
 			EventInfo(id_block, data) {};

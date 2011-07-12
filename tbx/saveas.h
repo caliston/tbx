@@ -219,10 +219,18 @@ public:
 class SaveAsDialogueCompletedEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct the event from Toolbox and WIMP event data
+	 *
+	 * @param id_block Toolbox IDs for this event
+	 * @param data Information returned from the WIMP for this event
+	 */
 	SaveAsDialogueCompletedEvent(IdBlock &id_block, PollBlock &data) :
 		EventInfo(id_block, data) {}
 
-	/*
+	/**
+	 * Check if the dialogue was closed after a successful save.
+	 *
 	 * save_done true if the dialogue box was closed after a successful save.
 	 * This value will also be false if a successful save by click on OK with adjust
 	 * and then cancelling the dialogue box.
@@ -238,9 +246,8 @@ class SaveAsDialogueCompletedListener : public Listener
 public:
 	/**
 	 * Called when dialog has be closed
-	 * @param save_done true if the dialogue box was closed after a successful save.
-	 * This value will also be false if a successful save by click on OK with adjust
-	 * and then cancelling the dialogue box.
+	 *
+	 * @param completed_event details of how the dialogue was completed
 	 */
 	virtual void saveas_dialogue_completed(const SaveAsDialogueCompletedEvent &completed_event) = 0;
 };
@@ -252,6 +259,12 @@ public:
 class SaveAsSaveCompletedEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct the event from Toolbox and WIMP event data
+	 *
+	 * @param id_block Toolbox IDs for this event
+	 * @param data Information returned from the WIMP for this event
+	 */
 	SaveAsSaveCompletedEvent(IdBlock &id_block, PollBlock &data) :
 		EventInfo(id_block, data)
 	{}
@@ -286,6 +299,8 @@ class SaveAsSaveCompletedListener : public Listener
 public:
 	/**
 	 * Called when a save has been successful
+	 *
+	 * @param event details of how the save was completed
 	 */
 	virtual void saveas_save_completed(SaveAsSaveCompletedEvent &event) = 0;
 };

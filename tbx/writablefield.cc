@@ -38,6 +38,12 @@ namespace tbx {
 class WritableFieldTextChangedEvent : public TextChangedEvent
 {
 public:
+	/**
+	 * Construct the event from Toolbox and WIMP event data
+	 *
+	 * @param id_block Toolbox IDs for this event
+	 * @param data Information returned from the WIMP for this event
+	 */
 	WritableFieldTextChangedEvent(IdBlock &id_block, PollBlock &data) :
 		TextChangedEvent(id_block, data)
 	{

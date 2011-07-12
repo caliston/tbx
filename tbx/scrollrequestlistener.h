@@ -45,6 +45,12 @@ namespace tbx
 class ScrollRequestEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct the event from Toolbox and WIMP event data
+	 *
+	 * @param id_block Toolbox IDs for this event
+	 * @param poll_block Information returned from the WIMP for this event
+	 */
 	ScrollRequestEvent(IdBlock &id_block, PollBlock &poll_block) :
 		EventInfo(id_block, poll_block)
 		{}

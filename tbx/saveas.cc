@@ -86,6 +86,8 @@ void SaveAs::file_save_completed(bool successful, std::string file_name)
  * Commonly it is used to set the file name, file type, file size and
  * if there is a selection available.
  * For save type 1 it can also be used to set the data buffer address
+ *
+ * @param listener listener to add
  */
 void SaveAs::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
@@ -94,6 +96,8 @@ void SaveAs::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
 
 /**
  * Remove about to be shown listener
+ *
+ * @param listener listener to remove
  */
 void SaveAs::remove_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
@@ -107,14 +111,21 @@ static void saveas_dialog_completed_router(IdBlock &id_block, PollBlock &data, L
     static_cast<SaveAsDialogueCompletedListener*>(listener)->saveas_dialogue_completed(ev);
 }
 
-/***
+/**
  * Add listener to be called when the dialogue has been completed
+ *
+ * @param listener listener to add
  */
 void SaveAs::add_dialogue_completed_listener(SaveAsDialogueCompletedListener *listener)
 {
 	add_listener(0x82bc1, listener, saveas_dialog_completed_router);
 }
 
+/**
+ * Remove listener for when dialog has been completed
+ *
+ * @param listener listener to remove
+ */
 void SaveAs::remove_dialogue_completed_listener(SaveAsDialogueCompletedListener *listener)
 {
 	remove_listener(0x82bc1, listener);
@@ -128,6 +139,8 @@ static void saveas_save_completed_router(IdBlock &id_block, PollBlock &data, Lis
 
 /**
  * Add listener for when the save operation has completed
+ *
+ * @param listener listener to add
  */
 void SaveAs::add_save_completed_listener(SaveAsSaveCompletedListener *listener)
 {
@@ -136,6 +149,8 @@ void SaveAs::add_save_completed_listener(SaveAsSaveCompletedListener *listener)
 
 /**
  * Remove save as completed listener
+ *
+ * @param listener listener to remove
  */
 void SaveAs::remove_save_completed_listener(SaveAsSaveCompletedListener *listener)
 {
@@ -153,6 +168,8 @@ static void saveas_save_to_file_router(IdBlock &id_block, PollBlock &data, Liste
 
 /**
  * Set handler to do save to a file
+ *
+ * @param handler object called to do the save
  */
 void SaveAs::set_save_to_file_handler(SaveAsSaveToFileHandler *handler)
 {
@@ -169,6 +186,8 @@ static void saveas_fill_buffer_router(IdBlock &id_block, PollBlock &data, Listen
 
 /**
  * Set handler to fill a buffer
+ *
+ * @param handler object called to fill the buffer
  */
 void SaveAs::set_fill_buffer_handler(SaveAsFillBufferHandler *handler)
 {

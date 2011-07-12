@@ -178,6 +178,12 @@ public:
 class ToolActionSelectedEvent : public EventInfo
 {
 public:
+	/**
+	 * Construct the event from Toolbox and WIMP event data
+	 *
+	 * @param id_block Toolbox IDs for this event
+	 * @param data Information returned from the WIMP for this event
+	 */
 	ToolActionSelectedEvent(IdBlock &id_block, PollBlock &data) :
 	  EventInfo(id_block, data) {}
 
