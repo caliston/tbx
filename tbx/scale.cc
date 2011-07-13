@@ -44,6 +44,8 @@ Scale::Scale(const res::ResScale &object_template) : ShowFullObject(object_templ
 
 /**
  * Set the lower bound for the scale
+ *
+ * @param value lowest value the scale can be set to
  */
 void Scale::lower_bound(int value)
 {
@@ -55,6 +57,8 @@ void Scale::lower_bound(int value)
 
 /**
  * Get the lower bound for the scale
+ *
+ * @returns lowest value ths scale can be set to
  */
 int Scale::lower_bound() const
 {
@@ -69,6 +73,8 @@ int Scale::lower_bound() const
 
 /**
  * Set the upper bound for the scale
+ *
+ * @param value maximum value for the scale
  */
 void Scale::upper_bound(int value)
 {
@@ -80,6 +86,8 @@ void Scale::upper_bound(int value)
 
 /**
  * Get the upper bound for the scale
+ *
+ * @returns maximum value for the scale
  */
 int Scale::upper_bound() const
 {
@@ -94,6 +102,8 @@ int Scale::upper_bound() const
 
 /**
  * Set the step size for the scale
+ *
+ * @param value increment for the scale
  */
 void Scale::step_size(int value)
 {
@@ -105,6 +115,8 @@ void Scale::step_size(int value)
 
 /**
  * Get the step size for the scale
+ *
+ * @returns increments used for the scale
  */
 int Scale::step_size() const
 {
@@ -120,6 +132,8 @@ int Scale::step_size() const
 /**
  * This event is raised just before the Scale underlying window is
  * about to be shown.
+ *
+ * @param listener listener to add
  */
 void Scale::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
@@ -128,6 +142,8 @@ void Scale::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
 
 /**
  * Remove about to be shown listener
+ *
+ * @param listener listener to remove
  */
 void Scale::remove_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
@@ -136,6 +152,8 @@ void Scale::remove_about_to_be_shown_listener(AboutToBeShownListener *listener)
 
 /**
  * This event is raised after the Scale dialog has been completed
+ *
+ * @param listener listener to add
  */
 void Scale::add_has_been_hidden_listener(HasBeenHiddenListener *listener)
 {
@@ -144,6 +162,8 @@ void Scale::add_has_been_hidden_listener(HasBeenHiddenListener *listener)
 
 /**
  * Remove has been hidden listener
+ *
+ * @param listener listener to remove
  */
 void Scale::remove_has_been_hidden_listener(HasBeenHiddenListener *listener)
 {
@@ -159,6 +179,8 @@ static void scale_apply_factor_router(IdBlock &id_block, PollBlock &data, Listen
 
 /**
  * Add listener for save button on print dialogue
+ *
+ * @param listener listener to add
  */
 void Scale::add_apply_factor_listener(ScaleApplyFactorListener *listener)
 {
@@ -167,6 +189,8 @@ void Scale::add_apply_factor_listener(ScaleApplyFactorListener *listener)
 
 /**
  * Remove listener for save button on print dialogue
+ *
+ * @param listener listener to remove
  */
 void Scale::remove_apply_factor_listener(ScaleApplyFactorListener *listener)
 {

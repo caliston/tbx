@@ -56,10 +56,18 @@ public:
 	ScaleFactors() {_xmult=_ymult=_xdiv=_ydiv=1;}
 	/**
 	 * Constructor allowing the multipliers and dividers to be specified.
+	 *
+	 * @param xm x direction multiplier
+	 * @param ym y direction multiplier
+	 * @param xd x direction divider
+	 * @param yd y direction divider
 	 */
 	ScaleFactors(int xm, int ym, int xd, int yd) {_xmult = xm; _ymult = ym; _xdiv = xd; _ydiv = yd;}
 	/**
 	 * Constructor for common multiplier/divider in x and y directions
+	 *
+	 * @param mult x and y direction multiplier
+	 * @param div x and y divider (defaults to 1)
 	 */
 	ScaleFactors(int mult, int div = 1) {_xmult = _ymult = mult; _xdiv = _ydiv = div;}
 
@@ -68,19 +76,59 @@ public:
 	 */
     bool is_unit() const {return (_xmult == _xdiv && _ymult == _ydiv);};
 
+    /**
+     * Return the x direction multiplier
+     */
 	int xmult() const {return _xmult;}
+
+	/**
+	 * Set the x direction multiplier
+	 *
+	 * @param x new x direction multiplier
+	 * @returns *this
+	 */
 	ScaleFactors &xmult(int x) {_xmult=x;return *this;}
+    /**
+     * Return the y direction multiplier
+     */
 	int ymult() const {return _ymult;}
+	/**
+	 * Set the y direction multiplier
+	 *
+	 * @param y new y direction multiplier
+	 * @returns *this
+	 */
 	ScaleFactors &ymult(int y) {_ymult=y;return *this;}
+    /**
+     * Return the x direction divider
+     */
 	int xdiv() const {return _xdiv;}
+	/**
+	 * Set the x direction divider
+	 *
+	 * @param x new x direction divider
+	 * @returns *this
+	 */
 	ScaleFactors &xdiv(int x) {_xdiv=x;return *this;}
+    /**
+     * Return the y direction divider
+     */
 	int ydiv() const {return _ydiv;}
+	/**
+	 * Set the y direction divider
+	 *
+	 * @param y new y direction divider
+	 * @returns *this
+	 */
 	ScaleFactors &ydiv(int y) {_ydiv=y;return *this;}
 
 	/**
 	 * Return 4 integer array of scale factors
 	 */
 	int *as_array() {return &_xmult;}
+	/**
+	 * Return 4 integer array of scale factors
+	 */
 	const int *as_array() const {return &_xmult;}
 
 };

@@ -121,6 +121,8 @@ public:
 
 	/**
 	 * Set the state
+	 *
+	 * @param value new state
 	 */
 	void state(int value) {int_property(0x401B, value);}
 
@@ -131,37 +133,16 @@ public:
 
 	/**
 	 * Set allow multiple selections
+	 *
+	 * @param value true to allow multiple selections
 	 */
 	void allow_multiple_selections(bool value) {flag_property(0x401A, 1, value);}
 
-	/**
-	 * Add a text item to the scroll list
-	 */
 	void add_item(const std::string &text, int index = -1);
-
-	/**
-	 * Add an item with a sprite from the wimp sprite pool
-	 */
 	void add_item(const std::string &text, const WimpSprite &sprite, int index = -1);
-
-	/**
-	 * Add an item with a use sprite
-	 */
 	void add_item(const std::string &text, const UserSprite &sprite, int index = -1);
-
-	/**
-	 * Delete an item
-	 */
 	void delete_item(int index);
-
-	/**
-	 * Delete a range of items
-	 */
 	void delete_items(int start, int end);
-
-	/**
-	 * Delete all the items
-	 */
 	void clear();
 
 	void select_unique_item(int index);
@@ -228,6 +209,11 @@ class ScrollListSelectionListener : public Listener
 public:
 	virtual ~ScrollListSelectionListener() {}
 
+	/**
+	 * Method called when an item is selected
+	 *
+	 * @param event details on the selection
+	 */
 	virtual void scrolllist_selection(const ScrollListSelectionEvent &event) = 0;
 };
 

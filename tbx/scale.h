@@ -60,17 +60,86 @@ class Scale : public tbx::ShowFullObject
 public:
 	enum { TOOLBOX_CLASS = 0x82c00 };
 
+	/**
+	 * Uninitialised constructor
+	 *
+	 * The Scale object must be assigned to a valid Toolbox object before
+	 * its properties or methods are used
+	 */
 	Scale() {};
+	/**
+	 * Construct from another Scale object
+	 *
+	 * This object then refers to the same underlying Toolbox object
+	 * as the other Scale object
+	 *
+	 * @param other Scale to copy reference from.
+	 */
 	Scale(const Scale &other) : ShowFullObject(other._handle) {}
+	/**
+	 * Construct a Scale from an Object that refers to a Scale
+	 *
+	 * This class then refers to the same underlying Toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a Scale
+	 */
 	Scale(const Object &other) : ShowFullObject(other)	{check_toolbox_class(Scale::TOOLBOX_CLASS);}
+	/**
+	 * Create a Scale from the named template
+	 *
+	 * @param template_name The name of the template to create the object from
+	 * @throws OsError if an object cannot be created from the named template
+	 * @throws ObjectClassException if the template is not for a Scale
+	 */
 	Scale(const std::string &template_name) : ShowFullObject(template_name)	{check_toolbox_class(Scale::TOOLBOX_CLASS);}
+	/**
+	 * Create a Scale from an in memory template resource
+	 *
+	 * @param object_template The template to create the object from
+	 * @throws OsError if an object cannot be created from the template
+	 */
 	Scale(const res::ResScale &object_template);
 
+	/**
+	 * Assign this Scale from another.
+	 *
+	 * Both objects will then refer to the same underlying toolbox object
+	 *
+	 * @param other Scale to copy
+	 * @returns reference to this Scale
+	 */
 	Scale &operator=(const Scale &other) {_handle = other.handle(); return *this;}
+	/**
+	 * Assign this Scale from an Object that refers to a Scale
+	 *
+	 * This class then refers to the same underlying toolbox object
+	 * as the other object
+	 *
+	 * @param other Object to copy.
+	 * @returns reference to this Scale
+	 * @throws ObjectNullException if the other object refers to a null object handle
+	 * @throws ObjectClassException if the other object is not a Scale
+	 */
 	Scale &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}
+	/**
+	 * Check if this Scale refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they refer to the same underlying toolbox object
+	 */
 	bool operator==(const Object &other) const {return (_handle == other.handle());}
+	/**
+	 * Check if this Scale does not refers to the same underlying toolbox
+	 * object as another.
+	 *
+	 * @param other Object to compare to
+	 * @returns true if they do not refer to the same underlying toolbox object
+	 */
 	bool operator!=(const Object &other) const {return (_handle != other.handle());}
-
 
 	// Properties
 	/**
@@ -80,11 +149,13 @@ public:
 
 	/**
 	 * Set the scale percentage
+	 *
+	 * @param pc the new percentage for the scale
 	 */
 	void value(int pc) {int_property(1, pc);}
 
 	/**
-	 * Get the scale percantage
+	 * Get the scale percentage
 	 */
 	int value() const {return int_property(2);}
 
@@ -149,6 +220,11 @@ class ScaleApplyFactorListener : public Listener
 public:
 	~ScaleApplyFactorListener() {}
 
+	/**
+	 * Method called when scale factors should be applied
+	 *
+	 * @param apply_event information on event including the scale factor to use
+	 */
 	virtual void scale_apply_factor(const ScaleApplyFactorEvent &apply_event) = 0;
 };
 

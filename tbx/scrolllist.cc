@@ -35,6 +35,12 @@
 
 namespace tbx {
 
+/**
+ * Add a text item to the scroll list
+ *
+ * @param text Text of item to add
+ * @param index location to insert or -1 (the default) for the end of the list
+ */
 void ScrollList::add_item(const std::string &text, int index /*= -1*/)
 {
 	_kernel_swi_regs regs;
@@ -50,7 +56,11 @@ void ScrollList::add_item(const std::string &text, int index /*= -1*/)
 }
 
 /**
- * Add an item with a sprite from the wimp sprite pool
+ * Add an item with a sprite from the WIMP sprite pool
+ *
+ * @param text Text of item to add
+ * @param sprite WimpSprite to display with the item
+ * @param index location to insert or -1 (the default) for the end of the list
  */
 void ScrollList::add_item(const std::string &text, const WimpSprite &sprite, int index /*= -1*/)
 {
@@ -68,6 +78,10 @@ void ScrollList::add_item(const std::string &text, const WimpSprite &sprite, int
 
 /**
  * Add an item with a use sprite
+ *
+ * @param text Text of item to add
+ * @param sprite UserSprite to display with the item
+ * @param index location to insert or -1 (the default) for the end of the list
  */
 void ScrollList::add_item(const std::string &text, const UserSprite &sprite, int index /*= -1*/)
 {
@@ -83,6 +97,12 @@ void ScrollList::add_item(const std::string &text, const UserSprite &sprite, int
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+
+/**
+ * Delete an item
+ *
+ * @param index index of item to remove from the scroll list
+ */
 void ScrollList::delete_item(int index)
 {
 	_kernel_swi_regs regs;
@@ -97,6 +117,9 @@ void ScrollList::delete_item(int index)
 
 /**
  * Delete a range of items
+ *
+ * @param start first item to delete
+ * @param end last item to delete
  */
 void ScrollList::delete_items(int start, int end)
 {
@@ -125,7 +148,11 @@ void ScrollList::clear()
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
-
+/**
+ * Select an item, clearing any other selection
+ *
+ * @param index new item that will make up the selection
+ */
 void ScrollList::select_unique_item(int index)
 {
 	_kernel_swi_regs regs;
@@ -137,6 +164,11 @@ void ScrollList::select_unique_item(int index)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Add the specified item to the selection
+ *
+ * @param index item to add to the selection
+ */
 void ScrollList::select_item(int index)
 {
 	_kernel_swi_regs regs;
@@ -148,6 +180,11 @@ void ScrollList::select_item(int index)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Remove an item from the selection
+ *
+ * @param index index of item to remove from the selection
+ */
 void ScrollList::deselect_item(int index)
 {
 	_kernel_swi_regs regs;
@@ -159,6 +196,11 @@ void ScrollList::deselect_item(int index)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Return the first selected item
+ *
+ * @return first selected item id or -1 if none
+ */
 int ScrollList::first_selected() const
 {
 	_kernel_swi_regs regs;
@@ -172,6 +214,12 @@ int ScrollList::first_selected() const
 	return regs.r[0];
 }
 
+/**
+ * Return the next selected item id
+ *
+ * @param from location to search for the selection from
+ * @returns next selected item id or -1
+ */
 int ScrollList::next_selected(int from) const
 {
 	_kernel_swi_regs regs;
@@ -185,7 +233,11 @@ int ScrollList::next_selected(int from) const
 	return regs.r[0];
 }
 
-
+/**
+ * Ensure an item is visible in the scrolllist
+ *
+ * @param index index of item to make visible
+ */
 void ScrollList::make_visible(int index)
 {
 	_kernel_swi_regs regs;
@@ -197,6 +249,12 @@ void ScrollList::make_visible(int index)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Update the text of an item
+ *
+ * @param index index of item to update
+ * @param text new text
+ */
 void ScrollList::item_text(int index, const std::string &text)
 {
 	_kernel_swi_regs regs;
@@ -209,6 +267,12 @@ void ScrollList::item_text(int index, const std::string &text)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Get the text for an item
+ *
+ * @param index index of item to retrieve text from
+ * @return text for the item
+ */
 std::string ScrollList::item_text(int index) const
 {
 	_kernel_swi_regs regs;
@@ -239,7 +303,11 @@ std::string ScrollList::item_text(int index) const
 
 }
 
-
+/**
+ * Get the number of items in the scroll list
+ *
+ * @returns number of items in the scrolllist
+ */
 int ScrollList::count_items() const
 {
 	_kernel_swi_regs regs;
@@ -277,7 +345,6 @@ void ScrollList::font(const std::string &name, int width, int height)
  * @param width font width in 16ths of a point
  * @param height font height in 16ths of a point
  */
-
 void ScrollList::system_font(int width, int height)
 {
 	_kernel_swi_regs regs;
@@ -291,7 +358,12 @@ void ScrollList::system_font(int width, int height)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
-
+/**
+ * Set the colours of the scroll list using WIMP colours
+ *
+ * @param foreground foreground/text colour
+ * @param background background colour
+ */
 void ScrollList::set_colour(WimpColour foreground, WimpColour background)
 {
 	_kernel_swi_regs regs;
@@ -304,6 +376,12 @@ void ScrollList::set_colour(WimpColour foreground, WimpColour background)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Set the colours of the scroll list using RGB colours
+ *
+ * @param foreground foreground/text colour
+ * @param background background colour
+ */
 void ScrollList::set_colour(Colour foreground, Colour background)
 {
 	_kernel_swi_regs regs;
@@ -316,6 +394,12 @@ void ScrollList::set_colour(Colour foreground, Colour background)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Get the colours used in the scrolllist
+ *
+ * @param foreground updated to foreground/text colour
+ * @param background updated to background/text colour
+ */
 void ScrollList::get_colour(Colour &foreground, Colour &background) const
 {
 	_kernel_swi_regs regs;
@@ -340,6 +424,8 @@ static void scrolllist_selection_router(IdBlock &id_block, PollBlock &data, List
  *
  * The default value change event must have been enabled in the resources
  * for this number range.
+ *
+ * @param listener listener to add
  */
 void ScrollList::add_selection_listener(ScrollListSelectionListener *listener)
 {
@@ -348,6 +434,8 @@ void ScrollList::add_selection_listener(ScrollListSelectionListener *listener)
 
 /**
  * Remove listener for when the value of the number range changes
+ *
+ * @param listener listener to remove
  */
 void ScrollList::remove_selection_listener(ScrollListSelectionListener *listener)
 {

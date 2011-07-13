@@ -60,8 +60,28 @@ public:
 	 */
 	const WindowOpenInfo &open_info() const {return *reinterpret_cast<WindowOpenInfo *>(&_data.word[0]);}
 
-	enum ScrollXDirection {PAGE_LEFT = -2, LEFT = -1, NONE_X = 0, RIGHT = 1, PAGE_RIGHT = 2};
-	enum ScrollYDirection {PAGE_DOWN = -2, DOWN = -1, NONE_Y = 0, UP = 1, PAGE_UP = 2};
+	/**
+	 * Enumeration of how the window should be scrolled in the X direction
+	 */
+	enum ScrollXDirection
+	{
+		PAGE_LEFT = -2, //!< Scroll left by one page
+		LEFT = -1,		//!< Scroll left by one
+		NONE_X = 0,     //!< No scrolling in X direction
+		RIGHT = 1,      //!< Scroll right by one
+		PAGE_RIGHT = 2  //!< Scroll right be one page
+	};
+	/**
+	 * Enumeration of how the window should be scrolled in the y direction
+	 */
+	enum ScrollYDirection
+	{
+		PAGE_DOWN = -2, //!< Scroll down by one page
+		DOWN = -1,		//!< Scroll down by one
+		NONE_Y = 0, 	//!< No scrolling in Y direction
+		UP = 1, 		//!< Scroll up by one
+		PAGE_UP = 2		//!< Scroll up by one page
+	};
 
 	/**
 	 * Direction requested for scroll in x direction
@@ -90,6 +110,8 @@ public:
 	 *
 	 * To process you should take a copy of the WindowOpenInfo, update
 	 * the scroll fields and call Window::open.
+	 *
+	 * @param event details of scroll request
 	 */
 	virtual void scroll_request(const ScrollRequestEvent &event) = 0;
 };
