@@ -649,7 +649,7 @@ void UserSprite::get_wimp_scale(ScaleFactors &factor) const
 }
 
 /**
- * Construct an uninitialise sprite area.
+ * Construct an uninitialised sprite area.
  */
 SpriteArea::SpriteArea()
 {
@@ -752,17 +752,16 @@ UserSprite SpriteArea::get_sprite(const std::string &name)
     return UserSprite();
 }
 
-//{
-//    Create a new sprite.
-//
-//@param name name of sprite (max length 12)
-//@param width Width of sprite in OS units
-//@param height Height of sprite in OS units
-//@param mode - Use SpriteFormat enum or value returned from SpriteMode
-//@param palette - true to create with a palette
-//@returns Pointer to sprite if successful or 0
-//@}
-
+/**
+ * Create a new sprite.
+ *
+ *@param name name of sprite (max length 12)
+ *@param width Width of sprite in OS units
+ *@param height Height of sprite in OS units
+ *@param mode - Use SpriteFormat enum or value returned from SpriteMode
+ *@param palette - true to create with a palette
+ *@returns Pointer to sprite if successful or 0
+ */
 UserSprite SpriteArea::create_sprite(const std::string &name, int width, int height, int mode, bool palette /* = false */)
 {
 	ModeInfo mi(mode);
@@ -771,17 +770,16 @@ UserSprite SpriteArea::create_sprite(const std::string &name, int width, int hei
 	return create_sprite_pixels(name, width, height, mode, palette);
 }
 
-//{
-//    Create a new sprite, size measured in pixels
-//
-//@param name name of sprite (max length 12)
-//@param width Width of sprite in pixels
-//@param height Height of sprite in pixels
-//@param mode - Use SpriteFormat enum or value returned from SpriteMode
-//@param palette - true to create with a palette
-//@returns Pointer to sprite if successful or 0
-//@}
-
+/**
+ *   Create a new sprite, size measured in pixels
+ *
+ *@param name name of sprite (max length 12)
+ *@param width Width of sprite in pixels
+ *@param height Height of sprite in pixels
+ *@param mode - Use SpriteFormat enum or value returned from SpriteMode
+ *@param palette - true to create with a palette
+ *@returns Pointer to sprite if successful or 0
+ */
 UserSprite SpriteArea::create_sprite_pixels(const std::string &name, int width, int height, int mode, bool palette /* = false */)
 {
   _kernel_swi_regs in, out;
@@ -813,11 +811,15 @@ UserSprite SpriteArea::create_sprite_pixels(const std::string &name, int width, 
   return UserSprite();
 }
 
-//@{
-//  Calculate the memory required for a sprite.
-//
-//@}
-
+/**
+ *  Calculate the memory required to create a sprite
+ *
+ *  @param width width of sprite in pixels
+ *  @param height height of sprite in pixels
+ *  @param mode screen mode to create the sprite for
+ *  @param withPalette true to create a palette for the sprite
+ *  @returns number of bytes required to create the sprite
+ */
 int SpriteArea::calculate_memory(int width, int height, int mode, bool withPalette)
 {
 	int bitsPerPixel = get_bits_per_pixel(mode);
@@ -843,6 +845,14 @@ int SpriteArea::calculate_memory(int width, int height, int mode, bool withPalet
 	return spriteSize;
 }
 
+/**
+ * Calculate the size required for a sprite mask
+ *
+ * @param width width of sprite in pixels
+ * @param heigh height of sprite in pixesl
+ * @param mode screen mode for sprite
+ * @returns number of bytes required for the mask
+ */
 int SpriteArea::calculate_mask_size(int width, int height, int mode)
 {
 	int bitsPerPixel = get_bits_per_pixel(mode);
@@ -861,7 +871,13 @@ int SpriteArea::calculate_mask_size(int width, int height, int mode)
 	return (wordsPerLine * height) << 2;
 }
 
-
+/**
+ * Calculate the number of bits required for one pixel for the given
+ * mode.
+ *
+ * @param mode screen mode number
+ * @returns number of bits per pixel
+ */
 int SpriteArea::get_bits_per_pixel(int mode)
 {
 	int bitsPerPixel = 32;
@@ -910,8 +926,9 @@ int SpriteArea::get_bits_per_pixel(int mode)
 	return bitsPerPixel;
 }
 
-// Get count of sprites in area
-
+/**
+ * Return the number of sprites in the sprite area
+ */
 int SpriteArea::sprite_count() const
 {
   _kernel_swi_regs regs;
@@ -929,8 +946,12 @@ int SpriteArea::sprite_count() const
    return count;
 }
 
-// Initialise a new user sprite area
-
+/**
+ * Initialise a new user sprite area
+ *
+ * @param size size of sprite area in bytes
+ * @returns true if successful
+ */
 bool SpriteArea::initialise(int size)
 {
     if (_owns_area) delete [] _area;
@@ -954,6 +975,12 @@ bool SpriteArea::initialise(int size)
 	}
 }
 
+/**
+ * Load a sprite area from a file
+ *
+ * @param file_name name of sprite area file
+ * @returns true if load is successful
+ */
 bool SpriteArea::load(const std::string &file_name)
 {
 	_kernel_swi_regs regs;
@@ -980,8 +1007,14 @@ bool SpriteArea::load(const std::string &file_name)
 }
 
 
-// Note: any pointers will no longer be valid
-
+/**
+ * Merge a sprite area from a file into this sprite area.
+ *
+ * Warning: Any UserSprites returned from the area will be invalid
+ *
+ * @param file_name name of tile to merge sprites from
+ * @returns true if successful
+ */
 bool SpriteArea::merge(const std::string &file_name)
 {
    _kernel_swi_regs regs;
@@ -1008,6 +1041,12 @@ bool SpriteArea::merge(const std::string &file_name)
    return false;
 }
 
+/**
+ * Save the sprite area to a file
+ *
+ * @param file_name name of file to save to
+ * @returns true if successful
+ */
 bool SpriteArea::save(const std::string &file_name) const
 {
    bool saved = false;
@@ -1024,16 +1063,32 @@ bool SpriteArea::save(const std::string &file_name) const
    return saved;
 }
 
+/**
+ * Get the size of the sprite area
+ *
+ * @returns number of bytes in the sprite area
+ */
 int SpriteArea::size() const
 {
    return (_area) ? _area[0] : 0;
 }
 
+/**
+ * Get the free space in the sprite area
+ *
+ * @returns number of unused bytes at the end of the sprite area
+ */
 int SpriteArea::free_space() const
 {
     return (_area) ? (_area[0] - _area[3]) : 0;
 }
 
+/**
+ * Resize the sprite area
+ *
+ * @param newSize new size for the area
+ * @returns true if successful
+ */
 bool SpriteArea::resize(int newSize)
 {
    bool ok = false;
@@ -1064,7 +1119,13 @@ bool SpriteArea::resize(int newSize)
    return ok;
 }
 
-
+/**
+ * Rename a sprite in a sprite area
+ *
+ * @param s UserSprite to rename
+ * @param name new name for the sprite
+ * @returns true if successful
+ */
 bool SpriteArea::rename(UserSprite &s, const std::string &name)
 {
 	if (!_area) return false;
@@ -1083,6 +1144,12 @@ bool SpriteArea::rename(UserSprite &s, const std::string &name)
 	return false;
 }
 
+/**
+ * Erase a sprite from the sprite area
+ *
+ * @param s sprite to erase
+ * @return true if successful
+ */
 bool SpriteArea::erase(UserSprite &s)
 {
     if (!_area) return false;
@@ -1114,8 +1181,14 @@ bool SpriteArea::erase(const std::string name)
 }
 
 
-// Create translation table to current mode
-
+/**
+ * Create a colour translation table for the given screen mode
+ * and optional palette
+ *
+ * @param mode screen mode for palette
+ * @param pal colour palette to translate or 0 (the default) for the
+ *            default palette for the mode
+ */
 bool TranslationTable::create(int mode, const ColourPalette *pal)
 {
     bool ok = false;
@@ -1138,6 +1211,13 @@ bool TranslationTable::create(int mode, const ColourPalette *pal)
     return ok;
 }
 
+/**
+ * Create a colour translation table for mapping a user sprite
+ * to the current screen mode.
+ *
+ * @param s UserSprite to create the table for
+ * @returns true if table created successfully
+ */
 bool TranslationTable::create(const UserSprite *s)
 {
    int numColours = initialise(s->mode());
@@ -1172,6 +1252,13 @@ bool TranslationTable::create(const UserSprite *s)
    return ok;
 }
 
+/**
+ * Create a colour translation table for mapping a wimp sprite
+ * to the current screen mode.
+ *
+ * @param s WimpSprite to create the table for
+ * @returns true if table created successfully
+ */
 bool TranslationTable::create(const WimpSprite *s)
 {
    int num_colours = initialise(s->mode());
@@ -1214,7 +1301,13 @@ bool TranslationTable::create(const WimpSprite *s)
    return ok;
 }
 
-
+/**
+ * Create a colour translation table to map from one sprite to another
+ *
+ * @param source source user sprite that will be plotted
+ * @param target target user sprite
+ * @returns true if table created successfully
+ */
 bool TranslationTable::create(UserSprite *source, UserSprite *target)
 {
 	_kernel_swi_regs regs;
@@ -1249,12 +1342,12 @@ bool TranslationTable::create(UserSprite *source, UserSprite *target)
 	return ok;
 }
 
-//******************************************************
-// Function: initialise
-// Purpose:  Allocate memory for translation table
-// Returns:  Number of colours in the mode
-//******************************************************
-
+/**
+ * Allocate memory for translation table
+ *
+ * @param mode screen mode to create table for
+ * @returns  Number of colours in the mode
+ */
 int TranslationTable::initialise(int mode)
 {
     ModeInfo sourceMode(mode);
@@ -1279,6 +1372,13 @@ ColourPalette::~ColourPalette()
   delete [] _palette;
 }
 
+/**
+ * Construct a colour palette of a specified size
+ *
+ * The palette will just consist of black entries
+ *
+ * @param size number of colours in the palette
+ */
 ColourPalette::ColourPalette(int size /* = 0 */)
 {
    if (_size)
@@ -1292,6 +1392,11 @@ ColourPalette::ColourPalette(int size /* = 0 */)
    }
 }
 
+/**
+ * Construct a palette by making a copy of another palette
+ *
+ * @param other palette to copy
+ */
 ColourPalette::ColourPalette(const ColourPalette &other)
 {
 	_palette = 0;
@@ -1328,6 +1433,12 @@ void ColourPalette::desktop_palette()
 	}
 }
 
+/**
+ * Assign to a copy of another palette
+ *
+ * @param other palette to copy
+ * @returns *this
+ */
 ColourPalette &ColourPalette::operator=(const ColourPalette &other)
 {
    delete [] _palette;
@@ -1345,6 +1456,12 @@ ColourPalette &ColourPalette::operator=(const ColourPalette &other)
    return *this;
 }
 
+/**
+ * Check if two palettes contain all the same colours
+ *
+ * @param other palette to compare to
+ * @returns true if they are the same
+ */
 bool ColourPalette::operator==(const ColourPalette &other)
 {
 	if (_size != other._size) return false;
@@ -1355,6 +1472,12 @@ bool ColourPalette::operator==(const ColourPalette &other)
 	return true;
 }
 
+/**
+ * Check if two palette have one or more colours different
+ *
+ * @param other palette to compare to
+ * @retuns true if palettes are different
+ */
 bool ColourPalette::operator!=(const ColourPalette &other)
 {
 	if (_size != other._size) return true;

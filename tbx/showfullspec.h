@@ -45,10 +45,25 @@ namespace tbx
 	struct ShowFullSpec
 	{
 	public:
+		/**
+		 * Location of window on screen and scroll offsets
+		 */
 		VisibleArea visible_area;
+		/**
+		 * Window handle of window to show this above.
+		 * Can also be one of the constants below
+		 */
 		WindowHandle wimp_window;
 
-		enum {WINDOW_SHOW_TOP = -1, WINDOW_SHOW_BOTTOM = -2, WINDOW_SHOW_BEHIND = -3};
+		/**
+		 * Special window handles to specify where a window should be
+		 * shown in the window stack.
+		 */
+		enum {
+			WINDOW_SHOW_TOP = -1, //!< Show the window at the top of the window stack
+			WINDOW_SHOW_BOTTOM = -2, //!< Show the window at the bottom of the window stack
+			WINDOW_SHOW_BEHIND = -3  //!< Show the window below the desktop background
+		};
 	};
 }
 

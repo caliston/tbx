@@ -40,10 +40,39 @@ namespace res {
 class ShowFullObject: public tbx::ShowPointObject
 {
 public:
+	/**
+	 * Constructor with no reference to a Toolbox object
+	 *
+	 * The object should be assigned to another object that contains
+	 * a valid Toolbox object reference before it is used.
+	 */
 	ShowFullObject()  {}
+	/**
+	 * Construct from a Toolbox object id
+	 *
+	 * @param handle Toolbox object id for an object supports the show with full details
+	 */
 	ShowFullObject(ObjectId handle) : ShowPointObject(handle) {}
+	/**
+	 * Construct as reference to another Toolbox object
+	 *
+	 * @param other object to copy Toolbox object reference from
+	 */
 	ShowFullObject(const Object &other) : ShowPointObject(other) {}
+	/**
+	 * Create a Toolbox object and make this object a reference to it
+	 *
+	 * @param template_name name of template in the application resources
+	 * @throws OsError Unable to create the Toolbox object
+	 */
 	ShowFullObject(const std::string &template_name) : ShowPointObject(template_name) {}
+	/**
+	 * Create Toolbox object from a memory template and make this object
+	 * a reference to it.
+	 *
+	 * @param object_template in memory resource template
+	 * @throws OsError Unable to create the Toolbox object
+	 */
 	ShowFullObject(const res::ResObject &object_template) : ShowPointObject(object_template) {}
 
 	using ShowPointObject::show;

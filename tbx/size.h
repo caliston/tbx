@@ -34,15 +34,49 @@ namespace tbx
 class Size
 {
 public:
+	/**
+	 * Construct an uninitialised size object.
+	 *
+	 * The width and height have undefined values
+	 */
 	Size() {}
+	/**
+	 * Construct a size object with the given dimensions
+	 *
+	 * @param w width for size object
+	 * @param h height for size object
+	 */
 	Size(int w, int h) : width(w), height(h) {}
+	/**
+	 * Copy constructor
+	 *
+	 * @param other size object to copy
+	 */
 	Size(const Size &other) : width(other.width), height(other.height) {}
 
-	int width;
-	int height;
+	int width;	//!< Width of size object
+	int height; //!< Height of size object
 
+	/**
+	 * Assign size to be equal to another
+	 *
+	 * @param other Size to copy
+	 * @returns *this
+	 */
 	Size &operator=(const Size &other) {width=other.width; height=other.height; return *this;}
+	/**
+	 * Check if two size have the same values
+	 *
+	 * @param other Size to compare with
+	 * @returns true if sizes match
+	 */
 	bool operator==(const Size &other) const {return (width==other.width) && (height==other.height);}
+	/**
+	 * Check if two size have a different width or height
+	 *
+	 * @param other Size to compare with
+	 * @returns true if sizes do not match
+	 */
 	bool operator!=(const Size &other) const {return (width!=other.width) || (height!=other.height);}
 };
 

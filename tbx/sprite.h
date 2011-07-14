@@ -67,15 +67,33 @@ namespace tbx
 		  bool operator==(const ColourPalette &other);
 		  bool operator!=(const ColourPalette &other);
 
+		  /**
+		   * Get reference to colour in the palette
+		   *
+		   * @param index index of entry in the palette  (0 to size-1)
+		   * @returns reference to the colour
+		   */
 		  Colour &operator[](int index) {return _palette[index];}
+		  /**
+		   * Get constant reference to colour in the palette
+		   *
+		   * @param index index of entry in the palette  (0 to size-1)
+		   * @returns constant reference to the colour
+		   */
 		  const Colour &operator[](int index) const {return _palette[index];}
 
 		  /**
 		   * Set the specified index to the given colour
+		   *
+		   * @param index index of entry to set palette for (0 to size-1)
+		   * @param col new colour for the entry
 		   */
 		  void entry(int index, const Colour &col) {_palette[index] = col;};
 		  /**
 		   * Return the colour for the specified index.
+		   *
+		   * @param index index of entry to return palette from (0 to size-1)
+		   * @return Colour at the given index
 		   */
 		  Colour entry(int index) const {return _palette[index];};
 
@@ -172,13 +190,21 @@ namespace tbx
 	}
 
 	/**
-	 * Exception throw for sprite method failures
+	 * Exception thrown for sprite method failures
 	 */
 	class SpriteException
 	{
 	   std::string _message;
 	   public:
+	   	   /**
+	   	    * Construct exception with the given message
+	   	    *
+	   	    * @param m Message for error
+	   	    */
 	       SpriteException(const std::string &m) {_message = m;}
+	       /**
+	        * Return the error message for the exception
+	        */
 	       const std::string &what() const {return _message;}
 	};
 
