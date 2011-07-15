@@ -354,18 +354,12 @@ bool UserSprite::info(Size *pixel_size, int *mode /* = NULL */ , bool *mask /* =
 	return ok;
 }
 
-/***************************************************/
-/*                                                */
-/*   Function: get_palette                        */
-/*                                                */
-/*   Purpose:  Get palette (non-flashing colours  */
-/*             only) for this sprite              */
-/*                                                */
-/*   Returns:  TRUE is sprite has a palette       */
-/*                                                */
-/**************************************************/
-
-
+/**
+ * Get palette (non-flashing colours only) for this sprite
+ *
+ * @param pal palette to copy entries to
+ * @returns true is sprite has a palette
+ */
 bool UserSprite::get_palette(ColourPalette &pal) const
 {
    int *pos = pointer();
@@ -387,7 +381,7 @@ bool UserSprite::get_palette(ColourPalette &pal) const
  *
  * Note: Does not create a palette if there it not already one
  *
- * @param palette - new value for palette
+ * @param pal new value for palette
  * @returns true if palette set.
  */
 bool UserSprite::set_palette(ColourPalette &pal)
@@ -414,7 +408,7 @@ bool UserSprite::set_palette(ColourPalette &pal)
  *
  * Will only create a palette if one doesn't already exist
  *
- * @param use256 - use full 256 colour palette for 256 colour sprites
+ * @param col256 - use full 256 colour palette for 256 colour sprites
  * @returns true if create is successful.
  */
 bool UserSprite::create_palette(bool col256 /*= false*/)
@@ -567,7 +561,7 @@ int UserSprite::pixel(int x, int y, int *tint) const
  *
  * @param x x coordinate to set the pixel for in pixels
  * @param y y coordinate to  set the pixel for in pixels
- * @returns gcol pixel value to set from 0 to number colours in sprite-1
+ * @param gcol pixel value to set from 0 to number colours in sprite-1
  * @throws OSError failed to set pixel
  */
 void UserSprite::pixel(int x, int y, int gcol)
@@ -586,7 +580,7 @@ void UserSprite::pixel(int x, int y, int gcol)
  *
  * @param x x coordinate to set the pixel for in pixels
  * @param y y coordinate to  set the pixel for in pixels
- * @returns gcol pixel value to set from 0 to number colours in sprite-1
+ * @param gcol pixel value to set from 0 to number colours in sprite-1
  * @param tint value to of tint (0, 64, 128 or 192 in 256 colour modes, ignored in all other modes)
  * @throws OSError failed to set pixel
  */
@@ -621,10 +615,9 @@ bool UserSprite::mask_pixel(int x, int y) const
  *
  * @param x x coordinate to set the mask pixel for in pixels
  * @param y y coordinate to  set the mask pixel for in pixels
- * @returns true to set the mask pixel, false to unset it
+ * @param on true to set the mask pixel, false to unset it
  * @throws OSError failed to set mask pixel
  */
-
 void UserSprite::mask_pixel(int x, int y, bool on)
 {
 	swix_check(_swix(OS_SpriteOp, _INR(0,5), 44 + 512,
@@ -849,7 +842,7 @@ int SpriteArea::calculate_memory(int width, int height, int mode, bool withPalet
  * Calculate the size required for a sprite mask
  *
  * @param width width of sprite in pixels
- * @param heigh height of sprite in pixesl
+ * @param height height of sprite in pixels
  * @param mode screen mode for sprite
  * @returns number of bytes required for the mask
  */
@@ -1409,7 +1402,14 @@ ColourPalette::ColourPalette(const ColourPalette &other)
 	}
 }
 
-
+/**
+ * Resize the colour palette
+ *
+ * Note: Old colours are not preserved and the palette is reset so
+ * all entries are black
+ *
+ * @param newsize new number of colours in the palette
+ */
 void ColourPalette::resize(int newsize)
 {
    delete [] _palette;
@@ -1476,7 +1476,7 @@ bool ColourPalette::operator==(const ColourPalette &other)
  * Check if two palette have one or more colours different
  *
  * @param other palette to compare to
- * @retuns true if palettes are different
+ * @returns true if palettes are different
  */
 bool ColourPalette::operator!=(const ColourPalette &other)
 {
@@ -1561,7 +1561,6 @@ bool SpriteCapture::release()
    return !_capturing;
 }
 
-
 /**
  * Construct a wimp sprite to represent the given
  * file_type.
@@ -1571,7 +1570,7 @@ bool SpriteCapture::release()
  * If the sprite is not in the current wimp sprite pool
  * unknown will be used.
  *
- * @param file type to construct sprite for
+ * @param file_type file type to construct sprite for
  */
 WimpSprite::WimpSprite(int file_type)
 {
@@ -1599,7 +1598,7 @@ WimpSprite::WimpSprite(int file_type)
  * If the sprite is not in the current wimp sprite pool
  * unknown will be used.
  *
- * @param file type to construct sprite for
+ * @param file_type file type to construct sprite for
  * @param leafname leaf name of file (used for applications)
  */
 WimpSprite::WimpSprite(int file_type, std::string leafname)

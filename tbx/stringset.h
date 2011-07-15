@@ -154,7 +154,33 @@ public:
 	 */
 	int selected_index() const;
 
-	//TODO: Document allowable
+	/**
+	 * Set the characters that are allowed to be entered into a string set.
+	 *
+	 * allow-spec ::= { char-spec }* { ~ { char-spec }* }*
+     * char-spec ::= char | char-char
+     * char ::= \- | \; | \\ | \~ | any character other than - ;
+     *
+	 * Each char-spec in the 'allow' string specifies a character or range
+	 * of characters; the ~ character toggles whether they are included or
+	 * excluded from the icon text string:
+	 *
+	 * e.g. 0-9a-z~dpu   allows the digits 0 - 9 and the lower-case letters
+	 * a - z, except for 'd', 'p' and 'u'
+	 *
+	 * If the first character following the A command is a ~ all normal
+	 * characters are initially included:
+	 *
+	 * e.g. ~0-9   allows all characters except for the digits 0 - 9
+	 *
+	 * If you use any of the four special characters - ; ~ \ in a char-spec
+	 * you must precede them with a backslash \:
+	 *
+	 * e.g. ~\-\;\~\\ allows all characters except the four special ones
+	 * - ; ~ \
+	 *
+	 * @param value string specifying what character can be entered into the list box.
+	 */
 	void allowable(const std::string &value) {string_property(900, value);}
 
 	//TODO: components

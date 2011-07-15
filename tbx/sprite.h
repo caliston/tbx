@@ -296,27 +296,133 @@ namespace tbx
 		virtual void plot(int x, int y) const;
 		virtual void plot(const Point &pos) const;
 
-	   // Common sprite functions
+		/**
+		 * Plot sprite with no scaling or colour translation
+		 *
+		 * @param pos OS coordinates of bottom left of where to plot the sprite
+		 * @param code sprite_plot_action flags speficying how the sprite is
+		 * combined with the screen (default SPA_USE_MASK)
+		 */
 	   virtual void plot_raw(const Point &pos, int code = SPA_USE_MASK) const = 0;
+		/**
+		 * Plot sprite scaled
+		 *
+		 * @param pos OS coordinates of bottom left of where to plot the sprite
+		 * @param sf ScaleFactors used to scale the sprite
+		 * @param tt Translation table for colours in plot, 0 (the default) means
+		 *  don't translate the colours
+		 * @param code sprite_plot_action flags speficying how the sprite is
+		 * combined with the screen (default SPA_USE_MASK)
+		 */
 	   virtual void plot_scaled(const Point &pos, const ScaleFactors *sf, const TranslationTable *tt = 0, int code = SPA_USE_MASK) const = 0;
+		/**
+		 * Plot sprite to screen calculating the correct colour translation and scaling.
+		 *
+		 * @param pos OS coordinates of bottom left of where to plot the sprite
+		 * @param code sprite_plot_action flags speficying how the sprite is
+		 * combined with the screen (default SPA_USE_MASK)
+		 */
 	   virtual void plot_screen(const Point &pos, int code = SPA_USE_MASK) const = 0;
+		/**
+		 * Plot sprite with no scaling or colour translation
+		 *
+		 * @param x left of destination to plot the sprite in OS coordinates
+		 * @param y bottom of destination to plot the sprite in OS coordinates
+		 * @param code sprite_plot_action flags
+		 */
 	   virtual void plot_raw(int x, int y, int code = SPA_USE_MASK) const = 0;
+		/**
+		 * Plot sprite scaled
+		 *
+		 * @param x left of destination to plot the sprite in OS coordinates
+		 * @param y bottom of destination to plot the sprite in OS coordinates
+		 * @param sf ScaleFactors used to scale the sprite
+		 * @param tt Translation table for colours in plot, 0 (the default) means
+		 *  don't translate the colours
+		 * @param code sprite_plot_action flags speficying how the sprite is
+		 * combined with the screen (default SPA_USE_MASK)
+		 */
 	   virtual void plot_scaled(int x, int y, const ScaleFactors *sf, const TranslationTable *tt = 0, int code = SPA_USE_MASK) const = 0;
+		/**
+		 * Plot sprite to screen calculating the correct colour translation and scaling.
+		 *
+		 * @param x left of destination to plot the sprite in OS coordinates
+		 * @param y bottom of destination to plot the sprite in OS coordinates
+		 * @param code sprite_plot_action flags speficying how the sprite is
+		 * combined with the screen (default SPA_USE_MASK)
+		 */
 	   virtual void plot_screen(int x, int y, int code = SPA_USE_MASK) const = 0;
 
+	   /**
+	    * Get the name of the sprite
+	    *
+	    * @returns the name of the sprite as a string
+	    */
 	   virtual std::string name() const = 0;
+	   /**
+	    * Return sprite area id used for calls that take an area pointer
+	    * or a special value for WIMP/System areas.
+	    */
 	   virtual int area_id() const = 0;
+
+	   /**
+	    * Get information about the sprite
+	    *
+	    * @param pixel_size pointer to Size to be updated with size of
+	    *        sprite in pixels
+	    * @param mode pointer to integer to receive the sprite mode number
+	    *        or 0 (the default) not to return the mode
+	    * @param mask pointer to a boolean which will be set to true if the
+	    *        sprite has a mask or 0 (the default) not to return the mask
+	    * @returns true if successfule
+	    */
 	   virtual bool info(Size *pixel_size, int *mode  = NULL, bool *mask = NULL) const = 0;
 
 	   // Functions using a virtual call to the derived class
+	   /**
+	    * Return the size of the sprite
+	    *
+	    * @returns size of the sprite in OS units
+	    */
 		Size size() const;
+	   /**
+		* Return the width of the sprite
+		*
+		* @returns width of the sprite in OS units
+		*/
 		int width() const;
+	   /**
+		* Return the height of the sprite
+		*
+		* @returns height of the sprite in OS units
+		*/
 		int height() const;
 
+		/**
+		 * Get size of the sprite in pixels
+		 *
+		 * @returns size of the sprite in pixels
+		 */
 		Size pixel_size() const {Size ps; info(&ps); return ps;};
+		/**
+		 * Get the mode of the sprite
+		 *
+		 * @returns the mode number the sprite is defined for
+		 */
 		int mode()       const {int m; info(NULL, &m); return m;};
+		/**
+		 * Check if the sprite has a mask
+		 *
+		 * @returns true if the sprite has a mask
+		 */
 		bool has_mask()      const {bool m; info(NULL, NULL, &m); return m;};
 
+		/**
+		 * Get the scale factors required to plot this sprite in
+		 * the WIMP as its logical size.
+		 *
+		 * @param factor scale factors updated with the correct value
+		 */
 	   virtual void get_wimp_scale(ScaleFactors &factor) const = 0;
 	};
 
@@ -411,8 +517,8 @@ namespace tbx
 		   friend class SpriteArea;
 
 	   protected:
-		   SpriteArea *_area;
-		   int _offset;
+		   SpriteArea *_area; //!< Sprite area containing this sprite
+		   int _offset;       //!< offset of sprite within the sprite area
 	};
 
     /**
@@ -431,6 +537,11 @@ namespace tbx
 
         bool capture();
         bool release();
+        /**
+         * Check if this capture is capturing to the sprite
+         *
+         * @returns true if capturing
+         */
         bool is_capturing() {return _capturing;}
     };
 
@@ -445,16 +556,30 @@ namespace tbx
 	{
 	public:
 		/**
-		 * Construct a wimp sprite.
+		 * Construct a WIMP sprite.
 		 *
 		 * There is no check on the name given here.
 		 * If it is incorrect the other sprite operations
 		 * will fail silently.
 		 *
 		 * Call the exist function to check if a sprite is
-		 * currently in the wimp sprite pool.
+		 * currently in the WIMP sprite pool.
+		 *
+		 * @param sname of sprite in to reference
 		 */
 		WimpSprite(const std::string &sname) : _name(sname) {};
+		/**
+		 * Construct a WIMP sprite.
+		 *
+		 * There is no check on the name given here.
+		 * If it is incorrect the other sprite operations
+		 * will fail silently.
+		 *
+		 * Call the exist function to check if a sprite is
+		 * currently in the WIMP sprite pool.
+		 *
+		 * @param sname of sprite in to reference
+		 */
 		WimpSprite(const char *sname) : _name(sname) {};
 		WimpSprite(int file_type);
 		WimpSprite(int file_type, std::string leafname);
