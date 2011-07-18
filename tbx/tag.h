@@ -52,19 +52,48 @@ public:
        */
 	int id() const	{return _id;}
 
+	/**
+	 * Get the current string value for the attribute
+	 */
 	const std::string &value()	{return _value;}
+	/**
+	 * Return the current value as an integer
+	 *
+	 * @return integer value or 0 if the current value is not an integer
+	 */
 	int integer() const		{return atoi(_value.c_str());}
+	/**
+	 * Set the value of the attribute
+	 *
+	 * @param value the new string value of the attribute
+	 */
 	void value(const std::string &value)	{_value = value;_has_value = true;}
+
+	/**
+	 * Set if the attribute has a value associated with it
+	 *
+	 * @param has true if the attribute has a value
+	 */
 	void has_value(bool has)	{_has_value = has;}
+	/**
+	 * Check if the attribute has a value
+	 *
+	 * @returns true if the attribute has a value
+	 */
 	bool has_value() const	{return _has_value;}
 
+	/**
+	 * Get the next attribute for the same tag
+	 *
+	 * @returns next attribute or 0 if there are no more attributes
+	 */
 	TagAttribute *next()	{return _next;}
 
 protected:
-	int _id;
-	std::string _value;
-	bool _has_value;
-	TagAttribute *_next;
+	int _id; 			//!< Id of attribute
+	std::string _value;	//!< Value of attribute (if any)
+	bool _has_value;	//!< true if attribute has a value
+	TagAttribute *_next;//!< Next attribute for the same tag
 
 	// Tag class maintains the attributes
 	friend class Tag;
@@ -97,14 +126,46 @@ protected:
 	~Tag();
 
 public:
+	/**
+	 * Return the tag id
+	 *
+	 * @return the ID for this type of tag
+	 */
 	int id() const						{return _id;}
 	const std::string &name() const;
 
 	TagDoc *doc() const;
+	/**
+	 * Get the parent for this tag
+	 *
+	 * @returns parent or 0 if it is the root of the tag tree
+	 */
 	Tag *parent() const				{return _parent;}
+
+	/**
+	 * Get the first child tag
+	 *
+	 * @returns first child tag or 0 if this tag has no children
+	 */
 	Tag *first_child()	const			{return _first_child;}
+	/**
+	 * Get the last child tag
+	 *
+	 * @returns last child tag or 0 if this tag has no children
+	 */
 	Tag *last_child()	const			{return _last_child;}
+	/**
+	 * Get the next sibling tag
+	 *
+	 * @returns the next sibling tag or 0 if there are no more
+	 */
 	Tag *next() const				{return _next;}
+
+	/**
+	 * Get the first attribute of this tag
+	 *
+	 * @returns first tag attribute or 0 if this tag has no attributes
+	 */
 	TagAttribute *first_attribute() const	{return _first_attribute;}
 
 	Tag *add_child(int id);
@@ -118,10 +179,30 @@ public:
 	Tag *find_child(int id, int attId, const std::string &value, Tag *after = NULL) const;
 	Tag *find_child(const std::string &name, const std::string &attName, const std::string &value, Tag *after = NULL) const;
 
+	/**
+	 * Get the text from the tag
+	 *
+	 * @returns text for this tag or "" if none
+	 */
 	const std::string &text() const		{return _text;}
+	/**
+	 * Set the text for this tag
+	 *
+	 * @param text new text for the tag
+	 */
 	void text(const std::string &text)	{_text = text;}
 
+	/**
+	 * Get the user data for this tag
+	 *
+	 * @returns data for this tag or 0 if there is none
+	 */
 	TagData *data() const			{return _data;}
+	/**
+	 * Set the data for this tag
+	 *
+	 * @param data new data for the tag
+	 */
 	void data(TagData *data)		{_data = data;}
 
 	void attribute(int att_id);
@@ -139,15 +220,15 @@ public:
 	std::string attribute_value(const std::string &name) const;
 
 protected:
-	Tag *_parent;
-	Tag *_first_child;
-	Tag *_last_child;
-	Tag *_next;
-	TagAttribute *_first_attribute;
+	Tag *_parent;		//!< parent tag or 0 for no parent
+	Tag *_first_child;	//!< first child tag or 0 for no children
+	Tag *_last_child;	//!< last child tag or 0 for no children
+	Tag *_next;			//!< next sibling tag or 0 if no more siblings
+	TagAttribute *_first_attribute; //!< first attribute or 0 if no attributes
 
-	int _id;
-	std::string _text;
-	TagData *_data;
+	int _id;			//!< ID for this type of tag
+	std::string _text;	//!< text for this type of tag or "" if not set
+	TagData *_data;		//!< user data or 0 if none
 };
 
 /**
@@ -183,7 +264,13 @@ protected:
 	char read_name(std::istream &is, std::string &name);
 
 protected:
+	/**
+	 * List of all tag names known to this document
+	 */
 	std::vector<std::string> _tag_names;
+	/**
+	 * List of all attribute names known to this document
+	 */
 	std::vector<std::string> _attribute_names;
 };
 
@@ -194,6 +281,9 @@ protected:
 class TagException : public std::runtime_error
 {
 public:
+	/**
+	 * Enumeration describing the reason for a tag exception
+	 */
 	enum Cause {None, EmptyFile, ErrorReading, EndTagNotMatch,
 		InvalidTagStartChar, InvalidTagEndChar,
 		InvalidNameEnd, MissingTagName,

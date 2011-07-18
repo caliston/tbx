@@ -55,6 +55,8 @@ using namespace tbx;
 
 /**
  * Construct an attribute without a value
+ *
+ * @param id ID of the name for this type of tag attribute
  */
 TagAttribute::TagAttribute(int id)
 {
@@ -65,6 +67,9 @@ TagAttribute::TagAttribute(int id)
 
 /**
  * Construct an attribute with the given value
+ *
+ * @param id ID of the name for this type of tag attribute
+ * @param value value of the tag attribute
  */
 TagAttribute::TagAttribute(int id, const std::string &value)
 {
@@ -81,6 +86,9 @@ TagAttribute::~TagAttribute()
 
 /**
  * Construct a tag with the given parent and id
+ *
+ * @param parent parent of the tag
+ * @param id ID of name of this type of tag
  */
 Tag::Tag(Tag *parent, int id)
 {
@@ -104,7 +112,7 @@ Tag::~Tag()
 
 
 /**
- * Return the name of the tag
+ * Return the name of this type of tag
  */
 const std::string &Tag::name() const
 {
@@ -125,6 +133,7 @@ TagDoc *Tag::doc() const
  * Add a new tag as a child of this tag
  *
  * @param id - tag id - must have been returned from TagDoc::tag_id
+ * @returns Tag pointer of new tag created
  */
 Tag *Tag::add_child(int id)
 {
@@ -146,6 +155,7 @@ Tag *Tag::add_child(int id)
  * of this tag.
  *
  * @param name - name for the tag. If it the name does not exists in the document it is added to it.
+ * @returns Tag pointer of new tag created
  */
 Tag *Tag::add_child(const std::string &name)
 {
