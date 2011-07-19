@@ -130,25 +130,114 @@ public:
 	 */
 	void state(int state) {int_property(0x4019, state);}
 
+	/**
+	 * Check if text area has a vertical scroll bar
+	 *
+	 * @returns true if the text area has a vertical scroll bar
+	 */
 	bool has_vertical_scrollbar() const {return flag_property(0x4018, 1);}
+	/**
+	 * Set if text area has a vertical scroll bar
+	 * @param value true to turn on the scroll bar, false to turn it off
+	 */
 	void has_vertical_scrollbar(bool value) {flag_property(0x4018, 1, value);}
+	/**
+	 * Check if text area has a horizontal scroll bar
+	 *
+	 * @returns true if the text area has a horizontal scroll bar
+	 */
 	bool has_horizontal_scrollbar() const {return flag_property(0x4018, 2);}
+	/**
+	 * Set if text area has a horizontal scroll bar
+	 * @param value true to turn on the scroll bar, false to turn it off
+	 */
 	void has_horizontal_scrollbar(bool value) {flag_property(0x4018, 2, value);}
+	/**
+	 * Check if text area is wrapping words
+	 *
+	 * @returns true if word wrap is on
+	 */
 	bool wordwrap() const {return flag_property(0x4018, 4);}
+	/**
+	 * Set word wrapping in the text area
+	 *
+	 * @param value true to turn word wrap on, false to turn it off
+	 */
 	void wordwrap(bool value) {flag_property(0x4018, 4, value);}
+	/**
+	 * Check if text area allows a selection to be made
+	 *
+	 * @returns true if selection is allowed
+	 */
 	bool allow_selection() const {return flag_property(0x4018, 8);}
+	/**
+	 * Set if text can be selected in the text area
+	 *
+	 * @param value true to allow selection, false to disallow selection.
+	 */
 	void allow_selection(bool value) {flag_property(0x4018, 8, value);}
+	/**
+	 * Check if saving from the text area is allowed
+	 *
+	 * @returns true if saving from the text area is allowed
+	 */
 	bool allow_save() const {return flag_property(0x4018, 0x10);}
+	/**
+	 * Set if saving is allowed in the text area
+	 *
+	 * @param value true if saving is allowed, false if saving is not allowed
+	 */
 	void allow_save(bool value) {flag_property(0x4018, 0x10, value);}
+	/**
+	 * Check if loading from the text area is allowed
+	 *
+	 * @returns true if loading from the text area is allowed
+	 */
 	bool allow_load() const {return flag_property(0x4018, 0x20);}
+	/**
+	 * Set if loading is allowed in the text area
+	 *
+	 * @param value true if loading is allowed, false if loading is not allowed
+	 */
 	void allow_load(bool value) {flag_property(0x4018, 0x20, value);}
+	/**
+	 * Check if this text area supports the clipboard
+	 *
+	 * @returns true if the text area supports the clipboard
+	 */
 	bool clipboard() const {return flag_property(0x4018, 0x40);}
+	/**
+	 * Set if clipboard support is used the text area
+	 *
+	 * @param value true if the clipboard is supported, false if not
+	 */
 	void clipboard(bool value) {flag_property(0x4018, 0x40, value);}
+	/**
+	 * Check if text area will auto scroll
+	 */
 	bool auto_scroll() const {return flag_property(0x4018, 0x80);}
+	/**
+	 * Set if text area will auto scroll
+	 *
+	 * @param value true to set auto scrolling mode, false to unset it
+	 */
 	void auto_scroll(bool value) {flag_property(0x4018, 0x80, value);}
 
+	/**
+	 * Set the text in the text area
+	 *
+	 * @param text new text for the text area
+	 */
 	void text(const std::string &text) {string_property(0x401A, text);}
+	/**
+	 * Get the text from the text area
+	 *
+	 * @returns text area text as a string
+	 */
 	std::string text() const {return string_property(0x401B);}
+	/**
+	 * Get the length of the text
+	 */
 	int text_length() const {return string_property_length(0x401B);}
 
 	void insert_text(int where, const std::string &text);
@@ -166,6 +255,11 @@ public:
 	void set_colour(Colour foreground, Colour background);
 	void get_colour(Colour &foreground, Colour &background) const;
 
+	/**
+	 * Set the size of the border for the text area
+	 *
+	 * @param value new border size in OS units
+	 */
 	void border_size(int value) {int_property(0x4023, value);}
 };
 

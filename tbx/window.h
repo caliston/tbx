@@ -111,9 +111,42 @@ namespace tbx
 		 */
 		Window(const res::ResWindow &object_template);
 
+		/**
+		 * Assign this Window from another.
+		 *
+		 * Both objects will then refer to the same underlying toolbox object
+		 *
+		 * @param other Window to copy
+		 * @returns reference to this SaveAs
+		 */
 		Window &operator=(const Window &other) {_handle = other.handle(); return *this;}
+		/**
+		 * Assign this Window from an Object that refers to a SaveAs
+		 *
+		 * This class then refers to the same underlying toolbox object
+		 * as the other object
+		 *
+		 * @param other Object to copy.
+		 * @returns reference to this Window
+		 * @throws ObjectNullException if the other object refers to a null object handle
+		 * @throws ObjectClassException if the other object is not a Window
+		 */
 		Window &operator=(const Object &other) {_handle = other.handle(); check_toolbox_class(TOOLBOX_CLASS); return *this;}
+		/**
+		 * Check if this Window refers to the same underlying toolbox
+		 * object as another.
+		 *
+		 * @param other Object to compare to
+		 * @returns true if they refer to the same underlying toolbox object
+		 */
 		bool operator==(const Object &other) const {return (_handle == other.handle());}
+		/**
+		 * Check if this Window does not refers to the same underlying toolbox
+		 * object as another.
+		 *
+		 * @param other Object to compare to
+		 * @returns true if they do not refer to the same underlying toolbox object
+		 */
 		bool operator!=(const Object &other) const {return (_handle != other.handle());}
 
 		Gadget gadget(ComponentId component_id);
@@ -136,7 +169,17 @@ namespace tbx
 		//TODO: set_pointer
 		//TODO: get_pointer
 
+		/**
+		 * Set the help message for the Window
+		 *
+		 * @param message the new help message
+		 */
 		void help_message(const std::string &message) {string_property(7, message);}
+		/**
+		 * Get the help message for the window
+		 *
+		 * @return current help message
+		 */
 		std::string help_message() const {return string_property(8);}
 
 		void add_shorcut(const res::ResShortcut &shortcut);
@@ -144,7 +187,17 @@ namespace tbx
 		void remove_all_shortcuts();
 		void remove_shortcuts(const res::ResShortcut *shortcuts, int num);
 
+		/**
+		 * Get the title (caption) of the window
+		 *
+		 * @returns the window title
+		 */
 		std::string title() const {return string_property(11);}
+		/**
+		 * Set the title (caption) of the window
+		 *
+		 * @param new_title new title for the window
+		 */
 		void title(std::string new_title) {string_property(11, new_title);}
 
 		//TODO: Gadget default_focus()
@@ -260,9 +313,9 @@ namespace tbx
 	class WindowOpenInfo
 	{
 	protected:
-		WindowHandle _window_handle;
-		VisibleArea _visible_area;
-		WindowHandle _window_handle_in_front;
+		WindowHandle _window_handle; //!< WIMP window handle
+		VisibleArea _visible_area;   //!< Position on screen and scroll settings
+		WindowHandle _window_handle_in_front; //!< Handle of window in front of this one
 		friend class Window;
 
 	public:

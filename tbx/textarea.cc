@@ -36,6 +36,12 @@
 
 namespace tbx {
 
+/**
+ * Insert text into the text area
+ *
+ * @param where position to insert the text
+ * @param text text to insert
+ */
 void TextArea::insert_text(int where, const std::string &text)
 {
 	_kernel_swi_regs regs;
@@ -48,6 +54,13 @@ void TextArea::insert_text(int where, const std::string &text)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Rpelace text in the text area
+ *
+ * @param start position of first character to replace
+ * @param end position of last character to replace
+ * @param text new text
+ */
 void TextArea::replace_text(int start, int end, const std::string &text)
 {
 	_kernel_swi_regs regs;
@@ -62,6 +75,12 @@ void TextArea::replace_text(int start, int end, const std::string &text)
 
 }
 
+/**
+ * Get location of selection
+ *
+ * @param start updated with start of selection
+ * @param end updated with end of selection
+ */
 void TextArea::get_selecton(int &start, int &end) const
 {
 	_kernel_swi_regs regs;
@@ -74,6 +93,12 @@ void TextArea::get_selecton(int &start, int &end) const
 	end = regs.r[5];
 }
 
+/**
+ * Set the selection
+ *
+ * @param start new start position of the selection
+ * @param end new end position of the selection
+ */
 void TextArea::set_selection(int start, int end)
 {
 	_kernel_swi_regs regs;
@@ -86,6 +111,9 @@ void TextArea::set_selection(int start, int end)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Get the length of the selection
+ */
 int TextArea::selection_length() const
 {
 	_kernel_swi_regs regs;
@@ -100,6 +128,9 @@ int TextArea::selection_length() const
 	return regs.r[5];
 }
 
+/**
+ * Get the text of the selection
+ */
 std::string TextArea::selection_text() const
 {
     _kernel_swi_regs regs;
@@ -171,7 +202,12 @@ void TextArea::system_font(int width, int height)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
-
+/**
+ * Set the colours of the text area using WIMP colours
+ *
+ * @param foreground foreground/text colour
+ * @param background background colour
+ */
 void TextArea::set_colour(WimpColour foreground, WimpColour background)
 {
 	_kernel_swi_regs regs;
@@ -184,6 +220,12 @@ void TextArea::set_colour(WimpColour foreground, WimpColour background)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Set the colours of the text area using RGB colours
+ *
+ * @param foreground foreground/text colour
+ * @param background background colour
+ */
 void TextArea::set_colour(Colour foreground, Colour background)
 {
 	_kernel_swi_regs regs;
@@ -196,6 +238,12 @@ void TextArea::set_colour(Colour foreground, Colour background)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Get the colours used in the text area
+ *
+ * @param foreground updated to foreground/text colour
+ * @param background updated to background/text colour
+ */
 void TextArea::get_colour(Colour &foreground, Colour &background) const
 {
 	_kernel_swi_regs regs;

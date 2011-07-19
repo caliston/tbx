@@ -140,7 +140,9 @@ Menu Window::menu() const
 }
 
 /**
- * Add a keyboard short cut
+ * Add a keyboard shortcut
+ *
+ * @param shortcut object with information about the shortcut
  */
 void Window::add_shorcut(const res::ResShortcut &shortcut)
 {
@@ -154,6 +156,12 @@ void Window::add_shorcut(const res::ResShortcut &shortcut)
 	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
 }
 
+/**
+ * Add multiple keyboard shortcuts from an array
+ *
+ * @param shortcuts array of objects with information about the shortcuts
+ * @param num number of shortcuts in the shortcuts array
+ */
 void Window::add_shortcuts(const res::ResShortcut *shortcuts, int num)
 {
 	char temp[num * res::SHORTCUT_SIZE];
@@ -527,7 +535,7 @@ Gadget Window::from_handle(WindowHandle window_handle, IconHandle icon_handle, W
 }
 
 /**
- * Gets the current state of the window.
+ * Gets a summary of the current state of the window.
  *
  * Usually this call isn't needed as the main information
  * it returns is given during redraw events anyway.
@@ -544,6 +552,12 @@ void Window::get_state(WindowState &state) const
 	swix_check(_swix(Wimp_GetWindowState, _IN(1), &(state._window_handle)));
 }
 
+/**
+ * Get complete information about the windows state
+ *
+ * @param info updated with information about the window
+ * @throws OsError unable to retrieve state for window.
+ */
 void Window::get_info(WindowInfo &info) const
 {
 	info._window_handle = window_handle();
@@ -558,7 +572,7 @@ void Window::get_info(WindowInfo &info) const
  *
  * Note that all coordinates are rounded down to whole numbers of pixels
  *
- * @param New information to be used by the for the window
+ * @param open_info new information to be used by the for the window
  * @throws OsError if unable to open the window
  */
 void Window::open_window(const WindowOpenInfo &open_info)
@@ -985,7 +999,7 @@ void Window::remove_scroll_request_listener(ScrollRequestListener *listener)
  * Add a file loader.
  *
  * @param loader the loader to add
- * @param the file type for the loader or -2 (the default) for
+ * @param file_type the file type for the loader or -2 (the default) for
  *        any type.
  */
 void Window::add_loader(Loader *loader, int file_type /*=-2*/)
@@ -999,7 +1013,7 @@ void Window::add_loader(Loader *loader, int file_type /*=-2*/)
  * Remove a file loader.
  *
  * @param loader the loader to remove
- * @param the file type for the loader or -2 (the default) for
+ * @param file_type the file type for the loader or -2 (the default) for
  *        any type.
  */
 void Window::remove_loader(Loader *loader, int file_type /*=-2*/)

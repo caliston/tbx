@@ -114,7 +114,7 @@ namespace tbx
 		  * Convert bounding box from screen coordinates to work area coordinates
 		  *
 		  * @param scr_box Screen BBox to convert
-		  * @param work_boxt Work area BBox to store result
+		  * @param work_box Work area BBox to store result
 		  * @returns reference to work_box
 		  */
 		 BBox &work(const BBox &scr_box, BBox &work_box) const

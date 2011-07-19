@@ -92,27 +92,26 @@ WimpMessage::~WimpMessage(void)
 	if (_owns_block) delete _message_block;
 }
 
-//@{
-//  Send a message to another application.
-//
-//  On exit sender task handle and my ref fields have been updated.
-//
-//@param type of message (User, Recorded, Acknowledge)
-//@param destination for message. task handle, window handle, -2 for icon bar, 0 for broadcast
-//@param icon handle to send to if destination is -2.
-//
-//@returns task handle of the destination.
-//@throws OsError if send fails
-//@}
-
-int WimpMessage::send(SendType type, int destination, int iconHandle /*= 0*/)
+/**
+ *  Send a message to another application.
+ *
+ *  On exit sender task handle and my ref fields have been updated.
+ *
+ * @param type type of message (User, Recorded, Acknowledge)
+ * @param destination target for the message. task handle, window handle, -2 for icon bar, 0 for broadcast
+ * @param icon_handle icon handle to send to if destination is -2.
+ *
+ * @returns task handle of the destination.
+ * @throws OsError if send fails
+ */
+int WimpMessage::send(SendType type, int destination, int icon_handle /*= 0*/)
 {
 	_kernel_swi_regs regs;
 
 	regs.r[0] = type;
 	regs.r[1] = (int)_message_block;
 	regs.r[2] = destination;
-	regs.r[3] = iconHandle;
+	regs.r[3] = icon_handle;
 
 	swix_check(_kernel_swi(0x400e7, &regs, &regs));
 

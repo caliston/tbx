@@ -210,6 +210,12 @@ class ToolActionSelectedListener : public Listener
 {
 public:
 	virtual ~ToolActionSelectedListener() {}
+
+	/**
+	 * Method called when the tool action button is selected
+	 *
+	 * @param selected_event details of the new state and how it was selected
+	 */
 	virtual void toolaction_selected(const ToolActionSelectedEvent &selected_event) = 0;
 };
 
