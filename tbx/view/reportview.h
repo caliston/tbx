@@ -63,16 +63,28 @@ public:
 	virtual void auto_size(bool on);
 
 	void row_height(unsigned int height);
+	/**
+	 * Get the height of one row of the report
+	 */
 	unsigned int row_height() const {return _height;}
 
 	void column_gap(unsigned int gap);
+	/**
+	 * Get the gap between columns in the report
+	 */
 	unsigned int column_gap() const {return _column_gap;}
 
 	unsigned int add_column(ItemRenderer *cr, unsigned int width = 0);
 	//TODO: void insert_column(int where, ReportViewCellRenderer *cr, int width);
 	void remove_column(unsigned int column);
 
+	/**
+	 * Get the number of columns in the report view
+	 */
 	unsigned int column_count() const {return _columns.size();}
+	/**
+	 * Get the number of rows in the report view
+	 */
 	unsigned int row_count() const {return _count;}
 
 	void column_width(unsigned int column, unsigned int width);

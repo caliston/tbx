@@ -233,6 +233,7 @@ bool DocManager::load_files(int num_files, char *file_names[])
  *
  * @param file_name name of file to load
  * @param estimated_size - estimated size of file if given
+ * @param from_filer true if document was loaded from the filer (safe storage)
  * @returns true if loaded successfully
  */
 bool DocManager::load_file(const std::string &file_name, int estimated_size /* = -1*/, bool from_filer /* = true */)

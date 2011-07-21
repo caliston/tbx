@@ -36,6 +36,12 @@ namespace tbx
 namespace doc
 {
 
+/**
+ * Create the main window for a given document using a resource template
+ *
+ * @param doc Document to create the window for
+ * @param template_name name of Window template in resources to use
+ */
 DocWindow::	DocWindow(Document *doc, std::string template_name) :
    _window(template_name)
 {

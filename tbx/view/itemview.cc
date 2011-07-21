@@ -151,7 +151,7 @@ void ItemView::allow_drag_selection(bool on, bool on_item /*= false*/)
  * hidden listener to the menu on the views window so a menu selection
  * is removed when the menu is closed.
  *
- * @param true to turn menu selection on, false to turn it off.
+ * @param on true to turn menu selection on, false to turn it off.
  */
 void ItemView::menu_selects(bool on)
 {

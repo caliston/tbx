@@ -37,6 +37,8 @@ namespace view {
 
 /**
  * Construct a report view for a window.
+ *
+ * @param window Window displaying the report view
  */
 ReportView::ReportView(Window window) : ItemView(window),
 	    _height(0), _width(0), _column_gap(4)
@@ -58,6 +60,8 @@ ReportView::~ReportView()
  * If the row height is 0. It will take the height from
  * the first item in the list. This is how the view
  * starts up.
+ *
+ * @param height new row height
  */
 void ReportView::row_height(unsigned int height)
 {
@@ -78,6 +82,8 @@ void ReportView::row_height(unsigned int height)
 
 /**
  * Calculate the row height from the first row of the report
+ *
+ * @returns calculated row height
  */
 unsigned int ReportView::calc_row_height() const
 {
@@ -100,6 +106,8 @@ unsigned int ReportView::calc_row_height() const
  *
  * To prevent a scan of the whole list on removal call the
  * removing method before actually doing a removal.
+ *
+ * @param on true to turn autosizing on
  */
 void ReportView::auto_size(bool on)
 {
@@ -119,6 +127,8 @@ void ReportView::auto_size(bool on)
 
 /**
  * Change the gap between columns
+ *
+ * @param gap new gap between the columns
  */
 void ReportView::column_gap(unsigned int gap)
 {
@@ -138,12 +148,8 @@ void ReportView::column_gap(unsigned int gap)
 	}
 }
 
-
 /**
  * Update the Window extent after a change in size.
- *
- * @param visible_area visible area of window on screen
- * @param repaint true to refresh the contents
  */
 void ReportView::update_window_extent()
 {
@@ -167,7 +173,6 @@ void ReportView::update_window_extent()
  *
  * It should also be called if all the data changes.
  */
-
 void ReportView::refresh()
 {
 	BBox all(_margin.left, -_margin.top - _count * _height,
@@ -182,7 +187,7 @@ void ReportView::refresh()
  * @param cr Renderer to render cells for the column
  * @param width the width of the column
  * (any value other than zero turns off auto size for all columns)
- * @returns column number
+ * @returns zero based column number
  */
 unsigned int ReportView::add_column(ItemRenderer *cr, unsigned int width /*= 0*/)
 {
@@ -207,6 +212,8 @@ unsigned int ReportView::add_column(ItemRenderer *cr, unsigned int width /*= 0*/
 
 /**
  * Remove column from report
+ *
+ * @param column zero based column number to remove
  */
 void ReportView::remove_column(unsigned int column)
 {
@@ -223,6 +230,9 @@ void ReportView::remove_column(unsigned int column)
  * Set the column width.
  *
  * Setting the column width turns of auto sizing
+ *
+ * @param column zero based column number to set width for
+ * @param width new width of the column
  */
 void ReportView::column_width(unsigned int column, unsigned int width)
 {
@@ -262,7 +272,7 @@ unsigned int ReportView::column_width(unsigned int column) const
  *
  * @param column column to resize
  * @param min_width minimum width of the column
- * @parma max_width maximum width of the column
+ * @param max_width maximum width of the column
  */
 void ReportView::size_column_to_width(unsigned int column, unsigned int min_width/* = 0*/, unsigned int max_width /*= 0xFFFFFFFF*/)
 {
@@ -396,6 +406,8 @@ bool ReportView::adjust_min_width(unsigned int from, unsigned int end)
  * Call after inserting rows into the collection
  * the ReportView is showing.
  *
+ * @param where row column was inserted at
+ * @param how_many number of columns inserted
  */
 void ReportView::inserted(unsigned int where, unsigned int how_many)
 {
@@ -466,6 +478,9 @@ void ReportView::removing(unsigned int where, unsigned int how_many)
 /**
  * Call after removing rows from the collection
  * the ReportView is showing.
+ *
+* @param where location items were removed from
+* @param how_many number of items that were removed
  */
 void ReportView::removed(unsigned int where, unsigned int how_many)
 {
@@ -663,10 +678,9 @@ void ReportView::cell_changing(unsigned int index, unsigned int column)
 /**
  * Inform the view that items have been changed.
  *
-* @param index location of item that will be changed from
-* @param column The column that has been changed
-*/
-
+ * @param index location of item that will be changed from
+ * @param column The column that has been changed
+ */
 void ReportView::cell_changed(unsigned int index, unsigned int column)
 {
 	unsigned int first = index;
@@ -721,6 +735,8 @@ void ReportView::cell_changed(unsigned int index, unsigned int column)
 
 /**
  * Get column from position on window
+ *
+ * @param x horizontal position from the left of the window work area
  */
 unsigned int ReportView::column_from_x(int x) const
 {
@@ -738,6 +754,8 @@ unsigned int ReportView::column_from_x(int x) const
 
 /**
  * Return x coordinate relative to window of column
+ *
+ * @returns horzontal distance of column from left of the window work area
  */
 int ReportView::x_from_column(unsigned int column) const
 {
@@ -754,7 +772,9 @@ int ReportView::x_from_column(unsigned int column) const
 }
 
 /**
- * Redraw the window
+ * Redraw the window.
+ *
+ * @param event information on area needing redraw
  */
 void ReportView::redraw(const RedrawEvent &event)
 {
@@ -870,6 +890,8 @@ unsigned int ReportView::screen_index(const Point &scr_pt) const
  * Return the index under the screen point, checks
  * if it hits content of the item renderer.
  *
+ * @param scr_pt location on screen to test
+ *
  * Returns: NO_INDEX if doesn't hit content
  */
 unsigned int ReportView::hit_test(const Point &scr_pt) const
@@ -914,6 +936,9 @@ unsigned int ReportView::hit_test(const Point &scr_pt) const
 
 /**
  * Get bounding box of the given index in work area coordinates
+ *
+ * @param bounds updated to bounds of row with given index
+ * @param index zero based row number
  */
 void ReportView::get_bounds(BBox &bounds, unsigned int index) const
 {
@@ -925,6 +950,10 @@ void ReportView::get_bounds(BBox &bounds, unsigned int index) const
 
 /**
  * Get bounding box of the range of indices in work area coordinates
+ *
+ * @param bounds updated to bounds of given rows
+ * @param first first zero based row number
+ * @param last last zero based row number
  */
 void ReportView::get_bounds(BBox &bounds, unsigned int first, unsigned int last) const
 {

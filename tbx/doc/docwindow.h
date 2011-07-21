@@ -65,8 +65,8 @@ class DocWindow :
 	public tbx::DCSCancelListener
 {
 protected:
-	tbx::Window _window;
-	Document *_document;
+	tbx::Window _window; //!< Window showing document
+	Document *_document; //!< Document that is being shown
 
 public:
 	DocWindow(Document *doc, std::string template_name);

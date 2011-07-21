@@ -122,26 +122,62 @@ public:
 	 */
 	bool operator!=(const Gadget &other) const {return (_handle != other.handle() || _id != other.id());}
 
-	//@{
-	//  Set the the text to display
-	//@}
+	/**
+	/*  Set the the text to display
+	 *
+	 * @param value new text to show in the writable field
+	 */
 	void text(const std::string &value) {string_property(512, value);}
 
-	//@{
-	//   Get the the text this is being displayed
-	//@}
+	/**
+	 * Get the the text that is being displayed
+	 */
 	std::string text() const {return string_property(513);}
 
-	//@{
-	//   Get the length of the text property
-	//
-	//@returns Number of characters for this property
-	//@}
+	/**
+	 *   Get the length of the text property
+	 *
+	 * @returns Number of characters for this property
+	 */
 	int text_length() const {return string_property_length(513);}
 
-	//TODO: Document allowable
+	/**
+	 * Set the characters that are allowed to be entered into a writable field.
+	 *
+	 * allow-spec ::= { char-spec }* { ~ { char-spec }* }*
+     * char-spec ::= char | char-char
+     * char ::= \- | \; | \\ | \~ | any character other than - ;
+     *
+	 * Each char-spec in the 'allow' string specifies a character or range
+	 * of characters; the ~ character toggles whether they are included or
+	 * excluded from the icon text string:
+	 *
+	 * e.g. 0-9a-z~dpu   allows the digits 0 - 9 and the lower-case letters
+	 * a - z, except for 'd', 'p' and 'u'
+	 *
+	 * If the first character following the A command is a ~ all normal
+	 * characters are initially included:
+	 *
+	 * e.g. ~0-9   allows all characters except for the digits 0 - 9
+	 *
+	 * If you use any of the four special characters - ; ~ \ in a char-spec
+	 * you must precede them with a backslash \:
+	 *
+	 * e.g. ~\-\;\~\\ allows all characters except the four special ones
+	 * - ; ~ \
+	 *
+	 * @param value string specifying what character can be entered into the list box.
+	 */
 	void allowable(const std::string &value) {string_property(514, value);}
+	/**
+	 * Get the pattern that specifies the character that can be entered into this field
+	 *
+	 * @return string specification of characters allowed to be entered or "" if no restriction.
+	 */
 	std::string allowable() const {return string_property(515);}
+	/**
+	 * Get the length of the allowable pattern
+	 */
 	int allowable_length() const {return string_property_length(515);}
 
 	void font(const std::string &name, int width, int height);

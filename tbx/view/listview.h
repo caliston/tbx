@@ -46,9 +46,9 @@ namespace view {
 class ListView : public ItemView
 {
 protected:
-	ItemRenderer *_item_renderer;
-	unsigned int _height;
-	unsigned int _width;
+	ItemRenderer *_item_renderer; //!< Object used to render itesm
+	unsigned int _height;         //!< Height of one item
+	unsigned int _width;		  //!< Width of list view
 
 public:
 	ListView(tbx::Window window, ItemRenderer *item_renderer = 0);

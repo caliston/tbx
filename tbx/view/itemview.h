@@ -348,6 +348,11 @@ public:
 	ItemViewClickListener() {}
 	virtual ~ItemViewClickListener() {}
 
+	/**
+	 * Method called when an item in the view is clicked
+	 *
+	 * @param event details of item hit (if any)
+	 */
 	virtual void itemview_clicked(const ItemViewClickEvent &event) = 0;
 };
 
@@ -362,10 +367,17 @@ class ItemViewClearMenuSelection : public tbx::HasBeenHiddenListener
 {
 	ItemView *_view;
 public:
+	/**
+	 * Constructor for the given item view
+	 *
+	 * @param iv ItemView this updates menu selection for
+	 */
 	ItemViewClearMenuSelection(ItemView *iv) : _view(iv) {};
 
 	/**
 	 * Clears the menu selection when the object is hidden
+	 *
+	 * @param hidden_event ignored
 	 */
 	virtual void has_been_hidden(const EventInfo &hidden_event)
 	{

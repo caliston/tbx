@@ -126,7 +126,7 @@ public:
 	  * Load document from the given input stream.
 	  *
 	  * @param is input stream to load from
-	  * @param estimated size of data or -1 if estimate not given
+	  * @param estimated_size estimated size of data or -1 if estimate not given
 	  */
 	 virtual bool load(std::istream &is, int estimated_size) = 0;
 	 virtual void load_completed(std::string file_name, bool from_filer);

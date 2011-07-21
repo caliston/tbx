@@ -51,12 +51,30 @@ class DocCreatorBase
 {
 	int _file_type;
 public:
+	/**
+	 * Construct a document and window creator for a file type
+	 *
+	 * @param file_type file type for this type of document
+	 */
 	DocCreatorBase(int file_type) : _file_type(file_type) {}
 	virtual ~DocCreatorBase() {}
 
+	/**
+	 * Return the file type handled by this document creator
+	 */
 	int file_type() const {return _file_type;}
 
+	/**
+	 * Override this method to create the document object
+	 *
+	 * @returns Document derived object to handle the document data
+	 */
 	virtual Document *create_document() = 0;
+	/**
+	 * Create the window used to display the given document
+	 *
+	 * @param doc document to create the main window for
+	 */
 	virtual void create_window(Document *doc) = 0;
 
 };
@@ -68,6 +86,11 @@ public:
 template<class T, class W> class DocCreator : public DocCreatorBase
 {
 public:
+	/**
+	 * Construct document creator for a file type
+	 *
+	 * @param file_type file type of documents created by this object
+	 */
 	DocCreator(int file_type) : DocCreatorBase(file_type) {}
 	virtual ~DocCreator() {}
 	virtual Document *create_document() {return new T();}
@@ -147,7 +170,13 @@ public:
 	DocManager(DocCreatorBase *doc_creator);
 	virtual ~DocManager();
 
+	/**
+	 * Get single instance of the document manager
+	 */
 	static DocManager *instance() {return _instance;}
+	/**
+	 * Get the object that creates documents and their main window
+	 */
 	DocCreatorBase *doc_creator() {return _doc_creator;}
 
 	unsigned int modified_count() const;

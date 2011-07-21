@@ -159,10 +159,12 @@ public:
 template<class T> class TypedItemRenderer : public ItemRenderer
 {
 protected:
-	ItemViewValue<T> *_value_provider;
+	ItemViewValue<T> *_value_provider; //!< Object to retrieve the value for a rendered
 public:
 	/**
 	 * Construct the item view renderer
+	 *
+	 * @param vp object used to retrieve values to render
 	 */
 	TypedItemRenderer(ItemViewValue<T> *vp) : _value_provider(vp) {}
 };
@@ -176,6 +178,11 @@ public:
 class WimpFontItemRenderer : public TypedItemRenderer<std::string>
 {
 public:
+	/**
+	 * Construct with object to give value to render
+	 *
+	 * @param vv object that returns a string to render
+	 */
 	WimpFontItemRenderer(ItemViewValue<std::string> *vv)
 	: TypedItemRenderer<std::string>(vv)
 	  {
@@ -185,22 +192,30 @@ public:
 
 	/**
 	 * Render text in black using current wimp font
+	 *
+	 * @param info Information on what to render and where
 	 */
 	virtual void render(const ItemRenderer::Info &info);
 
 
 	/**
 	 * Used to measure the width of a column
+	 *
+	 * @param index zero based index of item to get the width for
 	 */
 	virtual unsigned int width(unsigned int index) const;
 
 	/**
 	 * Wimp font height is always 40
+	 *
+	 * @param index (unused in this renderer)
 	 */
 	virtual unsigned int height(unsigned int index) const {return 40;}
 
 	/**
 	 * Called to get the size of the cell.
+	 *
+	 * @param index zero based index of item to get the size for
 	 */
 	virtual Size size(unsigned int index) const;
 
@@ -215,6 +230,11 @@ public:
 class SpriteItemRenderer : public TypedItemRenderer<tbx::Sprite *>
 {
 public:
+	/**
+	 * Construct with object to give value to render
+	 *
+	 * @param vv object that returns a sprite to render
+	 */
 	SpriteItemRenderer(ItemViewValue<tbx::Sprite *> *vv) :
 		 TypedItemRenderer<tbx::Sprite *>(vv) {};
 
