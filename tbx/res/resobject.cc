@@ -301,12 +301,25 @@ void ResObject::object_version(int new_version)
 	object_header()->version = new_version;
 }
 
+/**
+ * Set the object flags for this object
+ *
+ * You can use the create_on_load etc methods to change/interrogate
+ * these flags in a clearer way.
+ *
+ * @param flags new value for the object flags
+ */
 void ResObject::object_flags(unsigned int flags)
 {
 	make_writeable();
 	object_header()->flags = flags;
 }
 
+/**
+ * Set if the object to be automatically created when the Resource file is loaded
+ *
+ * @value true to set the object to be created when loaded
+ */
 void ResObject::create_on_load(bool value)
 {
 	make_writeable();
@@ -314,6 +327,11 @@ void ResObject::create_on_load(bool value)
 	else object_header()->flags &= ~1;
 }
 
+/**
+ * Set if the object to be automatically shown when it is created.
+ *
+ * @param value true to set object to be shown when created
+ */
 void ResObject::show_on_create(bool value)
 {
 	make_writeable();
@@ -321,6 +339,18 @@ void ResObject::show_on_create(bool value)
 	else  object_header()->flags &= ~2;
 }
 
+/**
+ * Set if the object is to be a shared object
+ *
+ * An object that is shared will only create one Toolbox object that
+ * will be reference counted whenever it is created rather than a
+ * new object every time it is created.
+ *
+ * The Toolbox object will not be deleted until every call to create it
+ * has been match by a call to destroy it.
+ *
+ * @param value true to make this a shared object
+ */
 void ResObject::shared(bool value)
 {
 	make_writeable();
@@ -328,6 +358,15 @@ void ResObject::shared(bool value)
 	else  object_header()->flags &= ~4;
 }
 
+/**
+ * Set if the object should be an ancestor object
+ *
+ * An ancestor object will have its object/component placed in
+ * the event ID block of any event raised on any of its
+ * descendents
+ *
+ * @param value true to make this an ancestor object
+ */
 void ResObject::ancestor(bool value)
 {
 	make_writeable();
@@ -351,6 +390,9 @@ void ResObject::check_class_id(int class_id) const
 
 /**
  * Insert a component in an object
+ *
+ * @param offset offset to insert the component
+ * @param comp_impl private component implementation handler
  */
 void ResObject::insert_component(int offset, const ResImpl *comp_impl)
 {

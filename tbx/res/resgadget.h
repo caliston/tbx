@@ -35,6 +35,9 @@ namespace res {
 
 class ResWindow;
 
+/**
+ * Base class for gadget memory resources
+ */
 class ResGadget : public ResBase
 {
 	friend class ResWindow;

@@ -341,6 +341,9 @@ class ResWindow : public ResObject
 	   
 	   // num_icons  at 160 (must be zero)  
 
+	   /**
+	    * Constant iterator for shortcuts
+	    */
 	   class const_shortcut_iterator : public ResIteratorBase<ResWindow>
 	   {
 		   const_shortcut_iterator(const ResWindow *window, int offset) : ResIteratorBase<ResWindow>(window, offset) {}
@@ -358,6 +361,9 @@ class ResWindow : public ResObject
 	   const_shortcut_iterator shortcut_cend() const {return const_shortcut_iterator(this, end_shortcut_offset());}
 	   const_shortcut_iterator find_shortcut(int component_id) const;
 
+	   /**
+	    * Iterator for shortcuts
+	    */
    	   class shortcut_iterator : public ResIteratorBase<ResWindow>
 	   {
 		   shortcut_iterator(const ResWindow *window, int offset) : ResIteratorBase<ResWindow>(window, offset) {}
@@ -385,6 +391,9 @@ class ResWindow : public ResObject
 	   shortcut_iterator erase_shortcut(shortcut_iterator pos);
 
 
+	   /**
+	    * Constant iterator for gadgets in the window resource
+	    */
 	   class const_gadget_iterator : public ResIteratorBase<ResWindow>
 	   {
 		   const_gadget_iterator(const ResWindow *window, int offset) : ResIteratorBase<ResWindow>(window, offset) {}
@@ -402,6 +411,9 @@ class ResWindow : public ResObject
 	   const_gadget_iterator gadget_cend() const {return const_gadget_iterator(this, end_gadget_offset());}
 	   const_gadget_iterator find_gadget(int component_id) const;
 
+	   /**
+	    * Iterator for gadgets in the window resource
+	    */
    	   class gadget_iterator : public ResIteratorBase<ResWindow>
 	   {
 		   gadget_iterator(const ResWindow *window, int offset) : ResIteratorBase<ResWindow>(window, offset) {}

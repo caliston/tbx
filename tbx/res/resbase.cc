@@ -31,6 +31,8 @@ namespace tbx {
 
 namespace res {
 
+//! @cond INTERNAL
+
 #ifdef CHECK_STRING_ALLOC
 
 inline void check_string_table(char *table)
@@ -1497,9 +1499,12 @@ void ResImpl::erase(int offset, int size)
 	_body = new_data + body_offset;
 }
 
+//! @endcond
 
 /**
  * Copy constructor
+ *
+ * @param other ResBase to copy
  */
 ResBase::ResBase(const ResBase &other)
 {
@@ -1523,6 +1528,8 @@ ResBase::~ResBase()
 
 /**
  * Assignment
+ *
+ * @param other ResBase to copy
  */
 ResBase &ResBase::operator=(const ResBase &other)
 {
@@ -1542,6 +1549,8 @@ ResBase &ResBase::operator=(const ResBase &other)
 
 /**
  * Return a string at the given offset
+ *
+ * @param offset offset of pointer to string in object
  */
 const char *ResBase::string(int offset) const
 {
@@ -1550,6 +1559,9 @@ const char *ResBase::string(int offset) const
 
 /**
  * Set a string at the given offset
+ *
+ * @param offset offset of string in the object
+ * @param value new value for the string
  */
 void ResBase::string(int offset, const char *value)
 {
@@ -1558,6 +1570,9 @@ void ResBase::string(int offset, const char *value)
 }
 /**
  * Set a string at the given offset
+
+ * @param offset offset of string in the object
+ * @param value new value for the string
  */
 void ResBase::string(int offset, std::string value)
 {
@@ -1581,6 +1596,8 @@ void ResBase::string_with_length(int offset, const char *value, int length /*= -
 
 /**
  * Get the message string at the given offset
+ *
+ * @param offset offset of message in the object
  */
 const char *ResBase::message(int offset) const
 {
@@ -1589,6 +1606,9 @@ const char *ResBase::message(int offset) const
 
 /**
  * Set a message at the given offset
+ *
+ * @param offset offset of message in the object
+ * @param value new value for the message
  */
 void ResBase::message(int offset, const char *value)
 {
@@ -1598,6 +1618,9 @@ void ResBase::message(int offset, const char *value)
 
 /**
  * Set a message at the given offset
+ *
+ * @param offset offset of message in the object
+ * @param value new value for the message
  */
 void ResBase::message(int offset, std::string value)
 {
@@ -1608,9 +1631,9 @@ void ResBase::message(int offset, std::string value)
 /**
  * Assign a message where the length is at offset+4
  *
- * @param offset - offset into body of message
- * @param value - new value for the message
- * @param length - new length or -1 to use existing length.
+ * @param offset offset into body of message
+ * @param value new value for the message
+ * @param length new length or -1 to use existing length.
  * The length is always adjusted so it is big enough for the value.
  */
 void ResBase::message_with_length(int offset, const char *value, int length/* = -1*/)
@@ -1621,6 +1644,9 @@ void ResBase::message_with_length(int offset, const char *value, int length/* = 
 
 /**
  * Set a number at the specified offset
+ *
+ * @param offset offset of the number in the object
+ * @param value new value
  */
 void ResBase::int_value(int offset, int value)
 {
@@ -1629,7 +1655,10 @@ void ResBase::int_value(int offset, int value)
 }
 
 /**
- * Set a number at the specified offset
+ * Set an unsigned number at the specified offset
+ *
+ * @param offset offset of the number in the object
+ * @param value new value
  */
 void ResBase::uint_value(int offset, unsigned int value)
 {
@@ -1637,12 +1666,24 @@ void ResBase::uint_value(int offset, unsigned int value)
 	_impl->uint_value(offset, value);
 }
 
+/**
+ * Set an unsigned byte (8 bit value) at the specified offset
+ *
+ * @param offset offset of the value in the object
+ * @param value new value
+ */
 void ResBase::byte_value(int offset, unsigned char value)
 {
 	make_writeable();
 	_impl->byte_value(offset, value);
 }
 
+/**
+ * Set an unsigned short (16 bit value) at the specified offset
+ *
+ * @param offset offset of the value in the object
+ * @param value new value
+ */
 void ResBase::ushort_value(int offset, unsigned short value)
 {
 	make_writeable();
@@ -1651,6 +1692,10 @@ void ResBase::ushort_value(int offset, unsigned short value)
 
 /**
  * Set/clear the bits in mask
+ *
+ * @param offset offset of the value to change
+ * @param mask bits to set on or off
+ * @param on true to set mask bits to 1, false to set them to 0
  */
 void ResBase::flag(int offset, int mask, bool on)
 {
@@ -1660,6 +1705,10 @@ void ResBase::flag(int offset, int mask, bool on)
 
 /**
  * Set bits in given mask clearing others
+ *
+ * @param offset of value to change
+ * @param mask bits to change
+ * @param value new value for bits in mask
  */
 void ResBase::flag_value(int offset, int mask, int value)
 {
@@ -1669,6 +1718,9 @@ void ResBase::flag_value(int offset, int mask, int value)
 
 /**
  * Initialise a string in a constructor helper
+ *
+ * @param offset offset of string in the object
+ * @param value initial value for the string
  */
 void ResBase::init_string(int offset, const char *value)
 {
@@ -1677,23 +1729,34 @@ void ResBase::init_string(int offset, const char *value)
 
 /**
  * Initialise a message in a constructor helper
+ *
+ * @param offset offset of the message in the object
+ * @param value initial value for the message
  */
 void ResBase::init_message(int offset, const char *value)
 {
 	_impl->init_text(offset, value, false);
 }
 
+/**
+ * Initialise a sprite area reference
+ *
+ * @param offset offset of the sprite area reference in the object
+ */
 void ResBase::init_sprite_area_ref(int offset)
 {
 	_impl->init_sprite_area_ref(offset);
 }
 
+/**
+ * Initialise an object reference
+ *
+ * @param offset offset of the object reference in the object
+ */
 void ResBase::init_object_ref(int offset)
 {
 	_impl->init_object_ref(offset);
 }
-
-
 
 }
 }

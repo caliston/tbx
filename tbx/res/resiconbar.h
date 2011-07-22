@@ -32,6 +32,9 @@ namespace tbx
 namespace res
 {
 
+/**
+ * Class for Iconbar in memory template
+ */
 class ResIconbar : public ResObject
 {
    public:

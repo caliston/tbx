@@ -94,17 +94,38 @@ public:
 	void object_version(int new_version);
 
 	/**
-	 * object flags - use methods below for names access to bits
+	 * object flags - use methods below for named access to the
+	 * bits of the flags
 	 */
 	unsigned int object_flags() const {return object_header()->flags;}
 	void object_flags(unsigned int flags);
 
+	/**
+	 * Get create on load flag
+	 *
+	 * @returns true if this object will be created when it is loaded
+	 */
 	bool create_on_load() const {return (object_header()->flags & 1) != 0;}
 	void create_on_load(bool value);
+	/**
+	 * Get show on create flags
+	 *
+	 * @returns true if this object will be shown when it is created
+	 */
 	bool show_on_create() const {return (object_header()->flags & 2) != 0;}
 	void show_on_create(bool value);
+	/**
+	 * Get shared flag
+	 *
+	 * @returns true if this creates shared objects
+	 */
 	bool shared() const {return (object_header()->flags & 4) != 0;}
 	void shared(bool value);
+	/**
+	 * Get ancestor flags
+	 *
+	 * @returns true if this object will be created as an ancestor
+	 */
 	bool ancestor() const {return (object_header()->flags & 8) != 0;}
 	void ancestor(bool value);
 

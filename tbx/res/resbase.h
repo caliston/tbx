@@ -34,6 +34,8 @@ namespace tbx {
 
 namespace res {
 
+//! @cond INTERNAL
+
 /**
  * Structure to represent a relocation table
  */
@@ -241,6 +243,7 @@ public:
 	void erase(int offset, int size);
 };
 
+//! @endcond
 
 
 /**
@@ -249,8 +252,13 @@ public:
 class ResBase
 {
 protected:
-	ResImpl *_impl;
+	ResImpl *_impl; //!< Internal Resource implementation
 
+	/**
+	 * Create from internal resource implementation
+	 *
+	 * @param impl internal implementation class
+	 */
 	ResBase(ResImpl *impl) { _impl = impl ;}
 
 public:
@@ -270,6 +278,15 @@ protected:
 	void string(int offset, const char *value);
 	void string(int offset, std::string value);
 	void string_with_length(int offset, const char *value, int length = -1);
+
+	/**
+	 * Assign a string where the length is at offset+4
+	 *
+	 * @param offset - offset into body of string
+	 * @param value - new value for the string
+	 * @param length - new length or -1 to use existing length.
+	 * The length is always adjusted so it is big enough for the value.
+	 */
 	void string_with_length(int offset, const std::string &value, int length = -1)
 	{
 		string_with_length(offset, value.c_str(), length);
@@ -278,24 +295,70 @@ protected:
 	void message(int offset, const char *value);
 	void message(int offset, std::string value);
 	void message_with_length(int offset, const char *value, int length = -1);
+	/**
+	 * Assign a message where the length is at offset+4
+	 *
+	 * @param offset offset into body of message
+	 * @param value new value for the message
+	 * @param length new length or -1 to use existing length.
+	 * The length is always adjusted so it is big enough for the value.
+	 */
 	void message_with_length(int offset, const std::string &value, int length = -1)
 	{
 		message_with_length(offset, value.c_str(), length);
 	}
+	/**
+	 * Get an integer value
+	 *
+	 * @param offset offset to retrieve value for
+	 * @returns integer value at the offset
+	 */
 	int int_value(int offset) const {return _impl->int_value(offset);}
 	void int_value(int offset, int value);
+	/**
+	 * Get an unsigned integer value
+	 *
+	 * @param offset offset to retrieve value for
+	 * @returns integer value at the offset
+	 */
 	unsigned int uint_value(int offset) const {return _impl->uint_value(offset);}
 	void uint_value(int offset, unsigned int value);
 
+	/**
+	 * Get a byte value
+	 *
+	 * @param offset offset to retrieve value for
+	 * @returns an unsigned 8 bit value
+	 */
 	unsigned char byte_value(int offset) const {return _impl->byte_value(offset);}
 	void byte_value(int offset, unsigned char value);
 
+	/**
+	 * Get a unsigned short value
+	 *
+	 * @param offset offset to retrieve value for
+	 * @returns unsigned 16 bit value at the offset
+	 */
 	unsigned short ushort_value(int offset) const {return _impl->ushort_value(offset);}
 	void ushort_value(int offset, unsigned short value);
 
+	/**
+	 * Check if any of the bits in a mask are set
+	 *
+	 * @param offset offset to check bits at
+	 * @param mask bits to check
+	 * @returns true if one or more of the mask bits are set
+	 */
 	bool flag(int offset, int mask) const {return _impl->flag(offset, mask);}
 	void flag(int offset, int mask, bool on);
 
+	/**
+	 * Get the bits for the given mask
+	 *
+	 * @param offset of value to check bits off
+	 * @param mask bits to check
+	 * @returns value & mask bits
+	 */
 	int flag_value(int offset, int mask) const {return _impl->flag_value(offset, mask);}
 	void flag_value(int offset, int mask, int value);
 

@@ -53,6 +53,9 @@ public:
 	bool contains(std::string name) const;
 	ResObject object(std::string name) const;
 
+	/**
+	 * Constant iterator of objects in this resource file
+	 */
    class const_iterator : public ResIteratorBase<ResFile>
    {
 	   const_iterator(const ResFile *res_file, int offset) : ResIteratorBase<ResFile>(res_file, offset) {}
