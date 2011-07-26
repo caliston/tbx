@@ -39,17 +39,34 @@ class ResActionButton : public ResGadget
 public:
 	enum {TYPE_ID = 128 };
 
+	/**
+	 * Construct an action button gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an action button
+	 */
 	ResActionButton(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an action button gadget resource
+	 *
+	 * @param other action button to copy resource from
+	 */
 	ResActionButton(const ResActionButton &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResActionButton() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an action button
+	 */
 	ResActionButton &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -57,12 +74,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another action button gadget resource
+	 *
+	 * @param other action button gadget resource to copy
+	 */
 	ResActionButton &operator=(const ResActionButton &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a action button gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResActionButton()
 	  : ResGadget(128,52)
 	{

@@ -40,17 +40,34 @@ class ResStringSet : public ResGadget
 public:
 	enum {TYPE_ID = 896 };
 
+	/**
+	 * Construct an string set gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an string set
+	 */
 	ResStringSet(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an string set gadget resource
+	 *
+	 * @param other string set to copy resource from
+	 */
 	ResStringSet(const ResStringSet &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResStringSet() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an string set
+	 */
 	ResStringSet &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -58,12 +75,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another string set gadget resource
+	 *
+	 * @param other string set gadget resource to copy
+	 */
 	ResStringSet &operator=(const ResStringSet &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a string set gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResStringSet()
 	  : ResGadget(896,68)
 	{

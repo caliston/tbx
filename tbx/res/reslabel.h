@@ -40,17 +40,34 @@ class ResLabel : public ResGadget
 public:
 	enum {TYPE_ID = 320 };
 
+	/**
+	 * Construct an label gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an label
+	 */
 	ResLabel(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an label gadget resource
+	 *
+	 * @param other label to copy resource from
+	 */
 	ResLabel(const ResLabel &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResLabel() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an label
+	 */
 	ResLabel &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -58,12 +75,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another label gadget resource
+	 *
+	 * @param other label gadget resource to copy
+	 */
 	ResLabel &operator=(const ResLabel &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a label gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResLabel()
 	  : ResGadget(320,40)
 	{

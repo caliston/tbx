@@ -26,7 +26,7 @@
 #define TBX_RES_RESWRITABLEFIELD_H
 
 #include "resgadget.h"
-#include "ResJustification.h"
+#include "resjustification.h"
 
 namespace tbx {
 namespace res {
@@ -40,17 +40,34 @@ class ResWritableField : public ResGadget
 public:
 	enum {TYPE_ID = 512 };
 
+	/**
+	 * Construct an writable field gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an writable field
+	 */
 	ResWritableField(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an writable field gadget resource
+	 *
+	 * @param other writable field to copy resource from
+	 */
 	ResWritableField(const ResWritableField &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResWritableField() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an writable field
+	 */
 	ResWritableField &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -58,12 +75,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another writable field gadget resource
+	 *
+	 * @param other writable field gadget resource to copy
+	 */
 	ResWritableField &operator=(const ResWritableField &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a writable field gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResWritableField()
 	  : ResGadget(512,60)
 	{

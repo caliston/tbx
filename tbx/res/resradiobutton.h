@@ -39,17 +39,34 @@ class ResRadioButton : public ResGadget
 public:
 	enum {TYPE_ID = 384 };
 
+	/**
+	 * Construct an radio button gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an radio button
+	 */
 	ResRadioButton(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an radio button gadget resource
+	 *
+	 * @param other radio button to copy resource from
+	 */
 	ResRadioButton(const ResRadioButton &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResRadioButton() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an radio button
+	 */
 	ResRadioButton &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -57,12 +74,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another radio button gadget resource
+	 *
+	 * @param other radio button gadget resource to copy
+	 */
 	ResRadioButton &operator=(const ResRadioButton &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a radio button gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResRadioButton()
 	  : ResGadget(384,52)
 	{

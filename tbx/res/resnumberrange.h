@@ -40,17 +40,34 @@ class ResNumberRange : public ResGadget
 public:
 	enum {TYPE_ID = 832 };
 
+	/**
+	 * Construct an number range gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an number range
+	 */
 	ResNumberRange(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an number range gadget resource
+	 *
+	 * @param other number range to copy resource from
+	 */
 	ResNumberRange(const ResNumberRange &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResNumberRange() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an number range
+	 */
 	ResNumberRange &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -58,12 +75,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another number range gadget resource
+	 *
+	 * @param other number range gadget resource to copy
+	 */
 	ResNumberRange &operator=(const ResNumberRange &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a number range gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResNumberRange()
 	  : ResGadget(832,68)
 	{

@@ -39,17 +39,34 @@ class ResOptionButton : public ResGadget
 public:
 	enum {TYPE_ID = 192 };
 
+	/**
+	 * Construct an option button gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an option button
+	 */
 	ResOptionButton(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an option button gadget resource
+	 *
+	 * @param other option button to copy resource from
+	 */
 	ResOptionButton(const ResOptionButton &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResOptionButton() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an option button
+	 */
 	ResOptionButton &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -57,12 +74,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another option button gadget resource
+	 *
+	 * @param other option button gadget resource to copy
+	 */
 	ResOptionButton &operator=(const ResOptionButton &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a option button gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResOptionButton()
 	  : ResGadget(192,48)
 	{

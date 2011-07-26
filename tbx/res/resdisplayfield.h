@@ -40,17 +40,34 @@ class ResDisplayField : public ResGadget
 public:
 	enum {TYPE_ID = 448 };
 
+	/**
+	 * Construct an display field gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an display field
+	 */
 	ResDisplayField(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an display field gadget resource
+	 *
+	 * @param other display field to copy resource from
+	 */
 	ResDisplayField(const ResDisplayField &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResDisplayField() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an display field
+	 */
 	ResDisplayField &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -58,12 +75,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another display field gadget resource
+	 *
+	 * @param other display field gadget resource to copy
+	 */
 	ResDisplayField &operator=(const ResDisplayField &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a display field gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResDisplayField()
 	  : ResGadget(448,44)
 	{

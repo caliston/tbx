@@ -39,17 +39,34 @@ class ResSlider : public ResGadget
 public:
 	enum {TYPE_ID = 576 };
 
+	/**
+	 * Construct an slider gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an slider
+	 */
 	ResSlider(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an slider gadget resource
+	 *
+	 * @param other slider to copy resource from
+	 */
 	ResSlider(const ResSlider &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResSlider() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an slider
+	 */
 	ResSlider &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -57,12 +74,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another slider gadget resource
+	 *
+	 * @param other slider gadget resource to copy
+	 */
 	ResSlider &operator=(const ResSlider &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a slider gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResSlider()
 	  : ResGadget(576,52)
 	{

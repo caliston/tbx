@@ -39,17 +39,34 @@ class ResButton : public ResGadget
 public:
 	enum {TYPE_ID = 960 };
 
+	/**
+	 * Construct an button gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an button
+	 */
 	ResButton(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an button gadget resource
+	 *
+	 * @param other button to copy resource from
+	 */
 	ResButton(const ResButton &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResButton() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an button
+	 */
 	ResButton &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -57,12 +74,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another button gadget resource
+	 *
+	 * @param other button gadget resource to copy
+	 */
 	ResButton &operator=(const ResButton &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a button gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResButton()
 	  : ResGadget(960,56)
 	{

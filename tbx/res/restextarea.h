@@ -39,17 +39,34 @@ class ResTextArea : public ResGadget
 public:
 	enum {TYPE_ID = 0x4018 };
 
+	/**
+	 * Construct an text area gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an text area
+	 */
 	ResTextArea(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an text area gadget resource
+	 *
+	 * @param other text area to copy resource from
+	 */
 	ResTextArea(const ResTextArea &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResTextArea() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an text area
+	 */
 	ResTextArea &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -57,12 +74,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another text area gadget resource
+	 *
+	 * @param other text area gadget resource to copy
+	 */
 	ResTextArea &operator=(const ResTextArea &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a text area gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResTextArea()
 	  : ResGadget(0x4018,56)
 	{

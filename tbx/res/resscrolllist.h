@@ -39,17 +39,34 @@ class ResScrollList : public ResGadget
 public:
 	enum {TYPE_ID = 0x401A };
 
+	/**
+	 * Construct an scroll list gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an scroll list
+	 */
 	ResScrollList(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an scroll list gadget resource
+	 *
+	 * @param other scroll list to copy resource from
+	 */
 	ResScrollList(const ResScrollList &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResScrollList() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an scroll list
+	 */
 	ResScrollList &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -57,12 +74,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another scroll list gadget resource
+	 *
+	 * @param other scroll list gadget resource to copy
+	 */
 	ResScrollList &operator=(const ResScrollList &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a scroll list gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResScrollList()
 	  : ResGadget(0x401A,48)
 	{

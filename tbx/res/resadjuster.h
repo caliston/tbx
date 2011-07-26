@@ -37,30 +37,57 @@ class ResAdjuster : public ResGadget
 {
 public:
   enum {TYPE_ID = 768 };
+	/**
+	 * Construct an adjuster gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an adjuster
+	 */
 	ResAdjuster(const ResGadget &other) : ResGadget(other)
 	{
-     check_type(TYPE_ID);
+   check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an adjuster gadget resource
+	 *
+	 * @param other adjuster to copy resource from
+	 */
 	ResAdjuster(const ResAdjuster &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResAdjuster() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an adjuster
+	 */
 	ResAdjuster &operator=(const ResGadget &other)
 	{
-     other.check_type(TYPE_ID);
+		other.check_type(TYPE_ID);
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Assign from another adjuster gadget resource
+	 *
+	 * @param other adjuster gadget resource to copy
+	 */
 	ResAdjuster &operator=(const ResAdjuster &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a adjuster gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResAdjuster()
     : ResGadget(768,40)
     {

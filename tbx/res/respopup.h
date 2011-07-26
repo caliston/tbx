@@ -39,17 +39,34 @@ class ResPopUp : public ResGadget
 public:
 	enum {TYPE_ID = 704 };
 
+	/**
+	 * Construct an pop up gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an pop up
+	 */
 	ResPopUp(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an pop up gadget resource
+	 *
+	 * @param other pop up to copy resource from
+	 */
 	ResPopUp(const ResPopUp &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResPopUp() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an pop up
+	 */
 	ResPopUp &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -57,12 +74,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another pop up gadget resource
+	 *
+	 * @param other pop up gadget resource to copy
+	 */
 	ResPopUp &operator=(const ResPopUp &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a pop up gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResPopUp()
 	  : ResGadget(704,40)
 	{

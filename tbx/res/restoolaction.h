@@ -39,17 +39,34 @@ class ResToolAction : public ResGadget
 public:
 	enum {TYPE_ID = 0x4014 };
 
+	/**
+	 * Construct an tool action gadget resource
+	 *
+	 * @param other ResGadget to copy resource from
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an tool action
+	 */
 	ResToolAction(const ResGadget &other) : ResGadget(other)
 	{
      check_type(TYPE_ID);
 	}
 
+	/**
+	 * Construct an tool action gadget resource
+	 *
+	 * @param other tool action to copy resource from
+	 */
 	ResToolAction(const ResToolAction &other) : ResGadget(other)
 	{
 	}
 
 	virtual ~ResToolAction() {}
 
+	/**
+	 * Assign from a ResGadget
+	 *
+	 * @param other ResGadget to copy
+	 * @throws ResGadgetTypeMismatch if the ResGadget is not an tool action
+	 */
 	ResToolAction &operator=(const ResGadget &other)
 	{
 		other.check_type(TYPE_ID);
@@ -57,12 +74,22 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another tool action gadget resource
+	 *
+	 * @param other tool action gadget resource to copy
+	 */
 	ResToolAction &operator=(const ResToolAction &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a tool action gadget resource.
+	 *
+	 * All options are false, events unset and messages are null.
+	 */
 	ResToolAction()
 	  : ResGadget(0x4014,76)
 	{
