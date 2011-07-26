@@ -39,17 +39,34 @@ class ResDCS : public ResObject
 public:
 	enum {CLASS_ID = 0x82a80 };
 
+	/**
+	 * Construct a discard/cancel/save dialogue resource from a ResObject
+	 *
+	 * @param other ResObject to construct from
+	 * @throws ResObjectClassMismatch if the ResObject is not a discard/cancel/save dialogue resource
+	 */
 	ResDCS(const ResObject &other) : ResObject(other)
 	{
      check_class_id(CLASS_ID);
 	}
 
+	/**
+	 * Construct a discard/cancel/save dialogue resource by copying another
+	 *
+	 * @param other ResDCS to copy
+	 */
 	ResDCS(const ResDCS &other) : ResObject(other)
 	{
 	}
 
 	virtual ~ResDCS() {}
 
+	/**
+	 * Assign from a ResObject
+	 *
+	 * @param other ResObject to copy
+	 * @throws ResObjectClassMismatch if the ResObject is not a discard/cancel/save dialogue resource
+	 */
 	ResDCS &operator=(const ResObject &other)
 	{
 		other.check_class_id(CLASS_ID);
@@ -57,12 +74,24 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another discard/cancel/save dialogue resource
+	 *
+	 * @param other button gadget resource to copy
+	 */
 	ResDCS &operator=(const ResDCS &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a discard/cancel/save dialogue resource
+	 *
+	 * All options are false, events unset and messages are null.
+	 *
+	 * @param name the name of this object (maximum 12 characters)
+	 */
 	ResDCS(std::string name)
 	  : ResObject(name, CLASS_ID, 100, 36 + 24)
 	{

@@ -39,17 +39,34 @@ class ResSaveAs : public ResObject
 public:
 	enum {CLASS_ID = 0x82bc0 };
 
+	/**
+	 * Construct a save as resource from a ResObject
+	 *
+	 * @param other ResObject to construct from
+	 * @throws ResObjectClassMismatch if the ResObject is not a save as resource
+	 */
 	ResSaveAs(const ResObject &other) : ResObject(other)
 	{
      check_class_id(CLASS_ID);
 	}
 
+	/**
+	 * Construct a save as resource by copying another
+	 *
+	 * @param other ResSaveAs to copy
+	 */
 	ResSaveAs(const ResSaveAs &other) : ResObject(other)
 	{
 	}
 
 	virtual ~ResSaveAs() {}
 
+	/**
+	 * Assign from a ResObject
+	 *
+	 * @param other ResObject to copy
+	 * @throws ResObjectClassMismatch if the ResObject is not a save as resource
+	 */
 	ResSaveAs &operator=(const ResObject &other)
 	{
 		other.check_class_id(CLASS_ID);
@@ -57,12 +74,24 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another save as resource
+	 *
+	 * @param other button gadget resource to copy
+	 */
 	ResSaveAs &operator=(const ResSaveAs &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a save as resource
+	 *
+	 * All options are false, events unset and messages are null.
+	 *
+	 * @param name the name of this object (maximum 12 characters)
+	 */
 	ResSaveAs(std::string name)
 	  : ResObject(name, CLASS_ID, 100, 36 + 24)
 	{

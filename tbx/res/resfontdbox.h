@@ -39,17 +39,34 @@ class ResFontDbox : public ResObject
 public:
 	enum {CLASS_ID = 0x82a00 };
 
+	/**
+	 * Construct a font dialogue resource from a ResObject
+	 *
+	 * @param other ResObject to construct from
+	 * @throws ResObjectClassMismatch if the ResObject is not a font dialogue resource
+	 */
 	ResFontDbox(const ResObject &other) : ResObject(other)
 	{
      check_class_id(CLASS_ID);
 	}
 
+	/**
+	 * Construct a font dialogue resource by copying another
+	 *
+	 * @param other ResFontDbox to copy
+	 */
 	ResFontDbox(const ResFontDbox &other) : ResObject(other)
 	{
 	}
 
 	virtual ~ResFontDbox() {}
 
+	/**
+	 * Assign from a ResObject
+	 *
+	 * @param other ResObject to copy
+	 * @throws ResObjectClassMismatch if the ResObject is not a font dialogue resource
+	 */
 	ResFontDbox &operator=(const ResObject &other)
 	{
 		other.check_class_id(CLASS_ID);
@@ -57,12 +74,24 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another font dialogue resource
+	 *
+	 * @param other button gadget resource to copy
+	 */
 	ResFontDbox &operator=(const ResFontDbox &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a font dialogue resource
+	 *
+	 * All options are false, events unset and messages are null.
+	 *
+	 * @param name the name of this object (maximum 12 characters)
+	 */
 	ResFontDbox(std::string name)
 	  : ResObject(name, CLASS_ID, 100, 36 + 32)
 	{

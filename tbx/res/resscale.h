@@ -39,17 +39,34 @@ class ResScale : public ResObject
 public:
 	enum {CLASS_ID = 0x82c00 };
 
+	/**
+	 * Construct a scale resource from a ResObject
+	 *
+	 * @param other ResObject to construct from
+	 * @throws ResObjectClassMismatch if the ResObject is not a scale resource
+	 */
 	ResScale(const ResObject &other) : ResObject(other)
 	{
      check_class_id(CLASS_ID);
 	}
 
+	/**
+	 * Construct a scale resource by copying another
+	 *
+	 * @param other ResScale to copy
+	 */
 	ResScale(const ResScale &other) : ResObject(other)
 	{
 	}
 
 	virtual ~ResScale() {}
 
+	/**
+	 * Assign from a ResObject
+	 *
+	 * @param other ResObject to copy
+	 * @throws ResObjectClassMismatch if the ResObject is not a scale resource
+	 */
 	ResScale &operator=(const ResObject &other)
 	{
 		other.check_class_id(CLASS_ID);
@@ -57,12 +74,24 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another scale resource
+	 *
+	 * @param other button gadget resource to copy
+	 */
 	ResScale &operator=(const ResScale &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a scale resource
+	 *
+	 * All options are false, events unset and messages are null.
+	 *
+	 * @param name the name of this object (maximum 12 characters)
+	 */
 	ResScale(std::string name)
 	  : ResObject(name, CLASS_ID, 100, 36+44)
 	{

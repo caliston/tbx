@@ -39,17 +39,34 @@ class ResFontMenu : public ResObject
 public:
 	enum {CLASS_ID = 0x82a40 };
 
+	/**
+	 * Construct a font menu resource from a ResObject
+	 *
+	 * @param other ResObject to construct from
+	 * @throws ResObjectClassMismatch if the ResObject is not a font menu resource
+	 */
 	ResFontMenu(const ResObject &other) : ResObject(other)
 	{
      check_class_id(CLASS_ID);
 	}
 
+	/**
+	 * Construct a font menu resource by copying another
+	 *
+	 * @param other ResFontMenu to copy
+	 */
 	ResFontMenu(const ResFontMenu &other) : ResObject(other)
 	{
 	}
 
 	virtual ~ResFontMenu() {}
 
+	/**
+	 * Assign from a ResObject
+	 *
+	 * @param other ResObject to copy
+	 * @throws ResObjectClassMismatch if the ResObject is not a font menu resource
+	 */
 	ResFontMenu &operator=(const ResObject &other)
 	{
 		other.check_class_id(CLASS_ID);
@@ -57,12 +74,24 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another font menu resource
+	 *
+	 * @param other button gadget resource to copy
+	 */
 	ResFontMenu &operator=(const ResFontMenu &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a font menu resource
+	 *
+	 * All options are false, events unset and messages are null.
+	 *
+	 * @param name the name of this object (maximum 12 characters)
+	 */
 	ResFontMenu(std::string name)
 	  : ResObject(name, CLASS_ID, 100, 36 + 8)
 	{

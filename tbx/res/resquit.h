@@ -39,17 +39,34 @@ class ResQuit : public ResObject
 public:
 	enum {CLASS_ID = 0x82a90 };
 
+	/**
+	 * Construct a quit dialogue resource from a ResObject
+	 *
+	 * @param other ResObject to construct from
+	 * @throws ResObjectClassMismatch if the ResObject is not a quit dialogue resource
+	 */
 	ResQuit(const ResObject &other) : ResObject(other)
 	{
      check_class_id(CLASS_ID);
 	}
 
+	/**
+	 * Construct a quit dialogue resource by copying another
+	 *
+	 * @param other ResQuit to copy
+	 */
 	ResQuit(const ResQuit &other) : ResObject(other)
 	{
 	}
 
 	virtual ~ResQuit() {}
 
+	/**
+	 * Assign from a ResObject
+	 *
+	 * @param other ResObject to copy
+	 * @throws ResObjectClassMismatch if the ResObject is not a quit dialogue resource
+	 */
 	ResQuit &operator=(const ResObject &other)
 	{
 		other.check_class_id(CLASS_ID);
@@ -57,12 +74,24 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another quit dialogue resource
+	 *
+	 * @param other button gadget resource to copy
+	 */
 	ResQuit &operator=(const ResQuit &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a quit dialogue resource
+	 *
+	 * All options are false, events unset and messages are null.
+	 *
+	 * @param name the name of this object (maximum 12 characters)
+	 */
 	ResQuit(std::string name)
 	  : ResObject(name, CLASS_ID, 100, 36 + 24)
 	{

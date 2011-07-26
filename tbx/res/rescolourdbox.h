@@ -39,17 +39,34 @@ class ResColourDbox : public ResObject
 public:
 	enum {CLASS_ID = 0x829C0 };
 
+	/**
+	 * Construct a colour dialogue resource from a ResObject
+	 *
+	 * @param other ResObject to construct from
+	 * @throws ResObjectClassMismatch if the ResObject is not a colour dialogue resource
+	 */
 	ResColourDbox(const ResObject &other) : ResObject(other)
 	{
      check_class_id(CLASS_ID);
 	}
 
+	/**
+	 * Construct a colour dialogue resource by copying another
+	 *
+	 * @param other ResColourDbox to copy
+	 */
 	ResColourDbox(const ResColourDbox &other) : ResObject(other)
 	{
 	}
 
 	virtual ~ResColourDbox() {}
 
+	/**
+	 * Assign from a ResObject
+	 *
+	 * @param other ResObject to copy
+	 * @throws ResObjectClassMismatch if the ResObject is not a colour dialogue resource
+	 */
 	ResColourDbox &operator=(const ResObject &other)
 	{
 		other.check_class_id(CLASS_ID);
@@ -57,12 +74,24 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another colour dialogue resource
+	 *
+	 * @param other button gadget resource to copy
+	 */
 	ResColourDbox &operator=(const ResColourDbox &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a colour dialogue resource
+	 *
+	 * All options are false, events unset and messages are null.
+	 *
+	 * @param name the name of this object (maximum 12 characters)
+	 */
 	ResColourDbox(std::string name)
 	  : ResObject(name, CLASS_ID, 100, 36+16)
 	{

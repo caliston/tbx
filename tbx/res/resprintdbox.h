@@ -39,17 +39,34 @@ class ResPrintDbox : public ResObject
 public:
 	enum {CLASS_ID = 0x82b00 };
 
+	/**
+	 * Construct a print dialogue resource from a ResObject
+	 *
+	 * @param other ResObject to construct from
+	 * @throws ResObjectClassMismatch if the ResObject is not a print dialogue resource
+	 */
 	ResPrintDbox(const ResObject &other) : ResObject(other)
 	{
      check_class_id(CLASS_ID);
 	}
 
+	/**
+	 * Construct a print dialogue resource by copying another
+	 *
+	 * @param other ResPrintDbox to copy
+	 */
 	ResPrintDbox(const ResPrintDbox &other) : ResObject(other)
 	{
 	}
 
 	virtual ~ResPrintDbox() {}
 
+	/**
+	 * Assign from a ResObject
+	 *
+	 * @param other ResObject to copy
+	 * @throws ResObjectClassMismatch if the ResObject is not a print dialogue resource
+	 */
 	ResPrintDbox &operator=(const ResObject &other)
 	{
 		other.check_class_id(CLASS_ID);
@@ -57,12 +74,24 @@ public:
 		return *this;
 	}
 
+	/**
+	 * Assign from another print dialogue resource
+	 *
+	 * @param other button gadget resource to copy
+	 */
 	ResPrintDbox &operator=(const ResPrintDbox &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 
+	/**
+	 * Construct a print dialogue resource
+	 *
+	 * All options are false, events unset and messages are null.
+	 *
+	 * @param name the name of this object (maximum 12 characters)
+	 */
 	ResPrintDbox(std::string name)
 	  : ResObject(name, CLASS_ID, 100, 36+28)
 	{
