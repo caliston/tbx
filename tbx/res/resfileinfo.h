@@ -103,17 +103,74 @@ public:
 		init_string(36,0); // window
 	}
 
-
+	/**
+	 * Raw access to all the object flags.
+	 *
+	 * It is recommended you use the other methods in this
+	 * class rather than use this directly.
+	 *
+	 * @returns integer with individual bits specifying various flags
+	 */
 	int flags() const {return int_value(0);}
+	/**
+	 * Set all the flags
+	 *
+	 * It is recommended you use the other methods in this
+	 * class rather than use this directly.
+	 *
+	 * @param value the new flags
+	 */
 	void flags(int value) {int_value(0,value);}
+	/**
+	 * Check if the about to be shown event should be generated
+	 *
+	 * @returns true if the about to be shown event should be generated
+	 */
 	bool generate_about_to_be_shown() const {return flag(0, 1<<0);}
+	/**
+	 * Set if the about to be shown event should be generated
+	 *
+	 * @param value set to true if the about to be shown event should be generated
+	 */
 	void generate_about_to_be_shown(bool value) {flag(0,1<<0,value);}
+	/**
+	 * Check if the dialogue completed event should be generated
+	 *
+	 * @returns true if the dialogue completed event should be generated
+	 */
 	bool generate_dialogue_completed() const {return flag(0, 1<<1);}
+	/**
+	 * Set if the dialogue completed event should be generated
+	 *
+	 * @param value set to true if the dialogue completed event should be generated
+	 */
 	void generate_dialogue_completed(bool value) {flag(0,1<<1,value);}
 
+	/**
+	 * Get the title of the dialogue
+	 *
+	 * @returns zero terminated string with title or 0 for the default title
+	 */
 	const char *title() const {return message(4);}
+	/**
+	 * Set the title of the dialogue
+	 *
+	 * @param value zero terminated string with the title or 0 for the default
+	 * @param max_length maximum length the title will be changed to.
+	 * -1 (the default) to use the length of the title given.
+	 */
 	void title(const char *value, int max_length = -1) {message_with_length(4, value, max_length);}
+	/**
+	 * Set the title of the dialogue
+	 *
+	 * @param value new title
+	 * @param max_length maximum length the title will be changed to.
+	 * -1 (the default) to use the length of the title given.
+	 */
 	void title(const std::string &value, int max_length = -1) {message_with_length(4, value, max_length);}
+	/**
+	 * Get the maximum size the title can be
+	 */
 	int max_title() const {return int_value(8);}
 	int modified() const {return int_value(12);}
 	void modified(int value) {int_value(12,value);}
@@ -126,8 +183,26 @@ public:
 	void filesize(int value) {int_value(24,value);}
 	UTCTime date() const {return UTCTime(int_value(28), int_value(32));}
 	void date(UTCTime value) {int_value(28,value.centiseconds() & 0xFFFFFFFF); int_value(32, (value.centiseconds() >> 32));}
+	/**
+	 * Get the name of the window template that provides the window for this
+	 * object.
+	 *
+	 * @returns name of window to use or 0 if default internal window will be used
+	 */
 	const char *window() const {return string(36);}
+	/**
+	 * Set the name of the window template that provides the window for this
+	 * object.
+	 *
+	 * @param value The name of window to use or 0 if default internal window will be used
+	 */
 	void window(const char *value) {string(36, value);}
+	/**
+	 * Set the name of the window template that provides the window for this
+	 * object.
+	 *
+	 * @param value The name of window to use or 0 if default internal window will be used
+	 */
 	void window(const std::string &value) {string(36, value);}
 
 };

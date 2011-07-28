@@ -101,10 +101,45 @@ public:
 		init_string(20,0); // window
 	}
 
-	bool generate_about_to_be_shown() const {return flag(0, 1<<0);}
-	void generate_about_to_be_shown(bool value) {flag(0,1<<0,value);}
-	bool generate_dialogue_completed() const {return flag(0, 1<<1);}
-	void generate_dialogue_completed(bool value) {flag(0,1<<1,value);}
+	  /**
+	   * Get all flags as a word raw access.
+	   *
+	   * Not normally used as there are named methods that allow access
+	   * to the individual items in the flags
+	   */
+	  unsigned int flags() const {return uint_value(0);}
+
+	  /**
+	   * Set all flags as a word
+	   *
+	   * Not normally used as there are named methods that allow access
+	   * to the individual items in the flags
+	   */
+	  void flags(unsigned int value) {uint_value(0, value);}
+	  /**
+	   * Check if the about to be shown event should be generated
+	   *
+	   * @returns true if the about to be shown event should be generated
+	   */
+	  bool generate_about_to_be_shown() const {return flag(0, 1<<0);}
+	  /**
+	   * Set if the about to be shown event should be generated
+	   *
+	   * @param value set to true if the about to be shown event should be generated
+	   */
+	  void generate_about_to_be_shown(bool value) {flag(0,1<<0,value);}
+	  /**
+	   * Check if the dialogue completed event should be generated
+	   *
+	   * @returns true if the dialogue completed event should be generated
+	   */
+	  bool generate_dialogue_completed() const {return flag(0, 1<<1);}
+	  /**
+	   * Set if the dialogue completed event should be generated
+	   *
+	   * @param value set to true if the dialogue completed event should be generated
+	   */
+	  void generate_dialogue_completed(bool value) {flag(0,1<<1,value);}
 	bool no_selection() const {return flag(0, 1<<2);}
 	void no_selection(bool value) {flag(0,1<<2,value);}
 	bool use_buffer() const {return flag(0, 1<<3);}
@@ -112,19 +147,57 @@ public:
 	bool ram_transfer() const {return flag(0, 1<<4);}
 	void ram_transfer(bool value) {flag(0,1<<4,value);}
 
-	int flags() const {return int_value(0);}
-	void flags(int value) {int_value(0,value);}
 	const char *file_name() const {return message(4);}
 	void file_name(const char *value) {message(4, value);}
 	void file_name(const std::string &value) {message(4, value);}
 	int file_type() const {return int_value(8);}
 	void file_type(int value) {int_value(8,value);}
+	/**
+	 * Get the title of the dialogue
+	 *
+	 * @returns zero terminated string with title or 0 for the default title
+	 */
 	const char *title() const {return message(12);}
+	/**
+	 * Set the title of the dialogue
+	 *
+	 * @param value zero terminated string with the title or 0 for the default
+	 * @param max_length maximum length the title will be changed to.
+	 * -1 (the default) to use the length of the title given.
+	 */
 	void title(const char *value, int max_length = -1) {message_with_length(12, value, max_length);}
+	/**
+	 * Set the title of the dialogue
+	 *
+	 * @param value new title
+	 * @param max_length maximum length the title will be changed to.
+	 * -1 (the default) to use the length of the title given.
+	 */
 	void title(const std::string &value, int max_length = -1) {message_with_length(12, value, max_length);}
+	/**
+	 * Get the maximum size the title can be
+	 */
 	int max_title() const {return int_value(16);}
+	/**
+	 * Get the name of the window template that provides the window for this
+	 * object.
+	 *
+	 * @returns name of window to use or 0 if default internal window will be used
+	 */
 	const char *window() const {return string(20);}
+	/**
+	 * Set the name of the window template that provides the window for this
+	 * object.
+	 *
+	 * @param value The name of window to use or 0 if default internal window will be used
+	 */
 	void window(const char *value) {string(20, value);}
+	/**
+	 * Set the name of the window template that provides the window for this
+	 * object.
+	 *
+	 * @param value The name of window to use or 0 if default internal window will be used
+	 */
 	void window(const std::string &value) {string(20, value);}
 
 };

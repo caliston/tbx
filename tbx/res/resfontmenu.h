@@ -98,13 +98,53 @@ public:
 		init_string(4,0); // ticked_font
 	}
 
-
+	/**
+	 * Raw access to all the object flags.
+	 *
+	 * It is recommended you use the other methods in this
+	 * class rather than use this directly.
+	 *
+	 * @returns integer with individual bits specifying various flags
+	 */
 	int flags() const {return int_value(0);}
+	/**
+	 * Set all the flags
+	 *
+	 * It is recommended you use the other methods in this
+	 * class rather than use this directly.
+	 *
+	 * @param value the new flags
+	 */
 	void flags(int value) {int_value(0,value);}
+	/**
+	 * Check if the about to be shown event should be generated
+	 *
+	 * @returns true if the about to be shown event should be generated
+	 */
 	bool generate_about_to_be_shown() const {return flag(0, 1<<0);}
+	/**
+	 * Set if the about to be shown event should be generated
+	 *
+	 * @param value set to true if the about to be shown event should be generated
+	 */
 	void generate_about_to_be_shown(bool value) {flag(0,1<<0,value);}
+	/**
+	 * Check if the has been hidden event should be generated
+	 *
+	 * @returns true if the has been hidden event should be generated
+	 */
 	bool generate_has_been_hidden() const {return flag(0, 1<<1);}
+	/**
+	 * Set if the has been hidden event should be generated
+	 *
+	 * @param value set to true if the has been hidden event should be generated
+	 */
 	void generate_has_been_hidden(bool value) {flag(0,1<<1,value);}
+	/**
+	 * Check if an option to select no colour should be included
+	 *
+	 * @returns true if the no colour option should be included
+	 */
 	bool include_system_font() const {return flag(0, 1<<2);}
 	void include_system_font(bool value) {flag(0,1<<2,value);}
 

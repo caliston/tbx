@@ -118,12 +118,30 @@ class ResProgInfo : public ResObject
 	   * to the individual items in the flags
 	   */
 	  void flags(unsigned int value) {uint_value(0, value);}
-
-	  bool generate_about_to_be_shown() const {return flag(0,1);}
-	  void generate_about_to_be_shown(bool value) {flag(0,1,value);}
-
-	  bool generate_dialogue_completed() const {return flag(0,2);}
-	  void generate_dialogue_completed(bool value) {flag(0,2,value);}
+		/**
+		 * Check if the about to be shown event should be generated
+		 *
+		 * @returns true if the about to be shown event should be generated
+		 */
+		bool generate_about_to_be_shown() const {return flag(0, 1<<0);}
+		/**
+		 * Set if the about to be shown event should be generated
+		 *
+		 * @param value set to true if the about to be shown event should be generated
+		 */
+		void generate_about_to_be_shown(bool value) {flag(0,1<<0,value);}
+		/**
+		 * Check if the dialogue completed event should be generated
+		 *
+		 * @returns true if the dialogue completed event should be generated
+		 */
+		bool generate_dialogue_completed() const {return flag(0, 1<<1);}
+		/**
+		 * Set if the dialogue completed event should be generated
+		 *
+		 * @param value set to true if the dialogue completed event should be generated
+		 */
+		void generate_dialogue_completed(bool value) {flag(0,1<<1,value);}
 
 	  bool include_licence_type() const {return flag(0,4);}
 	  void include_licence_type(bool value) {flag(0,4,value);}
@@ -131,25 +149,32 @@ class ResProgInfo : public ResObject
 	  bool include_web_page_button() const {return flag(0, 8);}
 	  bool generate_web_page_click() const {return flag(0, 16);}
 	  
-   	   /**
-	    * Get the title. 0 means use the default.
-		*/
-	   const char *title() const {return message(4);}
-
-	   /**
-	    * Set the title
-		*
-		* @param value help message or 0 for the default
-		* @param max_length maximum length for help message or -1 to use current value.
-		*                   This is alway adjusted to allow for the full length of the help message.
-		*/
-	   void title(const char *value, int max_length = -1) {message_with_length(4, value, max_length);}
-	   void title(const std::string &value, int max_length = -1) {message_with_length(4, value, max_length);}
-	   
-	   /**
-	    * Get the maximum help message length
-		*/
-	   int max_title() const {return int_value(8);}
+		/**
+		 * Get the title of the dialogue
+		 *
+		 * @returns zero terminated string with title or 0 for the default title
+		 */
+		const char *title() const {return message(4);}
+		/**
+		 * Set the title of the dialogue
+		 *
+		 * @param value zero terminated string with the title or 0 for the default
+		 * @param max_length maximum length the title will be changed to.
+		 * -1 (the default) to use the length of the title given.
+		 */
+		void title(const char *value, int max_length = -1) {message_with_length(4, value, max_length);}
+		/**
+		 * Set the title of the dialogue
+		 *
+		 * @param value new title
+		 * @param max_length maximum length the title will be changed to.
+		 * -1 (the default) to use the length of the title given.
+		 */
+		void title(const std::string &value, int max_length = -1) {message_with_length(4, value, max_length);}
+		/**
+		 * Get the maximum size the title can be
+		 */
+		int max_title() const {return int_value(8);}
 
 		/**
 		 * Get the purpose
@@ -200,16 +225,27 @@ class ResProgInfo : public ResObject
 	   void version(const char *value) {message(24, value);}
 	   void version(const std::string &value) {message(24, value);}
 
-	   	/**
-		 * Get the name of the alternative window to use or null for the default
+		/**
+		 * Get the name of the window template that provides the window for this
+		 * object.
+		 *
+		 * @returns name of window to use or 0 if default internal window will be used
 		 */
-	   const char *window() const {return string(28);}
-
-	   	/**
-		 * Set the name of the alternative window to use or null for the default
+		const char *window() const {return string(28);}
+		/**
+		 * Set the name of the window template that provides the window for this
+		 * object.
+		 *
+		 * @param value The name of window to use or 0 if default internal window will be used
 		 */
-	   void window(const char *value) {string(28, value);}
-	   void window(const std::string &value) {string(28, value);}
+		void window(const char *value) {string(28, value);}
+		/**
+		 * Set the name of the window template that provides the window for this
+		 * object.
+		 *
+		 * @param value The name of window to use or 0 if default internal window will be used
+		 */
+		void window(const std::string &value) {string(28, value);}
 
 	   /**
 	    * URI added with Proginfo version 1.01

@@ -105,11 +105,47 @@ public:
 	}
 
 
+	/**
+	 * Raw access to all the object flags.
+	 *
+	 * It is recommended you use the other methods in this
+	 * class rather than use this directly.
+	 *
+	 * @returns integer with individual bits specifying various flags
+	 */
 	int flags() const {return int_value(0);}
+	/**
+	 * Set all the flags
+	 *
+	 * It is recommended you use the other methods in this
+	 * class rather than use this directly.
+	 *
+	 * @param value the new flags
+	 */
 	void flags(int value) {int_value(0,value);}
+	/**
+	 * Check if the about to be shown event should be generated
+	 *
+	 * @returns true if the about to be shown event should be generated
+	 */
 	bool generate_about_to_be_shown() const {return flag(0, 1<<0);}
+	/**
+	 * Set if the about to be shown event should be generated
+	 *
+	 * @param value set to true if the about to be shown event should be generated
+	 */
 	void generate_about_to_be_shown(bool value) {flag(0,1<<0,value);}
+	/**
+	 * Check if the dialogue completed event should be generated
+	 *
+	 * @returns true if the dialogue completed event should be generated
+	 */
 	bool generate_dialogue_completed() const {return flag(0, 1<<1);}
+	/**
+	 * Set if the dialogue completed event should be generated
+	 *
+	 * @param value set to true if the dialogue completed event should be generated
+	 */
 	void generate_dialogue_completed(bool value) {flag(0,1<<1,value);}
 	bool generate_setup_about_to_be_shown() const {return flag(0, 1<<2);}
 	void generate_setup_about_to_be_shown(bool value) {flag(0,1<<2,value);}
@@ -145,8 +181,26 @@ public:
 	const char *further_options() const {return string(20);}
 	void further_options(const char *value) {string(20, value);}
 	void further_options(const std::string &value) {string(20, value);}
+	/**
+	 * Get the name of the window template that provides the window for this
+	 * object.
+	 *
+	 * @returns name of window to use or 0 if default internal window will be used
+	 */
 	const char *window() const {return string(24);}
-	void window(const char *value) {string(24, value);}
+	/**
+	 * Set the name of the window template that provides the window for this
+	 * object.
+	 *
+	 * @param value The name of window to use or 0 if default internal window will be used
+	 */
+	void window(const char *value) {string(24);}
+	/**
+	 * Set the name of the window template that provides the window for this
+	 * object.
+	 *
+	 * @param value The name of window to use or 0 if default internal window will be used
+	 */
 	void window(const std::string &value) {string(24, value);}
 
 };

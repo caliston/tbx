@@ -99,22 +99,112 @@ public:
 	}
 
 
+	/**
+	 * Raw access to all the object flags.
+	 *
+	 * It is recommended you use the other methods in this
+	 * class rather than use this directly.
+	 *
+	 * @returns integer with individual bits specifying various flags
+	 */
 	int flags() const {return int_value(0);}
+	/**
+	 * Set all the flags
+	 *
+	 * It is recommended you use the other methods in this
+	 * class rather than use this directly.
+	 *
+	 * @param value the new flags
+	 */
 	void flags(int value) {int_value(0,value);}
+	/**
+	 * Check if the about to be shown event should be generated
+	 *
+	 * @returns true if the about to be shown event should be generated
+	 */
 	bool generate_about_to_be_shown() const {return flag(0, 1<<0);}
+	/**
+	 * Set if the about to be shown event should be generated
+	 *
+	 * @param value set to true if the about to be shown event should be generated
+	 */
 	void generate_about_to_be_shown(bool value) {flag(0,1<<0,value);}
+	/**
+	 * Check if the dialogue completed event should be generated
+	 *
+	 * @returns true if the dialogue completed event should be generated
+	 */
 	bool generate_dialogue_completed() const {return flag(0, 1<<1);}
+	/**
+	 * Set if the dialogue completed event should be generated
+	 *
+	 * @param value set to true if the dialogue completed event should be generated
+	 */
 	void generate_dialogue_completed(bool value) {flag(0,1<<1,value);}
+	/**
+	 * Check if an option to select no colour should be included
+	 *
+	 * @returns true if the no colour option should be included
+	 */
 	bool include_none() const {return flag(0, 1<<2);}
+	/**
+	 * Set if an option to select no colour should be included
+	 *
+	 * @param value set to true if the no colour option should be included
+	 */
 	void include_none(bool value) {flag(0,1<<2,value);}
+
+	/**
+	 * Check if no colour option is selected
+	 *
+	 * @returns true if no colour option is selected
+	 */
 	bool select_none() const {return flag(0, 1<<3);}
+	/**
+	 * Set if no colour option is selected
+	 *
+	 * @param value set to true to select the no colour option
+	 */
 	void select_none(bool value) {flag(0,1<<3,value);}
 
+	/**
+	 * Get the title of the dialogue
+	 *
+	 * @returns zero terminated string with title or 0 for the default title
+	 */
 	const char *title() const {return message(4);}
+	/**
+	 * Set the title of the dialogue
+	 *
+	 * @param value zero terminated string with the title or 0 for the default
+	 * @param max_length maximum length the title will be changed to.
+	 * -1 (the default) to use the length of the title given.
+	 */
 	void title(const char *value, int max_length = -1) {message_with_length(4, value, max_length);}
+	/**
+	 * Set the title of the dialogue
+	 *
+	 * @param value new title
+	 * @param max_length maximum length the title will be changed to.
+	 * -1 (the default) to use the length of the title given.
+	 */
 	void title(const std::string &value, int max_length = -1) {message_with_length(4, value, max_length);}
+	/**
+	 * Get the maximum size the title can be
+	 */
 	int max_title() const {return int_value(8);}
+
+	/**
+	 * Get the initial selected colour
+	 *
+	 * @returns colour as an RGB value packed into an integer
+	 */
 	int colour() const {return int_value(12);}
+	/**
+	 * Set the initial selected colour
+	 *
+	 * @param value colour as an RGB value packed into an integer
+	 */
 	void colour(int value) {int_value(12,value);}
 
 };

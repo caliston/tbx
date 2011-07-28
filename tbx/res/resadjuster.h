@@ -95,18 +95,31 @@ public:
 	}
 
 	/**
-	 * True to increment, false to decrement
+	 * Check if adjustor is increment adjustor
+	 *
+	 * @returns true if increment, false if decrement
 	 */
 	bool increment() const {return flag(0,1);}
+	/**
+	 * Set if adjustor is increment adjustor
+	 *
+	 * @param value true for increment, false for decrement
+	 */
 	void increment(bool value) {flag(0,1, value);}
 
 	/**
-	 * Orientation.
+	 * Check adjuster orientation.
 	 *
-	 * true if vertical (i.e. one of an up/down pair)
+	 * @returns true if vertical (i.e. one of an up/down pair)
 	 * false if horizontal (i.e. one of a left/right pair)
 	 */
 	bool vertical() const {return flag(0,2);}
+	/**
+	 * Set adjuster orientation.
+	 *
+	 * @param value true to make a vertical adjuster (i.e. one of an up/down pair)
+	 * false to make a horizontal adjuster (i.e. one of a left/right pair)
+	 */
 	void vertical(bool value) {flag(0,2, value);}
 };
 

@@ -96,7 +96,19 @@ public:
 		init_string(36,0); // menu
 	}
 
+	/**
+	 * Check if the about to be shown event should be generated when the
+	 * menu is popped up from this gadget
+	 *
+	 * @returns true if the about to be shown event should be generated
+	 */
 	bool generate_about_to_be_shown() const {return flag(0, 1<<0);}
+	/**
+	 * Set if the about to be shown event should be generated when the
+	 * menu is popped up from this gadget
+	 *
+	 * @param value set to true if the about to be shown event should be generated
+	 */
 	void generate_about_to_be_shown(bool value) {flag(0,1<<0,value);}
 
 	const char *menu() const {return string(36);}
