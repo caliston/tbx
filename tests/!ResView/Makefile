@@ -5,8 +5,8 @@ CXXFLAGS=-O2 -ITBX: -mthrowback
 
 LDFLAGS=-LTBX: -ltbx -static
 
-TARGET=!RunImage
-TARGETELF=resview
+TARGET=resview
+TARGETELF=resviewe1f
 
 OBJS=resview.o
 

@@ -163,7 +163,7 @@ extern void do_tests();
 
 int main(int argc, char *argv[])
 {
-	if (argc < 1)
+	if (argc < 2)
 	{
 		cout << "Usage: resview <filename>" << endl;
 		return -1;
@@ -602,13 +602,13 @@ void dump_button(std::ostream &os, const ResGadget &gadget)
 	if (g.has_text()) os << MARGIN << MARGIN << " has_text" << endl;
 	if (g.is_sprite()) os << MARGIN << MARGIN << " is_sprite" << endl;
 	if (g.has_border()) os << MARGIN << MARGIN << " has_border" << endl;
-	if (g.hcentered()) os << MARGIN << MARGIN << " hcentered" << endl;
-	if (g.vcentered()) os << MARGIN << MARGIN << " vcentered" << endl;
+	if (g.hcentred()) os << MARGIN << MARGIN << " hcentred" << endl;
+	if (g.vcentred()) os << MARGIN << MARGIN << " vcentred" << endl;
 	if (g.filled()) os << MARGIN << MARGIN << " filled" << endl;
 	if (g.anti_aliased_font()) os << MARGIN << MARGIN << " anti_aliased_font" << endl;
 	if (g.redraw_needs_help()) os << MARGIN << MARGIN << " redraw_needs_help" << endl;
 	if (g.text_right_justified()) os << MARGIN << MARGIN << " text_right_justified" << endl;
-	if (g.adjust_doesnt_cancel()) os << MARGIN << MARGIN << " adjust_doesnt_cancel" << endl;
+	if (g.adjust_does_not_cancel()) os << MARGIN << MARGIN << " adjust_does_nott_cancel" << endl;
 	if (g.half_size_sprite()) os << MARGIN << MARGIN << " half_size_sprite" << endl;
 	os << MARGIN << MARGIN << " Button type: " << ButtonTypes[g.button_type()] << endl;
 	os << MARGIN << MARGIN << " ESG: "<< g.esg() << endl;

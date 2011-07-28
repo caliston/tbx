@@ -1,0 +1,17 @@
+resview 0.1
+
+This is a program to test the TBX resource classes reading of
+resource files.
+
+Click on the !Run file to create an alias for the resview command.
+
+You can then get it to read all the resources in a Toolbox resource (Res) file and show them in a textual from to the screen.
+
+To run it from a taskwindow type
+
+resview <res_file_name>
+
+where <res_file_name> is the name of a resource file.
+
+To build it the first time there is a makefile provided in
+the directory.

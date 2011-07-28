@@ -65,8 +65,8 @@
 using namespace std;
 using namespace tbx::res;
 
-char *master_folder = "<ResTest$Dir>.master.";
-char *test_folder = "<ResTest$Dir>.test.";
+char *master_folder = "<ResCheck$Dir>.master.";
+char *test_folder = "<ResCheck$Dir>.test.";
 
 bool compare_resources(const char *test_name, const std::string &source_fname, const std::string &target_fname);
 void where_in_res(std::ostream &os, char *here, char *start);
@@ -347,8 +347,8 @@ void default_gadget_test()
     button.xmax(564);
     button.ymax(-292);
     button.component_id(5);
-	button.vcentered(true);
-	button.hcentered(true);
+	button.vcentred(true);
+	button.hcentred(true);
 	button.has_border(true);
 	button.has_text(true);
 	button.value("Button", 8);
@@ -465,7 +465,7 @@ void default_gadget_test()
     textarea.ymax(-420);
     textarea.component_id(16);
 	textarea.has_vertical_scrollbar(true);
-	textarea.text("TextArea");	
+	textarea.text("TextArea");
 	window.add_gadget(textarea);
 
 	ResToolAction toolaction; // 1032
@@ -647,7 +647,7 @@ bool compare_resources(const char *test_name, const std::string &master_fname, c
 				cout << "    Offset    Master     Check" << hex << endl;
 				has_diff = true;
 			}
-			cout << setw(10) << (char *)master_ptr - master_data 
+			cout << setw(10) << (char *)master_ptr - master_data
 				 << setw(10) << *master_ptr
 				 << setw(10) << *check_ptr
 				 << " ";
@@ -656,7 +656,7 @@ bool compare_resources(const char *test_name, const std::string &master_fname, c
 		}
 		master_ptr++;
 		check_ptr++;
-		left -= 4;			
+		left -= 4;
 	}
 
 	delete [] master_data;
@@ -742,11 +742,11 @@ void where_in_res(std::ostream &os, char *here, char *start)
 					} else if (rdh->string_table_offset != -1)
 					{
 						os << "String table offset " << table_offset - rdh->string_table_offset;
-					}					
+					}
 				} else
 				{
 					os << "Can't figure out where offset " << here - (char *)obj;
-				}					
+				}
 			}
 		}
 	}

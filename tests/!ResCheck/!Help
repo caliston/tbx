@@ -1,0 +1,21 @@
+rescheck 0.1
+
+This is a program to test the TBX resource classes
+reading/creating and writing of resource files.
+
+Click on the !Run file to create an alias for the rescheck  command and set up the directory variable it needs to
+find the test resource files.
+
+To run it from a taskwindow type
+
+rescheck
+
+It will load/create and save resource files in several ways,
+loading the originals and checking the results against the
+!ResEdit created resource files in the master directory.
+
+The test files it saves will be put in the test directory.
+
+
+To build it the first time there is a makefile provided in
+the directory.

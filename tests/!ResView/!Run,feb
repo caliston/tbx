@@ -1,0 +1,4 @@
+| Run file for resview - just sets up an alias
+
+Set Alias$resview <Obey$Dir>.resview %%*0
+

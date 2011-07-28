@@ -1,14 +1,14 @@
-# Makefile for ResTest test program
+# Makefile for ResCheck test program
 
 CXX=g++
-CXXFLAGS=-O2 -ITBX:
+CXXFLAGS=-O2 -ITBX: -mthrowback
 
 LDFLAGS=-LTBX: -ltbx -static
 
-TARGET=!RunImage
-TARGETELF=restest
+TARGET=rescheck
+TARGETELF=reschecke1f
 
-OBJS=restest.o
+OBJS=rescheck.o
 
 all: $(TARGET)
 

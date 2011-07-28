@@ -1,0 +1,8 @@
+| Run file for rescheck - just sets up an alias
+
+| Directory to find test resources
+Set ResCheck$Dir <Obey$Dir>
+
+| Alias to make it
+Set Alias$rescheck <ResCheck$Dir>.rescheck %%*0
+
