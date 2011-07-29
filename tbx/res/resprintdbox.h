@@ -161,37 +161,193 @@ public:
 	 * @param value set to true if the setup about to be shown event should be generated
 	 */
 	void generate_setup_about_to_be_shown(bool value) {flag(0,1<<2,value);}
+	/**
+	 * Check if the dialogue will show a choice of page range
+	 *
+	 * @returns true if a page range choice will be shown
+	 */
 	bool has_page_range() const {return flag(0, 1<<3);}
+	/**
+	 * Set if the dialogue will show a choice of page range
+	 *
+	 * @param value set to true to enable a page range choice
+	 */
 	void has_page_range(bool value) {flag(0,1<<3,value);}
+	/**
+	 * Check if the number of copies can be specified
+	 *
+	 * @returns true if the number of copies can be specified
+	 */
 	bool has_copies() const {return flag(0, 1<<4);}
+	/**
+	 * Set if the number of copies can be specified
+	 *
+	 * @param value set to true if the number of copies can be specified
+	 */
 	void has_copies(bool value) {flag(0,1<<4,value);}
+	/**
+	 * Check if the scale can be specified
+	 *
+	 * @returns true if the scale can be specified
+	 */
 	bool has_scale() const {return flag(0, 1<<5);}
+	/**
+	 * Set if the scale can be specified
+	 *
+	 * @param value set to true if the scale can be specified
+	 */
 	void has_scale(bool value) {flag(0,1<<5,value);}
+	/**
+	 * Check if the orientation can be specified
+	 *
+	 * @returns true if the orientation can be specified
+	 */
 	bool has_orientation() const {return flag(0, 1<<6);}
+	/**
+	 * Set if the orientation can be specified
+	 *
+	 * @param value set to true if the orientation can be specified
+	 */
 	void has_orientation(bool value) {flag(0,1<<6,value);}
+	/**
+	 * Check if the dialogue has a save button
+	 *
+	 * @returns true if the dialogue has a save button
+	 */
 	bool has_save() const {return flag(0, 1<<7);}
+	/**
+	 * Set if the dialogue has a save button
+	 *
+	 * @param value set to true to include a save button
+	 */
 	void has_save(bool value) {flag(0,1<<7,value);}
+	/**
+	 * Check if the dialogue has a setup button
+	 *
+	 * @returns true if the dialogue includes a setup button
+	 */
 	bool has_setup() const {return flag(0, 1<<8);}
+	/**
+	 * Set if the dialogue has a setup button
+	 *
+	 * @param value set to true to include a setup button
+	 */
 	void has_setup(bool value) {flag(0,1<<8,value);}
+	/**
+	 * Check if the dialogue include a draft option
+	 *
+	 * @returns true if the dialogue include a draft option
+	 */
 	bool has_draft() const {return flag(0, 1<<9);}
+	/**
+	 * Set if the dialogue include a draft option
+	 *
+	 * @param value set to true to include a draft option
+	 */
 	void has_draft(bool value) {flag(0,1<<9,value);}
+	/**
+	 * Check if from/to for page range is set
+	 *
+	 * @returns true if from/to for page range is set
+	 */
 	bool has_from_to() const {return flag(0, 1<<10);}
+	/**
+	 * Set if from/to for page range is set
+	 *
+	 * @param value set to true if from/to for page range is set
+	 */
 	void has_from_to(bool value) {flag(0,1<<10,value);}
+	/**
+	 * Check if sideways is selected when dialogue is shown
+	 *
+	 * @returns true if sideways is selected
+	 */
 	bool sideways_selected() const {return flag(0, 1<<11);}
+	/**
+	 * Set if sideways is selected when dialogue is shown
+	 *
+	 * @param value set to true if sideways is selected
+	 */
 	void sideways_selected(bool value) {flag(0,1<<11,value);}
+	/**
+	 * Check if draft is selected when dialogue is shown
+	 *
+	 * @returns true if draft is selected
+	 */
 	bool draft_selected() const {return flag(0, 1<<12);}
+	/**
+	 * Set if draft is selected when dialogue is shown
+	 *
+	 * @param value set to true if draft is selected
+	 */
 	void draft_selected(bool value) {flag(0,1<<12,value);}
 
+	/**
+	 * Get from page number when dialogue is shown
+	 *
+	 * @returns from page number
+	 */
 	int from() const {return int_value(4);}
+	/**
+	 * Set from page number when dialogue is shown
+	 *
+	 * @param value from page number
+	 */
 	void from(int value) {int_value(4,value);}
+	/**
+	 * Get to page number when dialogue is shown
+	 *
+	 * @returns to page number
+	 */
 	int to() const {return int_value(8);}
+	/**
+	 * Set to page number when dialogue is shown
+	 *
+	 * @param value to page number
+	 */
 	void to(int value) {int_value(8,value);}
+	/**
+	 * Get the number of copies set when the dialogue is shown
+	 *
+	 * @returns number of copies
+	 */
 	int copies() const {return int_value(12);}
+	/**
+	 * Set the number of copies set when the dialogue is shown
+	 *
+	 * @param value number of copies
+	 */
 	void copies(int value) {int_value(12,value);}
+	/**
+	 * Get the scale set when the dialogue is shown
+	 *
+	 * @returns scale as a percentage
+	 */
 	int scale() const {return int_value(16);}
+	/**
+	 * Set the scale set when the dialogue is shown
+	 *
+	 * @param value scale as a percentage
+	 */
 	void scale(int value) {int_value(16,value);}
+
+	/**
+	 * Get the name of the window that shows further options
+	 *
+	 * @returns pointer to zero terminated window name or 0 for none
+	 */
 	const char *further_options() const {return string(20);}
+	/**
+	 * Set the name of the window that shows further options
+	 *
+	 * @param value pointer to zero terminated window name or 0 for none
+	 */
 	void further_options(const char *value) {string(20, value);}
+	/**
+	 * Set the name of the window that shows further options
+	 *
+	 * @param value window name
+	 */
 	void further_options(const std::string &value) {string(20, value);}
 	/**
 	 * Get the name of the window template that provides the window for this
