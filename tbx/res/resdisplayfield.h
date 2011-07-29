@@ -97,14 +97,47 @@ public:
 		init_message(36,0); // text
 	}
 
+	/**
+	 * Get the justification for the display field
+	 *
+	 * @return ResJustication enumeration value
+	 */
 	ResJustification justification() const {return ResJustification(flag_value(0,6)>>1);}
+	/**
+	 * Set the justification for the display field
+	 *
+	 * @param value ResJustication enumeration value
+	 */
 	void justification(ResJustification value) {flag_value(0,6, (int)value << 1);}
 
+	/**
+	 * Get the initial text for the display field
+	 *
+	 * @returns initial text or 0 for none
+	 */
 	const char *text() const {return message(36);}
+	/**
+	 * Set the initial text for the display field
+	 *
+	 * @param value initial text or 0 for none
+	 * @param max_length the maximum length the text will be changed to after
+	 * the gadget is created. The default (-1) will use the length of value.
+	 */
 	void text(const char *value, int max_length = -1) {message_with_length(36, value, max_length);}
+	/**
+	 * Set the initial text for the display field
+	 *
+	 * @param value initial text or 0 for none
+	 * @param max_length the maximum length the text will be changed to after
+	 * the gadget is created. The default (-1) will use the length of value.
+	 */
 	void text(const std::string &value, int max_length = -1) {message_with_length(36, value, max_length);}
+	/**
+	 * Get the maximum length for the text
+	 *
+	 * @returns maximum buffer size for the text.
+	 */
 	int max_text_len() const {return int_value(40);}
-
 };
 
 }

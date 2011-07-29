@@ -172,16 +172,64 @@ public:
 	 * Get the maximum size the title can be
 	 */
 	int max_title() const {return int_value(8);}
+
 	int modified() const {return int_value(12);}
 	void modified(int value) {int_value(12,value);}
+
+	/**
+	 * Get the initial file type for the file info resource
+	 *
+	 * @returns file type
+	 */
 	int file_type() const {return int_value(16);}
+	/**
+	 * Set the initial file type for the file info resource
+	 *
+	 * @param value new file type
+	 */
 	void file_type(int value) {int_value(16,value);}
+	/**
+	 * Get the initial file name for the file info
+	 *
+	 * @returns pointer to zero terminated file name string or 0 for the default.
+	 */
 	const char *file_name() const {return message(20);}
+	/**
+	 * Set the initial file name for the file info
+	 *
+	 * @param value pointer to zero terminated file name string or 0 for the default.
+	 */
 	void file_name(const char *value) {message(20, value);}
+	/**
+	 * Set the initial file name for the file info
+	 *
+	 * @param value new file name
+	 */
 	void file_name(const std::string &value) {message(20, value);}
+	/**
+	 * Get the file size reported by the file info
+	 *
+	 * @return file size in bytes
+	 */
 	int filesize() const {return int_value(24);}
+	/**
+	 * Set the file size reported by the file info
+	 *
+	 * @param value file size in bytes
+	 */
 	void filesize(int value) {int_value(24,value);}
+
+	/**
+	 * Get the data for the file info
+	 *
+	 * @returns UTCTime containing the date in the file info
+	 */
 	UTCTime date() const {return UTCTime(int_value(28), int_value(32));}
+	/**
+	 * Set the data for the file info
+	 *
+	 * @param value UTCTime containing the new date
+	 */
 	void date(UTCTime value) {int_value(28,value.centiseconds() & 0xFFFFFFFF); int_value(32, (value.centiseconds() >> 32));}
 	/**
 	 * Get the name of the window template that provides the window for this

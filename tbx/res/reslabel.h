@@ -97,20 +97,49 @@ public:
 		init_message(36,0); // label
 	}
 
+	/**
+	 * Check if the bounding box for the label should be omitted
+	 *
+	 * @returns true if the bounding box is not shown
+	 */
 	bool omit_bounding_box() const {return flag(0, 1<<0);}
+	/**
+	 * Set if the bounding box for the label should be omitted
+	 *
+	 * @param value set to true to omit the bounding box
+	 */
 	void omit_bounding_box(bool value) {flag(0,1<<0,value);}
 
-	/* TODO: bits 1-2  justification:     
-			0  left-justified  
-			1  right-justified  
-			2  centred  
-			*/
-
+	/**
+	 * Get the horizontal position of the text of the label in its bounding box
+	 *
+	 * @return ResJustification enumeration specifying the position
+	 */
 	ResJustification justification() const {return ResJustification(flag_value(0, 6) >> 1);}
+	/**
+	 * Set the horizontal position of the text of the label in its bounding box
+	 *
+	 * @param value ResJustification enumeration specifying the position
+	 */
 	void justification(ResJustification value) {flag_value(0, 6, (int)value<<1);}
 
+	/**
+	 * Get the label text
+	 *
+	 * @returns pointer to zero terminated label text or 0 for none
+	 */
 	const char *label() const {return message(36);}
+	/**
+	 * Set the label text
+	 *
+	 * @param value pointer to zero terminate label text or 0 for none
+	 */
 	void label(const char *value) {message(36, value);}
+	/**
+	 * Set the label text
+	 *
+	 * @param value label text
+	 */
 	void label(const std::string &value) {message(36, value);}
 };
 

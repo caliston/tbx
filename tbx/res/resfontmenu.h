@@ -141,15 +141,38 @@ public:
 	 */
 	void generate_has_been_hidden(bool value) {flag(0,1<<1,value);}
 	/**
-	 * Check if an option to select no colour should be included
+	 * Check if an option to select the system font should be included
 	 *
-	 * @returns true if the no colour option should be included
+	 * @returns true if the system font option should be included
 	 */
 	bool include_system_font() const {return flag(0, 1<<2);}
+	/**
+	 * Set if an option to select the system font should be included
+	 *
+	 * @param value set to true if the system font option should be included
+	 */
 	void include_system_font(bool value) {flag(0,1<<2,value);}
 
+	/**
+	 * Get the name of the font that should be selected
+	 *
+	 * @return pointer to zero terminated name of initial font selected
+	 * ("SystemFont" for the system font) or 0 if no font is selected.
+	 */
 	const char *ticked_font() const {return string(4);}
+	/**
+	 * Set the name of the font that should be selected
+	 *
+	 * @param value pointer to zero terminated name of initial font selected
+	 * ("SystemFont" for the system font) or 0 if no font is selected.
+	 */
 	void ticked_font(const char *value) {string(4, value);}
+	/**
+	 * Set the name of the font that should be selected
+	 *
+	 * @param value pointer to zero terminated name of initial font selected
+	 * ("SystemFont" for the system font).
+	 */
 	void ticked_font(const std::string &value) {string(4, value);}
 
 };

@@ -111,10 +111,24 @@ public:
 	 */
 	void generate_about_to_be_shown(bool value) {flag(0,1<<0,value);}
 
+	/**
+	 * Get the name of the menu object to show
+	 *
+	 * @returns pointer to null terminated menu name or 0 if none
+	 */
 	const char *menu() const {return string(36);}
+	/**
+	 * Set the name of the menu object to show
+	 *
+	 * @param value set to a pointer to null terminated menu name or 0 if none
+	 */
 	void menu(const char *value) {string(36, value);}
+	/**
+	 * Set the name of the menu object to show
+	 *
+	 * @param value menu name
+	 */
 	void menu(const std::string &value) {string(36, value);}
-
 };
 
 }

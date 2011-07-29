@@ -146,7 +146,17 @@ public:
 	 * @param value set to true if the dialogue completed event should be generated
 	 */
 	void generate_dialogue_completed(bool value) {flag(0,1<<1,value);}
+	/**
+	 * Check if the system font should be included in the dialogue
+	 *
+	 * @returns true if the system font should be included
+	 */
 	bool include_system_font() const {return flag(0, 1<<2);}
+	/**
+	 * Set if the system font should be included in the dialogue
+	 *
+	 * @param value set to true if the system font should be included
+	 */
 	void include_system_font(bool value) {flag(0,1<<2,value);}
 
 	/**
@@ -175,15 +185,70 @@ public:
 	 * Get the maximum size the title can be
 	 */
 	int max_title() const {return int_value(8);}
+
+	/**
+	 * Get the name of the selected font
+	 *
+	 * @returns pointer to zero terminated name of font to select, "SystemFont" for the System entry or 0 for the default
+	 */
 	const char *initial_font() const {return string(12);}
+	/**
+	 * Set the name of the selected font
+	 *
+	 * @param value pointer to zero terminated name of font to select, "SystemFont" for the System entry or 0 for the default
+	 */
 	void initial_font(const char *value) {string(12, value);}
+	/**
+	 * Set the name of the selected font
+	 *
+	 * @param value name of font to select, "SystemFont" for the System entry
+	 */
 	void initial_font(const std::string &value) {string(12, value);}
+	/**
+	 * Get the initial height in the dialogue
+	 *
+	 * @returns initial height (in points)
+	 */
 	int initial_height() const {return int_value(16);}
+	/**
+	 * Set the initial height in the dialogue
+	 *
+	 * @param value initial height (in points)
+	 */
 	void initial_height(int value) {int_value(16,value);}
+	/**
+	 * Get the aspect ratio of the font
+	 *
+	 * @returns aspect ratio (percentage)
+	 */
 	int initial_aspect() const {return int_value(20);}
+	/**
+	 * Set the aspect ratio of the font
+	 *
+	 * @param value the initial aspect ratio (percentage)
+	 */
 	void initial_aspect(int value) {int_value(20,value);}
+	/**
+	 * Get the string that is used to display an example of the
+	 * currently selected font.
+	 *
+	 * @returns pointer to zero terminated string or 0 if default is used
+	 */
 	const char *try_string() const {return message(24);}
+	/**
+	 * Set the string that is used to display an example of the
+	 * currently selected font.
+	 *
+	 * @param value pointer zero terminated try string or 0 if the default
+	 * is to be used
+	 */
 	void try_string(const char *value) {message(24, value);}
+	/**
+	 * Set the string that is used to display an example of the
+	 * currently selected font.
+	 *
+	 * @param value pointer zero terminated try string
+	 */
 	void try_string(const std::string &value) {message(24, value);}
 	/**
 	 * Get the name of the window template that provides the window for this

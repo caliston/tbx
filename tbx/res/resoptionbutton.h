@@ -96,18 +96,71 @@ public:
 		init_message(36,0); // label
 	}
 
+	/**
+	 * Check if state change message will be generated
+	 *
+	 * @returns true if state change message will be generated
+	 */
 	bool generate_state_changed() const {return flag(0, 1<<0);}
+	/**
+	 * Set if state change message will be generated
+	 *
+	 * @param value set to true if state change message should be generated
+	 */
 	void generate_state_changed(bool value) {flag(0,1<<0,value);}
+	/**
+	 * Check if option is on
+	 *
+	 * @returns true if option is on
+	 */
 	bool on() const {return flag(0, 1<<2);}
+	/**
+	 * Set state of option button
+	 *
+	 * @param value true to turn the option on
+	 */
 	void on(bool value) {flag(0,1<<2,value);}
 
+	/**
+	 * Get the label for the option button
+	 *
+	 * @returns pointer to zero terminated label text or 0 if none
+	 */
 	const char *label() const {return message(36);}
+	/**
+	 * Set the label for the option button
+	 *
+	 * @param value pointer to zero terminated label text or 0 if none
+	 * @param max_length maximum length the label text can be changed to
+	 * or -1 (the default) to use the length of value.
+	 */
 	void label(const char *value, int max_length = -1) {message_with_length(36, value, max_length);}
+	/**
+	 * Set the label for the option button
+	 *
+	 * @param value pointer to zero terminated label text
+	 * @param max_length maximum length the label text can be changed to
+	 * or -1 (the default) to use the length of value.
+	 */
 	void label(const std::string &value, int max_length = -1) {message_with_length(36, value, max_length);}
+	/**
+	 * Get the maximum length of the label text
+	 *
+	 * @returns maximum label text length
+	 */
 	int max_label_len() const {return int_value(40);}
+	/**
+	 * Get the event ID generated when the state changes
+	 *
+	 * @returns event ID set by user or 0 for the default event
+	 */
 	int event_id() const {return int_value(44);}
+	/**
+	 * Set the event ID generated when the state changes
+	 *
+	 * @param value event ID set by user or 0 for the default event
+	 */
 	void event_id(int value) {int_value(44,value);}
-
 };
 
 }

@@ -147,7 +147,19 @@ public:
 	 * @param value set to true if the dialogue completed event should be generated
 	 */
 	void generate_dialogue_completed(bool value) {flag(0,1<<1,value);}
+	/**
+	 * Check if an event should be generated when the printer setup dialogue
+	 * is about to be shown.
+	 *
+	 * @returns true the setup about to be shown event will be generated
+	 */
 	bool generate_setup_about_to_be_shown() const {return flag(0, 1<<2);}
+	/**
+	 * Set if an event should be generated when the printer setup dialogue
+	 * is about to be shown.
+	 *
+	 * @param value set to true if the setup about to be shown event should be generated
+	 */
 	void generate_setup_about_to_be_shown(bool value) {flag(0,1<<2,value);}
 	bool has_page_range() const {return flag(0, 1<<3);}
 	void has_page_range(bool value) {flag(0,1<<3,value);}

@@ -175,7 +175,7 @@ public:
 	 * Set the text for the button.
 	 *
 	 * @param value the text for the button
-	 * @param max_length the maximum length the text will be changed to when
+	 * @param max_length the maximum length the text will be changed to after
 	 * the gadget is created. The default (-1) will use the length of value
 	 */
 	void text(const char *value, int max_length = -1) {message_with_length(36, value, max_length);}

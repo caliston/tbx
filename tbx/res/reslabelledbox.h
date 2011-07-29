@@ -88,7 +88,7 @@ public:
 	/**
 	 * Construct a labelled box gadget resource.
 	 *
-	 * All options are false, events unset and messages are null.
+	 * All options are false except the back option and messages are null.
 	 */
 	ResLabelledBox()
 	  : ResGadget(256,40)
@@ -97,9 +97,23 @@ public:
 		init_message(36,0); // label
 	}
 
-
+	/**
+	 * Get the text displayed in the labelled box
+	 *
+	 * @returns pointer to zero terminated label text or 0 if none
+	 */
 	const char *label() const {return message(36);}
+	/**
+	 * Set the text displayed in the labelled box
+	 *
+	 * @param value pointer to zero terminated label text or 0 for none
+	 */
 	void label(const char *value) {message(36, value);}
+	/**
+	 * Set the text displayed in the labelled box
+	 *
+	 * @param value label text
+	 */
 	void label(const std::string &value) {message(36, value);}
 
 };
