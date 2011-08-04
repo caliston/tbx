@@ -100,17 +100,77 @@ public:
 		init_string(68,0); // fade_text
 	}
 
+	/**
+	 * Check if the select event will be generated
+	 *
+	 * @returns true if the select event will be generated
+	 */
 	bool generate_select() const {return flag(0, 1<<0);}
+	/**
+	 * Set if the select event will be generated
+	 *
+	 * @param value set to true if the select event will be generated
+	 */
 	void generate_select(bool value) {flag(0,1<<0,value);}
+	/**
+	 * Check if tool action includes text
+	 *
+	 * @returns true if the tool action includes text
+	 */
 	bool has_text() const {return flag(0, 1<<1);}
+	/**
+	 * Set if tool action includes text
+	 *
+	 * @param value set to true if the toolaction includes text
+	 */
 	void has_text(bool value) {flag(0,1<<1,value);}
+	/**
+	 * Check if the tool action starts off in the on state
+	 *
+	 * @returns true if the tool action is on
+	 */
 	bool on() const {return flag(0, 1<<2);}
+	/**
+	 * Set if the tool action starts off in the on state
+	 *
+	 * @param value set to true to set the tool action on
+	 */
 	void on(bool value) {flag(0,1<<2,value);}
+	/**
+	 * Check if the tool action should automatically toggle between states
+	 *
+	 * @returns true if auto toggle is on
+	 */
 	bool auto_toggle() const {return flag(0, 1<<3);}
+	/**
+	 * Set if the tool action should automatically toggle between states
+	 *
+	 * @param value set to true to turn auto toggle on
+	 */
 	void auto_toggle(bool value) {flag(0,1<<3,value);}
+	/**
+	 * Check if there is no sprite for the pressed state
+	 *
+	 * @returns true if there is no pressed sprite
+	 */
 	bool no_pressed_sprite() const {return flag(0, 1<<4);}
+	/**
+	 * Set if there is no sprite for the pressed state
+	 *
+	 * @param value set to true if there is no pressed sprite
+	 */
 	void no_pressed_sprite(bool value) {flag(0,1<<4,value);}
+	/**
+	 * Check if button presses auto repeat
+	 *
+	 * @returns true if button presses auto repeat
+	 */
 	bool auto_repeat() const {return flag(0, 1<<8);}
+	/**
+	 * Set if button presses auto repeat
+	 *
+	 * @param value set to true to make button presses auto repeat
+	 */
 	void auto_repeat(bool value) {flag(0,1<<8,value);}
 	bool show_transient() const {return flag(0, 1<<9);}
 	void show_transient(bool value) {flag(0,1<<9,value);}

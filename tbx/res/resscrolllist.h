@@ -97,11 +97,41 @@ public:
 	}
 
 
+	/**
+	 * Get the event returned when an item is selected
+	 *
+	 * @returns event ID or 0 for the default
+	 */
 	int event() const {return int_value(36);}
+	/**
+	 * Set the event returned when an item is selected
+	 *
+	 * @param value event ID or 0 for the default
+	 */
 	void event(int value) {int_value(36,value);}
+	/**
+	 * Get the foreground colour of the scroll list
+	 *
+	 * @returns foreground/text colour
+	 */
 	int foreground() const {return int_value(40);}
+	/**
+	 * Set the foreground colour of the scroll list
+	 *
+	 * @param value sets the foreground/text colour
+	 */
 	void foreground(int value) {int_value(40,value);}
+	/**
+	 * Get the background colour of the scroll list
+	 *
+	 * @returns background colour
+	 */
 	int background() const {return int_value(44);}
+	/**
+	 * Set the background colour of the scroll list
+	 *
+	 * @param value background colour
+	 */
 	void background(int value) {int_value(44,value);}
 
 };

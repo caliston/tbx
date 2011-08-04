@@ -140,17 +140,73 @@ public:
 	   * @param value set to true if the dialogue completed event should be generated
 	   */
 	  void generate_dialogue_completed(bool value) {flag(0,1<<1,value);}
+
+	/**
+	 * Check if the selection option is omitted from the dialogue
+	 *
+	 * @returns true if the selection option is not shown
+	 */
 	bool no_selection() const {return flag(0, 1<<2);}
+	/**
+	 * Set if the selection option is omitted from the dialogue
+	 *
+	 * @param value Set to true to suppress the selection option
+	 */
 	void no_selection(bool value) {flag(0,1<<2,value);}
+	/**
+	 * Check if the save as will use a single provided buffer
+	 *
+	 * @returns true if the transfer use a single buffer
+	 */
 	bool use_buffer() const {return flag(0, 1<<3);}
+	/**
+	 * Set if the save as will use a single provided buffer
+	 *
+	 * @param value set to true to use a single buffer
+	 */
 	void use_buffer(bool value) {flag(0,1<<3,value);}
+	/**
+	 * Check if save will use the RAM transfer protocol
+	 *
+	 * @returns true if RAM transfer will be used
+	 */
 	bool ram_transfer() const {return flag(0, 1<<4);}
+	/**
+	 * Set if save will use the RAM transfer protocol
+	 *
+	 * @param value set to true if RAM transfer will be used
+	 */
 	void ram_transfer(bool value) {flag(0,1<<4,value);}
 
+	/**
+	 * Get the initial file name for the dialogue
+	 *
+	 * @return pointer to zero terminated file name or 0 to use the default
+	 */
 	const char *file_name() const {return message(4);}
+	/**
+	 * Set the initial file name for the dialogue
+	 *
+	 * @param value pointer to zero terminated file name or 0 to use the default
+	 */
 	void file_name(const char *value) {message(4, value);}
+	/**
+	 * Set the initial file name for the dialogue
+	 *
+	 * @param value initial file name
+	 */
 	void file_name(const std::string &value) {message(4, value);}
+	/**
+	 * Get the file type for the dialogue
+	 *
+	 * @returns file type for files saved from the dialogue
+	 */
 	int file_type() const {return int_value(8);}
+	/**
+	 * Set the file type for the dialogue
+	 *
+	 * @param value set the file type for files saved from the dialogue
+	 */
 	void file_type(int value) {int_value(8,value);}
 	/**
 	 * Get the title of the dialogue

@@ -97,33 +97,156 @@ public:
 		background(0xffffff00); // white
 	}
 
+	/**
+	 * Check if text area has a vertical scroll bar
+	 *
+	 * @returns true if there is a vertical scroll bar
+	 */
 	bool has_vertical_scrollbar() const {return flag(0, 1<<0);}
+	/**
+	 * Set if text area has a vertical scroll bar
+	 *
+	 * @param value set to true to include a vertical scroll bar
+	 */
 	void has_vertical_scrollbar(bool value) {flag(0,1<<0,value);}
+	/**
+	 * Check if text area has a horizontal scroll bar
+	 *
+	 * @returns true if there is a horizontal scroll bar
+	 */
 	bool has_horizontal_scrollbar() const {return flag(0, 1<<1);}
+	/**
+	 * Set if text area has a horizontal scroll bar
+	 *
+	 * @param value set to true to include a horizontal scroll bar
+	 */
 	void has_horizontal_scrollbar(bool value) {flag(0,1<<1,value);}
+	/**
+	 * Check if text will be word wrapped
+	 *
+	 * @returns true if the text will be word wrapped
+	 */
 	bool wordwrap() const {return flag(0, 1<<2);}
+	/**
+	 * Set if text will be word wrapped
+	 *
+	 * @param value set to true to word wrap the text
+	 */
 	void wordwrap(bool value) {flag(0,1<<2,value);}
+	/**
+	 * Check if text can be selected by the mouse
+	 *
+	 * @returns true if text can be selected
+	 */
 	bool allow_selection() const {return flag(0, 1<<3);}
+	/**
+	 * Set if text can be selected by the mouse
+	 *
+	 * @param value set to true to allow text to be selected
+	 */
 	void allow_selection(bool value) {flag(0,1<<3,value);}
+	/**
+	 * Check if text can be saved.
+	 *
+	 * Text is saved by selecting some text and dragging it to
+	 * another application or the filer.
+	 *
+	 * @returns true if text can be saved
+	 */
 	bool allow_save() const {return flag(0, 1<<4);}
+	/**
+	 * Set if text can be saved.
+	 *
+	 * Text is saved by selecting some text and dragging it to
+	 * another application or the filer.
+	 *
+	 * @param value set to true if text can be saved
+	 */
 	void allow_save(bool value) {flag(0,1<<4,value);}
+	/**
+	 * Check if text can be loaded by dragging it to the text area
+	 *
+	 * @returns true if text can be loaded
+	 */
 	bool allow_load() const {return flag(0, 1<<5);}
+	/**
+	 * Set if text can be loaded by dragging it to the text area
+	 *
+	 * @param value set to true to allow text to be loaded
+	 */
 	void allow_load(bool value) {flag(0,1<<5,value);}
+	/**
+	 * Check if clipboard support is enabled
+	 *
+	 * @returns true if clipboard support is enabled
+	 */
 	bool clipboard() const {return flag(0, 1<<6);}
+	/**
+	 * Set if clipboard support is enabled
+	 *
+	 * @param value set to true to enable clipboard support
+	 */
 	void clipboard(bool value) {flag(0,1<<6,value);}
+	/**
+	 * Check if the text field will automatically scroll
+	 * as text is entered.
+	 *
+	 * @returns true if auto scroll is enabled
+	 */
 	bool auto_scroll() const {return flag(0, 1<<7);}
+	/**
+	 * Set if the text field will automatically scroll
+	 * as text is entered.
+	 *
+	 * @param value set to true to enable auto scroll
+	 */
 	void auto_scroll(bool value) {flag(0,1<<7,value);}
 
 	int type() const {return int_value(36);}
 	void type(int value) {int_value(36,value);}
 	int event() const {return int_value(40);}
 	void event(int value) {int_value(40,value);}
+	/**
+	 * Get the initial text for the text area
+	 *
+	 * @returns pointer to zero terminated string or 0 if none
+	 */
 	const char *text() const {return message(44);}
+	/**
+	 * Set the initial text for the text area
+	 *
+	 * @param value pointer to zero terminated string or 0 if none
+	 */
 	void text(const char *value) {message(44, value);}
+	/**
+	 * Set the initial text for the text area
+	 *
+	 * @param value initial text
+	 */
 	void text(const std::string &value) {message(44, value);}
+	/**
+	 * Get foreground/text colour for the text area
+	 *
+	 * @returns foreground/text colour
+	 */
 	int foreground() const {return int_value(48);}
+	/**
+	 * Set foreground/text colour for the text area
+	 *
+	 * @param value foreground/text colour
+	 */
 	void foreground(int value) {int_value(48,value);}
+	/**
+	 * Get background colour for the text area
+	 *
+	 * @returns background
+	 */
 	int background() const {return int_value(52);}
+	/**
+	 * Set background colour for the text area
+	 *
+	 * @param value background colour
+	 */
 	void background(int value) {int_value(52,value);}
 
 };

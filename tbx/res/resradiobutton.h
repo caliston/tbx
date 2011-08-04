@@ -96,18 +96,86 @@ public:
 		init_message(40,0); // label
 	}
 
+	/**
+	 * Check if state changed event will be generated
+	 *
+	 * @returns true if the event will be generated
+	 */
 	bool generate_state_changed() const {return flag(0, 1<<0);}
+	/**
+	 * Set if state changed event will be generated
+	 *
+	 * @param value set to true if the event will be generated
+	 */
 	void generate_state_changed(bool value) {flag(0,1<<0,value);}
+	/**
+	 * Check if the initial state of the radion button is on
+	 *
+	 * @return true if the initial state is on
+	 */
 	bool on() const {return flag(0, 1<<2);}
+	/**
+	 * Set if the initial state of the radion button is on
+	 *
+	 * @param value set to true if the initial state should be on
+	 */
 	void on(bool value) {flag(0,1<<2,value);}
 
+	/**
+	 * Get the group number for this radio buttons
+	 *
+	 * Other buttons in the same group are automatically deselected when
+	 * a button in the group is selected.
+	 *
+	 * @returns group number
+	 */
 	int group_number() const {return int_value(36);}
+	/**
+	 * Set the group number for this radio buttons
+	 *
+	 * Other buttons in the same group are automatically deselected when
+	 * a button in the group is selected.
+	 *
+	 * @param value group number
+	 */
 	void group_number(int value) {int_value(36,value);}
+	/**
+	 * Get the label for the radio button
+	 *
+	 * @returns zero terminated pointer to the message or 0 if none.
+	 */
 	const char *label() const {return message(40);}
+	/**
+	 * Set the label for the radio button
+	 *
+	 * @param value zero terminated pointer to the label or 0 if none.
+	 * @param max_length the maximum length the label can be changed to.
+	 * -1 (the default) means use the length of value.
+	 */
 	void label(const char *value, int max_length = -1) {message_with_length(40, value, max_length);}
+	/**
+	 * Set the label for the radio button
+	 *
+	 * @param value new label
+	 * @param max_length the maximum length the label can be changed to.
+	 * -1 (the default) means use the length of value.
+	 */
 	void label(const std::string &value, int max_length = -1) {message_with_length(40, value, max_length);}
+	/**
+	 * Get the maximum length allowed for the label
+	 */
 	int max_label_len() const {return int_value(44);}
+	/**
+	 * Get the event ID raised when the radio button is selected
+	 *
+	 * @returns event ID or 0 for the default event
+	 */
 	int event() const {return int_value(48);}
+	/**
+	 * Set the event ID raised when the radio button is selected
+	 *
+	 * @param value event ID or 0 for the default event
+	 */
 	void event(int value) {int_value(48,value);}
 
 };

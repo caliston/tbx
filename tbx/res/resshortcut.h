@@ -53,18 +53,33 @@ class ResShortcut : public ResBase
 	void *header() const {return _impl->header();}
 
 public:
+	/**
+	 * Construct shortcut as a copy of another
+	 *
+	 * @param other shortcut to copy
+	 */
 	ResShortcut(const ResShortcut &other) : ResBase(other)
 	{
 	}
 
 	virtual ~ResShortcut() {}
 
+	/**
+	 * Assign this shortcut to be a copy of another
+	 *
+	 * @param other shortcut to copy
+	 */
 	ResShortcut &operator=(const ResShortcut &other)
 	{
 		ResBase::operator=(other);
 		return *this;
 	}
 	
+	/**
+	 * Construct a new shortcut for the given key code
+	 *
+	 * @param code WIMP key code for the short cut
+	 */
 	ResShortcut(int code)
 		: ResBase(new ResImpl(new char[SHORTCUT_SIZE], 0, SHORTCUT_SIZE, new ResData()))
 	{
@@ -106,28 +121,62 @@ public:
 	   void flags(unsigned int value) {uint_value(0, value);}
 
 	   /**
-	    * Show object transiently
+	    * Check if show object will be shown transiently.
+	    *
+	    * @returns true if show object will be shown transiently
 		*/
 	   bool transient() const {return flag(0,1);}
+	   /**
+	    * Set if show object will be shown transiently.
+	    *
+	    * transient means the show object will automatically be closed
+	    * if a click occurs outside it.
+	    *
+	    * @param b set to true if show object should be shown transiently
+		*/
 	   void transient(bool b) {flag(0,1, b);}
 
 	   /**
-	    * Wimp key code for shortcut
+	    * Get the WIMP key code for shortcut
+	    *
+	    * @returns WIMP key code
 		*/
 	   int key_code() const {return int_value(4);}
-	   void key_code(int code) {int_value(4, code);}
-
 	   /**
-	    * event id to be generated for key
+	    * Set the WIMP key code for shortcut
+	    *
+	    * @param code WIMP key code
+		*/
+	   void key_code(int code) {int_value(4, code);}
+	   /**
+	    * Get the event ID to be generated for key
+	    *
+	    * @returns event ID or 0 if none
 		*/
 	   int event_id() const {return int_value(8);}
-	   void event_id(int id) {int_value(8, id);}
-
 	   /**
-	    * Object to show
+	    * Set the event ID to be generated for key
+	    *
+	    * @param id event ID or 0 if none
+		*/
+	   void event_id(int id) {int_value(8, id);}
+	   /**
+	    * Get the Toolbox object to show
+	    *
+	    * @returns pointer to zero terminated object name or 0 if none
 		*/
 	   const char *show() const {return string(12);}
+	   /**
+	    * Set the Toolbox object to show
+	    *
+	    * @param obj pointer to zero terminated object name or 0 if none
+		*/
 	   void show(const char *obj) {string(12, obj);}
+	   /**
+	    * Set the Toolbox object to show
+	    *
+	    * @param obj object name
+		*/
 	   void show(const std::string &obj) {string(12, obj);}
 };
 

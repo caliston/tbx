@@ -166,9 +166,32 @@ public:
 	 * Get the maximum size the title can be
 	 */
 	int max_title() const {return int_value(8);}
+
+	/**
+	 * Get the alternative message to display in the dialogue
+	 *
+	 * @returns pointer to zero terminated alternative message or 0 if the default message will be used
+	 */
 	const char *alternative_message() const {return message(12);}
+	/**
+	 * Set the alternative message to display in the dialogue
+	 *
+	 * @param value pointer to zero terminated alternative message or 0 if the default message will be used
+	 * @param max_length maximum length the alternative message will be changed to.
+	 * -1 (the default) to use the length of the value given.
+	 */
 	void alternative_message(const char *value, int max_length = -1) {message_with_length(12, value, max_length);}
+	/**
+	 * Set the alternative message to display in the dialogue
+	 *
+	 * @param value alternative message
+	 * @param max_length maximum length the alternative message will be changed to.
+	 * -1 (the default) to use the length of the value given.
+	 */
 	void alternative_message(const std::string &value, int max_length = -1) {message_with_length(12, value, max_length);}
+	/**
+	 * Get the maximum length for the alternative message
+	 */
 	int max_alternative_message() const {return int_value(16);}
 	/**
 	 * Get the name of the window template that provides the window for this

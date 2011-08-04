@@ -26,6 +26,7 @@
 #define TBX_RES_RESSLIDER_H
 
 #include "resgadget.h"
+#include "../colour.h"
 
 namespace tbx {
 namespace res {
@@ -98,36 +99,128 @@ public:
 		step_size(1);
 	}
 
+	/**
+	 * Check if value changed event will be generated
+	 *
+	 * @returns true if the value changed event will be generated
+	 */
 	bool generate_value_changed() const {return flag(0, 1<<0);}
+	/**
+	 * Set if value changed event will be generated
+	 *
+	 * @param value set to if the value changed event will be generated
+	 */
 	void generate_value_changed(bool value) {flag(0,1<<0,value);}
+	/**
+	 * Check if the value changed event will be generated when the slider is
+	 * dragged.
+	 *
+	 * @returns true to generate the value changed while dragging
+	 */
 	bool generate_value_changed_while_dragging() const {return flag(0, 1<<1);}
+	/**
+	 * Set if the value changed event will be generated when the slider is
+	 * dragged.
+	 *
+	 * @param value set to true to generate the value changed while dragging
+	 */
 	void generate_value_changed_while_dragging(bool value) {flag(0,1<<1,value);}
+	/**
+	 * Check if the slider is vertical instead of horizontal
+	 *
+	 * @returns true if the slider is vertical
+	 */
 	bool vertical() const {return flag(0, 1<<3);}
+	/**
+	 * Set if the slider is vertical instead of horizontal
+	 *
+	 * @param value set to true for a vertical slider
+	 */
 	void vertical(bool value) {flag(0,1<<3,value);}
+	/**
+	 * Check if the bar can be dragged
+	 *
+	 * @returns true if the bar can be dragged
+	 */
 	bool bar_is_draggable() const {return flag(0, 1<<4);}
+	/**
+	 * Set if the bar can be dragged
+	 *
+	 * @param value set to true to allow the bar to be dragged
+	 */
 	void bar_is_draggable(bool value) {flag(0,1<<4,value);}
 	/**
-	 * Get/Set bar_colour
-   * TODO: Make following an enum
-	 * Values:
-	*/
-	int bar_colour() const {return flag_value(0, 61440)>>12;}
-	void bar_colour(int value) {flag_value(0,61440,value<<12);}
+	 * Get the bar colour.
+	 *
+	 * @returns WIMP colour for the bar
+	 */
+	WimpColour bar_colour() const {return WimpColour(flag_value(0, 61440)>>12);}
 	/**
-	 * Get/Set background_colour
-   * TODO: Make following an enum
-	 * Values:
+	 * Set the bar colour.
+	 *
+	 * @param value WIMP colour for the bar
 	*/
-	int background_colour() const {return flag_value(0, 983040)>>16;}
-	void background_colour(int value) {flag_value(0,983040,value<<16);}
+	void bar_colour(WimpColour value) {flag_value(0,61440,((int)value)<<12);}
+	/**
+	 * Get the background colour
+	 *
+	 * @returns WIMP colour for the background
+	 */
+	WimpColour background_colour() const {return WimpColour(flag_value(0, 983040)>>16);}
+	/**
+	 * Set the background colour.
+	 *
+	 * @param value WIMP colour for the background
+	*/
+	void background_colour(WimpColour value) {flag_value(0,983040,((int)value)<<16);}
 
+	/**
+	 * Get the minimum value for the slider
+	 *
+	 * @returns minimum value for the slider
+	 */
 	int lower_bound() const {return int_value(36);}
+	/**
+	 * Set the minimum value for the slider
+	 *
+	 * @param value minimum value for the slider
+	 */
 	void lower_bound(int value) {int_value(36,value);}
+	/**
+	 * Get the maximum value for the slider
+	 *
+	 * @returns maximum value for the slider
+	 */
 	int upper_bound() const {return int_value(40);}
+	/**
+	 * Set the maximum value for the slider
+	 *
+	 * @param value maximum value for the slider
+	 */
 	void upper_bound(int value) {int_value(40,value);}
+	/**
+	 * Get the step size for the slider
+	 *
+	 * @returns step size for the slider
+	 */
 	int step_size() const {return int_value(44);}
+	/**
+	 * Set the step size for the slider
+	 *
+	 * @param step size for the slider
+	 */
 	void step_size(int value) {int_value(44,value);}
+	/**
+	 * Get the initial value for the slider
+	 *
+	 * @returns initial value for the slider
+	 */
 	int initial_value() const {return int_value(48);}
+	/**
+	 * Set the initial value for the slider
+	 *
+	 * @param value initial value for the slider
+	 */
 	void initial_value(int value) {int_value(48,value);}
 
 };
