@@ -113,15 +113,15 @@ public:
 	 */
 	void generate_select(bool value) {flag(0,1<<0,value);}
 	/**
-	 * Check if tool action includes text
+	 * Check if tool action shows text
 	 *
-	 * @returns true if the tool action includes text
+	 * @returns true if the tool action shows text
 	 */
 	bool has_text() const {return flag(0, 1<<1);}
 	/**
-	 * Set if tool action includes text
+	 * Set if tool action shows text
 	 *
-	 * @param value set to true if the toolaction includes text
+	 * @param value set to true if the tool action shows text
 	 */
 	void has_text(bool value) {flag(0,1<<1,value);}
 	/**
@@ -172,36 +172,205 @@ public:
 	 * @param value set to true to make button presses auto repeat
 	 */
 	void auto_repeat(bool value) {flag(0,1<<8,value);}
+	/**
+	 * Check if the select show object will be shown transiently
+	 *
+	 * @returns true if the select show object will be shown transiently
+	 */
 	bool show_transient() const {return flag(0, 1<<9);}
+	/**
+	 * Set if the select show object will be shown transiently
+	 *
+	 * @param vale set to true if the select show object should be shown transiently
+	 */
 	void show_transient(bool value) {flag(0,1<<9,value);}
+	/**
+	 * Check if the select show object will be shown as a pop up
+	 *
+	 * @returns true if the select show object will be shown as a pop up
+	 */
 	bool show_as_pop_up() const {return flag(0, 1<<10);}
+	/**
+	 * Set if the select show object will be shown pop up
+	 *
+	 * @param vale set to true if the select show object should be shown pop up
+	 */
 	void show_as_pop_up(bool value) {flag(0,1<<10,value);}
+	/**
+	 * Check if the tool action has a faded sprite provided
+	 *
+	 * @returns true if a faded sprite is provided
+	 */
 	bool has_fade_sprite() const {return flag(0, 1<<11);}
+	/**
+	 * Set if the tool action has a faded sprite provided
+	 *
+	 * @param value set to  true if a faded sprite is provided
+	 */
 	void has_fade_sprite(bool value) {flag(0,1<<11,value);}
 
-	const char *off_text() const {return string(36);}
-	void off_text(const char *value, int max_length = -1) {message_with_length(36, value, max_length);}
-	void off_text(const std::string &value, int max_length = -1) {message_with_length(36, value, max_length);}
-	int max_off_text() const {return int_value(40);}
-	const char *on_text() const {return message(44);}
-	void on_text(const char *value, int max_length = -1) {message_with_length(44, value, max_length);}
-	void on_text(const std::string &value, int max_length = -1) {message_with_length(44, value, max_length);}
-	int max_on_text() const {return int_value(48);}
+	/**
+	 * Get the text or sprite name shown when the tool action is off
+	 *
+	 * The has_text() method determines if this refers to text or a sprite
+	 *
+	 * @returns pointer to zero terminated text/sprite name or 0 if none
+	 */
+	const char *off_ident() const {return string(36);}
+	/**
+	 * Set the text or sprite name shown when the tool action is off
+	 *
+	 * The has_text() method determines if this refers to text or a sprite
+	 *
+	 * @param value pointer to zero terminated text/sprite name or 0 if none
+	 * @param max_length The maximum length the off text will be changed to
+	 * when the tool action is shown or -1 (the default) for the length of
+	 * value.
+	 */
+	void off_ident(const char *value, int max_length = -1) {message_with_length(36, value, max_length);}
+	/**
+	 * Set the text or sprite name shown when the tool action is off
+	 *
+	 * The has_text() method determines if this refers to text or a sprite
+	 *
+	 * @param value text/sprite name
+	 * @param max_length The maximum length the off text will be changed to
+	 * when the tool action is shown or -1 (the default) for the length of
+	 * value.
+	 */
+	void off_ident(const std::string &value, int max_length = -1) {message_with_length(36, value, max_length);}
+	/**
+	 * Get the maximum length of the off identifier.
+	 */
+	int max_off_ident() const {return int_value(40);}
+	/**
+	 * Get the text or sprite name shown when the tool action is on
+	 *
+	 * The has_text() method determines if this refers to text or a sprite
+	 *
+	 * @returns pointer to zero terminated text/sprite name or 0 if none
+	 */
+	const char *on_ident() const {return message(44);}
+	/**
+	 * Set the text or sprite name shown when the tool action is on
+	 *
+	 * The has_text() method determines if this refers to text or a sprite
+	 *
+	 * @param value pointer to zero terminated text/sprite name or 0 if none
+	 * @param max_length The maximum length the on text will be changed to
+	 * when the tool action is shown or -1 (the default) for the length of
+	 * value.
+	 */
+	void on_ident(const char *value, int max_length = -1) {message_with_length(44, value, max_length);}
+	/**
+	 * Set the text or sprite name shown when the tool action is on
+	 *
+	 * The has_text() method determines if this refers to text or a sprite
+	 *
+	 * @param value text/sprite name
+	 * @param max_length The maximum length the on text will be changed to
+	 * when the tool action is shown or -1 (the default) for the length of
+	 * value.
+	 */
+	void on_ident(const std::string &value, int max_length = -1) {message_with_length(44, value, max_length);}
+	/**
+	 * Get the maximum length of the on identifier.
+	 */
+	int max_on_ident() const {return int_value(48);}
+	/**
+	 * Get the event that will generated when the tool action is clicked
+	 *
+	 * @returns event ID of event generated or 0 for the default
+	 */
 	int click_event() const {return int_value(52);}
+	/**
+	 * Set the event that will generated when the tool action is clicked
+	 *
+	 * @param value event ID of event generated or 0 for the default
+	 */
 	void click_event(int value) {int_value(52,value);}
+	/**
+	 * Get the name of the object shown when select is clicked
+	 *
+	 * @returns pointer to zero terminate object name or 0 if none
+	 */
 	const char *select_show() const {return string(56);}
+	/**
+	 * Set the name of the object shown when select is clicked
+	 *
+	 * @param value pointer to zero terminate object name or 0 if none
+	 */
 	void select_show(const char *value) {string(56, value);}
+	/**
+	 * Set the name of the object shown when select is clicked
+	 *
+	 * @param value object name
+	 */
 	void select_show(const std::string &value) {string(56, value);}
+	/**
+	 * Get the event that will generated when the tool action is clicked with adjust
+	 *
+	 * @returns event ID of event generated or 0 for the default
+	 */
 	int adjust_event() const {return int_value(60);}
+	/**
+	 * Set the event that will generated when the tool action is clicked with adjust
+	 *
+	 * @param value event ID of event generated or 0 for the default
+	 */
 	void adjust_event(int value) {int_value(60,value);}
+	/**
+	 * Get the name of the object shown when adjust is clicked
+	 *
+	 * @returns pointer to zero terminate object name or 0 if none
+	 */
 	const char *adjust_show() const {return string(64);}
+	/**
+	 * Set the name of the object shown when adjust is clicked
+	 *
+	 * @param value pointer to zero terminate object name or 0 if none
+	 */
 	void adjust_show(const char *value) {string(64,value);}
+	/**
+	 * Set the name of the object shown when adjust is clicked
+	 *
+	 * @param value object name
+	 */
 	void adjust_show(const std::string &value) {string(64, value);}
-	const char *fade_text() const {return message(68);}
-	void fade_text(const char *value) {message(68, value);}
-	void fade_text(const std::string &value) {message(68, value);}
+	/**
+	 * Get the text or sprite name for the faded tool action
+	 *
+	 * The has_text() method determines if this refers to text or a sprite
+	 *
+	 * @returns pointer to zero terminated text/sprite name or 0 if none
+	 */
+	const char *fade_ident() const {return message(68);}
+	/**
+	 * Set the text or sprite name shown when the tool action is faded
+	 *
+	 * The has_text() method determines if this refers to text or a sprite
+	 *
+	 * @param value pointer to zero terminated text/sprite name or 0 if none
+	 * @param max_length The maximum length the faded text will be changed to
+	 * when the tool action is shown or -1 (the default) for the length of
+	 * value.
+	 */
+	void fade_ident(const char *value, int max_length = -1) {message_with_length(68, value, max_length);}
+	/**
+	 * Set the text or sprite name shown when the tool action is faded
+	 *
+	 * The has_text() method determines if this refers to text or a sprite
+	 *
+	 * @param value text/sprite name
+	 * @param max_length The maximum length the faded text will be changed to
+	 * when the tool action is shown or -1 (the default) for the length of
+	 * value.
+	 */
+	void fade_ident(const std::string &value, int max_length = -1) {message_with_length(68, value, max_length);}
+	/**
+	 * Get the maximum length of the faded identifier.
+	 */
 	int max_fade() const {return int_value(72);}
-	void max_fade(int value) {int_value(72,value);}
 
 };
 

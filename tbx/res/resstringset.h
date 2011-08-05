@@ -240,7 +240,7 @@ public:
 	/**
 	 * Get the allowable characters in a writable string set
 	 *
-	 * @see tbx::res::ResWritableField::allowable()
+	 * @see tbx::WritableField::allowable()
 	 *
 	 * @returns pointer to zero terminated string of allowable characters or 0
 	 * if there is no restriction
@@ -249,7 +249,7 @@ public:
 	/**
 	 * Set the allowable characters in a writable string set
 	 *
-	 * @see tbx::res::ResWritableField::allowable()
+	 * @see tbx::WritableField::allowable()
 	 *
 	 * @param pointer to zero terminated string of allowable characters or 0
 	 * if there is no restriction
@@ -261,7 +261,7 @@ public:
 	/**
 	 * Set the allowable characters in a writable string set
 	 *
-	 * @see tbx::res::ResWritableField::allowable()
+	 * @see tbx::WritableField::allowable()
 	 *
 	 * @param string of allowable characters
 	 * @param max_length maximum length the allowable character can be changed
@@ -270,7 +270,7 @@ public:
 	 */
 	void allowable(const std::string &value, int max_length = -1) {message_with_length(52, value, max_length);}
 	/**
-	 * Get themaximum length the allowable character can be changed
+	 * Get the maximum length the allowable character can be changed
 	 * to when the gadget is shown.
 	 */
 	int max_allowable() const {return int_value(56);}
