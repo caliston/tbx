@@ -164,50 +164,104 @@ class ResWindow : public ResObject
 	  void flags(unsigned int value) {uint_value(0, value);}
 
 	  /**
-	   * Generate a Window_AboutToBeShown event before showing the underlying Wimp window  
+	   * Check if the about to be shown event will be generated
+	   *
+	   * @returns true if the about to be shown event will be generated
 	   */
 	  bool generate_about_to_be_shown() const {return flag(0,1);}
+	  /**
+	   * Set if the about to be shown event will be generated
+	   *
+	   * @param value set to true if the about to be shown event should be generated
+	   */
 	  void generate_about_to_be_shown(bool value) {flag(0,1, value);}
 
 	  /**
-	   * Automatically open this Window when a Wimp OpenWindowRequest is received
-	   * (when set the client will not see the underlying Wimp requests)  
+	   * Check if window is automatically shown.
+	   *
+	   * Automatically open this Window when a WIMP OpenWindowRequest is received
+	   * (when set the client will not see the underlying WIMP requests)
+	   *
+	   * @returns true if window is automatically shown
 	   */
 	  bool auto_show() const {return flag(0,2);}
+	  /**
+	   * Set if window is automatically shown.
+	   *
+	   * Automatically open this Window when a WIMP OpenWindowRequest is received
+	   * (when set the client will not see the underlying WIMP requests)
+	   *
+	   * @param value set to true if window is automatically shown
+	   */
 	  void auto_show(bool value) {flag(0,2, value);}
 
 	  /**
-	   *  Automatically close this Window when a Wimp CloseWindowRequest is received
-	   * (when set the client will not see the underlying Wimp requests)  
+	   * Check if window is automatically closed.
+	   *
+	   * Automatically close this Window when a WIMP CloseWindowRequest is received
+	   * (when set the client will not see the underlying WIMP requests)
+	   *
+	   * @returns true if window will be automatically closed
 	   */
 	  bool auto_close() const {return flag(0,4);}
+	  /**
+	   * Set if window is automatically closed.
+	   *
+	   * Automatically close this Window when a WIMP CloseWindowRequest is received
+	   * (when set the client will not see the underlying WIMP requests)
+	   *
+	   * @param value set to true if window should be automatically closed
+	   */
 	  void auto_close(bool value) {flag(0,4, value);}
 
 	  /**
-	   * Generate a Window_HasBeenHidden Event after hiding the underlying Wimp window  
+	   * Check if an event will be generated when the window has been hidden.
+	   *
+	   * @returns true if the event will be generated
 	   */
 	  bool generate_has_been_hidden() const {return flag(0,8);}
+	  /**
+	   * Set if an event will be generated when the window has been hidden.
+	   *
+	   * @param value set to true if the event should be generated
+	   */
 	  void generate_has_been_hidden(bool value) {flag(0,8, value);}
 
 	  /**
-	   * Indicates that this template is of a toolbar
+	   * Check if this template is for a toolbar
+	   *
+	   * @returns true if the template is for a toolbar
 	   */
 	  bool toolbar() const {return flag(0,16);}
+	  /**
+	   * Set if this template is for a toolbar
+	   *
+	   * @param value set to true if the template is for a toolbar
+	   */
 	  void toolbar(bool value) {flag(0,16, value);}
 
    	   /**
 	    * Get the help message
+	    *
+	    * @returns pointer to zero terminated help message or 0 if none.
 		*/
 	   const char *help_message() const {return message(4);}
 
 	   /**
 	    * Set the help message
 		*
-		* @param value help message
+		* @param value pointer to zero terminated help message or 0 if none.
 		* @param max_length maximum length for help message or -1 to use current value.
 		*                   This is alway adjusted to allow for the full length of the help message.
 		*/
 	   void help_message(const char *value, int max_length = -1) {message_with_length(4, value, max_length);}
+	   /**
+	    * Set the help message
+		*
+		* @param value help message.
+		* @param max_length maximum length for help message or -1 to use current value.
+		*                   This is alway adjusted to allow for the full length of the help message.
+		*/
 	   void help_message(const std::string &value, int max_length = -1) {message_with_length(4, value, max_length);}
 	   
 	   /**
@@ -215,65 +269,213 @@ class ResWindow : public ResObject
 		*/
 	   int max_help_message() const {return int_value(8);}
 
+	   /**
+	    * Get the name of the sprite to use for the mouse pointer
+	    * when it is over this window.
+	    *
+	    * @returns pointer to zero terminated sprite name or 0 if none
+	    */
 	   const char *pointer_shape() const {return string(12);}
+	   /**
+	    * Set the name of the sprite to use for the mouse pointer
+	    * when it is over this window.
+	    *
+	    * @param value pointer to zero terminated sprite name or 0 if none
+	    * @param max_length maximum length of sprite name the pointer shape
+	    * will be set to or -1 to use the length of value.
+	    */
 	   void pointer_shape(const char *value, int max_length = -1) {string_with_length(12, value, max_length);}
+	   /**
+	    * Set the name of the sprite to use for the mouse pointer
+	    * when it is over this window.
+	    *
+	    * @param value sprite name
+	    * @param max_length maximum length of sprite name the pointer shape
+	    * will be set to or -1 to use the length of value.
+	    */
 	   void pointer_shape(const std::string &value, int max_length = -1) {string_with_length(12, value, max_length);}
 
    	   /**
 	    * Get the maximum pointer shape length
 		*/
 	   int max_pointer_shape() const {return int_value(16);}
-
+	   /**
+	    * Get the X position of the hotspot in the pointer
+	    *
+	    * @returns X position of hotspot
+	    */
 	   int pointer_x_hot() const {return int_value(20);}
+	   /**
+	    * Set the X position of the hotspot in the pointer
+	    *
+	    * @param value X position of hotspot
+	    */
 	   void pointer_x_hot(int value) {int_value(20, value);}
+	   /**
+	    * Get the Y position of the hotspot in the pointer
+	    *
+	    * @returns Y position of hotspot
+	    */
 	   int pointer_y_hot() const {return int_value(24);}
+	   /**
+	    * Set the Y position of the hotspot in the pointer
+	    *
+	    * @param value Y position of hotspot
+	    */
 	   void pointer_y_hot(int value) {int_value(24, value);}
 
+	   /**
+	    * Get the menu to be shown for this menu
+	    *
+	    * @returns pointer to zero terminated menu object name or 0 for none
+	    */
 	   const char *menu() const {return string(28);}
+	   /**
+	    * Set the menu to be shown for this menu
+	    *
+	    * @param value pointer to zero terminated menu object name or 0 for none
+	    */
 	   void menu(const char *value) {string(28, value);}
+	   /**
+	    * Set the menu to be shown for this menu
+	    *
+	    * @param value menu object name
+	    */
 	   void menu(const std::string &value) {string(28, value);}
-
+	   /**
+	    * Get the number of shortcut keys in this window
+	    *
+	    * @returns the number of shortcut keys
+	    */
 	   int num_shortcuts() const {return int_value(32);}
+	   /**
+	    * Get the number of gadgets in this window
+	    *
+	    * @returns the number of gadgets
+	    */
 	   int num_gadgets() const {return int_value(40);}
 		
 	   /**
-	    * Component to get the default focus or NULL_ComponentID for none
+	    * Get the component ID of the gadget to get the default focus.
+	    *
+	    * @returns the component ID or NULL_ComponentID for none
 		*/
 	   ComponentId default_focus() const {return int_value(48);}
+	   /**
+	    * Set the component ID of the gadget to get the default focus.
+	    *
+	    * @param id the component ID or NULL_ComponentID for none
+		*/
 	   void default_focus(ComponentId id) {int_value(48, id);}
 
 	   /**
-	    * Show event or -1 for default.
+	    * Get the event ID of the event generated when the window is shown.
 		*
 		* generate_about_to_be_shown must be set for this event to be generated
+		*
+		* @returns event ID or -1 for default.
 		*/
 	   int show_event() const {return int_value(52);}
+	   /**
+	    * Set the event ID of the event generated when the window is shown.
+		*
+		* generate_about_to_be_shown must be set for this event to be generated
+		*
+		* @param event_id event ID or -1 for default.
+		*/
 	   void show_event(int event_id) {int_value(52, event_id);}
 
 	   /**
-	    * Show event or -1 for default.
+	    * Get the event ID of the event generated when the window has been hidden.
 		*
 		* generate_has_been_hidden must be set for this event to be generated
+		*
+		* @returns event ID or -1 for default.
 		*/
    	   int hide_event() const {return int_value(56);}
+	   /**
+	    * Set the event ID of the event generated when the window has been hidden.
+		*
+		* generate_has_been_hidden must be set for this event to be generated
+		*
+		* @param value event ID or -1 for default.
+		*/
 	   void hide_event(int value) {int_value(56, value);}
 
+	   /**
+	    * Get the name of the object to use for the internal bottom left toolbar.
+	    *
+	    * @returns pointer to zero terminated toolbar object name or 0 if none.
+	    */
 	   const char *internal_bl_toolbar() const {return string(60);}
+	   /**
+	    * Set the name of the object to use for the internal bottom left toolbar.
+	    *
+	    * @param value pointer to zero terminated toolbar object name or 0 if none.
+	    */
 	   void internal_bl_toolbar(const char *value) {string(60, value);}
+	   /**
+	    * Set the name of the object to use for the internal bottom left toolbar.
+	    *
+	    * @param value toolbar object name.
+	    */
 	   void internal_bl_toolbar(const std::string &value) {string(60, value);}
-
+	   /**
+	    * Get the name of the object to use for the internal top left toolbar.
+	    *
+	    * @returns pointer to zero terminated toolbar object name or 0 if none.
+	    */
    	   const char *internal_tl_toolbar() const {return string(64);}
+	   /**
+	    * Set the name of the object to use for the internal top left toolbar.
+	    *
+	    * @param value pointer to zero terminated toolbar object name or 0 if none.
+	    */
 	   void internal_tl_toolbar(const char *value) {string(64, value);}
+	   /**
+	    * Set the name of the object to use for the internal top left toolbar.
+	    *
+	    * @param value toolbar object name.
+	    */
 	   void internal_tl_toolbar(const std::string &value) {string(64, value);}
 
+	   /**
+	    * Get the name of the object to use for the external bottom left toolbar.
+	    *
+	    * @returns pointer to zero terminated toolbar object name or 0 if none.
+	    */
 	   const char *external_bl_toolbar() const {return string(68);}
+	   /**
+	    * Set the name of the object to use for the external bottom left toolbar.
+	    *
+	    * @param value pointer to zero terminated toolbar object name or 0 if none.
+	    */
 	   void external_bl_toolbar(const char *value) {string(68, value);}
+	   /**
+	    * Set the name of the object to use for the external bottom left toolbar.
+	    *
+	    * @param value toolbar object name.
+	    */
 	   void external_bl_toolbar(const std::string &value) {string(68, value);}
 
+	   /**
+	    * Get the name of the object to use for the external top left toolbar.
+	    *
+	    * @returns pointer to zero terminated toolbar object name or 0 if none.
+	    */
 	   const char *external_tl_toolbar() const {return string(72);}
+	   /**
+	    * Set the name of the object to use for the external top left toolbar.
+	    *
+	    * @param value pointer to zero terminated toolbar object name or 0 if none.
+	    */
 	   void external_tl_toolbar(const char *value) {string(72, value);}
+	   /**
+	    * Set the name of the object to use for the external top left toolbar.
+	    *
+	    * @param value toolbar object name.
+	    */
 	   void external_tl_toolbar(const std::string &value) {string(72, value);}
-
 
 // window  88  WimpWindow  
 	   int visible_xmin() const {return int_value(76);}

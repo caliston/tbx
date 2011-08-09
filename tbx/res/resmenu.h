@@ -54,12 +54,22 @@ class ResMenuItem : public ResBase
 	char *header() const {return _impl->header();}
 
 public:
+	/**
+	 * Create a ResMenuItem as a copy of another
+	 *
+	 * @param other ResMenuItem to copy
+	 */
 	ResMenuItem(const ResMenuItem &other) : ResBase(other)
 	{
 	}
 
 	virtual ~ResMenuItem() {}
 
+	/**
+	 * Assign this menu item to be equal to another
+	 *
+	 * @param other ResMenuItem to copy
+	 */
 	ResMenuItem &operator=(const ResMenuItem &other)
 	{
 		ResBase::operator=(other);
@@ -101,15 +111,29 @@ public:
 	  void flags(unsigned int value) {uint_value(0, value);}
 
 	  /**
-	   * Item it ticked
+	   * Check if the item is ticked
+	   *
+	   * @returns true if the item is ticked
 	   */
 	  bool ticked() const {return flag(0,1);}
+	  /**
+	   * Set if the item is ticked
+	   *
+	   * @param t set to true if the item should be ticked
+	   */
 	  void ticked(bool t) {flag(0,1,t);}
 
 	  /**
-	   * Entry followed by a dotted line
+	   * Check if this entry is followed by a dotted line
+	   *
+	   * @returns true if the entry is followed by a dotted line
 	   */
 	  bool dotted_line() const {return flag(0,2);}
+	  /**
+	   * Set if this entry is followed by a dotted line
+	   *
+	   * @param value set to true if the entry is followed by a dotted line
+	   */
 	  void dotted_line(bool value) {flag(0,2,value);}
 
 	  /**
@@ -119,8 +143,11 @@ public:
 	  void faded(bool value) {flag(0,256, value);}
 
 	  /**
-	   * Entry is a sprite.
-	   * When not set entry is a text menu item
+	   * Check if this entry shows a sprite.
+	   *
+	   * When not set this entry shows text
+	   *
+	   * @returns true if this is a sprite menu item
 	   */
 	  bool sprite() const {return flag(0,512);}
 
@@ -128,81 +155,180 @@ public:
 	  // void sprite(bool value) {flag(0,512,value);}
 
   	  /**
-	   * Entry has a submenu (ie a submenu arrow appears next to the entry).
+	   * Check if this entry has a sub menu.
+	   *
+	   * ie a sub menu arrow appears next to the entry
+	   *
+	   * @returns true if this menu has a sub menu
 	   */
 	  bool has_submenu() const {return flag(0,1024);}
+  	  /**
+	   * Set if this entry has a sub menu.
+	   *
+	   * ie a sub menu arrow appears next to the entry
+	   *
+	   * @param value set to true if this menu has a sub menu
+	   */
 	  void has_submenu(bool value) {flag(0,1024, value);}
   	  /**
-	   * Entry deliver submenu_event when the user traverses this entry's submenu arrow with
-	   * the mouse pointer (if has_submenu() == true).  
+  	   * Check if the sub menu event will be generated.
+	   *
+	   * The sub menu event occurs when the user traverses this entry's
+	   * sub menu arrow with the mouse pointer (if has_submenu() == true).
+	   *
+	   * @returns true if the sub menu event will be generated
 	   */
 	  bool generate_submenu_event() const {return flag(0,2048);}
+  	  /**
+  	   * Set if the sub menu event will be generated.
+	   *
+	   * The sub menu event occurs when the user traverses this entry's
+	   * sub menu arrow with the mouse pointer (if has_submenu() == true).
+	   *
+	   * @param value set to true if the sub menu event should be generated
+	   */
 	  void generate_submenu_event(bool value) {flag(0,2048, value);}
   	  /**
-	   * Shows object to be shown with Wimp_CreateMenu semantics. The default is to show persistently.  
+	   * Check if shown object will be shown transiently.
+	   *
+	   * @returns true if object will be shown transiently
 	   */
 	  bool show_transient() const {return flag(0,4096);}
+  	  /**
+	   * Set if shown object will be shown transiently.
+	   *
+	   * @param value set to true if object will be shown transiently
+	   */
 	  void show_transient(bool value) {flag(0,4096, value);}
 
 	/**
-	 * Get component id of menu item
+	 * Get component ID of menu item
 	 */
 	  ComponentId component_id() const {return int_value(4);}
 	  /**
-	   * Set component id
+	   * Set component ID
+	   *
+	   * @param id component ID of menu item
 	   */
 	  void component_id(ComponentId id) {int_value(4,id);}
 
     /**
-	 * Text or sprite name for entry
+	 * Get text or sprite name for entry
 	 *
 	 * The sprite() flag determines if this is a sprite or text entry
+	 *
+	 * @returns pointer to zero terminated text or sprite name
 	 */
 	 const char *text() const {return string(8);}
+	/**
+	 * Set text or sprite name for entry
+	 *
+	 * The sprite() flag determines if this is a sprite or text entry
+	 *
+	 * @param value pointer to zero terminated text or sprite name
+	 * @param max_length maximum length of the text or sprite name that will
+	 * be used with this menu item or -1 (the default) for the length of value
+	 */
 	 void text(const char *value, int max_length = -1) {make_writeable(); _impl->text_with_length(8, value, max_length, sprite());}
+	/**
+	 * Set text or sprite name for entry
+	 *
+	 * The sprite() flag determines if this is a sprite or text entry
+	 *
+	 * @param value text or sprite name
+	 * @param max_length maximum length of the text or sprite name that will
+	 * be used with this menu item or -1 (the default) for the length of value
+	 */
 	 void text(const std::string &value, int max_length = -1) {make_writeable(); _impl->text_with_length(8, value, max_length, sprite());}
-
 	 /**
-	  * Maximum space for text entry
+	  * Maximum space for text or sprite name
 	  */
 	 int max_text() const {return int_value(12);}
 
 	 /**
-	  * Item to show on click or null pointer for none
+	  * Get the name of the object to show on click
+	  *
+	  * @returns pointer to zero terminated object name or 0 if none
 	  */
 	 const char *click_show() const {return string(16);}
+	 /**
+	  * Set the name of the object to show on click
+	  *
+	  * @param show_name pointer to zero terminated object name or 0 if none
+	  */
 	 void click_show(const char *show_name) {string(16, show_name);}
+	 /**
+	  * Set the name of the object to show on click
+	  *
+	  * @param show_name object name
+	  */
 	 void click_show(const std::string &show_name) {string(16, show_name);}
 
  	 /**
-	  * Submenu to show for this menu item or null pointer for none
+ 	  * Get the name of the sub menu to show for this menu item.
+ 	  *
+ 	  * @returns pointer to zero terminated sub menu object name or 0 for none.
 	  */
 	 const char *submenu_show() const {return string(20);}
+ 	 /**
+ 	  * Set the name of the sub menu to show for this menu item.
+ 	  *
+ 	  * @param show_name pointer to zero terminated sub menu object name or 0 for none.
+	  */
 	 void submenu_show(char *show_name) {string(20, show_name);}
+ 	 /**
+ 	  * Set the name of the sub menu to show for this menu item.
+ 	  *
+ 	  * @param show_name sub menu object name
+	  */
 	 void submenu_show(const std::string &show_name) {string(20, show_name);}
-
 	 /**
-	  * Event to show on submenu or -1 for default
+	  * Get the event ID generated when sub menu is shown.
+	  *
+	  * @returns event ID or 0 for the default
 	  */
 	 int submenu_event() const {return int_value(24);}
+	 /**
+	  * Set the event ID generated when sub menu is shown.
+	  *
+	  * @param event_id event ID or 0 for the default
+	  */
 	 void submenu_event(int event_id) {int_value(24, event_id);}
-
+	 /**
+	  * Get the event ID generated when the item is clicked.
+	  *
+	  * @returns event ID or 0 for the default
+	  */
 	 int click_event() const {return int_value(28);}
+	 /**
+	  * Set the event ID generated when the item is clicked.
+	  *
+	  * @param event_id event ID or 0 for the default
+	  */
 	 void click_event(int event_id) {int_value(28, event_id);}
 
 	   /**
 	    * Get the menu item help message
+	    *
+	    * @returns pointer to zero terminated help message or 0 for none.
 		*/
 	   const char *help_message() const {return message(32);}
 
 	   /**
 	    * Set the item help message
 		*
-		* @param value menu help message
+		* @param value pointer to zero terminated menu help message or 0 for none.
 		* @param max_length maximum length for help message or -1 to use current value.
 		*                   This is alway adjusted to allow for the full length of the help message.
 		*/
 	   void help_message(const char *value, int max_length = -1) {message_with_length(32, value, max_length);}
+	   /**
+	    * Set the item help message
+		*
+		* @param value menu help message.
+		* @param max_length maximum length for help message or -1 to use current value.
+		*                   This is alway adjusted to allow for the full length of the help message.
+		*/
 	   void help_message(const std::string &value, int max_length = -1) {message_with_length(32, value, max_length);}
 	   
 	   /**
@@ -283,34 +409,59 @@ class ResMenu : public ResObject
 	   *
 	   * Not normally used as there are named methods that allow access
 	   * to the individual items in the flags
+	   *
+	   * @param value new flags value
 	   */
 	  void flags(unsigned int value) {uint_value(0, value);}
 
 	  /**
-	   * Generate an event when SWI Toolbox_ShowObject is called for this Menu.
+	   * Check if about to be shown event will be generated
+	   *
+	   * @returns true if the about to be shown event will be generated
 	   */
 	  bool generate_about_to_be_shown() const {return flag(0, 1);}
+	  /**
+	   * Set if about to be shown event will be generated
+	   *
+	   * @param generate set to true if the about to be shown event should be generated
+	   */
 	  void generate_about_to_be_shown(bool generate) {flag(0, 1, generate);}
 
 	  /**
-	   * Generate when the Menu has been removed from the screen.
+	   * Check if event will be generated when the menu has been removed from the screen.
+	   *
+	   * @returns true if an event is generated when the menu is hidden
 	   */
   	  bool generate_has_been_hidden() const {return flag(0, 2);}
+	  /**
+	   * Set if event will be generated when the menu has been removed from the screen.
+	   *
+	   * @param value set to true if an event should be generated when the menu is hidden
+	   */
 	  void generate_has_been_hidden(bool generate) {flag(0, 2, generate);}
 
 	    /**
 	    * Get the iconbar icon title
+	    *
+	    * @returns pointer to zero terminated title or "" for no title bar or 0 for no title.
 		*/
 	   const char *title() const {return message(4);}
 
 	   /**
 	    * Set the title
 		*
-		* @param title menu title (0 means no title, an empty string means no titlebar)
+		* @param value menu title (0 means no title, an empty string means no titlebar)
 		* @param max_length maximum length for title or -1 to use current value.
-		*                   This is alway adjusted to allow for the full length of the title.
+		*                   This is always adjusted to allow for the full length of the title.
 		*/
 	   void title(const char *value, int max_length = -1) {message_with_length(4, value, max_length);}
+	   /**
+	    * Set the title
+		*
+		* @param value menu title (an empty string means no titlebar)
+		* @param max_length maximum length for title or -1 to use current value.
+		*                   This is always adjusted to allow for the full length of the title.
+		*/
 	   void title(const std::string &value, int max_length = -1) {message_with_length(4, value, max_length);}
 	   
 	   /**
@@ -320,17 +471,26 @@ class ResMenu : public ResObject
 
 	   /**
 	    * Get the menu help message
+	    *
+	    * @returns pointer to zero terminated help message or 0 for none
 		*/
 	   const char *help_message() const {return message(12);}
 
 	   /**
 	    * Set the help message
 		*
-		* @param value menu help message
+		* @param value pointer to zero terminated help message or 0 for none
 		* @param max_length maximum length for help message or -1 to use current value.
-		*                   This is alway adjusted to allow for the full length of the help message.
+		*                   This is always adjusted to allow for the full length of the help message.
 		*/
 	   void help_message(const char *value, int max_length = -1) {message_with_length(12, value, max_length);}
+	   /**
+	    * Set the help message
+		*
+		* @param value help message
+		* @param max_length maximum length for help message or -1 to use current value.
+		*                   This is always adjusted to allow for the full length of the help message.
+		*/
 	   void help_message(const std::string &value, int max_length = -1) {message_with_length(12, value, max_length);}
 	   
 	   /**
@@ -340,25 +500,29 @@ class ResMenu : public ResObject
 
       /**
        * Get the event to generate when the menu is shown.
-	   * Can be -1 for the default.
+	   *
+	   * @returns event ID or -1 for the default.
        */
 	   int about_to_be_shown_event() const {return int_value(20);}
 
       /**
        * Set the event to generate when the menu is shown.
-	   * Use -1 for the default.
+	   *
+	   * @param event_id event ID or -1 for the default.
        */
 	   void about_to_be_shown_event(int event_id) {int_value(20, event_id);}
 
 	  /**
        * Get the event to generate when menu is hidden.
-	   * Can be -1 for the default.
+	   *
+	   * @returns event ID or -1 for the default.
        */
 	   int has_been_hidden_event() const {return int_value(24);}
 
       /**
        * Set the event to generate when the menu is hidden.
-	   * Use -1 for the default.
+	   *
+	   * @param event_id event ID or -1 for the default.
        */
 	   void has_been_hidden_event(int event_id) {int_value(24, event_id);}
 
@@ -369,14 +533,7 @@ class ResMenu : public ResObject
 
 	   ResMenuItem item(ComponentId component_id) const;
 
-	  /**
-	   * Get a copy of item at given index
-	   */
 	   ResMenuItem item_at(int index) const;
-
-	   /**
-	    * Get a copy of an item at the given offset in the body
-		*/
 	   ResMenuItem item_at_offset(int item_offset) const;
 
 

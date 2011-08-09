@@ -31,6 +31,10 @@ namespace tbx
 namespace res
 {
 
+/**
+ * Construct a ResMenuItem with flags unset, item text "" and show objects
+ * and help message null.
+ */
 ResMenuItem::ResMenuItem()
 : ResBase(new ResImpl(new char[MENU_ITEM_SIZE], 0, MENU_ITEM_SIZE, new ResData()))
 {
@@ -49,6 +53,13 @@ ResMenuItem::ResMenuItem(void *item_header, int size, ResData *data)
 {
 }
 
+/**
+ * Get a copy of item at given index
+ *
+ * @param index zero based item index.
+ * @returns Copy of menu item at the given index
+ * @throws std::range_error if index is not valid
+ */
 ResMenuItem ResMenu::item_at(int index) const
 {
 	if (index < 0 || index >= item_count()) throw std::range_error("Invalid menu index");
@@ -56,6 +67,16 @@ ResMenuItem ResMenu::item_at(int index) const
 	return item_at_offset(offset + MENU_DATA_SIZE);
 }
 
+
+/**
+ * Get a copy of an item at the given offset in the body
+ *
+ * There is no checking on the offset given so you must ensure it
+ * is correct before using this function.
+ *
+ * @param item_offset offset of menu
+ * @returns menu item
+ */
 ResMenuItem ResMenu::item_at_offset(int item_offset) const
 {
 	void *item_header = object_header()->body + item_offset;
