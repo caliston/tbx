@@ -130,7 +130,7 @@ public:
 	 * The cancel button is also activated by pressing escape
 	 * in the window.
 	 *
-	 * @params value true to make this the cancel button
+	 * @param value true to make this the cancel button
 	 */
 	void cancel(bool value) {flag(0,1<<1,value);}
 	/**
@@ -148,7 +148,7 @@ public:
 	 * A local button does not close the window when it is selected,
 	 * whereas a non-local button will close the window when selected.
 	 *
-	 * @params value true to make this a local button
+	 * @param value true to make this a local button
 	 */
 	void local(bool value) {flag(0,1<<2,value);}
 
@@ -161,7 +161,7 @@ public:
 	/**
 	 * Set if the object shown on a click is transient
 	 *
-	 * @params value true to make the shown object is transient.
+	 * @param value true to make the shown object is transient.
 	 */
 	void click_show_transient(bool value) {flag(0,1<<3,value);}
 
@@ -206,7 +206,7 @@ public:
 	 * @param value name of object to show or 0 for no object
 	 */
 	void click_show(const char *value) {string(44, value);}
-	/*
+	/**
 	 * Set the name of the object to show on click
 	 *
 	 * @param value name of object to show

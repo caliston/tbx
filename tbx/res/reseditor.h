@@ -56,14 +56,40 @@ public:
 	 */
 	const ResFileHeader *header() const {return reinterpret_cast<ResFileHeader *>(_header);}
 
+	/**
+	 * Constant iterator to iterate through the objects being edited
+	 */
 	typedef std::vector<ResObject>::const_iterator const_iterator;
+	/**
+	 * Iterator to iterate through the objects being edited
+	 */
 	typedef std::vector<ResObject>::iterator iterator;
 
+	/**
+	 * Get constant iterator to first object
+	 *
+	 * @returns constant iterator to first object or end() if no objects
+	 */
 	const_iterator begin() const {return _objects.begin();}
+	/**
+	 * Get constant iterator to the end of the objects
+	 *
+	 * @returns constant iterator referencing the object after the last object
+	 */
 	const_iterator end()   const {return _objects.end();}
 	const_iterator find(std::string name) const;
 
+	/**
+	 * Get iterator to first object
+	 *
+	 * @returns iterator to first object or end() if no objects
+	 */
 	iterator begin() {return _objects.begin();}
+	/**
+	 * Get iterator to the end of the objects
+	 *
+	 * @returns iterator referencing the object after the last object
+	 */
 	iterator end()   {return _objects.end();}
 	iterator find(std::string name);
 

@@ -157,7 +157,7 @@ public:
 	/**
 	 * Set the interaction with the mouse for this draggable
 	 *
-	 * @param DraggableType enumeration value
+	 * @param value DraggableType enumeration value
 	 */
 	void draggable_type(DraggableType value) {flag_value(0,56,((int)value)<<3);}
 

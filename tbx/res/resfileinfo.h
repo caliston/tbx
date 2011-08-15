@@ -173,7 +173,17 @@ public:
 	 */
 	int max_title() const {return int_value(8);}
 
+	/**
+	 * Get modified state
+	 *
+	 * @returns non-zero if modified
+	 */
 	int modified() const {return int_value(12);}
+	/**
+	 * Set modified state
+	 *
+	 * @param value set to any non-zero value if modified
+	 */
 	void modified(int value) {int_value(12,value);}
 
 	/**

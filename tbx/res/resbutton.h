@@ -311,7 +311,7 @@ public:
 	/**
 	 * Set how the button processes mouse clicks
 	 *
-	 * @param value ButtonType for how clicks are handled
+	 * @param type ButtonType for how clicks are handled
 	 */
 	void button_type(ButtonType type) {flag_value(36, ((int)type) << 12);}
 

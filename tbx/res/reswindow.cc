@@ -70,6 +70,16 @@ ResGadget::ResGadget(void *item_header, int size, ResData *data)
 {
 }
 
+/**
+ * Construct an empty gadget of the given type and size
+ *
+ * The gadget is constructed with all fields 0 except
+ * the type and size field and the help message field
+ * registered as a message string.
+ *
+ * @param type gadget type
+ * @param size gadget size. This must always be specified it will not be deduced from the type.
+ */
 ResGadget::ResGadget(int type, int size)
 : ResBase(new ResImpl(new char[size], 0, size, new ResData()))
 {

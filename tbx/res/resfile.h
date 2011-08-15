@@ -61,15 +61,50 @@ public:
 	   const_iterator(const ResFile *res_file, int offset) : ResIteratorBase<ResFile>(res_file, offset) {}
 	   friend class ResFile;
    public:
+	   /**
+	    * Increment iterator
+	    *
+	    * @returns incremented iterator
+	    */
 	   const_iterator &operator++() {_object->next_object(_offset); return *this;}
+	   /**
+	    * Increment iterator
+	    *
+	    * @return iterator before increment
+	    */
 	   const_iterator operator++(int) {const_iterator tmp(*this); _object->next_object(_offset); return tmp;}
+	   /**
+	    * Get object reference by iterator
+	    *
+	    * @returns ResObject referenced
+	    */
 	   ResObject operator*() const {return _object->at_offset(_offset);}
    };
    friend class const_iterator;
 
+   /**
+    * Get constant iterator to first object
+    *
+    * @returns constant iterator to first object
+    */
    const_iterator begin() const {return const_iterator(this, first_offset());}
+   /**
+    * Get constant iterator to end object
+    *
+    * @returns constant iterator to object after the last object
+    */
    const_iterator end() const {return const_iterator(this, end_offset());}
+   /**
+    * Get constant iterator to first object
+    *
+    * @returns constant iterator to first object
+    */
    const_iterator cbegin() const {return const_iterator(this, first_offset());}
+   /**
+    * Get constant iterator to end object
+    *
+    * @returns constant iterator to object after the last object
+    */
    const_iterator cend() const {return const_iterator(this, end_offset());}
    const_iterator find(std::string name) const;
 

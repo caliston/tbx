@@ -263,7 +263,7 @@ class ResIconbar : public ResObject
 	   /**
 	    * Set the text
 		*
-		* @param text iconbar icon text
+		* @param value iconbar icon text
 		* @param max_length maximum length for text or -1 to use current value.
 		*                   This is alway adjusted to allow for the full length of the text.
 		*/
@@ -271,7 +271,7 @@ class ResIconbar : public ResObject
 	   /**
 	    * Set the text
 		*
-		* @param text iconbar icon text
+		* @param value iconbar icon text
 		* @param max_length maximum length for text or -1 to use current value.
 		*                   This is alway adjusted to allow for the full length of the text.
 		*/
