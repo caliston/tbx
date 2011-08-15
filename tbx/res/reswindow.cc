@@ -328,6 +328,9 @@ int ResWindow::end_shortcut_offset() const
 
 /**
  * Find shortcut for the given key
+ *
+ * @param key_code key code for shortcut
+ * @returns shortcut_iterator or shortcut_end() if not found
  */
 ResWindow::shortcut_iterator ResWindow::find_shortcut(int key_code)
 {
@@ -342,6 +345,9 @@ ResWindow::shortcut_iterator ResWindow::find_shortcut(int key_code)
 
 /**
  * Find shortcut with given key
+ *
+ * @param key_code key code for shortcut
+ * @returns const_shortcut_iterator or shortcut_cend() if not found
  */
 ResWindow::const_shortcut_iterator ResWindow::find_shortcut(int key_code) const
 {

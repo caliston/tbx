@@ -477,63 +477,321 @@ class ResWindow : public ResObject
 	    */
 	   void external_tl_toolbar(const std::string &value) {string(72, value);}
 
-// window  88  WimpWindow  
+// window  88  WimpWindow
+	   /**
+	    * Get the minimum X coordinate of the visible part of the window
+	    *
+	    * @returns X coordinate in OS units
+	    */
 	   int visible_xmin() const {return int_value(76);}
+	   /**
+	    * Set the minimum X coordinate of the visible part of the window
+	    *
+	    * @param value X coordinate in OS units
+	    */
 	   void visible_xmin(int value) {int_value(76, value);}
+	   /**
+	    * Get the minimum Y coordinate of the visible part of the window
+	    *
+	    * @returns Y coordinate in OS units
+	    */
 	   int visible_ymin() const {return int_value(80);}
+	   /**
+	    * Set the minimum Y coordinate of the visible part of the window
+	    *
+	    * @param value Y coordinate in OS units
+	    */
 	   void visible_ymin(int value) {int_value(80, value);}
+	   /**
+	    * Get the maximum X coordinate of the visible part of the window
+	    *
+	    * @returns X coordinate in OS units
+	    */
 	   int visible_xmax() const {return int_value(84);}
+	   /**
+	    * Set the maximum X coordinate of the visible part of the window
+	    *
+	    * @param value X coordinate in OS units
+	    */
 	   void visible_xmax(int value) {int_value(84, value);}
+	   /**
+	    * Get the maximum Y coordinate of the visible part of the window
+	    *
+	    * @returns Y coordinate in OS units
+	    */
 	   int visible_ymax() const {return int_value(88);}
+	   /**
+	    * Set the maximum Y coordinate of the visible part of the window
+	    *
+	    * @param value Y coordinate in OS units
+	    */
 	   void visible_ymax(int value) {int_value(88, value);}
+	   /**
+	    * Get the X scroll offset into the work area
+	    *
+	    * @returns X scroll offset in OS units
+	    */
 	   int scroll_x() const {return int_value(92);}
+	   /**
+	    * Set the X scroll offset into the work area
+	    *
+	    * @param value X scroll offset in OS units
+	    */
 	   void scroll_x(int value) {int_value(92, value);}
+	   /**
+	    * Get the Y scroll offset into the work area
+	    *
+	    * @returns Y scroll offset in OS units
+	    */
 	   int scroll_y() const {return int_value(96);}
+	   /**
+	    * Set the Y scroll offset into the work area
+	    *
+	    * @param value Y scroll offset in OS units
+	    */
 	   void scroll_y(int value) {int_value(96, value);}
+	   /**
+	    * Get the WIMP window handle this window will be opened behind
+	    *
+	    * @returns WIMP window handle or -1 for on top
+	    */
 	   int behind() const {return int_value(100);}
+	   /**
+	    * Set the WIMP window handle this window will be opened behind
+	    *
+	    * @param value WIMP window handle or -1 for on top
+	    */
 	   void behind(int value) {int_value(100, value);}
+	   /**
+	    * Get the window flags
+	    *
+	    * @returns the window flags
+	    */
 	   unsigned int window_flags() const {return uint_value(104);}
+	   /**
+	    * Set the window flags
+	    *
+	    * @param value the new window flags
+	    */
 	   void window_flags(unsigned int value) {uint_value(104, value);}
 
+	   /**
+	    * Get the foreground/text colour for the title bar
+	    *
+	    * @returns WIMP colour
+	    */
 	   WimpColour title_fore() const {return byte_value(108);}
+	   /**
+	    * Set the foreground/text colour for the title bar
+	    *
+	    * @param value WIMP colour
+	    */
 	   void title_fore(WimpColour value) {byte_value(108, value);}
+	   /**
+	    * Get the background colour for the title bar
+	    *
+	    * @returns WIMP colour
+	    */
 	   WimpColour title_back() const {return byte_value(109);}
+	   /**
+	    * Set the background colour for the title bar
+	    *
+	    * @param value WIMP colour
+	    */
 	   void title_back(WimpColour value) {byte_value(109, value);}
+	   /**
+	    * Get the work area foreground colour
+	    *
+	    * @returns WIMP colour
+	    */
 	   WimpColour  work_fore() const {return byte_value(110);}
+	   /**
+	    * Set the work area foreground colour
+	    *
+	    * @param value WIMP colour
+	    */
 	   void work_fore(WimpColour value) {byte_value(110, value);}
+	   /**
+	    * Get the work area background colour
+	    *
+	    * @returns WIMP colour
+	    */
 	   WimpColour work_back() const {return byte_value(111);}
+	   /**
+	    * Set the work area background colour
+	    *
+	    * @param value WIMP colour
+	    */
 	   void work_back(WimpColour value) {byte_value(111, value);}
+	   /**
+	    * Get the work area scroll bar outer colour
+	    *
+	    * @returns WIMP colour
+	    */
 	   WimpColour scroll_outer() const {return byte_value(112);}
+	   /**
+	    * Set the scroll bar outer colour
+	    *
+	    * @param value WIMP colour
+	    */
 	   void scroll_outer(WimpColour value) {byte_value(112, value);}
+	   /**
+	    * Get the scroll bar inner colour
+	    *
+	    * @returns WIMP colour
+	    */
 	   WimpColour scroll_inner() const {return byte_value(113);}
+	   /**
+	    * Set the scroll bar inner colour
+	    *
+	    * @param value WIMP colour
+	    */
 	   void scroll_inner(WimpColour value) {byte_value(113, value);}
+	   /**
+	    * Get the background colour for the title bar when it has
+	    * the input focus.
+	    *
+	    * @returns WIMP colour
+	    */
 	   WimpColour title_inputfocus() const {return byte_value(114);}
+	   /**
+	    * Set the background colour for the title bar when it has
+	    * the input focus.
+	    *
+	    * @param value WIMP colour
+	    */
 	   void title_inputfocus(WimpColour value) {byte_value(114, value);}
 	   // Note: 115 is a filler byte and must be 0
+	   /**
+	    * Get the minimum X coordinate of the work area extent
+	    *
+	    * @returns X coordinate in OS units
+	    */
    	   int work_xmin() const {return int_value(116);}
+	   /**
+	    * Set the minimum X coordinate of the work area extent
+	    *
+	    * @param value X coordinate in OS units
+	    */
 	   void work_xmin(int value) {int_value(116, value);}
+	   /**
+	    * Get the minimum Y coordinate of the work area extent
+	    *
+	    * @returns Y coordinate in OS units
+	    */
 	   int work_ymin() const {return int_value(120);}
+	   /**
+	    * Set the minimum Y coordinate of the work area extent
+	    *
+	    * @param value Y coordinate in OS units
+	    */
 	   void work_ymin(int value) {int_value(120, value);}
+	   /**
+	    * Get the maximum X coordinate of the work area extent
+	    *
+	    * @returns X coordinate in OS units
+	    */
 	   int work_xmax() const {return int_value(124);}
+	   /**
+	    * Set the maximum X coordinate of the work area extent
+	    *
+	    * @param value X coordinate in OS units
+	    */
 	   void work_xmax(int value) {int_value(124, value);}
+	   /**
+	    * Get the maximum Y coordinate of the work area extent
+	    *
+	    * @returns Y coordinate in OS units
+	    */
 	   int work_ymax() const {return int_value(128);}
+	   /**
+	    * Set the maximum Y coordinate of the work area extent
+	    *
+	    * @param value Y coordinate in OS units
+	    */
 	   void work_ymax(int value) {int_value(128, value);}
+	   /**
+	    * Get the title flags
+	    *
+	    * @returns title flags 32 bit value
+	    */
 	   unsigned int title_flags() const {return uint_value(132);}
+	   /**
+	    * Set the title flags
+	    *
+	    * @param value title flags 32 bit value
+	    */
 	   void title_flags(unsigned int value) {uint_value(132, value);}
 	   //TODO: setters/getters for bits of title flags
+	   /**
+	    * Get the button type
+	    *
+	    * @return button type
+	    */
 	   unsigned int button_type() const {return uint_value(136);}
+	   /**
+	    * Set the button type
+	    *
+	    * @param value button type
+	    */
 	   void button_type(unsigned int value) {uint_value(136, value);}
 	   //TODO: enum for button_type
+	   /**
+	    * Get a pointer to the sprite area used for client icons on
+	    * this window.
+	    *
+	    * @returns OS Sprite area pointer
+	    */
 	   OsSpriteAreaPtr sprite_area() const {return (OsSpriteAreaPtr)uint_value(140);}
+	   /**
+	    * Set a pointer to the sprite area used for client icons on
+	    * this window.
+	    *
+	    * @param value OS Sprite area pointer
+	    */
 	   void sprite_area(OsSpriteAreaPtr value) {uint_value(140, (unsigned int)value);}
-
+	   /**
+	    * Get the minimum width for the window
+	    *
+	    * @returns minimum width in OS units
+	    */
 	   unsigned short min_width() const {return ushort_value(144);}
+	   /**
+	    * Set the minimum width for the window
+	    *
+	    * @param value minimum width in OS units
+	    */
 	   void min_width(unsigned short value) {ushort_value(144, value);}
+	   /**
+	    * Get the minimum height for the window
+	    *
+	    * @returns minimum height in OS units
+	    */
 	   unsigned short min_height() const {return ushort_value(146);}
+	   /**
+	    * Set the minimum height for the window
+	    *
+	    * @param value minimum height in OS units
+	    */
 	   void min_height(unsigned short value) {ushort_value(146, value);}
 
+	   /**
+	    * Get the text for the title of the window
+	    *
+	    * @returns pointer to zero terminated title text
+	    */
 	   const char *title_text() const {return message(148);}
+	   /**
+	    * Set the text for the title of the window
+	    *
+	    * @param value pointer to zero terminated title text
+	    */
 	   void title_text(const char *value) {message(148, value);}
+	   /**
+	    * Set the text for the title of the window
+	    *
+	    * @param value title text
+	    */
 	   void title_text(const std::string &value) {message(148, value);}
 	   const char *title_validation() const {return string(152);}
 	   void title_validation(const char *value) {string(152, value);}
@@ -551,17 +809,53 @@ class ResWindow : public ResObject
 		   const_shortcut_iterator(const ResWindow *window, int offset) : ResIteratorBase<ResWindow>(window, offset) {}
 		   friend class ResWindow;
 	   public:
+		   /**
+		    * Increment to the next shortcut
+		    *
+		    * @returns incremented iterator
+		    */
 		   const_shortcut_iterator &operator++() {_offset += SHORTCUT_SIZE; return *this;}
+		   /**
+		    * Increment to the next shortcut
+		    *
+		    * @returns iterator before increment
+		    */
 		   const_shortcut_iterator operator++(int) {const_shortcut_iterator tmp(*this); _offset += SHORTCUT_SIZE; return tmp;}
+		   /**
+		    * Get the shortcut pointed to by this iterator
+		    *
+		    * @returns ResShortcut pointed to
+		    */
 		   ResShortcut operator*() const {return _object->shortcut_at_offset(_offset);}
 	   };
 	   friend class const_shortcut_iterator;
 
+	   /**
+	    * Get constant iterator to first shortcut
+	    *
+	    * @returns constant shortcut iterator
+	    */
 	   const_shortcut_iterator shortcut_begin() const {return const_shortcut_iterator(this, first_shortcut_offset());}
+	   /**
+	    * Get constant iterator to end of shortcuts
+	    *
+	    * @returns constant shortcut iterator to position after the last shortcut
+	    */
 	   const_shortcut_iterator shortcut_end() const {return const_shortcut_iterator(this, end_shortcut_offset());}
+	   /**
+	    * Get constant iterator to first shortcut
+	    *
+	    * @returns constant shortcut iterator
+	    */
 	   const_shortcut_iterator shortcut_cbegin() const {return const_shortcut_iterator(this, first_shortcut_offset());}
+	   /**
+	    * Get constant iterator to end of shortcuts
+	    *
+	    * @returns constant shortcut iterator to position after the last shortcut
+	    */
 	   const_shortcut_iterator shortcut_cend() const {return const_shortcut_iterator(this, end_shortcut_offset());}
-	   const_shortcut_iterator find_shortcut(int component_id) const;
+
+	   const_shortcut_iterator find_shortcut(int key_code) const;
 
 	   /**
 	    * Iterator for shortcuts
@@ -571,13 +865,38 @@ class ResWindow : public ResObject
 		   shortcut_iterator(const ResWindow *window, int offset) : ResIteratorBase<ResWindow>(window, offset) {}
 		   friend class ResWindow;
 	   public:
+		   /**
+		    * Increment to the next shortcut
+		    *
+		    * @returns incremented iterator
+		    */
 		   shortcut_iterator &operator++() {_offset += SHORTCUT_SIZE; return *this;}
+		   /**
+		    * Increment to the next shortcut
+		    *
+		    * @returns iterator before increment
+		    */
 		   shortcut_iterator operator++(int) {shortcut_iterator tmp(*this); _offset += SHORTCUT_SIZE; return tmp;}
+		   /**
+		    * Get the shortcut pointed to by this iterator
+		    *
+		    * @returns ResShortcut pointed to
+		    */
 		   ResShortcut operator*() const {return _object->shortcut_at_offset(_offset);}
 	   };
 	   friend class shortcut_iterator;
 
+	   /**
+	    * Get iterator to first shortcut
+	    *
+	    * @returns shortcut iterator
+	    */
 	   shortcut_iterator shortcut_begin() {return shortcut_iterator(this, first_shortcut_offset());}
+	   /**
+	    * Get iterator to end of shortcuts
+	    *
+	    * @returns shortcut iterator to position after the last shortcut
+	    */
 	   shortcut_iterator shortcut_end() {return shortcut_iterator(this, end_shortcut_offset());}
 	   //TODO: Document use of SpecialKeys from KeyListener
 	   shortcut_iterator find_shortcut(int key_code);
@@ -601,15 +920,50 @@ class ResWindow : public ResObject
 		   const_gadget_iterator(const ResWindow *window, int offset) : ResIteratorBase<ResWindow>(window, offset) {}
 		   friend class ResWindow;
 	   public:
+		   /**
+		    * Increment to the next gadget
+		    *
+		    * @returns incremented iterator
+		    */
 		   const_gadget_iterator &operator++() {_object->next_gadget(_offset); return *this;}
+		   /**
+		    * Increment to the next gadget
+		    *
+		    * @returns iterator before increment
+		    */
 		   const_gadget_iterator operator++(int) {const_gadget_iterator tmp(*this); _object->next_gadget(_offset); return tmp;}
+		   /**
+		    * Get the gadget pointed to by this iterator
+		    *
+		    * @returns ResGadget pointed to
+		    */
 		   ResGadget operator*() const {return _object->gadget_at_offset(_offset);}
 	   };
 	   friend class const_gadget_iterator;
 
+	   /**
+	    * Get constant iterator to first gadget
+	    *
+	    * @returns constant iterator for first gadget
+	    */
 	   const_gadget_iterator gadget_begin() const {return const_gadget_iterator(this, first_gadget_offset());}
+	   /**
+	    * Get constant iterator to the end of the gadgets
+	    *
+	    * @returns constant iterator to the position after the last gadget
+	    */
 	   const_gadget_iterator gadget_end() const {return const_gadget_iterator(this, end_gadget_offset());}
+	   /**
+	    * Get constant iterator to first gadget
+	    *
+	    * @returns constant iterator for first gadget
+	    */
 	   const_gadget_iterator gadget_cbegin() const {return const_gadget_iterator(this, first_gadget_offset());}
+	   /**
+	    * Get constant iterator to the end of the gadgets
+	    *
+	    * @returns constant iterator to the position after the last gadget
+	    */
 	   const_gadget_iterator gadget_cend() const {return const_gadget_iterator(this, end_gadget_offset());}
 	   const_gadget_iterator find_gadget(int component_id) const;
 
@@ -621,13 +975,38 @@ class ResWindow : public ResObject
 		   gadget_iterator(const ResWindow *window, int offset) : ResIteratorBase<ResWindow>(window, offset) {}
 		   friend class ResWindow;
 	   public:
+		   /**
+		    * Increment to the next gadget
+		    *
+		    * @returns incremented iterator
+		    */
 		   gadget_iterator &operator++() {_object->next_gadget(_offset); return *this;}
+		   /**
+		    * Increment to the next gadget
+		    *
+		    * @returns iterator before increment
+		    */
 		   gadget_iterator operator++(int) {gadget_iterator tmp(*this); _object->next_gadget(_offset); return tmp;}
+		   /**
+		    * Get the gadget pointed to by this iterator
+		    *
+		    * @returns ResGadget pointed to
+		    */
 		   ResGadget operator*() const {return _object->gadget_at_offset(_offset);}
 	   };
 	   friend class gadget_iterator;
 
+	   /**
+	    * Get iterator to first gadget
+	    *
+	    * @returns iterator for first gadget
+	    */
 	   gadget_iterator gadget_begin() {return gadget_iterator(this, first_gadget_offset());}
+	   /**
+	    * Get iterator to the end of the gadgets
+	    *
+	    * @returns iterator to the position after the last gadget
+	    */
 	   gadget_iterator gadget_end() {return gadget_iterator(this, end_gadget_offset());}
 	   gadget_iterator find_gadget(int component_id);
 
@@ -642,12 +1021,22 @@ class ResWindow : public ResObject
 	   gadget_iterator erase_gadget(gadget_iterator pos);
 
 	protected:
+	   /**
+	    * Get pointer to position of first gadget in memory
+	    *
+	    * @returns pointer to first gadget in memory or 0 if none
+	    */
 		char *gadget_start() const {return (char *)int_value(44);}
 		int first_gadget_offset() const;
 		int end_gadget_offset() const;
 	    ResGadget gadget_at_offset(int item_offset) const;
 		void next_gadget(int &item_offset) const;
 
+		/**
+		 * Get pointer to first short cut in memory
+		 *
+		 * @return pointer to first shortcut in memory or 0 if none
+		 */
 		char *shortcut_start() const {return (char *)int_value(36);}
 		int first_shortcut_offset() const;
 		int end_shortcut_offset() const;
