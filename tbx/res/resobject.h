@@ -146,6 +146,13 @@ protected:
 	 */
 	void make_writeable();
 
+	/**
+	 * Extract a copy of a components data from this object
+	 *
+	 * @param new_body - new component body to copy relocations to
+	 * @param offset - offset to start of components in body
+	 * @param size - size of component
+	 */
 	ResData *component_data(char *new_body, int offset, int size) const {return _impl->component_data(new_body, offset, size);}
 	void insert_component(int offset, const ResImpl *comp_impl);
 	void replace_component(int offset, int old_size, const ResImpl *comp_impl);

@@ -137,9 +137,16 @@ public:
 	  void dotted_line(bool value) {flag(0,2,value);}
 
 	  /**
-	   * Entry is faded
+	   * Check if entry is faded
+	   *
+	   * @returns true if entry is faded
 	   */
 	  bool faded() const {return flag(0,256);}
+	  /**
+	   * Set if entry is faded
+	   *
+	   * @param value set to true if the entry should be faded
+	   */
 	  void faded(bool value) {flag(0,256, value);}
 
 	  /**
@@ -436,7 +443,7 @@ class ResMenu : public ResObject
 	  /**
 	   * Set if event will be generated when the menu has been removed from the screen.
 	   *
-	   * @param value set to true if an event should be generated when the menu is hidden
+	   * @param generate set to true if an event should be generated when the menu is hidden
 	   */
 	  void generate_has_been_hidden(bool generate) {flag(0, 2, generate);}
 
@@ -545,8 +552,23 @@ class ResMenu : public ResObject
 		   const_iterator(const ResMenu *menu, int offset) : ResIteratorBase<ResMenu>(menu, offset) {};
 		   friend class ResMenu;
 	   public:
+		   /**
+		    * Increment constant iterator
+		    *
+		    * @returns constant iterator after increment
+		    */
 			const_iterator &operator++() {_offset += MENU_ITEM_SIZE;	return *this;}
+		   /**
+			* Increment constant iterator
+			*
+			* @returns constant iterator before increment
+			*/
 			const_iterator operator++(int) {const_iterator temp(*this);	_offset += MENU_ITEM_SIZE;	return temp;}
+			/**
+			 * Get the menu item this constant iterator refers to
+			 *
+			 * @returns menu item resource
+			 */
 			ResMenuItem operator*() const {return _object->item_at_offset(_offset);}
 	   };
 	   friend class const_iterator;
@@ -562,8 +584,23 @@ class ResMenu : public ResObject
 		   iterator(const ResMenu *menu, int offset) : ResIteratorBase<ResMenu>(menu, offset) {};
 		   friend class ResMenu;
 	   public:
+		   /**
+		    * Increment iterator
+		    *
+		    * @returns iterator after increment
+		    */
 			iterator &operator++() {_offset += MENU_ITEM_SIZE;	return *this;}
+		   /**
+			* Increment iterator
+			*
+			* @returns iterator before increment
+			*/
 			iterator operator++(int) {iterator temp(*this);	_offset += MENU_ITEM_SIZE;	return temp;}
+			/**
+			 * Get the menu item this iterator refers to
+			 *
+			 * @returns menu item resource
+			 */
 			ResMenuItem operator*() const {return _object->item_at_offset(_offset);}
 	   };
 	   friend class iterator;

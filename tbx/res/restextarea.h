@@ -202,9 +202,30 @@ public:
 	 */
 	void auto_scroll(bool value) {flag(0,1<<7,value);}
 
+	/**
+	 * Get the type of the text area gadget
+	 *
+	 * @returns type of the text area gadget
+	 */
 	int type() const {return int_value(36);}
+	//TODO: Find out what this actually is
+	/**
+	 * Set the type of the text area gadget
+	 *
+	 * @param value type of the text area gadget
+	 */
 	void type(int value) {int_value(36,value);}
+	/**
+	 * Get the event for the text area gadget
+	 *
+	 * @returns ID of event.
+	 */
 	int event() const {return int_value(40);}
+	/**
+	 * Set the event for the text area gadget
+	 *
+	 * @param value new event ID
+	 */
 	void event(int value) {int_value(40,value);}
 	/**
 	 * Get the initial text for the text area

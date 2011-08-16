@@ -41,9 +41,9 @@ const int RESF_MARKER = 0x46534552;// 'RESF'
  */
 struct ResFileHeader
 {
-	int file_id; /* Magic number should be RESF_MARKER */
-	unsigned int version; /* Version number * 100 */
-	int object_offset;    /* Offset to first object in the file or -1 for no objects */
+	int file_id; //!< Magic number should be RESF_MARKER
+	unsigned int version; //!< Version number * 100
+	int object_offset;    //!< Offset to first object in the file or -1 for no objects
 };
 
 /**
@@ -51,9 +51,9 @@ struct ResFileHeader
  */
 struct ResDataHeader
 {
-	int string_table_offset;
-	int messages_table_offset;
-	int relocations_table_offset;
+	int string_table_offset;      //!< Offset to string table
+	int messages_table_offset;    //!< Offset to messages table
+	int relocations_table_offset; //!< Offset to relocations table
 };
 
 
@@ -62,9 +62,12 @@ struct ResDataHeader
  */
 struct ResRelocation
 {
+	/**
+	 * Relocation type enumeration
+	 */
 	enum Type {STRING_REF = 1, MESSAGE_REF, SPRITE_AREA_REF, OBJECT_REF};
-	int offset;
-	Type type;
+	int offset; //!< Offset in object to relocation
+	Type type;  //!< Type of relocation
 };
 
 /**
@@ -72,13 +75,13 @@ struct ResRelocation
  */
 struct ResObjectHeader
 {
-    int class_id;		// Object class
-    int flags;			// flags
-    int version;		// version * 100
-	char name[12];		// Null terminated name
-	int total_size;     // Total size of object including tables
-	char *body;			// Pointer to body
-	int body_size;	    // Size of header and body only
+    int class_id;		//!< Object class
+    int flags;			//!< flags
+    int version;		//!< version * 100
+	char name[12];		//!< Null terminated name
+	int total_size;     //!< Total size of object including tables
+	char *body;			//!< Pointer to body
+	int body_size;	    //!< Size of header and body only
 };
 
 

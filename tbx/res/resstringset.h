@@ -251,7 +251,7 @@ public:
 	 *
 	 * @see tbx::WritableField::allowable()
 	 *
-	 * @param pointer to zero terminated string of allowable characters or 0
+	 * @param value pointer to zero terminated string of allowable characters or 0
 	 * if there is no restriction
 	 * @param max_length maximum length the allowable character can be changed
 	 * to when the gadget is shown or -1 (the default) for the length of
@@ -263,7 +263,7 @@ public:
 	 *
 	 * @see tbx::WritableField::allowable()
 	 *
-	 * @param string of allowable characters
+	 * @param value string of allowable characters
 	 * @param max_length maximum length the allowable character can be changed
 	 * to when the gadget is shown or -1 (the default) for the length of
 	 * value.

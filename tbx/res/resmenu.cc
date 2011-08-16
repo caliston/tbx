@@ -97,21 +97,41 @@ ResMenuItem ResMenu::item_at_offset(int item_offset) const
     return item;
 }
 
+/**
+ * Get constant iterator to first menu item
+ *
+ * @returns constant iterator to first menu item or end() if no menu items
+ */
 ResMenu::const_iterator ResMenu::begin() const
 {
 	return const_iterator(this, MENU_DATA_SIZE);
 }
 
+/**
+ * Get constant iterator to end of menu items
+ *
+ * @returns constant iterator to then item after the last menu item
+ */
 ResMenu::const_iterator ResMenu::end() const
 {
 	return const_iterator(this, MENU_DATA_SIZE + MENU_ITEM_SIZE * item_count());
 }
 
+/**
+ * Get constant iterator to first menu item
+ *
+ * @returns constant iterator to first menu item or end() if no menu items
+ */
 ResMenu::const_iterator ResMenu::cbegin() const
 {
 	return const_iterator(this, MENU_DATA_SIZE);
 }
 
+/**
+ * Get constant iterator to end of menu items
+ *
+ * @returns constant iterator to then item after the last menu item
+ */
 ResMenu::const_iterator ResMenu::cend() const
 {
 	return const_iterator(this, MENU_DATA_SIZE + MENU_ITEM_SIZE * item_count());
@@ -119,8 +139,11 @@ ResMenu::const_iterator ResMenu::cend() const
 
 /**
  * Find component with given id
+ *
+ * @param component_id id of component to find
+ * @returns constant iterator to component or end()
  */
-ResMenu::const_iterator ResMenu::find(int component_id) const
+ResMenu::const_iterator ResMenu::find(ComponentId component_id) const
 {
 	const_iterator i = begin();
 	for (; i != end(); ++i)
@@ -131,11 +154,21 @@ ResMenu::const_iterator ResMenu::find(int component_id) const
 	return i; 
 }
 
+/**
+ * Get iterator to first menu item
+ *
+ * @returns iterator to first menu item or end() if no menu items
+ */
 ResMenu::iterator ResMenu::begin()
 {
 	return iterator(this, MENU_DATA_SIZE);
 }
 
+/**
+ * Get iterator to end of menu items
+ *
+ * @returns iterator to then item after the last menu item
+ */
 ResMenu::iterator ResMenu::end()
 {
 	return iterator(this, MENU_DATA_SIZE + MENU_ITEM_SIZE * item_count());
@@ -143,6 +176,9 @@ ResMenu::iterator ResMenu::end()
 
 /**
  * Find component with given id
+ *
+ * @param component_id id of component to find
+ * @returns iterator to component or end()
  */
 ResMenu::iterator ResMenu::find(ComponentId component_id)
 {
@@ -168,8 +204,11 @@ ResMenuItem ResMenu::item(ComponentId component_id) const
 }
 
 /**
- * Returns true if menu contains a menu item
- * with the given id
+ * Check if menu contains a menu item
+ * with the given id.
+ *
+ * @param component_id component ID to check
+ * @returns true if the menu contains the component ID
  */
 bool ResMenu::contains(ComponentId component_id) const
 {
@@ -189,6 +228,10 @@ void ResMenu::add(const ResMenuItem &item)
 
 /**
  * Replace menu item with same component id as given item
+ *
+ * @param item Menu item resource to replace
+ * @throws ResMenuItemNotFound if there is no existing item with
+ * the same component ID
  */
 void ResMenu::replace(const ResMenuItem &item)
 {
@@ -216,6 +259,8 @@ void ResMenu::erase(ComponentId component_id)
 /**
  * Insert item at given position
  *
+ * @param pos location to insert the item before
+ * @param item menu item to insert
  * @throws ResMenuItemExists if the menu already contains an item with the
  * same component id
  */
@@ -237,8 +282,10 @@ ResMenu::iterator ResMenu::insert(iterator pos, const ResMenuItem &item)
 /**
  * Replace the item at the given iterator position
  *
+ * @param pos position of item to replace
+ * @param item menu item to replace it with
  * @throws ResMenuItemExists if the menu already contains an item with the
- * same component id unless it is the component being replaced.
+ * same component ID unless it is the component being replaced.
  */
 ResMenu::iterator ResMenu::replace(iterator pos, const ResMenuItem &item)
 {
@@ -257,6 +304,9 @@ ResMenu::iterator ResMenu::replace(iterator pos, const ResMenuItem &item)
 
 /**
  * Delete the component at the given location
+ *
+ * @param pos location of item to delete
+ * @returns iterator to next item in menu
  */
 ResMenu::iterator ResMenu::erase(iterator pos)
 {

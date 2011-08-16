@@ -128,16 +128,31 @@ ResGadget ResWindow::gadget_at_offset(int item_offset) const
     return gadget;
 }
 
+/**
+ * Get offset to first gadget
+ *
+ * @returns offset to first gadget or 0 if no gadgets
+ */
 int ResWindow::first_gadget_offset() const
 {
 	return(gadget_start()) ? gadget_start() - object_header()->body : 0;
 }
 
+/**
+ * Get offset to end of gadgets
+ *
+ * @returns offset to end of gadgets or 0 if no gadgets
+ */
 int ResWindow::end_gadget_offset() const
 {
 	return (gadget_start()) ? object_header()->body_size : 0;
 }
 
+/**
+ * Get offset to next gadget in window
+ *
+ * @param item_offset current offset. Updated to next offset.
+ */
 void ResWindow::next_gadget(int &item_offset) const
 {
 	item_offset += ResGadget::gadget_size(*((int *)(object_header()->body + item_offset + 4)));
@@ -145,6 +160,8 @@ void ResWindow::next_gadget(int &item_offset) const
 
 /**
  * Find gadget with given id
+ *
+ * @param component_id component ID of gadget to find
  */
 ResWindow::gadget_iterator ResWindow::find_gadget(ComponentId component_id)
 {
@@ -159,6 +176,8 @@ ResWindow::gadget_iterator ResWindow::find_gadget(ComponentId component_id)
 
 /**
  * Find gadget with given id
+ *
+ * @param component_id component ID of gadget to find
  */
 ResWindow::const_gadget_iterator ResWindow::find_gadget(ComponentId component_id) const
 {
@@ -184,8 +203,10 @@ ResGadget ResWindow::gadget(ComponentId component_id) const
 }
 
 /**
- * Returns true if Window contains a gadget
- * with the given id
+ * Check if the window contains a gadget with the given id.
+ *
+ * @param component_id component ID of gadget to check
+ * @returns true if window contains a gadget with the given ID
  */
 bool ResWindow::contains_gadget(ComponentId component_id) const
 {
@@ -205,6 +226,9 @@ void ResWindow::add_gadget(const ResGadget &gadget)
 
 /**
  * Replace menu gadget with same component id as given gadget
+ *
+ * @param gadget gadget to replace
+ * @throws ResGadgetNotFound if a gadget with the same component ID does not exist
  */
 void ResWindow::replace_gadget(const ResGadget &gadget)
 {
@@ -233,6 +257,11 @@ void ResWindow::erase_gadget(ComponentId id)
 
 /**
  * Insert gadget at given position
+ *
+ * @param pos position to insert the gadget before
+ * @param gadget gadget to insert
+ * @returns iterator to inserted gadget
+ * @throws ResGadgetExists if a gadget with the same component ID already exists in the window
  */
 ResWindow::gadget_iterator ResWindow::insert_gadget(gadget_iterator pos, const ResGadget &gadget)
 {
@@ -261,6 +290,12 @@ ResWindow::gadget_iterator ResWindow::insert_gadget(gadget_iterator pos, const R
 
 /**
  * Replace the gadget at the given iterator position
+ *
+ * @param pos iterator pointing at gadget to replace
+ * @param gadget gadget to use as replacement
+ * @returns iterator to replacement gadget
+ * @throws ResGadgetExists if component ID of replacement gadget matches an
+ * existing gadget in the window apart from the one replaced.
  */
 ResWindow::gadget_iterator ResWindow::replace_gadget(gadget_iterator pos, const ResGadget &gadget)
 {
@@ -280,6 +315,9 @@ ResWindow::gadget_iterator ResWindow::replace_gadget(gadget_iterator pos, const 
 
 /**
  * Delete the component at the given location
+ *
+ * @param pos iterator to gadget to be deleted
+ * @return iterator to gadget following deleted gadget.
  */
 ResWindow::gadget_iterator ResWindow::erase_gadget(gadget_iterator pos)
 {
@@ -298,6 +336,9 @@ ResWindow::gadget_iterator ResWindow::erase_gadget(gadget_iterator pos)
  *
  * This is for specialised use only - use shortcut iterators for
  * normal access to the shortcuts in this window
+ *
+ * @param item_offset offset to shortcut in the window
+ * @return copy of shortcut at the given offset.
  */
 ResShortcut ResWindow::shortcut_at_offset(int item_offset) const
 {
@@ -320,11 +361,21 @@ ResShortcut ResWindow::shortcut_at_offset(int item_offset) const
     return shortcut;
 }
 
+/**
+ * Get offset of first shortcut in window
+ *
+ * @returns offset to first shortcut or 0 if none
+ */
 int ResWindow::first_shortcut_offset() const
 {
 	return(shortcut_start()) ? shortcut_start() - object_header()->body : 0;
 }
 
+/**
+ * Get offset to end of shortcuts in window
+ *
+ * @returns offset to end of shortcuts or 0 if none
+ */
 int ResWindow::end_shortcut_offset() const
 {
 	int offset = 0;
@@ -404,6 +455,9 @@ void ResWindow::add_shortcut(const ResShortcut &shortcut)
 
 /**
  * Replace menu shortcut with same key_code as given shortcut
+ *
+ * @param shortcut shortcut to replace
+ * @throws ResShortcutNotFound if shortcut with same key code is not in the window
  */
 void ResWindow::replace_shortcut(const ResShortcut &shortcut)
 {
@@ -419,7 +473,7 @@ void ResWindow::replace_shortcut(const ResShortcut &shortcut)
 /**
  * Erase shortcut with specific key_code
  *
- * @param id key_code
+ * @param key_code WIMP key code of shortcut to erase
  * @throws ResShortcutNotFound if key_code is not in the Window
  */
 void ResWindow::erase_shortcut(int key_code)
@@ -431,6 +485,11 @@ void ResWindow::erase_shortcut(int key_code)
 
 /**
  * Insert shortcut at given position
+ *
+ * @param pos iterator to position to insert the shortcut
+ * @param shortcut shortcut to insert
+ * @returns iterator to inserted shortcut
+ * @throws ResShortcutExists if a shortcut with the same key code already exists.
  */
 ResWindow::shortcut_iterator ResWindow::insert_shortcut(shortcut_iterator pos, const ResShortcut &shortcut)
 {
@@ -460,6 +519,12 @@ ResWindow::shortcut_iterator ResWindow::insert_shortcut(shortcut_iterator pos, c
 
 /**
  * Replace the shortcut at the given iterator position
+ *
+ * @param pos position of shortcut to replace
+ * @param shortcut replacement shortcut
+ * @returns iterator to replacement shortcut
+ * @throws ResShortcutExists if a shortcut apart from the replaced shortcut exists
+ * with the same key code as the replacement shortcut.
  */
 ResWindow::shortcut_iterator ResWindow::replace_shortcut(shortcut_iterator pos, const ResShortcut &shortcut)
 {
@@ -478,6 +543,9 @@ ResWindow::shortcut_iterator ResWindow::replace_shortcut(shortcut_iterator pos, 
 
 /**
  * Delete the component at the given location
+ *
+ * @param pos iterator to shortcut to erase
+ * @returns iterator to shortcut following erased shortcut
  */
 ResWindow::shortcut_iterator ResWindow::erase_shortcut(shortcut_iterator pos)
 {

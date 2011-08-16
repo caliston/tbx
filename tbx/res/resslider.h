@@ -207,7 +207,7 @@ public:
 	/**
 	 * Set the step size for the slider
 	 *
-	 * @param step size for the slider
+	 * @param value step size for the slider
 	 */
 	void step_size(int value) {int_value(44,value);}
 	/**

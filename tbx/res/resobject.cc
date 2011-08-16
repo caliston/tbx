@@ -316,9 +316,9 @@ void ResObject::object_flags(unsigned int flags)
 }
 
 /**
- * Set if the object to be automatically created when the Resource file is loaded
+ * Set if the object should be automatically created when the Resource file is loaded
  *
- * @value true to set the object to be created when loaded
+ * @param value set to true if the object should be created when loaded
  */
 void ResObject::create_on_load(bool value)
 {

@@ -181,7 +181,7 @@ public:
 	/**
 	 * Set if the select show object will be shown transiently
 	 *
-	 * @param vale set to true if the select show object should be shown transiently
+	 * @param value set to true if the select show object should be shown transiently
 	 */
 	void show_transient(bool value) {flag(0,1<<9,value);}
 	/**
@@ -193,7 +193,7 @@ public:
 	/**
 	 * Set if the select show object will be shown pop up
 	 *
-	 * @param vale set to true if the select show object should be shown pop up
+	 * @param value set to true if the select show object should be shown pop up
 	 */
 	void show_as_pop_up(bool value) {flag(0,1<<10,value);}
 	/**

@@ -793,10 +793,35 @@ class ResWindow : public ResObject
 	    * @param value title text
 	    */
 	   void title_text(const std::string &value) {message(148, value);}
+	   /**
+	    * Get the title validation
+	    *
+	    * @returns pointer to zero terminated title validation string or -1 if none.
+	    */
 	   const char *title_validation() const {return string(152);}
+	   /**
+	    * Set the title validation
+	    *
+	    * @param value pointer to zero terminated title validation string or -1 if none.
+	    */
 	   void title_validation(const char *value) {string(152, value);}
+	   /**
+	    * Set the title validation
+	    *
+	    * @param value title validation string
+	    */
 	   void title_validation(const std::string &value) {string(152, value);}
+	   /**
+	    * Get the length of the buffer to hold the title
+	    *
+	    * @returns title buffer length
+	    */
 	   int title_buflen() const {return int_value(156);}
+	   /**
+	    * Set the length of the buffer to hold the title
+	    *
+	    * @param value title buffer length
+	    */
 	   void title_buflen(int value) {int_value(156, value);}
 	   
 	   // num_icons  at 160 (must be zero)  
