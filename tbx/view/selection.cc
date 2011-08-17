@@ -87,17 +87,31 @@ void Selection::remove_listener(SelectionListener *listener)
 	}
 }
 
+/**
+ * Get iterator to first selected item
+ *
+ * @returns iterator to first selected item or end() if none.
+ */
 Selection::Iterator Selection::begin() const
 {
 	return Iterator(get_iterator_impl());
 }
 
+/**
+ * Get iterator to end of selection
+ *
+ * @returns iterator to item after last item in the selection.
+ */
 Selection::Iterator Selection::end() const
 {
 	return Iterator(0);
 }
 
-// Copy constructor
+/**
+ * Copy constructor
+ *
+ * @param other selection iterator to copy
+ */
 Selection::Iterator::Iterator(const Selection::Iterator &other)
 {
 	_impl = other._impl;

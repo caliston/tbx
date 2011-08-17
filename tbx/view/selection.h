@@ -44,8 +44,19 @@ namespace view {
 class SelectionChangedEvent
 {
 public:
+	/**
+	 * Construct a selection changed event
+	 *
+	 * @param first index of first item in selection
+	 * @param last index of last item in selection
+	 * @param selected true if items are being selected, false if they are being deselected
+	 * @param final true if last event generated in one action.
+	 */
 	SelectionChangedEvent(unsigned int first, unsigned int last, bool selected, bool final = true) :
 		 _first(first), _last(last), _selected(selected), _final(final) {}
+	/**
+	 * Default constructor creates a selection of item 0.
+	 */
 	SelectionChangedEvent() : _first(0),_last(0), _selected(true), _final(true) {};
 
 private:
@@ -314,19 +325,56 @@ protected:
 	{
 		unsigned int _refcount;
 	public:
+		/**
+		 * Construct iterator implementation
+		 */
 		IteratorImpl() : _refcount(1) {}
+		/**
+		 * Destructor does nothing
+		 */
 		virtual ~IteratorImpl() {}
+		/**
+		 * Increase reference count
+		 */
 		void add_ref() {++_refcount;}
+		/**
+		 * Decrease reference count and delete this if reference count
+		 * becomes zero.
+		 */
 		void release() {if (--_refcount == 0) delete this;}
+		/**
+		 * Check if the iterator implementation is being shared between
+		 * two or more iterators
+		 *
+		 * @returns true if this is shared
+		 */
 		bool shared() const {return _refcount > 1;}
 
-		// Return a copy of the implementation
+		/**
+		 * Override this method to return a copy of
+		 * the iterator implementation.
+		 *
+		 * @returns copy of iterator implementation
+		 */
 		virtual IteratorImpl *clone() = 0;
-		// return the current index or NO_INDEX if at end
+		/**
+		 * Override this to get the current index.
+		 *
+		 * @return current index or NO_INDEX if at the end
+		 */
 		virtual unsigned int index() const = 0;
-		// advance iterator
+		/**
+		 * Override this method to advance the iterator to the next
+		 * item.
+		 */
 		virtual void next() = 0;
 	};
+	/**
+	 * Override to return the iterator implementation for
+	 * the selection iterator to used.
+	 *
+	 * @return Iterator implementation for this selection type.
+	 */
 	virtual IteratorImpl *get_iterator_impl() const = 0;
 
 public:
@@ -439,12 +487,29 @@ protected:
 	{
 		unsigned int _index;
 	public:
+		/**
+		 * Construct iterator for item with given index
+		 *
+		 * @param index index of selected item
+		 */
 		SingleIteratorImpl(unsigned int index) : _index(index) {}
-		// Return a copy of the implementation
+		/**
+		 * Get copy of this iterator implentation
+		 *
+		 * @returns copy of this with reference count increased
+		 */
 		virtual IteratorImpl *clone() {add_ref(); return this;}
-		// return the current index or NO_SELECTION if at end
+		/**
+		 * Get the current index
+		 *
+		 * @return current index or NO_SELECTION if at end of selection
+		 */
 		virtual unsigned int index() const {return _index;}
-		// advance iterator
+		/**
+		 * Advance iterator
+		 *
+		 * For the single selection model this makes the index NO_SELECTION.
+		 */
 		virtual void next() {_index = NO_SELECTION;}
 	};
 	virtual IteratorImpl *get_iterator_impl() const {return new SingleIteratorImpl(_selected);}

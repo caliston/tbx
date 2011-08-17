@@ -45,7 +45,7 @@ const char ROW_HEIGHT = 40;
  * Construct a text view.
  *
  * @param window to show it in
- * @param true to wrap to window width. Default false
+ * @param wrap true to wrap to window width. Default false
  */
 TextView::TextView(tbx::Window window, bool wrap /*= false*/) :
 	_window(window),
@@ -58,6 +58,9 @@ TextView::TextView(tbx::Window window, bool wrap /*= false*/) :
 	if (_wrap) _window.add_open_window_listener(this);
 }
 
+/**
+ * Destructor removes listeners from window and deletes the text
+ */
 TextView::~TextView()
 {
 	_window.remove_open_window_listener(this);
@@ -66,6 +69,8 @@ TextView::~TextView()
 
 /**
  * Set the text for the text view
+ *
+ * @param text pointer to zero terminated text
  */
 void TextView::text(const char *text)
 {
@@ -82,6 +87,8 @@ void TextView::text(const char *text)
 
 /**
  * Set the text for the text view
+ *
+ * @param text new text for the text view
  */
 void TextView::text(const std::string &text)
 {
@@ -98,7 +105,9 @@ void TextView::text(const std::string &text)
 }
 
 /**
- * Set wrap to width on or off
+ * Set wrap to window width on or off
+ *
+ * @param w set to true to turn on wrapping.
  */
 void TextView::wrap(bool w)
 {
@@ -113,6 +122,8 @@ void TextView::wrap(bool w)
 
 /**
  * Change the margin
+ *
+ * @param margin new margin
  */
 void TextView::margin(const tbx::Margin &margin)
 {
@@ -156,7 +167,6 @@ void TextView::update_window_extent(const BBox &visible_bounds)
  *
  * It should also be called if all the data changes.
  */
-
 void TextView::refresh()
 {
 	BBox all(_margin.left, -_margin.top - _line_end.size() * ROW_HEIGHT,
@@ -166,6 +176,8 @@ void TextView::refresh()
 
 /**
  * Redraw the window
+ *
+ * @param event details on what needs to be redrawn
  */
 void TextView::redraw(const RedrawEvent &event)
 {
@@ -204,6 +216,8 @@ void TextView::redraw(const RedrawEvent &event)
 
 /**
  * Window has been opened or resized, so re do layout
+ *
+ * @param event details on open window event
  */
 void TextView::open_window(OpenWindowEvent &event)
 {
@@ -291,7 +305,7 @@ void TextView::recalc_layout(const BBox &visible_bounds)
  * with a space.
  *
  * @param file_name - name of file to load
- * @return true if file loaded OK.
+ * @returns true if file loaded OK.
  */
 bool TextView::load_file(const std::string &file_name)
 {

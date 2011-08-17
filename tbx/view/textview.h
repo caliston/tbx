@@ -65,19 +65,45 @@ public:
 	void update_window_extent();
 	void refresh();
 
+	/**
+	 * Get the window the text view is on
+	 *
+	 * @returns Window that displays the text view
+	 */
 	tbx::Window &window() {return _window;}
 
+	/**
+	 * Get the margin between the text view contents and the
+	 * edge of the Window.
+	 *
+	 * @returns the margin
+	 */
 	const tbx::Margin &margin() const {return _margin;}
 	void margin(const tbx::Margin &margin);
 
+	/**
+	 * Get a pointer to the text.
+	 *
+	 * @returns a zero terminated pointer to the text
+	 */
 	const char *text() const {return _text;}
 	void text(const char *text);
 	void text(const std::string &text);
 
+	/**
+	 * Get the current size of the text
+	 *
+	 * @returns size in bytes of the text
+	 */
     unsigned int size() const {return _size;}
 
     bool load_file(const std::string &file_name);
 
+    /**
+     * Check it text view is set to wrap text
+     *
+     * @returns true if text view will wrap text
+     */
     bool wrap() const {return _wrap;}
     void wrap(bool w);
 

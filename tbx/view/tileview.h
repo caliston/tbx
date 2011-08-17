@@ -48,9 +48,9 @@ namespace view {
 class TileView : public ItemView, tbx::OpenWindowListener
 {
 protected:
-	ItemRenderer *_item_renderer;
-	tbx::Size _tile_size;
-	int _cols_per_row;
+	ItemRenderer *_item_renderer; //!< Renderer for items in the tile view
+	tbx::Size _tile_size;         //!< Size of tiles
+	int _cols_per_row;            //!< Number of tiles in a row
 
 public:
 	TileView(tbx::Window window, ItemRenderer *item_renderer = 0);
