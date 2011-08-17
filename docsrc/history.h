@@ -38,4 +38,8 @@
  * - fixed equals_ignore_case function as it failed when both parameters were strings.
  * - Added defer_delete template function to delay deletion of an object until the next null poll.
  * - Added UserSprite methods to set and get pixels.
+ *
+ * <B>0.4 Alpha ?? 2011</B>
+ * - New userguide
+ * - Added missing reference documentation on classes/methods etc.
  */
