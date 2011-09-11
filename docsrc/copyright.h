@@ -3,7 +3,7 @@
  *
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2008, 2009 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2008, 2009, 2010, 2011 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),

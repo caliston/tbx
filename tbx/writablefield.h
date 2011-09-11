@@ -123,7 +123,7 @@ public:
 	bool operator!=(const Gadget &other) const {return (_handle != other.handle() || _id != other.id());}
 
 	/**
-	/*  Set the the text to display
+	 *  Set the the text to display
 	 *
 	 * @param value new text to show in the writable field
 	 */
