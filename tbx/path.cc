@@ -53,6 +53,16 @@ Path::Path(const std::string &name)
 }
 
 /**
+ * Construct a path from the given path string
+ *
+ * @param name string representing path name
+ */
+Path::Path(const char *name)
+{
+	_name = name;
+}
+
+/**
  * Copy constructor
  *
  * @param other Path to copy
@@ -69,6 +79,19 @@ Path::Path(const Path &other)
  * @param child name of the child item in the directory
  */
 Path::Path(const Path &other, const std::string &child)
+{
+	_name = other._name;
+	_name += PathDelim;
+	_name += child;
+}
+
+/**
+ * Construct a path to a child of another path
+ *
+ * @param other Path for parent directory
+ * @param child name of the child item in the directory
+ */
+Path::Path(const Path &other, const char *child)
 {
 	_name = other._name;
 	_name += PathDelim;
@@ -1450,6 +1473,17 @@ PathInfo &PathInfo::Iterator::operator*()
 {
 	return *_info;
 }
+
+/**
+ * Get the PathInfo for the iterator
+ *
+ * @returns PathInfo for the iterators current position
+ */
+PathInfo *PathInfo::Iterator::operator->()
+{
+	return _info;
+}
+
 
 /**
  * Constructe Iterator block for given directory and file name

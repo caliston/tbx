@@ -43,4 +43,8 @@
  * - New userguide
  * - Added missing reference documentation on classes/methods etc.
  * - Minor class tidying
+ *
+ * <B>0.5 Alpha ???? </B>
+ * - const char * constructor for Path class
+ * - pointer operator for Path and PathInfo iterators
  */

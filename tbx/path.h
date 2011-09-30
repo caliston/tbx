@@ -186,6 +186,7 @@ namespace tbx
 			Iterator operator++(int);
 
 			PathInfo &operator*();
+			PathInfo *operator->();
 
 			void next();
 
@@ -257,8 +258,10 @@ namespace tbx
 	public:
 		Path();
 		Path(const std::string &name);
+		Path(const char *name);
 		Path(const Path &other);
 		Path(const Path &other, const std::string &child);
+		Path(const Path &other, const char *name);
 
 		virtual ~Path();
 
@@ -373,6 +376,12 @@ namespace tbx
 			 * @returns file name
 			 */
 			std::string &operator*()	{return _name;};
+			/**
+			 * Get file name for current iterator
+			 *
+			 * @returns file name
+			 */
+			std::string *operator->()	{return &_name;};
 
 			void next();
 
