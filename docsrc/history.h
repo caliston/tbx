@@ -47,4 +47,6 @@
  * <B>0.5 Alpha ???? </B>
  * - const char * constructor for Path class
  * - pointer operator for Path and PathInfo iterators
+ * - Added foreground and background methods for setting the font colours in the TextView
+ * - Removed space at beginning of a wrapped line in the TextView
  */

@@ -36,6 +36,7 @@
 #include "../redrawlistener.h"
 #include "../openwindowlistener.h"
 #include "../margin.h"
+#include "../colour.h"
 #include <vector>
 
 namespace tbx
@@ -57,6 +58,8 @@ private:
 	unsigned int _size;
 	std::vector<unsigned int> _line_end;
 	unsigned int _width;
+	tbx::Colour _foreground;
+	tbx::Colour _background;
 
 public:
 	TextView(tbx::Window window, bool wrap = false);
@@ -96,6 +99,32 @@ public:
 	 * @returns size in bytes of the text
 	 */
     unsigned int size() const {return _size;}
+
+    /**
+     * Get current background colour for the text
+     *
+     * @returns background colour
+     */
+    tbx::Colour background() const {return _background;}
+    /**
+     * Set the current background colour for the text
+     *
+     * @param colour new background colour
+     */
+    void background(tbx::Colour colour);
+    /**
+     * Get current foreground colour for the text
+     *
+     * @returns foreground colour
+     */
+    tbx::Colour foreground() const {return _foreground;}
+    /**
+     * Set the current foreground colour for the text
+     *
+     * @param colour new foreground colour
+     */
+    void foreground(tbx::Colour colour);
+
 
     bool load_file(const std::string &file_name);
 

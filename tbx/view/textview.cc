@@ -44,6 +44,8 @@ const char ROW_HEIGHT = 40;
 /**
  * Construct a text view.
  *
+ * Default to black text on with a white background text colour
+ *
  * @param window to show it in
  * @param wrap true to wrap to window width. Default false
  */
@@ -52,7 +54,9 @@ TextView::TextView(tbx::Window window, bool wrap /*= false*/) :
 	_wrap(wrap),
 	_text(0),
 	_size(0),
-	_width(0)
+	_width(0),
+	_foreground(tbx::Colour::black),
+	_background(tbx::Colour::white)
 {
 	_window.add_redraw_listener(this);
 	if (_wrap) _window.add_open_window_listener(this);
@@ -133,6 +137,36 @@ void TextView::margin(const tbx::Margin &margin)
 }
 
 /**
+ * Set the current background colour for the text
+ *
+ * Note: This colour is used for painting the text only
+ * it does not fill the text view area.
+ *
+ * @param colour new background colour
+ */
+void TextView::background(tbx::Colour colour)
+{
+	if (colour != _background)
+	{
+		_background = colour;
+		if (_text && _size) refresh();
+	}
+}
+/**
+ * Set the current foreground colour for the text
+ *
+ * @param colour new foreground colour
+ */
+void TextView::foreground(tbx::Colour colour)
+{
+	if (colour != _foreground)
+	{
+		_foreground = colour;
+		if (_text && _size) refresh();
+	}
+}
+
+/**
  * Update the Window extent after a change in size of text.
  */
 void TextView::update_window_extent()
@@ -195,7 +229,7 @@ void TextView::redraw(const RedrawEvent &event)
 	if (last_row >= _line_end.size()) last_row = _line_end.size() - 1;
 
 	tbx::WimpFont font;
-	font.set_colours(tbx::Colour::black, tbx::Colour::white);
+	font.set_colours(_foreground, _background);
 
 	int x = event.visible_area().screen_x(_margin.left);
 	int y = event.visible_area().screen_y(-_margin.top - (first_row+1) * ROW_HEIGHT) + 4;
@@ -205,6 +239,7 @@ void TextView::redraw(const RedrawEvent &event)
 	{
 		int end = _line_end[row];
 		if (_text[start] == '\n') start++;
+		else if (_wrap && _text[start] == ' ' && start > 0 && _text[start-1] != '\n') start++;
 		if (start < end)
 		{
 			font.paint(x, y+8, _text + start, end-start);
