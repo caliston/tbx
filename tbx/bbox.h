@@ -58,6 +58,11 @@ public:
 	BBox(const Point &imin, const Point &imax) : min(imin), max(imax) {}
 
 	/**
+	 * Construct from the minimum point and size of the box
+	 */
+	BBox(const Point &imin, const Size &size) : min(imin), max(imin.x + size.width, imin.y + size.height) {}
+
+	/**
 	 * Minimum coordinate of the bounding box
 	 */
 	Point min;
