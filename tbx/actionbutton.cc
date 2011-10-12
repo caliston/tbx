@@ -27,7 +27,7 @@
 #include "buttonselectedlistener.h"
 #include "command.h"
 #include "commandrouter.h"
-
+#include "swixcheck.h"
 #include "kernel.h"
 
 namespace tbx {
@@ -121,6 +121,84 @@ void ActionButton::add_adjust_command(Command *command)
 void ActionButton::remove_adjust_command(Command *command)
 {
 	remove_listener(0x82881, command);
+}
+
+/**
+ * Set object to show when the button is clicked
+ *
+ * @param object object to show
+ * @param transient show transiently (default false)
+ */
+void ActionButton::click_show(const Object &object, bool transient /*= false*/)
+{
+    _kernel_swi_regs regs;
+    regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 132;
+    regs.r[3] = _id;
+    regs.r[4] = object.handle();
+    regs.r[5] = (transient) ? 1 : 0;
+
+    // Run Toolbox_ObjectMiscOp
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Clear object shown on click
+ */
+void ActionButton::clear_click_show()
+{
+    _kernel_swi_regs regs;
+    regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 132;
+    regs.r[3] = _id;
+    regs.r[4] = 0;
+    regs.r[5] = 0;
+
+    // Run Toolbox_ObjectMiscOp
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Check if action button will show an object
+ *
+ * @returns true if action button will show an object
+ */
+bool ActionButton::has_click_show() const
+{
+    _kernel_swi_regs regs;
+    regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 133;
+    regs.r[3] = _id;
+
+    // Run Toolbox_ObjectMiscOp
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    return (regs.r[0] != 0);
+}
+
+/**
+ * Get object shown on a click
+ *
+ * @param transient if used will return the transient state
+ * @returns Object that will be shown. Can be null() object if nothing shown
+ */
+Object ActionButton::click_show(bool *transient /*= 0*/)
+{
+    _kernel_swi_regs regs;
+    regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 133;
+    regs.r[3] = _id;
+
+    // Run Toolbox_ObjectMiscOp
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    if (transient) *transient = ((regs.r[1]&1)!=0);
+
+    return tbx::Object(regs.r[0]);
 }
 
 }

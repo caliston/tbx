@@ -134,12 +134,10 @@ namespace tbx
 		 */
 		int event() const {return int_property(130);}
 
-		/*TODO:
-		void click_show(const Object &object, bool transient = true);
+		void click_show(const Object &object, bool transient = false);
 		void clear_click_show();
 		bool has_click_show() const;
 		Object click_show(bool *transient = 0);
-		*/
 
 		void add_selected_listener(ButtonSelectedListener *listener);
 		void remove_selected_listener(ButtonSelectedListener *listener);
