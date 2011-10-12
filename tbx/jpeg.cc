@@ -246,9 +246,15 @@ void JPEG::plot(const BBox &bbox)
 	_kernel_swi(0x49984, &regs, &regs);
 }
 
-/*TODO:
+/**
+ * Plot JPEG using a DrawTransform
+ *
+ * @param dt Transform to use for plot
+ */
 void JPEG::plot(const DrawTransform &dt)
 {
+	if (_image == 0) return;
+
 	_kernel_swi_regs regs;
 
 	regs.r[0] = reinterpret_cast<int>(_image);
@@ -259,7 +265,6 @@ void JPEG::plot(const DrawTransform &dt)
 	// JPEG_PlotTransformed
 	_kernel_swi(0x49984, &regs, &regs);
 }
-*/
 
 /**
  * Set flag to control dithering when plotting
@@ -282,5 +287,65 @@ void JPEG::error_defused(bool error_defused)
 	if (error_defused) _plot_flags |=2;
 	else _plot_flags &=~2;
 }
+
+/**
+ * Check if a file is a JPEG file
+ *
+ * @params file_name name of file to check
+ * @returns true if it is a JPEG file
+ */
+bool JPEG::IsJPEGFile(const std::string &file_name)
+{
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0;
+	regs.r[1] = reinterpret_cast<int>(file_name.c_str());
+
+	// JPEG_FileInfo
+	return (_kernel_swi(0x49981, &regs, &regs) == 0);
+}
+
+/**
+ * Get information on a JPEG file
+ *
+ * Pass 0 for any parameters not required
+ *
+ * @params file_name name of file to get the information for
+ * @param width set to width in pixels
+ * @param height set to height in pixels
+ * @param x_density set to horizontal pixel density
+ * @param y_density set to vertical pixel density
+ * @param workspace set to SpriteExtend extra workspace requirement to plot.
+ * @param greyscale_image set to true if JPEG is a greyscale image
+ * @param no_transform_plots set to true if transform plots are not supported for this image.
+ * @param pixel_density_is_simple_ratio set to true if pixel density is in dpi.
+ * @returns true if it is a JPEG file
+ */
+
+bool JPEG::GetFileInfo(const std::string &file_name, int *width, int *height, int *x_density, int *y_density, int *workspace, bool *greyscale_image, bool *no_transform_plots, bool *pixel_density_is_simple_ratio)
+{
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0;
+	regs.r[1] = reinterpret_cast<int>(file_name.c_str());
+
+	// JPEG_FileInfo
+	if (_kernel_swi(0x49981, &regs, &regs) == 0)
+	{
+		if (*width) *width = regs.r[2];
+		if (*height) *height = regs.r[3];
+		if (x_density) *x_density = regs.r[4];
+		if (y_density) *y_density = regs.r[5];
+		if (workspace) *workspace = regs.r[6];
+		if (greyscale_image) *greyscale_image = ((regs.r[0] & 1)!= 0);
+		if (no_transform_plots) *no_transform_plots = ((regs.r[0] & 2)!= 0);
+		if (pixel_density_is_simple_ratio) *pixel_density_is_simple_ratio = ((regs.r[0] & 4)!= 0);
+		return true;
+	} else
+	{
+		return false;
+	}
+}
+
 
 }

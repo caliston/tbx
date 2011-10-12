@@ -51,4 +51,5 @@
  * - Removed space at beginning of a wrapped line in the TextView
  * - Added Point/Size constructor the BBox
  * - Missing ActionButton methods added
+ * - JPEG added draw transform plot and file checking methods
  */

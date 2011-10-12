@@ -35,6 +35,7 @@
 #include "image.h"
 #include "bbox.h"
 #include "scalefactors.h"
+#include "drawtransform.h"
 #include <string>
 
 namespace tbx {
@@ -71,7 +72,7 @@ public:
 
 	void plot(int x, int y, const ScaleFactors &sf);
 	void plot(const BBox &bbox);
-//TODO:	bool plot(const DrawTransform &dt);
+	void plot(const DrawTransform &dt);
 
 	void dithered(bool dither);
 
@@ -148,9 +149,8 @@ public:
 	 */
 	bool density_simple_ratio() const		{return ((_flags & 4) != 0);}
 
-//TODO:		static bool IsJPEGFile(const std::string &fileName);
-//TODO:		static bool GetFileInfo(const std::string &fileName, int *width, int *height, int *xDensity, int *yDensity, int *workSpace, bool *greyscaleImage, bool *noTransformPlots, bool *pixelDensityIsSimpleRatio);
-
+	static bool IsJPEGFile(const std::string &file_name);
+	static bool GetFileInfo(const std::string &file_name, int *width, int *height, int *x_density, int *y_density, int *workspace, bool *greyscale_image, bool *no_transform_plots, bool *pixel_density_is_simple_ratio);
 };
 
 }
