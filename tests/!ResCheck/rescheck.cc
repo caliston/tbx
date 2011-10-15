@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2011 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -61,6 +61,7 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include <sstream>
 
 using namespace std;
 using namespace tbx::res;
@@ -69,7 +70,7 @@ char *master_folder = "<ResCheck$Dir>.master.";
 char *test_folder = "<ResCheck$Dir>.test.";
 
 bool compare_resources(const char *test_name, const std::string &source_fname, const std::string &target_fname);
-void where_in_res(std::ostream &os, char *here, char *start);
+bool where_in_res( char *here, char *check, char *start, std::string &desc);
 
 void save_test();
 void copy_test();
@@ -476,7 +477,7 @@ void default_gadget_test()
     toolaction.component_id(17);
 	toolaction.has_text(true);
 	toolaction.generate_select(true);
-	toolaction.off_text("ToolAction");
+	toolaction.off_ident("ToolAction");
 	window.add_gadget(toolaction);
 
 	editor.add(window);
@@ -637,27 +638,40 @@ bool compare_resources(const char *test_name, const std::string &master_fname, c
 
 	int *master_ptr = (int *)master_data;
 	int *check_ptr = (int *)check_data;
+	bool show_failed = false;
+	std::string where_desc;
+
 	while (left > 0)
 	{
 		if (*master_ptr != *check_ptr)
 		{
-			if (!has_diff)
+			has_diff = true;
+			if (where_in_res((char *)master_ptr, (char *)check_ptr, master_data, where_desc))
 			{
-				cout << test_name << ": Failed: files are different" << endl;
-				cout << "    Offset    Master     Check" << hex << endl;
-				has_diff = true;
-			}
-			cout << setw(10) << (char *)master_ptr - master_data
-				 << setw(10) << *master_ptr
-				 << setw(10) << *check_ptr
-				 << " ";
-			where_in_res(cout, (char *)master_ptr, master_data);
-			cout << endl;
+			    if (!show_failed)
+			    {
+				   cout << test_name << ": Failed: files are different" << endl;
+				   cout << "    Offset    Master     Check" << hex << endl;
+				   show_failed = true;
+				}
+
+                cout << setw(10) << (char *)master_ptr - master_data
+                	 << setw(10) << *master_ptr
+                	 << setw(10) << *check_ptr
+                	 << " "
+                     << where_desc
+                     << endl;
+            }
 		}
 		master_ptr++;
 		check_ptr++;
 		left -= 4;
 	}
+
+    if (!show_failed && has_diff)
+    {
+       cout << test_name << ": OK: Difference in string or message table padding only" << endl;
+    }
 
 	delete [] master_data;
 	delete [] check_data;
@@ -667,9 +681,19 @@ bool compare_resources(const char *test_name, const std::string &master_fname, c
 
 /**
  * Textual description of location in resource file
+ *
+ * @param here location in master of error
+ * @param check location in checked of error
+ * @param start start of master resource
+ * @param desc update with description of location
+ * @returns true if "real" error,
+ *          false if an unimportant error in table padding.
  */
-void where_in_res(std::ostream &os, char *here, char *start)
+bool where_in_res(char *here, char *check, char *start, std::string &desc)
 {
+    std::ostringstream os;
+    bool real_error = true;
+
 	if (here == start) os << "Resource file header";
 	else if (here == start + 4) os << "Resource file version";
 	else if (here == start + 8) os << "First object offset";
@@ -703,9 +727,9 @@ void where_in_res(std::ostream &os, char *here, char *start)
 			os << "Object '" << obj->name << "' ";
 			if (here < (char *)obj)
 			{
-				if (here == pos) os << "String table offset";
-				else if (here == pos + 4) os << "Message table offset";
-				else if (here == pos + 8) os << "Relocation table offset";
+			    if (here == pos) os << "String table offset";
+			    else if (here == pos + 4) os << "Message table offset";
+                else if (here == pos + 8) os << "Relocation table offset";
 			} else
 			{
 				if (here == (char *)&obj->class_id) os << "Class id";
@@ -739,9 +763,23 @@ void where_in_res(std::ostream &os, char *here, char *start)
 						&& table_offset >= rdh->messages_table_offset)
 					{
 						os << "Message table offset " << table_offset - rdh->messages_table_offset;
+       			        char *p1 = here, *p2 = check;
+                        while (*p1 && *p2 && *p1 == *p2)
+                        {
+                            p1++;
+                            p2++;
+                        }
+                        if (!*p1 && !*p2) real_error = false;
 					} else if (rdh->string_table_offset != -1)
 					{
 						os << "String table offset " << table_offset - rdh->string_table_offset;
+       			        char *p1 = here, *p2 = check;
+                        while (*p1 && *p2 && *p1 == *p2)
+                        {
+                            p1++;
+                            p2++;
+                        }
+                        if (!*p1 && !*p2) real_error = false;
 					}
 				} else
 				{
@@ -750,4 +788,8 @@ void where_in_res(std::ostream &os, char *here, char *start)
 			}
 		}
 	}
+
+    desc = os.str();
+
+    return real_error;
 }

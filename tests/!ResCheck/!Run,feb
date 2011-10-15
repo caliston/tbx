@@ -3,6 +3,9 @@
 | Directory to find test resources
 Set ResCheck$Dir <Obey$Dir>
 
-| Alias to make it
+| Alias so it can be re run in a task window to save the output
 Set Alias$rescheck <ResCheck$Dir>.rescheck %%*0
+
+rescheck
+
 
