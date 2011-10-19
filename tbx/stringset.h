@@ -33,10 +33,15 @@
 #define TBX_STRINGSET_H_
 
 #include "gadget.h"
+#include "menu.h"
+#include "listener.h"
+#include "eventinfo.h"
 
 namespace tbx {
 
 class TextChangedListener;
+class StringSetAboutToBeShownListener;
+
 
 /**
  * StringSet wrapper class for an underlying toolbox StringSet gadget.
@@ -183,14 +188,33 @@ public:
 	 */
 	void allowable(const std::string &value) {string_property(900, value);}
 
-	//TODO: components
+	Gadget alphanumeric_gadget() const;
+	Menu popup_menu() const;
 
 	// Listeners
 	void add_text_changed_listener(TextChangedListener *listener);
 	void remove_text_changed_listener(TextChangedListener *listener);
 
-	//TODO: About to be shown listener
+	void add_about_to_be_shown_listener(StringSetAboutToBeShownListener *listener);
+	void remove_about_to_be_shown_listener(StringSetAboutToBeShownListener *listener);
 
+};
+
+/**
+ * Listener for the string set about to be shown event
+ */
+class StringSetAboutToBeShownListener : public Listener
+{
+public:
+	StringSetAboutToBeShownListener() {}
+	virtual ~StringSetAboutToBeShownListener() {}
+
+	/**
+	 * Method called just before the popup menu for a string set is shown
+	 *
+	 * @param event information on the objects/components for this event.
+	 */
+	virtual void stringset_about_to_be_shown(const EventInfo &event) = 0;
 };
 
 }

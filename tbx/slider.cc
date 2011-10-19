@@ -187,4 +187,107 @@ int Slider::step_size() const
 	return regs.r[2];
 }
 
+/**
+ * Set colours for the bar and background of the slider
+ *
+ * @param bar bar desktop colour
+ * @param background background desktop colour
+ */
+void Slider::set_colour(WimpColour bar, WimpColour background)
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[2] = 580;
+	regs.r[1] = _handle;
+	regs.r[3] = _id;
+	regs.r[4] = (int)bar;
+	regs.r[5] = (int)background;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+/**
+ * Get colours for the bar and background of the slider
+ *
+ * @param bar Updated to the bar desktop colour
+ * @param background Update to the background desktop colour
+ */
+void Slider::get_colour(WimpColour &bar, WimpColour &background)
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[2] = 581;
+	regs.r[1] = _handle;
+	regs.r[3] = _id;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+	bar = regs.r[0];
+	background = regs.r[1];
+}
+
+/*
+ * handle Slider value changed event
+ */
+static void slider_changed_handler(IdBlock &id_block, PollBlock &data, Listener *listener)
+{
+	SliderValueChangedEvent event(id_block, data);
+	static_cast<SliderValueChangedListener *>(listener)->slider_value_changed(event);
+}
+
+/*
+ * handle Slider value changed event as a standard value changed event
+ */
+static void slider_standard_changed_handler(IdBlock &id_block, PollBlock &data, Listener *listener)
+{
+	ValueChangedEvent event(id_block, data);
+	static_cast<ValueChangedListener *>(listener)->value_changed(event);
+}
+
+
+/**
+ * Add Listener for changes in the slider
+ *
+ * @param listener listener to add
+ */
+void Slider::add_value_changed_listener(SliderValueChangedListener *listener)
+{
+	add_listener(0x82886, listener, slider_changed_handler);
+}
+/**
+ * Remove Listener for changes in the slider
+ *
+ * @param listener listener to remove
+ */
+void Slider::remove_value_changed_listener(SliderValueChangedListener *listener)
+{
+	remove_listener(0x82886, listener);
+}
+
+/**
+ * Add Listener for changes in the slider.
+ *
+ * This listens for the same event as the SliderValueChangedListener but
+ * uses a standard value changed event listener to report the value.
+ *
+ * @param listener listener to add
+ */
+void Slider::add_value_changed_listener(ValueChangedListener *listener)
+{
+	add_listener(0x82886, listener, slider_standard_changed_handler);
+}
+/**
+ * Remove Listener for changes in the slider.
+ *
+ * This listens for the same event as the SliderValueChangedListener but
+ * uses a standard value changed event listener to report the value.
+ *
+ * @param listener listener to remove
+ */
+void Slider::remove_value_changed_listener(ValueChangedListener *listener)
+{
+	remove_listener(0x82886, listener);
+}
+
+
+
+
 }

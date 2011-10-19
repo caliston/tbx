@@ -131,7 +131,6 @@ public:
 	std::string fade_ident() const;
 
 	// Actions
-	//TODO: Figure out what these are
 	void set_action(int select_action, int adjust_action);
 	void get_action(int &select_action, int &adjust_action) const;
 

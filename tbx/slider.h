@@ -33,9 +33,13 @@
 #define TBX_SLIDER_H_
 
 #include "gadget.h"
+#include "valuechangedlistener.h"
+#include "colour.h"
 
 namespace tbx
 {
+
+class SliderValueChangedListener;
 
 /**
  * A Slider is a gadget that shows bar in a well which may be draggable
@@ -140,9 +144,70 @@ public:
 	void step_size(int value);
 	int step_size() const;
 
-	//TODO: set colour
-	//TODO: Value changed listener
+	void set_colour(WimpColour bar, WimpColour background);
+	void get_colour(WimpColour &bar, WimpColour &background);
 
+	void add_value_changed_listener(SliderValueChangedListener *listener);
+	void remove_value_changed_listener(SliderValueChangedListener *listener);
+
+	void add_value_changed_listener(ValueChangedListener *listener);
+	void remove_value_changed_listener(ValueChangedListener *listener);
+
+};
+
+/**
+ * Information on event generated when the value of the slider has been
+ * changed
+ */
+class SliderValueChangedEvent : public ValueChangedEvent
+{
+public:
+	/**
+	 * Construct the event from Toolbox and WIMP event data
+	 *
+	 * @param id_block Toolbox IDs for this event
+	 * @param data Information returned from the WIMP for this event
+	 */
+	SliderValueChangedEvent(IdBlock &id_block, PollBlock &data) :
+			ValueChangedEvent(id_block, data) {};
+
+	/**
+	 * Check if value was changed by a click or start of dragging of the
+	 * bar.
+	 *
+	 * @returns true if value was changed by a click or start of dragging of the
+	 * bar.
+	 */
+	bool drag_start_or_click() const {return (_data.word[3]  & 1)!=0;}
+	/**
+	 * Check if the drag is in progress
+	 *
+	 * @returns true if a drag of the slider is in progress
+	 */
+	bool drag_in_progress() const {return (_data.word[3]  & 2)!=0;}
+	/**
+	 * Check if this is the end of a drag
+	 *
+	 * @returns true if this event is the end of a slider drag
+	 */
+	bool drag_ended() const {return (_data.word[3]  & 4)!=0;}
+};
+
+/**
+ * Listener for changes in the slider value
+ */
+class SliderValueChangedListener : public Listener
+{
+public:
+	SliderValueChangedListener() {}
+	virtual ~SliderValueChangedListener() {}
+
+	/**
+	 * Method called when the slider value has changed
+	 *
+	 * @param event information on the new value and how it was changed
+	 */
+	virtual void slider_value_changed(const SliderValueChangedEvent &event) = 0;
 };
 
 }

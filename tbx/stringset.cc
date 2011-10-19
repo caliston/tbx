@@ -79,6 +79,15 @@ static void stringset_changed_handler(IdBlock &id_block, PollBlock &data, Listen
 	static_cast<TextChangedListener *>(listener)->text_changed(event);
 }
 
+/*
+ * handle StringSet about to be shown event
+ */
+static void stringset_about_to_be_shown_handler(IdBlock &id_block, PollBlock &data, Listener *listener)
+{
+	EventInfo event(id_block, data);
+	static_cast<StringSetAboutToBeShownListener *>(listener)->stringset_about_to_be_shown(event);
+}
+
 
 void StringSet::selected_index(int index)
 {
@@ -93,6 +102,34 @@ int StringSet::selected_index() const
 	swix_check(_swix(0x44ec6, _INR(0,3)|_OUT(0), 1, _handle, 899, _id, &index));
 	return index;
 }
+
+/**
+ * Get the gadget used to display the selected string.
+ *
+ * This may be either a DisplayField or a WritableField depending on how
+ * the StringSet was created.
+ *
+ * @returns gadget used for the display
+ */
+Gadget StringSet::alphanumeric_gadget() const
+{
+	int component_id;
+	swix_check(_swix(0x44ec6, _INR(0,3)|_OUT(0), 1, _handle, 902, _id, &component_id));
+	return window().gadget((ComponentId)component_id);
+}
+
+/**
+ * Get the popup menu used with the string set
+ *
+ * @return Menu used by the string set
+ */
+Menu StringSet::popup_menu() const
+{
+	int object_id;
+	swix_check(_swix(0x44ec6, _INR(0,3)|_OUT(1), 2, _handle, 902, _id, &object_id));
+	return Menu((ObjectId)object_id);
+}
+
 
 /**
  * Add a listener to report when the text has changed in the string set
@@ -113,6 +150,25 @@ void StringSet::remove_text_changed_listener(TextChangedListener *listener)
 	remove_listener(0x8288e, listener);
 }
 
+/**
+ * Add a listener to be called just before the string set's menu is shown.
+ *
+ * @param listener listener to add
+ */
+void StringSet::add_about_to_be_shown_listener(StringSetAboutToBeShownListener *listener)
+{
+	add_listener(0x8288f, listener, stringset_about_to_be_shown_handler);
+}
+
+/**
+ * Remove a listener to be called just before the string set's menu is shown.
+ *
+ * @param listener listener to remove
+ */
+void StringSet::remove_about_to_be_shown_listener(StringSetAboutToBeShownListener *listener)
+{
+	remove_listener(0x8288f, listener);
+}
 
 }
 

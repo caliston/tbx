@@ -291,7 +291,7 @@ void JPEG::error_defused(bool error_defused)
 /**
  * Check if a file is a JPEG file
  *
- * @params file_name name of file to check
+ * @param file_name name of file to check
  * @returns true if it is a JPEG file
  */
 bool JPEG::IsJPEGFile(const std::string &file_name)
@@ -310,7 +310,7 @@ bool JPEG::IsJPEGFile(const std::string &file_name)
  *
  * Pass 0 for any parameters not required
  *
- * @params file_name name of file to get the information for
+ * @param file_name name of file to get the information for
  * @param width set to width in pixels
  * @param height set to height in pixels
  * @param x_density set to horizontal pixel density
