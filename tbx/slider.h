@@ -147,6 +147,11 @@ public:
 	void set_colour(WimpColour bar, WimpColour background);
 	void get_colour(WimpColour &bar, WimpColour &background);
 
+    void bar_colour(WimpColour value);
+    WimpColour bar_colour() const;
+    void background_colour(WimpColour value);
+    WimpColour background_colour() const;
+
 	void add_value_changed_listener(SliderValueChangedListener *listener);
 	void remove_value_changed_listener(SliderValueChangedListener *listener);
 

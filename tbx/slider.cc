@@ -224,6 +224,87 @@ void Slider::get_colour(WimpColour &bar, WimpColour &background)
 	background = regs.r[1];
 }
 
+/**
+ * Change the bar colour of the slider
+ *
+ * @param value new WimpColour for the bar
+ */
+void Slider::bar_colour(WimpColour value)
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[2] = 581;
+	regs.r[1] = _handle;
+	regs.r[3] = _id;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+    regs.r[4] = (int)value;
+	regs.r[5] = regs.r[1];
+	regs.r[0] = 0;
+	regs.r[2] = 580;
+	regs.r[1] = _handle;
+	regs.r[3] = _id;
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Get the bar colour of the slider
+ *
+ * @returns WimpColour of the bar
+ */
+WimpColour Slider::bar_colour() const
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[2] = 581;
+	regs.r[1] = _handle;
+	regs.r[3] = _id;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    return WimpColour(regs.r[0]);
+}
+
+/**
+ * Change the background colour of the slider
+ *
+ * @param value new WimpColour for the background
+ */
+void Slider::background_colour(WimpColour value)
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[2] = 581;
+	regs.r[1] = _handle;
+	regs.r[3] = _id;
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+    regs.r[5] = (int)value;
+	regs.r[4] = regs.r[0];
+	regs.r[0] = 0;
+	regs.r[2] = 580;
+	regs.r[1] = _handle;
+	regs.r[3] = _id;
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
+ * Get the background colour of the slider
+ *
+ * @returns WimpColour of the background
+ */
+WimpColour Slider::background_colour() const
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = 0;
+	regs.r[2] = 581;
+	regs.r[1] = _handle;
+	regs.r[3] = _id;
+
+	swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    return WimpColour(regs.r[1]);
+}
+
 /*
  * handle Slider value changed event
  */

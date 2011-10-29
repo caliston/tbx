@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2011 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -26,6 +26,8 @@
 #define TBX_NUMBERRANGE_H_
 
 #include "gadget.h"
+#include "adjuster.h"
+#include "slider.h"
 
 namespace tbx {
 
@@ -127,7 +129,25 @@ public:
 	 */
 	int value() const {return int_property(833);}
 
-	//TODO: Set/Get bounds
+    void set_bounds(int lower, int upper, int step_size, int precision);
+	void get_bounds(int &lower, int &upper, int &step_size, int &precision) const;
+    void set_bounds(int lower, int upper, int step_size);
+	void get_bounds(int &lower, int &upper, int &step_size) const;
+	void set_bounds(int lower, int upper);
+	void get_bounds(int &lower, int &upper) const;
+	void lower_bound(int value);
+	int lower_bound() const;
+	void upper_bound(int value);
+	int upper_bound() const;
+	void step_size(int value);
+	int step_size() const;
+	void precision(int value);
+	int precision() const;
+
+    Gadget numeric_gadget() const;
+    Adjuster left_adjuster() const;
+    Adjuster right_adjuster() const;
+    Slider slider() const;
 
 	void add_value_changed_listener(ValueChangedListener *listener);
 	void remove_value_changed_listener(ValueChangedListener *listener);

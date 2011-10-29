@@ -50,6 +50,6 @@
  * - Added foreground and background methods for setting the font colours in the TextView
  * - Removed space at beginning of a wrapped line in the TextView
  * - Added Point/Size constructor the BBox
- * - Missing ActionButton, Slider and StringSet methods added
+ * - Missing ActionButton, Button, NumberRange, Slider and StringSet methods added
  * - JPEG added draw transform plot and file checking methods
  */

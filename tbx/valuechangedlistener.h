@@ -27,9 +27,6 @@
 
 #include "listener.h"
 #include "eventinfo.h"
-#include "numberrange.h"
-
-//TODO: This event should be generalised for more gadgets to use.
 
 namespace tbx
 {
