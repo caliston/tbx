@@ -44,7 +44,7 @@
  * - Added missing reference documentation on classes/methods etc.
  * - Minor class tidying
  *
- * <B>0.5 Alpha ???? </B>
+ * <B>0.5 November 2011</B>
  * - const char * constructor for Path class
  * - pointer operator for Path and PathInfo iterators
  * - Added foreground and background methods for setting the font colours in the TextView
@@ -52,4 +52,5 @@
  * - Added Point/Size constructor the BBox
  * - Missing ActionButton, Button, NumberRange, Slider and StringSet methods added
  * - JPEG added draw transform plot and file checking methods
+ * - Fixed error when the last idle command was removed during an idle command 
  */

@@ -579,7 +579,8 @@ void EventRouter::process_null_event()
 		{
 			Command *to_run = (*_null_event_commands)[i];
 			to_run->execute();
-			if (i >= _null_event_commands->size()
+			if (_null_event_commands == 0
+				|| i >= _null_event_commands->size()
 				|| (*_null_event_commands)[i] != to_run)
 			{
 				i = size; // Stop processing if list changes
