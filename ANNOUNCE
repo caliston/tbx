@@ -1,7 +1,11 @@
 TBX C++ Toolbox application library released
 
 
-TBX C++ library version 0.4 (alpha) has now been released.
+TBX C++ library version 0.5 (alpha) has now been released.
+
+This versions adds a few more methods to the toolbox gadgets
+and fixes a bug that appeared on RISC OS 6.20 with idle
+processing.
 
 TBX is a C++ library to help with the development of
 C++ applications for the RISC OS desktop.

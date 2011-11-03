@@ -1,4 +1,4 @@
-VERSION = 0.4-1
+VERSION = 0.5-1
 PACKAGES = \
  TBX-Dev_$(VERSION)
 INSTALL_TO=Temp/Apps/Library
