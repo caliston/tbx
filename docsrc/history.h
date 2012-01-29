@@ -52,5 +52,8 @@
  * - Added Point/Size constructor the BBox
  * - Missing ActionButton, Button, NumberRange, Slider and StringSet methods added
  * - JPEG added draw transform plot and file checking methods
- * - Fixed error when the last idle command was removed during an idle command 
+ * - Fixed error when the last idle command was removed during an idle command
+ *
+ * <B>0.6 ????</B>
+ * - Fixed incorrect return value from Font class string_width methods
  */

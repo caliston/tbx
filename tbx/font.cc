@@ -218,7 +218,7 @@ int Font::string_width_mp(const std::string &text)
 	// Font_ScanString
 	swix_check(_kernel_swi(0x400A1, &regs, &regs));
 
-	return regs.r[7];
+	return regs.r[3];
 }
 
 /**
@@ -242,7 +242,7 @@ int Font::string_width_mp(const char *text, int length /*= -1*/)
 	// Font_ScanString
 	swix_check(_kernel_swi(0x400A1, &regs, &regs));
 
-	return regs.r[7];
+	return regs.r[3];
 }
 
 /**
@@ -264,7 +264,7 @@ int Font::string_width_os(const std::string &text)
 	swix_check(_kernel_swi(0x400A1, &regs, &regs));
 
 	// 400 OS units to the millipoint
-	return (regs.r[7] * 45 + 44) / 100;
+	return (regs.r[3] + 399) / 400;
 }
 
 /**
@@ -289,7 +289,7 @@ int Font::string_width_os(const char *text, int length /*= -1*/)
 	swix_check(_kernel_swi(0x400A1, &regs, &regs));
 
 	// 400 OS units to the millipoint
-	return (regs.r[7] * 45 + 44) / 100;
+	return (regs.r[3] + 399) / 400;
 }
 
 /**
