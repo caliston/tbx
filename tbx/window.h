@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2012 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -423,8 +423,14 @@ namespace tbx
 	{
 	private:
 		unsigned int _flags;
-		unsigned int _colours1;
-		unsigned int _colours2;
+		char _title_foreground;
+		char _title_background;
+		char _work_area_foreground;
+		char _work_area_background;
+		char _scroll_outer;
+		char _scroll innfer;
+		char _title_highlight;
+		char _reserved; /* Unused - must be 0 */
 		BBox _work_area;
 		unsigned int _title_bar_flags;
 		unsigned int _work_area_flags;
@@ -455,6 +461,25 @@ namespace tbx
 		 * Button type
 		 */
 		ButtonType button_type() const {return ButtonType((_work_area_flags>>12) & 15);}
+
+        /**
+         * Work area
+         */
+         const BBox &work_area() const {return _work_area;}
+
+         /**
+          * Title foreground and frame colour.
+          *
+          * @returns WimpColour or WimpColour::no_colour if window has no
+          * control area or frame.
+          */
+         WimpColour title_foreground() const {return  WimpColour(_title_foreground);}
+         /**
+          * Title background colour
+          *
+          * @returns WimpColour for title backgronud
+          */
+		 WimpColour title_background() const {return WimpColour(_title_background);}
 	};
 }
 
