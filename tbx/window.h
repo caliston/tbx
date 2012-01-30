@@ -28,6 +28,7 @@
 #include "showfullobject.h"
 #include "pollinfo.h"
 #include "visiblearea.h"
+#include "colour.h"
 
 namespace tbx
 {
@@ -428,7 +429,7 @@ namespace tbx
 		char _work_area_foreground;
 		char _work_area_background;
 		char _scroll_outer;
-		char _scroll innfer;
+		char _scroll_inner;
 		char _title_highlight;
 		char _reserved; /* Unused - must be 0 */
 		BBox _work_area;
@@ -467,19 +468,68 @@ namespace tbx
          */
          const BBox &work_area() const {return _work_area;}
 
-         /**
-          * Title foreground and frame colour.
-          *
-          * @returns WimpColour or WimpColour::no_colour if window has no
-          * control area or frame.
-          */
-         WimpColour title_foreground() const {return  WimpColour(_title_foreground);}
-         /**
-          * Title background colour
-          *
-          * @returns WimpColour for title backgronud
-          */
-		 WimpColour title_background() const {return WimpColour(_title_background);}
+        /**
+         * Title foreground and frame colour.
+         *
+         * @returns WimpColour or WimpColour::no_colour if window has no
+         * control area or frame.
+         */
+        WimpColour title_foreground() const {return  WimpColour(_title_foreground);}
+        /**
+         * Title background colour
+         *
+         * @returns WimpColour for title backgronud
+         */
+		WimpColour title_background() const {return WimpColour(_title_background);}
+
+        /**
+         * Work area foreground colour
+         *
+         * @returns WimpColour for the work area foreground
+         */
+		WimpColour work_area_foreground() const {return WimpColour(_work_area_foreground);}
+        /**
+         * Work area background colour
+         *
+         * @returns WimpColour for the work area background or 
+		 * WimpColour::no_colour if the Wimp does not draw the background.
+         */
+		WimpColour work_area_background() const {return WimpColour(_work_area_background);}
+		/**
+		 * Scroll bar outer colour
+		 *
+		 * @return WimpColour for the outer area of the scroll bar
+		 */
+		WimpColour scroll_outer() const {return WimpColour(_scroll_outer);}
+		/**
+		 * Scroll bar inner colour
+		 *
+		 * @return WimpColour for the inner area of the scroll bar
+		 */
+		WimpColour scroll_inner() const {return WimpColour(_scroll_inner);}
+        /**
+         * Title background highlight colour
+         *
+         * @returns WimpColour for title background when the window has the focus
+         */
+		WimpColour title_highlight() const {return WimpColour(_title_highlight);}
+
+		/**
+		 * Minimum width of the window.
+		 *
+		 * If the minimum width and height are both 0 the minimum width
+		 * is taken from the title width.
+		 *
+		 *@returns minimum width of window in OS coordinates.
+		 */
+		int min_width() const {return (_min_width_and_height & 0xFFFF);}
+		/**
+		 * Minimum height of the window.
+		 *
+		 *@returns minimum height of window in OS coordinates.
+		 */
+		int min_height() const {return (_min_width_and_height >> 16);}
+
 	};
 }
 
