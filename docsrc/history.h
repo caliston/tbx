@@ -57,4 +57,6 @@
  * <B>0.6 ????</B>
  * - Fixed incorrect return value from Font class string_width methods
  * - Add a few more methods to the WindowInfo class
+ * - Added canonicalise and canonical_equals methods to Path class
+ * - deleteonhidden.h was missing object.h include
  */

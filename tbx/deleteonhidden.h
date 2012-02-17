@@ -26,6 +26,7 @@
 #define TBX_DELETEONHIDDEN_H_
 
 #include "hasbeenhiddenlistener.h"
+#include "object.h"
 
 namespace tbx
 {

@@ -25,6 +25,8 @@
 #include "path.h"
 #include "swis.h"
 #include <memory>
+#include "stringutils.h"
+#include "swixcheck.h"
 
 using namespace tbx;
 
@@ -677,6 +679,67 @@ bool Path::save_file(const char *data, int length, int file_type) const
 	regs.r[5] = reinterpret_cast<int>(data+length);
 
 	return (_kernel_swi(OS_File, &regs, &regs) == 0);
+}
+
+
+/**
+ * Canonicalise the path name
+ */
+void Path::canonicalise()
+{
+  _name = canonicalise(_name);
+}
+
+/**
+ * Static function to provide the canonicalised version of a
+ * path name.
+ *
+ * @param path path to canonicalise
+ * @returns new path name
+ */
+std::string Path::canonicalise(const std::string &path)
+{
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 37;
+	regs.r[1] = reinterpret_cast<int>(path.c_str());
+	regs.r[2] = 0; // Path buffer 0 to read size required
+	regs.r[3] = 0; // Don't use path variable
+	regs.r[4] = 0; // Don't use path string
+	regs.r[5] = 0; // Buffer size 0 to read size required
+	swix_check(_kernel_swi(OS_FSControl, &regs, &regs));
+
+	regs.r[5] = 1 - regs.r[5]; // Size of buffer required
+	char buffer[regs.r[5]];
+	regs.r[1] = reinterpret_cast<int>(path.c_str());
+	regs.r[2] = reinterpret_cast<int>(buffer);
+	swix_check(_kernel_swi(OS_FSControl, &regs, &regs));
+
+	std::string result(buffer);
+	return result;
+}
+
+/**
+ * Compare this path with another to see if their canonical names
+ * are the same using a case insensitive compare.
+ *
+ * @param compare_to Path to compare to
+ * @return true if they are the same
+ */
+bool Path::canonical_equals(const tbx::Path &compare_to)
+{
+	return tbx::equals_ignore_case(canonicalise(_name), canonicalise(compare_to._name));
+}
+/**
+ * Compare this paths with a string see if their canonical names
+ * are the same using a case insensitive compare.
+ *
+ * @param compare_to Path to compare to
+ * @return true if they are the same
+ */
+bool Path::canonical_equals(const std::string &compare_to)
+{
+	return tbx::equals_ignore_case(canonicalise(_name), canonicalise(compare_to));
 }
 
 /**

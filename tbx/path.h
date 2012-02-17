@@ -344,6 +344,11 @@ namespace tbx
 
 		bool set_current_directory() const;
 
+		void canonicalise();
+		static std::string canonicalise(const std::string &path);
+		bool canonical_equals(const tbx::Path &compare_to);
+		bool canonical_equals(const std::string &compare_to);
+
 		//Operators
 
 		/**
