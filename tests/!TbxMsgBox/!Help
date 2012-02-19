@@ -1,0 +1,9 @@
+This is a simple application to show the use of the show_message tbx function.
+
+The menu on the icon bar gives a selection of messages to test some of the features of this function.
+
+The last two (non-quit options) also show the use of report_error.
+
+
+
+

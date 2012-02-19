@@ -59,4 +59,6 @@
  * - Add a few more methods to the WindowInfo class
  * - Added canonicalise and canonical_equals methods to Path class
  * - deleteonhidden.h was missing object.h include
+ * - Added show_message function and the MessageWindow class (in
+ *   messagewindow.h) to make it easy to show a message in a window.
  */
