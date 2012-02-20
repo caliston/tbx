@@ -726,7 +726,7 @@ std::string Path::canonicalise(const std::string &path)
  * @param compare_to Path to compare to
  * @return true if they are the same
  */
-bool Path::canonical_equals(const tbx::Path &compare_to)
+bool Path::canonical_equals(const tbx::Path &compare_to) const
 {
 	return tbx::equals_ignore_case(canonicalise(_name), canonicalise(compare_to._name));
 }
@@ -737,7 +737,7 @@ bool Path::canonical_equals(const tbx::Path &compare_to)
  * @param compare_to Path to compare to
  * @return true if they are the same
  */
-bool Path::canonical_equals(const std::string &compare_to)
+bool Path::canonical_equals(const std::string &compare_to) const
 {
 	return tbx::equals_ignore_case(canonicalise(_name), canonicalise(compare_to));
 }

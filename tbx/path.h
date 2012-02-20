@@ -346,8 +346,8 @@ namespace tbx
 
 		void canonicalise();
 		static std::string canonicalise(const std::string &path);
-		bool canonical_equals(const tbx::Path &compare_to);
-		bool canonical_equals(const std::string &compare_to);
+		bool canonical_equals(const tbx::Path &compare_to) const;
+		bool canonical_equals(const std::string &compare_to) const;
 
 		//Operators
 
