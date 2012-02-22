@@ -61,4 +61,6 @@
  * - deleteonhidden.h was missing object.h include
  * - Added show_message function and the MessageWindow class (in
  *   messagewindow.h) to make it easy to show a message in a window.
+ * - Added FilerAction class to make it easy to run multi-tasking file
+ *   operation via the desktop filer
  */
