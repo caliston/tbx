@@ -325,6 +325,7 @@ namespace tbx
 		 */
 		enum CopyOption {
 			COPY_RECURSE=1, // Recursively copy
+			COPY_FORCE=2,   // Overwrite destination if it already exists
             COPY_ALLOW_PRINT = 0x100u, // Allow copy to printer
 			COPY_NO_ATTRIBUTES = 0x200u, // Don't copy attributes
 			COPY_STAMP = 0x400u,  // Reset date stamp

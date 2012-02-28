@@ -509,7 +509,7 @@ bool Path::rename(const std::string &new_name)
 }
 
 /**
- * Copy the object overwriting any existing object.
+ * Copy the object.
  *
  * @param copyto location to copy to
  * @param options bitwise or of flags from CopyOption enum.
@@ -522,7 +522,7 @@ bool Path::copy(const std::string &copyto, unsigned int options)
 	regs.r[0] = 26;
 	regs.r[1] = reinterpret_cast<int>(_name.c_str());
 	regs.r[2] = reinterpret_cast<int>(copyto.c_str());
-	regs.r[3] = options | 1; /* 1 = FORCE COPY */
+	regs.r[3] = options;
 	regs.r[4] = 0;
 	regs.r[5] = 0;
 	regs.r[6] = 0;
@@ -532,7 +532,7 @@ bool Path::copy(const std::string &copyto, unsigned int options)
 	return (_kernel_swi(OS_FSControl, &regs, &regs) == 0);
 }
 /**
- * Copy the object overwriting any existing object.
+ * Copy the object.
  *
  * This version uses the given buffer for workspace.
  *
@@ -553,7 +553,7 @@ bool Path::copy(const std::string &copyto, unsigned int options, void *buffer, u
 	regs.r[0] = 26;
 	regs.r[1] = reinterpret_cast<int>(_name.c_str());
 	regs.r[2] = reinterpret_cast<int>(copyto.c_str());
-	regs.r[3] = options | 1 | 0x2000; /* 1 = FORCE COPY, 0x2000 = USE DESCRIPTOR */
+	regs.r[3] = options | 0x2000; /* 0x2000 = USE DESCRIPTOR */
 	regs.r[4] = 0;
 	regs.r[5] = 0;
 	regs.r[6] = 0;
@@ -564,7 +564,7 @@ bool Path::copy(const std::string &copyto, unsigned int options, void *buffer, u
 }
 
 /**
- * Move a file to a new location overwriting destination.
+ * Move a file to a new location.
  *
  * This moves the file by copying it then deleting the
  * source.
@@ -580,7 +580,7 @@ bool Path::move(const std::string &copyto, unsigned int options)
 	regs.r[0] = 26;
 	regs.r[1] = reinterpret_cast<int>(_name.c_str());
 	regs.r[2] = reinterpret_cast<int>(copyto.c_str());
-	regs.r[3] = options | 1 | 0x80; /* 1 = FORCE COPY, 0x80 = DELETE */
+	regs.r[3] = options | 0x80; /* 0x80 = DELETE after copy */
 	regs.r[4] = 0;
 	regs.r[5] = 0;
 	regs.r[6] = 0;
@@ -591,7 +591,7 @@ bool Path::move(const std::string &copyto, unsigned int options)
 }
 
 /**
- * Move a file to a new location overwriting destination.
+ * Move a file to a new location.
  *
  * This moves the file by copying it then deleting the
  * source.
@@ -615,7 +615,7 @@ bool Path::move(const std::string &copyto, unsigned int options, void *buffer, u
 	regs.r[0] = 26;
 	regs.r[1] = reinterpret_cast<int>(_name.c_str());
 	regs.r[2] = reinterpret_cast<int>(copyto.c_str());
-	regs.r[3] = options | 1 | 0x80 | 0x2000; /* 1 = FORCE COPY, 0x80 = DELETE, 0x2000 = USE DESCRIPTOR */
+	regs.r[3] = options | 0x80 | 0x2000; /* 0x80 = DELETE, 0x2000 = USE DESCRIPTOR */
 	regs.r[4] = 0;
 	regs.r[5] = 0;
 	regs.r[6] = 0;

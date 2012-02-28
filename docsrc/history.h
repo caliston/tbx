@@ -63,4 +63,7 @@
  *   messagewindow.h) to make it easy to show a message in a window.
  * - Added FilerAction class to make it easy to run multi-tasking file
  *   operation via the desktop filer
+ * - Added COPY_FORCE option to force overwrite of the target in Path::copy
+ *   and Path::move methods. The documentation for previous releases said they were
+ *   overwriting always when they were incorrectly adding the recurse flag.
  */
