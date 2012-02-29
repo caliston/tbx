@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2012 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -43,6 +43,7 @@
 #include "tbxexcept.h"
 #include "monotonictime.h"
 #include "timer.h"
+#include "postpolllistener.h"
 
 #include <cstring>
 #include <kernel.h>
@@ -82,6 +83,7 @@ EventRouter::EventRouter()
     _first_timer = 0;
 
     _catch_exceptions = true;
+    _post_poll_listener = 0;
 }
 
 EventRouter::~EventRouter()
@@ -111,6 +113,11 @@ void EventRouter::poll()
 	{
         // Reply task for User Message Acknowledge (eventCode == 18)
     	_reply_to = regs.r[2];
+
+        if (_post_poll_listener)
+        {
+           _post_poll_listener->post_poll(regs.r[0], _poll_block, _id_block, _reply_to);
+        }
 
     	if (_catch_exceptions)
     	{
