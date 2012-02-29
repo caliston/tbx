@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2012 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -45,6 +45,7 @@ namespace tbx
 	class SpriteArea;
 	class Timer;
 	class Loader;
+	class PostPollListener;
 
 	namespace res
 	{
@@ -163,6 +164,7 @@ namespace tbx
 		int unix_file_name_control() const;
 
 		void catch_poll_exceptions(bool on);
+		void set_post_poll_listener(PostPollListener *listener);
 
 		bool owns_window(WindowHandle window_handle, IconHandle icon_handle = 0);
 
