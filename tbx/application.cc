@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2012 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -573,6 +573,26 @@ int Application::unix_file_name_control() const
 void Application::catch_poll_exceptions(bool on)
 {
 	event_router()->catch_exceptions(on);
+}
+
+/**
+ * Set listener to look at the results of the internal call to Wimp_Poll.
+ *
+ * There can only be one of these listeners. It is called immediately after
+ * Wimp_Poll before any other processing.
+ *
+ * Care must be taken in the PostPollListener so as not to cause problems
+ * for the processing that follows this.
+ *
+ * The call is mainly provided to help with debugging of the messages received
+ * by the application by the Wimp.
+ *
+ * @param listener Listener to report the poll results to. Set to 0 to remove
+ * the post poll listener.
+ */
+void Application::set_post_poll_listener(PostPollListener *listener)
+{
+   event_router()->_post_poll_listener = listener;
 }
 
 /**
