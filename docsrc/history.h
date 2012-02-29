@@ -66,4 +66,6 @@
  * - Added COPY_FORCE option to force overwrite of the target in Path::copy
  *   and Path::move methods. The documentation for previous releases said they were
  *   overwriting always when they were incorrectly adding the recurse flag.
+ * - Added application::set_post_poll_listener so an application can look
+ *   at the raw messages it recieves.
  */
