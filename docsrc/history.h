@@ -68,4 +68,6 @@
  *   overwriting always when they were incorrectly adding the recurse flag.
  * - Added application::set_post_poll_listener so an application can look
  *   at the raw messages it recieves.
+ * - Added Gadget::move_by to move a gadget relative to current position
+ * - Add TextDisplayWindow class to display a window resized to a text message
  */

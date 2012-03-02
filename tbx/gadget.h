@@ -152,6 +152,7 @@ namespace tbx
 		Point top_left() const;
 		void move_to(const Point &pos);
 		void move_to(int x, int y);
+		void move_by(int bx, int by);
 		Size size() const;
 		void size(const Size &sz);
 

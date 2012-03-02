@@ -345,6 +345,32 @@ void Gadget::move_to(int x, int y)
 }
 
 /**
+ * Move gadget relative to it's current position without resizing
+ *
+ * @param bx amount to move gadget in x direction (across)
+ * @param by amount to move gadget in y direction (up)
+ */
+void Gadget::move_by(int bx, int by)
+{
+	BBox bounds;
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 0; // Flags are zero
+    regs.r[1] = _handle;
+    regs.r[2] = 72;
+    regs.r[3] = _id;
+    regs.r[4] = reinterpret_cast<int>(&bounds.min.x);
+    // Run Toolbox_ObjectMiscOp - to get bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+
+    bounds.move(bx,by);
+
+    regs.r[2] = 71;
+    // Run Toolbox_ObjectMiscOp - to get bounds
+    swix_check(_kernel_swi(0x44ec6, &regs, &regs));
+}
+
+/**
  * Return the size of the gadget
  *
  * @returns size of gadget

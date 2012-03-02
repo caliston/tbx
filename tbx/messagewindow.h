@@ -28,9 +28,7 @@
 #include <string>
 #include <vector>
 
-#include "redrawlistener.h"
-#include "hasbeenhiddenlistener.h"
-#include "window.h"
+#include "textdisplaywindow.h"
 
 namespace tbx
 {
@@ -62,34 +60,12 @@ namespace tbx
  * bottom right of the window and the rule is moved down to stay at the
  * same relative position to the bottom of the window.
  */
-class MessageWindow :
-      public tbx::RedrawListener,
-      public tbx::HasBeenHiddenListener
+class MessageWindow : public TextDisplayWindow
 {
-   private:
-      tbx::Window _window;
-      std::string _msg;
-      std::vector<int> _line_end;
-      tbx::BBox _msg_bounds;
-      bool _delete_on_hide;
-
-      virtual void redraw (const tbx::RedrawEvent &e);
-      virtual void has_been_hidden (const tbx::EventInfo &hidden_event);
-      bool calc_line_ends(int max_width);
-
    public:
       MessageWindow(const std::string &msg);
 
       void sprite(const std::string &sprite_name);
-      void title(const std::string &title);
-      /**
-       * Get underlying window used for the message window
-       */
-      tbx::Window window() {return _window;}
-
-      void delete_on_hide();
-
-      void show();
 };
 
 void show_message(const std::string &msg, const std::string &title = "", const std::string &sprite = "");
