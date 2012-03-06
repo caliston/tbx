@@ -31,11 +31,40 @@
 #include "fileraction.h"
 #include "swixcheck.h"
 #include "path.h"
+#include "wimpmessagelistener.h"
+#include "command.h"
+#include "application.h"
 
 #include <swis.h>
 #include <stdexcept>
 
 namespace tbx {
+
+// Internal class to detect when the FilerAction task has finished
+// Looks out for task finished message for this task
+class FilerActionTaskFinished :
+   public WimpUserMessageListener
+{
+    int _handle;
+    FilerActionFinishedListener *_listener;
+
+public:
+    FilerActionTaskFinished(int handle, FilerActionFinishedListener *listener) :
+       _handle(handle), _listener(listener)
+    {
+       app()->add_user_message_listener(0x400c3, this);
+    };
+
+ 	virtual void user_message(WimpMessageEvent &event)
+ 	{
+ 	    if (event.message().sender_task_handle() == _handle)
+ 	    {
+ 	       _listener->fileraction_finished();
+ 	       app()->remove_user_message_listener(0x400c3, this);
+ 	       delete this;
+ 	    }
+ 	}
+};
 
 /**
  * Constructor with no parameters
@@ -334,6 +363,40 @@ void FilerAction::start()
 			reinterpret_cast<int>("Filer_Action"),
 			&_handle
 			));
+}
+
+
+/**
+ * Turn on or off verbose window while filer action is running
+ *
+ * Does nothing if filer action is not running
+ *
+ * @param on true to turn verbose mode on
+ */
+void FilerAction::verbose(bool on)
+{
+   if (_handle)
+   {
+       WimpMessage filer_control_action(0x406, 6);
+       filer_control_action.word(5) = on ? 1 : 2;
+       filer_control_action.send(WimpMessage::User, _handle);
+   }
+}
+
+/**
+ * Add a listener for when the filer action has finished.
+ *
+ * This listener must be added after the action has been run or it
+ * will be ignored.
+ *
+ * @param listener listener to add
+ */
+void FilerAction::add_finished_listener(FilerActionFinishedListener *listener)
+{
+    if (_handle)
+    {
+         new FilerActionTaskFinished(_handle, listener);
+    }
 }
 
 

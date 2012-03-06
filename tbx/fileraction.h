@@ -32,8 +32,23 @@
 #define TBX_FILERACTION_H_
 
 #include <string>
+#include "listener.h"
 
 namespace tbx {
+
+/**
+ * Listener for filer action finished
+ */
+class FilerActionFinishedListener : public tbx::Listener
+{
+    public:
+       virtual ~FilerActionFinishedListener() {}
+
+       /**
+        * Called when the filer action has finished.
+        */
+       virtual void fileraction_finished() = 0;
+};
 
 /**
  * Class to use the RISC OS desktop filer to perform multi-tasking
@@ -53,6 +68,15 @@ public:
 	FilerAction(const std::string &object_name);
 	FilerAction(const std::string &dir_name, const std::string &objects);
 	virtual ~FilerAction();
+
+    /**
+     * Return the handle of the filer action task.
+     *
+     * This will be 0 until one of the action methods is called
+     *
+     * @return WIMP task handle for filer action task
+     */
+    int task_handle() const {return _handle;}
 
 	void directory(const std::string &dir_name);
 	void add_objects(const std::string &objects);
@@ -82,6 +106,10 @@ public:
 	void copy_local(const std::string &leaf_name, int options = NONE);
 	void stamp(int options = NONE);
 	void find(const std::string &find_object, int options = NONE);
+
+    void verbose(bool on);
+
+    void add_finished_listener(FilerActionFinishedListener *listener);
 
 private:
 	void start();
