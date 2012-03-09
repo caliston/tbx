@@ -69,6 +69,8 @@ class MessageWindow : public TextDisplayWindow
 };
 
 void show_message(const std::string &msg, const std::string &title = "", const std::string &sprite = "");
+void show_message_as_menu(const std::string &msg, const std::string &title = "", const std::string &sprite = "");
+
 
 };
 

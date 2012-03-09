@@ -60,6 +60,7 @@ TextDisplayWindow::TextDisplayWindow(const std::string &template_name,
 		_text(text),
 		_delete_on_hide(false)
 {
+	_window.add_redraw_listener(this);
 }
 
 

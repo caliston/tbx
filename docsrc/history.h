@@ -70,4 +70,6 @@
  *   at the raw messages it recieves.
  * - Added Gadget::move_by to move a gadget relative to current position
  * - Add TextDisplayWindow class to display a window resized to a text message
+ * - Added show_question function and QuestionWindow class to make it easy to
+ * display a question in a window (in questionwindow.h)
  */

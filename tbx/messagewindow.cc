@@ -63,6 +63,38 @@ void show_message(const std::string &msg, const std::string &title /*=""*/, cons
 }
 
 /**
+ * Show a message in a window centred in the screen in the same way as
+ * a menu is shown.
+ *
+ * This shows the window and returns immediately. It is appropriate to use
+ * instead of report_error as it allows the current and all other applications
+ * to multi-task while the mesasge is shown.
+ *
+ * The window is closed if the OK button is selected or the mouse is clicked
+ * outside the window.
+ *
+ * To use this function a window template called "Message" must be in your
+ * resources. A suitable window is provided in TbxRes in the !TBX directory.
+ * For full details of this window see the MessageWindow class.
+ *
+ * @param msg The text of the message. This can be multi-line and the window
+ *  will be resized to fit it.
+ * @param title The title of the message box. Use "" (the default) to keep
+ * the title from the Message resource.
+ * @param sprite_name The name of the sprite for the window. Use "" (the
+ * default) to keep the sprite name in the Message resource. Useful sprites for
+ * this provided with RISC OS include "information", "warning" and "error".
+ */
+void show_message_as_menu(const std::string &msg, const std::string &title /*=""*/, const std::string &sprite_name/*=""*/)
+{
+   MessageWindow *mw = new MessageWindow(msg);
+   if (!sprite_name.empty()) mw->sprite(sprite_name);
+   if (!title.empty()) mw->title(title);
+   mw->delete_on_hide();
+   mw->show_as_menu();
+}
+
+/**
  * Construct a message window with the give message
  *
  * @param msg The message for the window
