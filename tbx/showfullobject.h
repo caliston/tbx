@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2012 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -83,14 +83,7 @@ public:
 
 	using ShowPointObject::show_as_menu;
 
-	void show_as_menu(const ShowFullSpec &full_spec);
-	void show_as_menu(const ShowFullSpec &full_spec, const Object &parent);
-	void show_as_menu(const ShowFullSpec &full_spec, const Component &parent);
-
 	using ShowPointObject::show_as_submenu;
-
-	void show_as_submenu(const MenuItem &parent);
-	void show_as_submenu(const ShowFullSpec &full_spec, const MenuItem &parent);
 };
 
 }

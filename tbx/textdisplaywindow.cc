@@ -113,10 +113,11 @@ void TextDisplayWindow::show()
  */
 void TextDisplayWindow::show_as_menu()
 {
-	tbx::ShowFullSpec full_spec;
-	calc_layout(full_spec);
+//TODO: Figure out how to do this
+//	tbx::ShowFullSpec full_spec;
+//	calc_layout(full_spec);
 
-    _window.show_as_menu(full_spec);
+    _window.show_as_menu();
 }
 
 

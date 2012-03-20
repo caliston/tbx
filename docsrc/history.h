@@ -72,4 +72,6 @@
  * - Add TextDisplayWindow class to display a window resized to a text message
  * - Added show_question function and QuestionWindow class to make it easy to
  * display a question in a window (in questionwindow.h)
+ * - Remove show_as_menu and show_as_submenu with ShowFullSpec parameter from
+ * ShowFullObject class as the full spec does not affect the show.
  */
