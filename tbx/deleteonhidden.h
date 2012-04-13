@@ -69,6 +69,8 @@ namespace tbx
 	class DeleteObjectOnHidden  : public tbx::HasBeenHiddenListener
 	{
 	public:
+		virtual ~DeleteObjectOnHidden() {}
+
 		/**
 		 * Overridden has_been_hidden call back to delete the toolbox
 		 * object that raised the event
