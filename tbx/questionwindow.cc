@@ -29,6 +29,7 @@
 
 #include "questionwindow.h"
 #include "actionbutton.h"
+#include "message.h"
 
 namespace tbx {
 
@@ -39,14 +40,7 @@ namespace tbx {
  * This shows the window and returns immediately. The commands given
  * are run when the use clicks on the appropriate button.
  *
- * To use this function a window template called "Question" must be in your
- * resources. A suitable window is provided in TbxRes in the !TBX directory.
- * For full details of this window see the QuestionWindow class.
- *
- * @param question The text of the question. This can be multi-line and the window
- *  will be resized to fit it.
- * @param title The title of the message box. Use "" to keep
- * the title from the Question resource.
+ * @param title The title of the message box. Use "" for the default.
  * @param yes_command command to run if yes is chosen or 0 for none.
  * @param no_command command to run if no is chosen or 0 (the default) for none
  */
@@ -68,16 +62,11 @@ void show_question(const std::string &question, const std::string &title, tbx::C
  *
  * Selecting the "Yes" or "No" button or clicking outside the window close
  * the window. A command is not run if the window is closed by clicking
- * outsied of it.
- *
- * To use this function a window template called "Question" must be in your
- * resources. A suitable window is provided in TbxRes in the !TBX directory.
- * For full details of this window see the QuestionWindow class.
+ * outside of it.
  *
  * @param question The text of the question. This can be multi-line and the window
  *  will be resized to fit it.
- * @param title The title of the message box. Use "" to keep
- * the title from the Question resource.
+ * @param title The title of the message box. Use "" to use the default.
  * @param yes_command command to run if yes is chosen or 0 for none.
  * @param no_command command to run if no is chosen or 0 (the default) for none
  */
@@ -97,8 +86,9 @@ void show_question_as_menu(const std::string &question, const std::string &title
  * @param question The question for the window
  */
 QuestionWindow::QuestionWindow(const std::string &question)
-   : TextDisplayWindow("Question", -1,-1, 1,2, question)
+   : TextDisplayWindow(question, "Yes;No",0,1)
 {
+  title("Question from " + message("_TaskName"));
 }
 
 QuestionWindow::~QuestionWindow()
@@ -112,7 +102,7 @@ QuestionWindow::~QuestionWindow()
  */
 void QuestionWindow::add_yes_command(tbx::Command *yes_command)
 {
-	tbx::ActionButton yes_button = _window.gadget(1);
+	tbx::ActionButton yes_button = _window.gadget(10);
 	yes_button.add_selected_command(yes_command);
 }
 
@@ -123,7 +113,7 @@ void QuestionWindow::add_yes_command(tbx::Command *yes_command)
  */
 void QuestionWindow::add_no_command(tbx::Command *no_command)
 {
-	tbx::ActionButton no_button = _window.gadget(2);
+	tbx::ActionButton no_button = _window.gadget(11);
 	no_button.add_selected_command(no_command);
 }
 

@@ -34,32 +34,38 @@
 #include "font.h"
 #include "modeinfo.h"
 #include "button.h"
+#include "res/reswindow.h"
+#include "res/resbutton.h"
+#include "res/resactionbutton.h"
+#include "application.h"
+#include "margin.h"
+#include <cstring>
 
 namespace tbx
 {
 
 /**
- * Construct a text display window with the given text
+ * Construct a text display window with the given text and buttons
  *
- * @param template_name window template name
- * @param first_bottom_component ID of first component to move down (or -1 for none)
- * @param last_bottom_component ID of last component to move down (or -1 for none)
- * @param first_bottom_right_gadget ID of first component to move down and right (or -1 for none)
- * @param last_bottom_right_gadget ID of last component to move down and right (or -1 for none)
+ * If the default button or cancel button are given a value other than
+ * -1 the window will be given the input focus when shown.
+ *
  * @param text The message for the window
+ * @param buttons string contains semi-colon seperated list of button text
+ * @param default_button index (from 0) of button that is default button
+ *        or -1 if there is not a default button
+ * @param cancel_button index (from 0) of button that is cancel button
+ *        or -1 if there is not a cancel button
+ * @param button_width width of buttons (default 200 OS units)
  */
-TextDisplayWindow::TextDisplayWindow(const std::string &template_name,
-		ComponentId first_bottom_gadget, ComponentId last_bottom_gadget,
-		ComponentId first_bottom_right_gadget, ComponentId last_bottom_right_gadget,
-		const std::string &text) :
-		_window(template_name),
-		_first_bottom_gadget(first_bottom_gadget),
-		_last_bottom_gadget(last_bottom_gadget),
-		_first_bottom_right_gadget(first_bottom_right_gadget),
-		_last_bottom_right_gadget(last_bottom_right_gadget),
-		_text(text),
-		_delete_on_hide(false)
+TextDisplayWindow::TextDisplayWindow(const std::string &text,
+        const char *buttons,
+	    int default_button /*= -1*/, int cancel_button /*= -1*/,
+	    int button_width /*= 200*/) :
+		_text(text)
 {
+    create_window(buttons, default_button, cancel_button, button_width);
+
 	_window.add_redraw_listener(this);
 }
 
@@ -97,10 +103,7 @@ void TextDisplayWindow::delete_on_hide()
  */
 void TextDisplayWindow::show()
 {
-	tbx::ShowFullSpec full_spec;
-	calc_layout(full_spec);
-
-    _window.show(full_spec);
+    _window.show();
 }
 
 /**
@@ -113,71 +116,159 @@ void TextDisplayWindow::show()
  */
 void TextDisplayWindow::show_as_menu()
 {
-//TODO: Figure out how to do this
-//	tbx::ShowFullSpec full_spec;
-//	calc_layout(full_spec);
-
     _window.show_as_menu();
 }
 
 
 /**
- * Calculate layout for the window
+ * Helper function to create the window
  *
- * @param full_spec updated so it can be passed to window::show()
+ * @param buttons semi-colon separated list of button text
+ * @param default_button index (from 0) of button that is default button
+ *        or -1 if there is not a default button
+ * @param cancel_button index (from 0) of button that is cancel button
+ *        or -1 if there is not a cancel button
+ * @param button_width width of buttons (default 200 OS units)
  */
-void TextDisplayWindow::calc_layout(tbx::ShowFullSpec &full_spec)
+void TextDisplayWindow::create_window(const char *buttons,
+       int default_button, int cancel_button,
+	   int button_width)
 {
-    tbx::Gadget text_gadget = _window.gadget(0);
+    res::ResWindow twindow("TbxMessage");
+    int gap = 16; // Gap between edges and elements
+    int icon_size = 96;
+    int button_height = 68;
+    int rule_height = 8;
+    int text_height;
+    int window_width;
+    int window_height;
+    int num_buttons = 1;
+    const char *button_text = buttons;
 
-    // Get measurements
-    _text_bounds = text_gadget.bounds();
-    tbx::BBox old_bounds = _text_bounds;
-    tbx::WindowInfo winfo;
-    _window.get_info(winfo);
-    tbx::BBox wextent = winfo.work_area();
-
-    int max_width = wextent.width() - (winfo.visible_area().bounds().width()  - _text_bounds.width());
-
-    full_spec.visible_area = winfo.visible_area();
-
-    if (calc_line_ends(max_width))
+    while ((button_text = std::strchr(button_text, ';')) != 0)
     {
-        int extra_width = _text_bounds.width() - old_bounds.width();
-        int extra_height = _text_bounds.height() - old_bounds.height();
-        text_gadget.bounds(_text_bounds);
-        full_spec.visible_area.bounds().max.x += extra_width;
-        full_spec.visible_area.bounds().min.y -= extra_height;
-
-        ComponentId comp_id;
-        if (_first_bottom_gadget != -1)
-        {
-        	for (comp_id = _first_bottom_gadget; comp_id <= _last_bottom_gadget; ++comp_id)
-        	{
-        		tbx::Gadget g = _window.gadget(comp_id);
-        		g.move_by(0, -extra_height);
-
-        	}
-        }
-
-        if (_first_bottom_right_gadget != -1)
-        {
-        	for (comp_id = _first_bottom_right_gadget; comp_id <= _last_bottom_right_gadget; ++comp_id)
-        	{
-        		tbx::Gadget g = _window.gadget(comp_id);
-        		g.move_by(extra_width, -extra_height);
-        	}
-        }
+       num_buttons++;
+       button_text++;
     }
 
-    full_spec.wimp_window = tbx::ShowFullSpec::WINDOW_SHOW_TOP;
-    // Centre window on screen
     tbx::ModeInfo mode_info;
     tbx::Size screen_size = mode_info.screen_size();
-    full_spec.visible_area.bounds().move_to(
-        (screen_size.width - full_spec.visible_area.bounds().width())/2,
-        (screen_size.height - full_spec.visible_area.bounds().height())/2
-        );
+
+    int min_width = (button_width + gap) * num_buttons + gap;
+    int max_width = screen_size.width / 2;
+
+    if (min_width < 256) min_width = 256;
+    if (max_width < min_width) max_width = min_width;
+
+    _text_bounds = BBox(gap * 2 + icon_size,
+                        -gap - 40,
+                        gap * 2 + icon_size + min_width,
+                        -gap);
+    calc_line_ends(max_width);
+
+    if (_text_bounds.height() < icon_size)
+    {
+       text_height = icon_size;
+       _text_bounds.move(0, (_text_bounds.height() - text_height) / 2);
+    } else text_height = _text_bounds.height();
+
+    window_width = _text_bounds.width();
+    window_width += icon_size + gap * 3;
+    if (window_width < min_width) window_width = min_width;
+    window_height = text_height;
+    window_height += gap * 4 + button_height;
+
+    // Set window flags
+    twindow.title_text("Message");
+    twindow.title_buflen(64);
+    twindow.auto_redraw(false);
+    twindow.hscrollbar(false);
+    twindow.vscrollbar(false);
+    twindow.back_icon(false);
+    twindow.close_icon(false);
+    twindow.toggle_size_icon(false);
+
+    // size window and centre on screen
+    int wx = (screen_size.width - window_width)/2;
+    int wy = (screen_size.height - window_height)/2;
+    twindow.visible_xmin(wx);
+    twindow.visible_xmax(wx + window_width);
+    twindow.visible_ymin(wy);
+    twindow.visible_ymax(wy + window_height);
+
+    twindow.work_xmin(0);
+    twindow.work_xmax(window_width);
+    twindow.work_ymin(-window_height);
+    twindow.work_ymax(0);
+
+    // Add Icon to left - actual icon used set in derived classes
+    res::ResButton icon;
+    icon.component_id(0);
+    icon.is_sprite(true);
+    icon.hcentred(true);
+    icon.vcentred(true);
+    icon.value("information");
+    icon.xmin(gap);
+    icon.xmax(icon_size + gap);
+    icon.ymin(-text_height - gap);
+    icon.ymax(-gap);
+
+    twindow.add_gadget(icon);
+
+    // Add Icon as rule off
+    res::ResButton rule;
+    rule.component_id(99);
+    rule.has_text(true);
+    rule.hcentred(true);
+    rule.vcentred(true);
+    rule.has_border(true);
+    rule.validation("R2");
+    rule.xmin(0);
+    rule.xmax(window_width);
+    rule.ymax(-gap * 2 - text_height);
+    rule.ymin(rule.ymax() - rule_height);
+    twindow.add_gadget(rule);
+
+    res::ResActionButton button;
+    bool get_focus = false;
+    char *text_end;
+
+    button_text = buttons;
+    button.xmin(window_width - (button_width + gap) * (num_buttons+1));
+    button.ymin(-window_height + gap);
+    button.ymax(-window_height + button_height + gap);
+
+    for (int j = 0; j < num_buttons; j++)
+    {
+        text_end = std::strchr(button_text, ';');
+        if (text_end)
+        {
+           button.text(std::string(button_text, text_end - button_text));
+           button_text = text_end + 1;
+        } else button.text(button_text);
+
+        button.component_id(10+j);
+        if (j == default_button)
+        {
+           button.is_default(true);
+           get_focus = true;
+        }
+
+        if (j == cancel_button)
+        {
+           button.cancel(true);
+           get_focus = true;
+        }
+
+        button.xmin(button.xmin() + button_width + gap);
+        button.xmax(button.xmin() + button_width);
+
+        twindow.add_gadget(button);
+    }
+
+    if (get_focus) twindow.default_focus(res::FOCUS_TO_WINDOW);
+
+    _window = Window(twindow);
 }
 
 /**
@@ -277,3 +368,4 @@ void TextDisplayWindow::has_been_hidden (const tbx::EventInfo &hidden_event)
 
 
 } /* namespace tbx */
+

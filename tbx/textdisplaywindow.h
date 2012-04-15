@@ -43,29 +43,17 @@ namespace tbx {
 
 /**
  * Class to show some text in a window in the centre of the screen,
- * resizing the window to fit the text if necessary.
+ * with an icon to the left and one or buttons at the bottom.
  *
- * Gadgets that should be moved if the window is expanded can be specified
+ * The window is created to fit the text.
  *
- * To use this window you must have a template in
- * your resources with the following characteristics.
+ * The buttons are created with the component ids 10 and up.
  *
- * The visible area shown is the minimum size of the window.
- * The extent of the window sets the maximum width and height of the
- * window.
+ * Subclasses can use the _window protected member to modify
+ * the window and add event handlers.
  *
- * Gadgets:
- *    0 - Button with the needs help flag set. This is used as a guide
- *        to position the message and is resized if necessary.
- *
- * The "Message" and "Question" windows that are used by the derived classes
- * MessageWindow and QuestionWindow are provided in TbxRes in the !TBX
- * directory which you can copy to base your own window on.
- *
- * If the depth or width of the window is changed due to the size of the
- * text the specified gadgets are moved to stay at the same relative position
- * to the bottom right of the window or moved down to stay at the
- * same relative position to the bottom of the window.
+ * The MessageWindow and QuestionWindow both derived from
+ * this class.
  */
 class TextDisplayWindow  :
 	public tbx::RedrawListener,
@@ -74,26 +62,22 @@ class TextDisplayWindow  :
 protected:
 	tbx::Window _window;
 private:
-	ComponentId _first_bottom_gadget;
-	ComponentId _last_bottom_gadget;
-	ComponentId _first_bottom_right_gadget;
-	ComponentId _last_bottom_right_gadget;
 	std::string _text;
 	std::vector<int> _line_end;
 	tbx::BBox _text_bounds;
-	bool _delete_on_hide;
 
 	virtual void redraw (const tbx::RedrawEvent &e);
 	virtual void has_been_hidden (const tbx::EventInfo &hidden_event);
 
-	void calc_layout(tbx::ShowFullSpec &full_spec);
+    void create_window(const char *buttons,
+       int default_button, int cancel_button,
+	   int button_width);
 	bool calc_line_ends(int max_width);
 
 public:
-	TextDisplayWindow(const std::string &template_name,
-			ComponentId first_bottom_gadget, ComponentId last_bottom_gadget,
-			ComponentId first_bottom_right_gadget, ComponentId last_bottom_right_gadget,
-			const std::string &text);
+	TextDisplayWindow(const std::string &text, const char *buttons,
+	   int default_button = -1, int cancel_button = -1,
+	   int button_width = 200);
 	virtual ~TextDisplayWindow();
 
     void title(const std::string &title);

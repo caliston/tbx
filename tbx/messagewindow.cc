@@ -30,6 +30,7 @@
 #include "showfullspec.h"
 #include "modeinfo.h"
 #include "button.h"
+#include "message.h"
 
 namespace tbx
 {
@@ -41,14 +42,10 @@ namespace tbx
  * instead of report_error as it allows the current and all other applications
  * to multi-task while the mesasge is shown.
  *
- * To use this function a window template called "Message" must be in your
- * resources. A suitable window is provided in TbxRes in the !TBX directory.
- * For full details of this window see the MessageWindow class.
- *
  * @param msg The text of the message. This can be multi-line and the window
  *  will be resized to fit it.
- * @param title The title of the message box. Use "" (the default) to keep
- * the title from the Message resource.
+ * @param title The title of the message box. Use "" (the default) for
+ * the default title.
  * @param sprite_name The name of the sprite for the window. Use "" (the
  * default) to keep the sprite name in the Message resource. Useful sprites for
  * this provided with RISC OS include "information", "warning" and "error".
@@ -73,14 +70,10 @@ void show_message(const std::string &msg, const std::string &title /*=""*/, cons
  * The window is closed if the OK button is selected or the mouse is clicked
  * outside the window.
  *
- * To use this function a window template called "Message" must be in your
- * resources. A suitable window is provided in TbxRes in the !TBX directory.
- * For full details of this window see the MessageWindow class.
- *
  * @param msg The text of the message. This can be multi-line and the window
  *  will be resized to fit it.
- * @param title The title of the message box. Use "" (the default) to keep
- * the title from the Message resource.
+ * @param title The title of the message box. Use "" (the default) to use
+ * the default.
  * @param sprite_name The name of the sprite for the window. Use "" (the
  * default) to keep the sprite name in the Message resource. Useful sprites for
  * this provided with RISC OS include "information", "warning" and "error".
@@ -100,8 +93,9 @@ void show_message_as_menu(const std::string &msg, const std::string &title /*=""
  * @param msg The message for the window
  */
 MessageWindow::MessageWindow(const std::string &msg) :
-    TextDisplayWindow("Message", 3,3, 1,1, msg)
+    TextDisplayWindow(msg, "OK", 0, 0)
 {
+   title("Message from " + message("_TaskName"));
 }
 
 /**
@@ -111,7 +105,7 @@ MessageWindow::MessageWindow(const std::string &msg) :
  */
 void MessageWindow::sprite(const std::string &sprite_name)
 {
-    tbx::Button sprite_gadget = _window.gadget(2);
+    tbx::Button sprite_gadget = _window.gadget(0);
     sprite_gadget.value(sprite_name);
 }
 
