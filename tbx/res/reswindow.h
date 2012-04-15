@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2012 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -38,6 +38,11 @@ typedef int *OsSpriteAreaPtr;
 namespace res
 {
 /**
+ * Constant to put default focus to the window
+ */
+const ComponentId FOCUS_TO_WINDOW = (ComponentId)-2;
+
+/**
  * Window resource object
  */
 class ResWindow : public ResObject
@@ -50,7 +55,7 @@ class ResWindow : public ResObject
       * @param name template name of the object
 	  * @param toolbar true to set defaults for a toolbar
       */
-      ResWindow(std::string name, bool toolbar = false) : 
+      ResWindow(std::string name, bool toolbar = false) :
           ResObject(name, CLASS_ID, 102, 36 + 164)
       {
 		if (toolbar) flags(16); // is a toolbar flag
@@ -151,7 +156,7 @@ class ResWindow : public ResObject
 	   *
 	   * Not normally used as there are named methods that allow access
 	   * to the individual items in the flags
-	   * 
+	   *
 	   */
 	  unsigned int flags() const {return uint_value(0);}
 
@@ -263,7 +268,7 @@ class ResWindow : public ResObject
 		*                   This is alway adjusted to allow for the full length of the help message.
 		*/
 	   void help_message(const std::string &value, int max_length = -1) {message_with_length(4, value, max_length);}
-	   
+
 	   /**
 	    * Get the maximum help message length
 		*/
@@ -354,17 +359,19 @@ class ResWindow : public ResObject
 	    * @returns the number of gadgets
 	    */
 	   int num_gadgets() const {return int_value(40);}
-		
+
 	   /**
 	    * Get the component ID of the gadget to get the default focus.
 	    *
-	    * @returns the component ID or NULL_ComponentID for none
+	    * @returns the component ID, FOCUS_TO_WINDOW if focus is on
+	    *          the window or NULL_ComponentID for none
 		*/
 	   ComponentId default_focus() const {return int_value(48);}
 	   /**
 	    * Set the component ID of the gadget to get the default focus.
 	    *
-	    * @param id the component ID or NULL_ComponentID for none
+	    * @param id the component ID, FOCUS_TO_WINDOW if focus should be
+	                on the window or NULL_ComponentID for none
 		*/
 	   void default_focus(ComponentId id) {int_value(48, id);}
 
@@ -565,15 +572,262 @@ class ResWindow : public ResObject
 	   /**
 	    * Get the window flags
 	    *
+	    * This gets all the window flags as one number, use the methods below
+	    * for a more readable way to interrogate individual window flags
+	    *
 	    * @returns the window flags
 	    */
 	   unsigned int window_flags() const {return uint_value(104);}
 	   /**
 	    * Set the window flags
 	    *
+	    * This sets all the window flags as one number, use the methods
+	    * below for a more readble way to set the individual window flags.
+	    *
 	    * @param value the new window flags
 	    */
 	   void window_flags(unsigned int value) {uint_value(104, value);}
+
+       /**
+        * Check if the window will be moveable
+        *
+        * @returns true if the window is moveable
+        */
+       bool moveable() const {return flag(104,2);}
+       /**
+        * Set if the window is moveable
+        *
+        * @param move true to make window moveable
+        */
+       void moveable(bool move) {flag(104,2,move);}
+       /**
+        * Check if window can be redrawn entirely by the WIMP.
+        *
+        * i.e there are no user graphics in the work area
+        *
+        * @returns true if WIMP can redraw whole Window
+        */
+       bool auto_redraw() const {return flag(104,16);}
+       /**
+        * Set if window can be redrawn entirely by the WIMP.
+        *
+        * i.e there are no user graphics in the work area
+        *
+        * @param on true if WIMP can redraw whole Window
+        */
+       void auto_redraw(bool on) {flag(104,16,on);}
+       /**
+        * Check if a window is a pane
+        *
+        * @returns true if the window is a pane
+        */
+       bool pane() const {return flag(104,32);}
+       /**
+        * Set if a window is a pane
+        *
+        * @param p true if the window is a pane
+        */
+       void pane(bool p) {flag(104,32,p);}
+       /**
+         * Check if window is allowed off screen
+         *
+         * @returns true if window is allowed off screen
+         */
+       bool allow_off_screen() const {return flag(104,64);}
+       /**
+        * Set if window is allowed off screen
+        *
+        * @param allow true if window is allowed off screen
+        */
+       void allow_off_screen(bool allow) {flag(104,64, allow);}
+       /**
+        * Check if a Scroll_Request event if returned with auto-repeat
+        * on the arrow icons and no auto-repeat on the outer scroll
+        * bar region.
+        *
+        * @returns if user scroll is on
+        */
+       bool user_scroll() const {return flag(104,256);}
+       /**
+        * Set if a Scroll_Request event if returned with auto-repeat
+        * on the arrow icons and no auto-repeat on the outer scroll
+        * bar region.
+        *
+        * @param scroll true to turn user scroll on
+        */
+       void user_scroll(bool scroll) {flag(104,256,scroll);}
+       /**
+        * Check if a Scroll_Request event if returned with no auto-repeat
+        * on the arrow icons and no auto-repeat on the outer scroll
+        * bar region.
+        *
+        * @returns if user scroll is on
+        */
+       bool user_scroll_debounced() const {return flag(104,512);}
+       /**
+        * Set if a Scroll_Request event if returned with no auto-repeat
+        * on the arrow icons and no auto-repeat on the outer scroll
+        * bar region.
+        *
+        * @param scroll true to turn user scroll on
+        */
+       void user_scroll_debounced(bool scroll) {flag(104,512,scroll);}
+       /**
+        * Check if window colours are given as gcol numbers
+        *
+        * @returns true if window colours are given as gcol numbers
+        */
+        bool real_colours() const {return flag(104,1024);}
+        /**
+         * Set if window colours are given as gcol numbers
+         *
+         * @param real true if window colours are given as gcol numbers
+         */
+        void real_colours(bool real) {flag(104,1024, real);}
+        /**
+         * Check if window can be opened below this
+         *
+         * @returns true if this is the top window
+         */
+         bool top_window() const {return flag(104,2048);}
+        /**
+         * Set if window can be opened below this
+         *
+         * @param tw true if this is the top window
+         */
+        void top_window(bool tw) {flag(104,2048,tw);}
+        /**
+         * Check if generates events for hot keys
+         *
+         * @returns true if events are generated for hot keys
+         */
+         bool hot_keys() const {return flag(104,4096);}
+        /**
+         * Set if generates events for hot keys
+         *
+         * @param generate true if events are generated for hot keys
+         */
+        void hot_keys(bool generate) {flag(104,4096,generate);}
+        /**
+         * Check if window is forced on screen
+         *
+         * @returns true if window if forced on screen
+         */
+         bool force_on_screen() const {return flag(104,8192);}
+        /**
+         * Set if window is forced on screen
+         *
+         * @param on true if window if forced on screen
+         */
+      void force_on_screen(bool on) {flag(104,8192,on);}
+      /**
+       * Check if right extent is ignored
+       *
+       * @returns true if right extent is ignored
+       */
+      bool ignore_right_extent() const {return flag(104,16384);}
+      /**
+       * Set if right extent is ignored
+       *
+       * @param ignore true if right extent is ignored
+       */
+      void ignore_right_extent(bool ignore) {flag(104,16384,ignore);}
+      /**
+       * Check if lower extent is ignored
+       *
+       * @returns true if lower extent is ignored
+       */
+      bool ignore_lower_extent() const {return flag(104,32768);}
+      /**
+       * Set if lower extent is ignored
+       *
+       * @param ignore true if lower extent is ignored
+       */
+      void ignore_lower_extent(bool ignore) {flag(104,32768,ignore);}
+       /**
+        * Check if window has a back icon
+        *
+        * @returns true if window has a back icon
+        */
+       bool back_icon() const {return flag(104,(1<<24));}
+       /**
+        * Set if window has a back icon
+        *
+        * @param has_icon true if window has a back icon
+        */
+       void back_icon(bool has_icon) {flag(104,(1<<24), has_icon);}
+       /**
+        * Check if window has a close icon
+        *
+        * @returns true if window has a close icon
+        */
+       bool close_icon() const {return flag(104,(1<<25));}
+       /**
+        * Set if window has a close icon
+        *
+        * @param has_icon true if window has a close icon
+        */
+       void close_icon(bool has_icon) {flag(104,(1<<25), has_icon);}
+       /**
+        * Check if window has a title bar
+        *
+        * @returns true if window has a title bar
+        */
+       bool titlebar() const {return flag(104,(1<<26));}
+       /**
+        * Set if window has a title bar
+        *
+        * @param has_tb true if window has a title bar
+        */
+       void titlebar(bool has_tb) {flag(104,(1<<26), has_tb);}
+       /**
+        * Check if window has a toggle size icon
+        *
+        * @returns true if window has a toggle size icon
+        */
+       bool toggle_size_icon() const {return flag(104,(1<<27));}
+       /**
+        * Set if window has a toggle size icon
+        *
+        * @param has_icon true if window has a toggle size icon
+        */
+       void toggle_size_icon(bool has_icon) {flag(104,(1<<27), has_icon);}
+       /**
+        * Check if window has a vertical scroll bar
+        *
+        * @returns true if window has a vertical scroll bar
+        */
+       bool vscrollbar() const {return flag(104,(1<<28));}
+       /**
+        * Set if window has a vertical scroll bar
+        *
+        * @param has_vsb true if window has a vertical scroll bar
+        */
+       void vscrollbar(bool has_vsb) {flag(104,(1<<28), has_vsb);}
+       /**
+        * Check if window has an adjust size icon
+        *
+        * @returns true if window has an adjust size icon
+        */
+       bool adjust_size_icon() const {return flag(104,(1<<29));}
+       /**
+        * Set if window has an adjust size icon
+        *
+        * @param has_icon true if window has an adjust size icon
+        */
+       void adjust_size_icon(bool has_icon) {flag(104,(1<<29), has_icon);}
+       /**
+        * Check if window has a horizontal scroll bar
+        *
+        * @returns true if window has a horizontal scroll bar
+        */
+       bool hscrollbar() const {return flag(104,(1<<30));}
+       /**
+        * Set if window has a horizontal scroll bar
+        *
+        * @param has_hsb true if window has a horizontal scroll bar
+        */
+       void hscrollbar(bool has_hsb) {flag(104,(1<<30), has_hsb);}
 
 	   /**
 	    * Get the foreground/text colour for the title bar
@@ -823,8 +1077,8 @@ class ResWindow : public ResObject
 	    * @param value title buffer length
 	    */
 	   void title_buflen(int value) {int_value(156, value);}
-	   
-	   // num_icons  at 160 (must be zero)  
+
+	   // num_icons  at 160 (must be zero)
 
 	   /**
 	    * Constant iterator for shortcuts
