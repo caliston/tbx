@@ -475,9 +475,11 @@ bool Path::create_directory() const
 }
 
 /**
- * Remove this file from the file system
+ * Remove this file or directory from the file system
  *
- * @returns true if successful
+ * @returns true  if successful or the object does not exist
+ *          false if the object is locked against deletion or is a directory
+ *                which is not empty or already open.
  */
 bool Path::remove() const
 {
