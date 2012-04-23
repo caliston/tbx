@@ -75,4 +75,5 @@
  * - Remove show_as_menu and show_as_submenu with ShowFullSpec parameter from
  * ShowFullObject class as the full spec does not affect the show.
  * - Added methods for window flags to ResWindow class
+ * - Added has_been_hidden_listener to SaveAs dialogue
  */

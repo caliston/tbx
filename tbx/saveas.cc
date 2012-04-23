@@ -24,6 +24,7 @@
 
 #include "saveas.h"
 #include "abouttobeshownlistener.h"
+#include "hasbeenhiddenlistener.h"
 #include "res/ressaveas.h"
 
 #include "swis.h"
@@ -102,6 +103,32 @@ void SaveAs::add_about_to_be_shown_listener(AboutToBeShownListener *listener)
 void SaveAs::remove_about_to_be_shown_listener(AboutToBeShownListener *listener)
 {
 	remove_listener(0x82bc0, listener);
+}
+
+/**
+ * Add listener for when save as dialogue has been hidden.
+ *
+ * This uses the same toolbox event as the dialogue completed listener, but
+ * does not return the additional information.
+ *
+ * @param listener listener to add
+ */
+void SaveAs::add_has_been_hidden_listener(HasBeenHiddenListener *listener)
+{
+	add_listener(0x82bc1, listener, has_been_hidden_router);
+}
+
+/**
+ * Remove listener for when save as dialogue has been hidden.
+ *
+ * This uses the same toolbox event as the dialogue completed listener, but
+ * does not return the additional information.
+ *
+ * @param listener listener to remove
+ */
+void SaveAs::remove_has_been_hidden_listener(HasBeenHiddenListener *listener)
+{
+	remove_listener(0x82bc1, listener);
 }
 
 

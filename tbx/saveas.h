@@ -41,6 +41,7 @@ namespace tbx {
 
 // Listener classes used by SaveAs
 class AboutToBeShownListener;
+class HasBeenHiddenListener;
 class SaveAsDialogueCompletedListener;
 class SaveAsSaveToFileHandler;
 class SaveAsFillBufferHandler;
@@ -203,6 +204,8 @@ public:
 
 	void add_about_to_be_shown_listener(AboutToBeShownListener *listener);
 	void remove_about_to_be_shown_listener(AboutToBeShownListener *listener);
+	void add_has_been_hidden_listener(HasBeenHiddenListener *listener);
+	void remove_has_been_hidden_listener(HasBeenHiddenListener *listener);
 	void add_dialogue_completed_listener(SaveAsDialogueCompletedListener *listener);
 	void remove_dialogue_completed_listener(SaveAsDialogueCompletedListener *listener);
 	void add_save_completed_listener(SaveAsSaveCompletedListener *listener);
