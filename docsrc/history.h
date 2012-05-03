@@ -77,4 +77,6 @@
  * - Added methods for window flags to ResWindow class
  * - Added has_been_hidden_listener to SaveAs dialogue
  * - Fixed slider bounds getting/setting which was switching the lower and upper bounds
+ * - Included TbxRes resource file with pre-built template as a basis for an alternative
+ * save as window.
  */
