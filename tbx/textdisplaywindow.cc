@@ -135,10 +135,11 @@ void TextDisplayWindow::create_window(const char *buttons,
 	   int button_width)
 {
     res::ResWindow twindow("TbxMessage");
-    int gap = 16; // Gap between edges and elements
-    int icon_size = 96;
-    int button_height = 68;
-    int rule_height = 8;
+    const int gap = 16; // Gap between edges and elements
+    const int right_margin = gap + gap; // Space on right
+    const int icon_size = 96;
+    const int button_height = 68;
+    const int rule_height = 8;
     int text_height;
     int window_width;
     int window_height;
@@ -154,7 +155,7 @@ void TextDisplayWindow::create_window(const char *buttons,
     tbx::ModeInfo mode_info;
     tbx::Size screen_size = mode_info.screen_size();
 
-    int min_width = (button_width + gap) * num_buttons + gap;
+    int min_width = (button_width + gap) * num_buttons + right_margin;
     int max_width = screen_size.width / 2;
 
     if (min_width < 256) min_width = 256;
@@ -173,7 +174,7 @@ void TextDisplayWindow::create_window(const char *buttons,
     } else text_height = _text_bounds.height();
 
     window_width = _text_bounds.width();
-    window_width += icon_size + gap * 3;
+    window_width += icon_size + gap  * 2 + right_margin;
     if (window_width < min_width) window_width = min_width;
     window_height = text_height;
     window_height += gap * 4 + button_height;
@@ -234,7 +235,7 @@ void TextDisplayWindow::create_window(const char *buttons,
     char *text_end;
 
     button_text = buttons;
-    button.xmin(window_width - (button_width + gap) * (num_buttons+1));
+    button.xmin(window_width - (button_width + gap) * (num_buttons+1) + gap - right_margin);
     button.ymin(-window_height + gap);
     button.ymax(-window_height + button_height + gap);
 
