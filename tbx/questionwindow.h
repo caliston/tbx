@@ -32,6 +32,7 @@
 
 #include "textdisplaywindow.h"
 #include "command.h"
+#include <vector>
 
 namespace tbx {
 
@@ -61,16 +62,19 @@ namespace tbx {
  */
 class QuestionWindow : public TextDisplayWindow
 {
+	std::vector<tbx::Command *> *_commands_to_delete;
 public:
 	QuestionWindow(const std::string &question);
 	virtual ~QuestionWindow();
+
+	void delete_commands();
 
 	void add_yes_command(tbx::Command *yes_command);
 	void add_no_command(tbx::Command *no_command);
 };
 
-void show_question(const std::string &question, const std::string &title, tbx::Command *yes_command, tbx::Command *no_command = 0);
-void show_question_as_menu(const std::string &question, const std::string &title, tbx::Command *yes_command, tbx::Command *no_command = 0);
+void show_question(const std::string &question, const std::string &title, tbx::Command *yes_command, tbx::Command *no_command = 0, bool delete_commands = false);
+void show_question_as_menu(const std::string &question, const std::string &title, tbx::Command *yes_command, tbx::Command *no_command = 0, bool delete_commands = false);
 
 } /* namespace tbx */
 
