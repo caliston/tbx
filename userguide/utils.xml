@@ -47,7 +47,7 @@
 </para>
 </section>
 
-<section><title>Reporting errors</title>
+<section><title>Reporting errors, messages and questions.</title>
 <para>
  Usually you should create an Window that is shown to report any errors
  that occur in your application. However sometimes during testing or for
@@ -57,6 +57,19 @@
  Windows until it is dismissed, which is why it is not recommended for
  standard error reporting.
 </para>
+  <para>
+    For simple messages the <function>show_message</function> can be used
+    to show a window which is sized to fit the text it is given. This
+    window does not stop user interaction with any other Windows,
+  </para>
+  <para>
+    If you wish to ask a simple yes/no type question you can use
+    <function>show_question</function>. This runs the commands it
+    is given when the user selects yes or no. It does not
+    stop interaction with any other windows. <function>show_question_as_menu</function>
+    can be used if you want the question window to be cancelled if
+    the user attempts to click anywhere else.
+  </para>
 </section>
 
 <section><title>String utilities</title>

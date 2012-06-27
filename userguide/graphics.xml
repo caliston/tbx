@@ -141,4 +141,24 @@
       by the Toolbox.
     </para>
   </section>
+  <section>
+    <title>Drawings</title>
+    <para>
+      You can output paths to the screen using vector graphics.
+      The <classname>tbx::DrawPath</classname> encapsulates methods to create
+      and display paths that will be rendered using the RISC OS Draw module.
+    </para>
+    <para>
+      Using these paths it is possible to draw shapes consisting of bezier
+      curves, control how lines are drawn (including the thickness) and
+      how shapes are filled.
+    </para>
+    <para>
+      The graphics classes contain methods to draw the outlines (stroke) or
+      fill a draw path positioning it at a given location. They internally set
+      up the transform required by the <classname>tbx::DrawPath</classname>
+      to position it and to treat the user coordinates used by the path
+      as if they were specified as OS coordinates.
+    </para>
+  </section>
 </chapter>
