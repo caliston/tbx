@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2012 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -29,6 +29,7 @@
 #include "font.h"
 #include "bbox.h"
 #include "image.h"
+#include "drawpath.h"
 #include <string>
 
 namespace tbx
@@ -461,6 +462,80 @@ namespace tbx
 		 * @param im Image to draw
 		 */
 		virtual void image(const Point &pt, const Image &im) {image(pt.x, pt.y, im);}
+
+		/**
+		 * Fill a draw path
+		 *
+		 * The path is drawn by transforming it so the user units used in it
+		 * are treated as OS coordinates.
+		 * 
+		 * @param x coordinate of bottom left to place the path
+		 * @param y coordinate of bottom left to place the path
+		 * @param path the DrawPath to fill
+		 * @param style style flags for filling. Default WINDING_NON_ZERO.
+		 * @param flatness maximum distance allowed from beizer curve when flattening it in user units.
+		 *  Defaults to 1 as this gives a good curve with the transform used.
+		 */
+		virtual void fill(int x, int y, const DrawPath &path, DrawFillStyle fill_style = WINDING_NON_ZERO, int flatness = 1) = 0;
+		/**
+		 * Fill a draw path
+		 *
+		 * The path is drawn by transforming it so the user units used in it
+		 * are treated as OS coordinates.
+		 * 
+		 * @param pt coordinates of bottom left to place the path
+		 * @param path the DrawPath to fill
+		 * @param style style flags for filling. Default WINDING_NON_ZERO.
+		 * @param flatness maximum distance allowed from beizer curve when flattening it in user units.
+		 *  Defaults to 1 as this gives a good curve with the transform used.
+		 */
+		virtual void fill(const Point &pt,  const DrawPath &path, DrawFillStyle fill_style = WINDING_NON_ZERO, int flatness = 1) {fill(pt.x, pt.y, path, fill_style, flatness);}
+
+		/**
+		 * Plot the lines in a path
+		 *
+		 * The path is drawn by transforming it so the user units used in it
+		 * are treated as OS coordinates.
+		 *
+		 * @param x coordinate of bottom left to place the path
+		 * @param y coordinate of bottom left to place the path
+		 * @param path the DrawPath to draw
+		 * @param fill_style DrawFillStyle. Default WINDING_NON_ZERO.
+		 * @param transform pointer to transformation matrix, or 0 for identity matrix
+		 * @param flatness flatness.  Defaults to 1 as this gives a good curve with the transform used.
+		 * @param thickness line thickness, or 0 for default.
+		 * If the thickness is zero then the line is drawn with the minimum width that can be used, given the limitations of the pixel size (so lines are a single pixel wide).
+		 * If the thickness is n, then the line will be drawn with a thickness of n/2 user coordinates translated to pixels on either side of the theoretical line position.
+		 * If the line thickness is non-zero, then the cap and join parameter must also be passed.
+		 * @param cap_and_join pointer to line cap and join specification (if required)
+		 * @param pointer to dash pattern, or 0 for no dashes
+		 */
+		virtual void stroke(int x, int y, const DrawPath &path,DrawFillStyle fill_style = WINDING_NON_ZERO, int flatness = 1,
+					  int thickness = 0, DrawCapAndJoin *cap_and_join = 0, DrawDashPattern *dashes = 0) = 0;
+
+		/**
+		 * Plot the lines in a path
+		 *
+		 * The path is drawn by transforming it so the user units used in it
+		 * are treated as OS coordinates.
+		 *
+		 * @param pt coordinates of bottom left to place the path
+		 * @param path the DrawPath to draw
+		 * @param fill_style DrawFillStyle. Default WINDING_NON_ZERO.
+		 * @param transform pointer to transformation matrix, or 0 for identity matrix
+		 * @param flatness flatness.  Defaults to 1 as this gives a good curve with the transform used.
+		 * @param thickness line thickness, or 0 for default.
+		 * If the thickness is zero then the line is drawn with the minimum width that can be used, given the limitations of the pixel size (so lines are a single pixel wide).
+		 * If the thickness is n, then the line will be drawn with a thickness of n/2 user coordinates translated to pixels on either side of the theoretical line position.
+		 * If the line thickness is non-zero, then the cap and join parameter must also be passed.
+		 * @param cap_and_join pointer to line cap and join specification (if required)
+		 * @param pointer to dash pattern, or 0 for no dashes
+		 */
+		virtual void stroke(const Point &pt, const DrawPath &path, DrawFillStyle fill_style = WINDING_NON_ZERO, int flatness = 1,
+			int thickness = 0, DrawCapAndJoin *cap_and_join = 0, DrawDashPattern *dashes = 0)
+		{
+			stroke(pt.x, pt.y, path, fill_style, flatness, thickness, cap_and_join, dashes);
+		}
 	};
 }
 

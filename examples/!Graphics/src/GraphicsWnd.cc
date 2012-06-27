@@ -10,6 +10,7 @@
 #include "tbx/application.h"
 #include "tbx/sprite.h"
 
+
 using namespace tbx;
 
 /**
@@ -22,6 +23,13 @@ void GraphicsWnd::auto_created(std::string template_name, Object object)
     window.add_redraw_listener(this);
     _jpeg.load("<Graphics$Dir>.bluebells");
     _draw.load("<Graphics$Dir>.Drawing");
+
+    _fish.move(30,-30);
+    _fish.bezier(100, 30, 300,200, 400,0);
+    _fish.bezier(300, -200, 100, -30, 30, 30);
+    _fish.close_line();
+    _fish.circle(360,10, 20);
+    _fish.end_path();
 }
 
 /**
@@ -136,5 +144,17 @@ void GraphicsWnd::paint(tbx::OffsetGraphics &g)
 	g.text(0, -1112, "Draw files");
 	if (_draw.is_valid()) g.image(160, -1600, _draw);
 	else g.text(160, -1112, "Unable to load 'Drawing' image");
+
+	g.text(0, -1328, "Drawing paths");
+
+	g.foreground(tbx::Colour(255,0,0));
+	g.fill(160, -1400, _fish);
+
+	// if you want a one pixel line you can just call
+	// g.stroke(160, -1400, _fish);
+
+	g.foreground(tbx::Colour::black);
+	tbx::DrawCapAndJoin caps;
+	g.stroke(160, -1400, _fish, tbx::WINDING_NON_ZERO,1,8,&caps);
 
 }

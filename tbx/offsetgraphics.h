@@ -121,6 +121,22 @@ namespace tbx
 		// Images
 		virtual void image(int x, int y, const Image &image) {OSGraphics::image(x + _offset_x, y + _offset_y, image);}
 		virtual void image(const Point &pt, const Image &im) {OSGraphics::image(pt.x + _offset_x, pt.y + _offset_y, im);}
+
+		// Draw paths
+		virtual void fill(int x, int y, const DrawPath &path, DrawFillStyle fill_style = WINDING_NON_ZERO, int flatness = 1) {OSGraphics::fill(x + _offset_x, y + _offset_y, path, fill_style, flatness);}
+		virtual void fill(const Point &pt, const DrawPath &path, DrawFillStyle fill_style = WINDING_NON_ZERO, int flatness = 1) {OSGraphics::fill(pt.x + _offset_x, pt.y + _offset_y, path, fill_style, flatness);}
+		virtual void stroke(int x, int y, const DrawPath &path,DrawFillStyle fill_style = WINDING_NON_ZERO, int flatness = 1,
+					  int thickness = 0, DrawCapAndJoin *cap_and_join = 0, DrawDashPattern *dashes = 0)
+		{
+			OSGraphics::stroke(x + _offset_x, y + _offset_y, path, fill_style, flatness,
+					  thickness, cap_and_join, dashes);
+		}
+		virtual void stroke(const Point &pt, const DrawPath &path,DrawFillStyle fill_style = WINDING_NON_ZERO, int flatness = 1,
+					  int thickness = 0, DrawCapAndJoin *cap_and_join = 0, DrawDashPattern *dashes = 0)
+		{
+			OSGraphics::stroke(pt.x + _offset_x, pt.y + _offset_y, path, fill_style, flatness,
+					  thickness, cap_and_join, dashes);
+		}
 	};
 }
 

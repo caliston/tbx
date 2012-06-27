@@ -1,7 +1,7 @@
 /*
  * tbx RISC OS toolbox library
  *
- * Copyright (C) 2010 Alan Buckley   All Rights Reserved.
+ * Copyright (C) 2010-2012 Alan Buckley   All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -31,6 +31,8 @@
 #ifndef TBX_DRAWTRANSFORM_H_
 #define TBX_DRAWTRANSFORM_H_
 
+#include "fixed16.h"
+
 namespace tbx
 {
 /**
@@ -51,18 +53,16 @@ namespace tbx
  * Scaling the x axis uses a, while the y axis uses d.
  * Rotation can be performed by setting
  *   a = cos(angle), b= sin(angle), c = -sin(angle) and d = cos(angle)
- *   a, b, c and d given with the top two bytes as the integer part and the bottom two
- *   bytes are the fractional part.
+ *   a, b, c and d given in 16.16 bit fixed point.
  *   e and f are as 256th of an OS unit.
- *
  */
 	class DrawTransform
 	{
 	public:
-		int a; //!< Fixed 16.16 top left of transform matrix
-		int b; //!< Fixed 16.16 top middle of transform matrix
-		int c; //!< Fixed 16.16 middle left of transform matrix
-		int d; //!< Fixed 16.16 middle of transform matrix
+		Fixed16 a; //!< Top left of transform matrix
+		Fixed16 b; //!< Top middle of transform matrix
+		Fixed16 c; //!< Middle left of transform matrix
+		Fixed16 d; //!< Middle of transform matrix
 		int e; //!< Translation in x direction in 256th of an OS unit
 		int f; //!< Translation in y direction in 256th of an OS unit
 
@@ -70,20 +70,39 @@ namespace tbx
 		 * Create the identity draw transform.
 		 * i.e. a transformed that does not move anything
 		 */
-		DrawTransform() {a = d = (1<<16); b = c = e = f = 0;}
+		DrawTransform() {a = d = 1; b = c = e = f = 0;}
 
 		/**
 		 * Set transform translation in os units
 		 */
-		void translate_os(int x, int y) {e = x * 256;f = y * 256;}
+		void translate_os(int x, int y) {e = x << 8;f = y << 8;}
 		/**
 		 * Set transform translation in os units
 		 */
-		void translate_os_x(int x) {e = x * 256;}
+		void translate_os_x(int x) {e = x << 8;}
 		/**
 		 * Set transform translation in os units
 		 */
-		void translate_os_y(int y) {f = y * 256;}
+		void translate_os_y(int y) {f = y << 8;}
+
+		/**
+		 * Set matrix to scale without rotation
+		 *
+		 * @param scale integer to scale by
+		 */
+		void scale(int scale) {a=d=scale;b=c=0;}
+
+		/**
+		 * Set matrix to scale without rotation
+		 *
+		 * @param scale Fixed16 to scale by
+		 */
+		void scale(const Fixed16 &scale) {a=d=scale;b=c=0;}
+
+		/**
+		 * Set matrix scale so 1 user unit = 1 os unit
+		 */
+		void scale_os() {a=d=256;b=c=0;}
 	};
 }
 

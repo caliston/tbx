@@ -1,5 +1,5 @@
 // GraphicsWnd.h
-// Alan Buckley - Nov 2010
+// Alan Buckley - Nov 2010-2012
 // This is released under the same COPYRIGHT as TBX
 //
 // Handler for the the Window we are showing the graphics in
@@ -13,6 +13,7 @@
 #include "tbx/window.h"
 #include "tbx/jpeg.h"
 #include "tbx/drawfile.h"
+#include "tbx/drawpath.h"
 
 /**
  * Class to set up listeners on, and paint graphics to a window.
@@ -24,6 +25,7 @@ class GraphicsWnd
 	  // Example non-sprite images
 	  tbx::JPEG _jpeg;
 	  tbx::DrawFile _draw;
+	  tbx::DrawPath _fish;
 public:
     virtual void auto_created(std::string template_name, tbx::Object object);
 	virtual void redraw(const tbx::RedrawEvent &e);

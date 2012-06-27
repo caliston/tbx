@@ -400,6 +400,29 @@ void OSGraphics::image(int x, int y, const Image &image)
 }
 
 /**
+ * Fill an draw path at the given location
+ */
+void OSGraphics::fill(int x, int y, const DrawPath &path, DrawFillStyle fill_style /*= WINDING_NON_ZERO*/, int flatness /*= 1*/)
+{
+	DrawTransform trans;
+	trans.translate_os(x,y);
+	trans.scale_os();
+	path.fill(fill_style, &trans, flatness);
+}
+
+/**
+ * Draw lines of a draw path at the given location
+ */
+void OSGraphics::stroke(int x, int y, const DrawPath &path,DrawFillStyle fill_style /* = WINDING_NON_ZERO*/, int flatness /* = 1*/,
+					  int thickness /* = 0*/, DrawCapAndJoin *cap_and_join /* = 0*/, DrawDashPattern *dashes /* = 0*/)
+{
+	DrawTransform trans;
+	trans.translate_os(x,y);
+	trans.scale_os();
+	path.stroke(fill_style, &trans, flatness, thickness, cap_and_join, dashes);
+}
+
+/**
  * Clear the current graphics window to the background colour
  */
 void OSGraphics::clear()

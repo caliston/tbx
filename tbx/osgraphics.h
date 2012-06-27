@@ -99,6 +99,11 @@ namespace tbx
 		// Images
 		virtual void image(int x, int y, const Image &image);
 
+		// Draw paths
+		virtual void fill(int x, int y, const DrawPath &path, DrawFillStyle fill_style = WINDING_NON_ZERO, int flatness = 1);
+		virtual void stroke(int x, int y, const DrawPath &path,DrawFillStyle fill_style = WINDING_NON_ZERO, int flatness = 1,
+					  int thickness = 0, DrawCapAndJoin *cap_and_join = 0, DrawDashPattern *dashes = 0);
+
 		// OS Graphics specific functions
 		void clear();
 
