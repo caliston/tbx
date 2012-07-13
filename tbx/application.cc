@@ -606,3 +606,21 @@ bool Application::owns_window(WindowHandle window_handle, IconHandle icon_handle
 	WimpMessage msg(0,5);
 	return (msg.send(WimpMessage::Acknowledge, window_handle, icon_handle) == _task_handle);
 }
+
+
+/**
+ *  Start a child task from this application.
+ *
+ *  This call returns when the task called calls Wimp_Poll or after it finishes.
+ *
+ *  @param command command line to start the task
+ *  @returns handle of task started if it's still alive or 0
+ *  @throws OsError Start task failed
+ */
+int Application::start_wimp_task(std::string command)
+{
+	int handle;
+	swix_check(_swix(Wimp_StartTask, _IN(0)|_OUT(0), command.c_str(), &handle));
+	return handle;
+}
+
