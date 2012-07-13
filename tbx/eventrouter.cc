@@ -361,7 +361,7 @@ void EventRouter::remove_object_listener(ObjectId handle, ComponentId component_
 			prev = item;
 			item = item->next;
 		}
-		if (item && item->action == action && item->listener == listener && item->component_id != component_id)
+		if (item && item->action == action && item->listener == listener && item->component_id == component_id)
 		{
 			if (item == _running_object_item) _remove_running = true;
 			else
@@ -400,7 +400,7 @@ void EventRouter::set_object_handler(ObjectId handle, int action, Listener *list
 		}
 	} else if (listener == 0)
 	{
-		remove_object_listener(handle, NULL_ComponentId, action, listener);
+		remove_object_listener(handle, NULL_ComponentId, action, item->listener);
 	} else
 	{
 		item->listener = listener;

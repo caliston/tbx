@@ -48,16 +48,6 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.base.426588506" name="Cygwin C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.base"/>
 						</toolChain>
 					</folderInfo>
-					<folderInfo id="cdt.managedbuild.config.gnu.cygwin.lib.debug.2143117164.479405416" name="/" resourcePath="examples">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.cygwin.lib.debug.2053678258" name="Cygwin GCC" superClass="cdt.managedbuild.toolchain.gnu.cygwin.lib.debug" unusedChildren="">
-							<tool id="cdt.managedbuild.tool.gnu.assembler.cygwin.lib.debug.1745444890" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.lib.debug.501602755"/>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.cygwin.lib.debug.273863787" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.cygwin.lib.debug.535492089"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.lib.debug.854770546" name="Cygwin C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.lib.debug.1278851034"/>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.lib.debug.151634567" name="Cygwin C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.lib.debug.617741205"/>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.cygwin.base.997701558" name="Cygwin C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.base.1816546129"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.base.1854895940" name="Cygwin C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.base.426588506"/>
-						</toolChain>
-					</folderInfo>
 					<sourceEntries>
 						<entry excluding="examples|!TBX|tests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
@@ -74,6 +64,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/tbx"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/tbx/Release"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="tbx"/>
 					</externalSetting>
 				</externalSettings>
 				<extensions>
@@ -90,17 +81,21 @@
 						<toolChain id="cdt.managedbuild.toolchain.gnu.cygwin.lib.release.1198189082" name="Cygwin GCC" superClass="cdt.managedbuild.toolchain.gnu.cygwin.lib.release">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.cygwin.lib.release.1259868761" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.cygwin.lib.release"/>
 							<builder buildPath="${workspace_loc:/tbx/Release}" id="cdt.managedbuild.target.gnu.builder.cygwin.lib.release.622024394" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.cygwin.lib.release"/>
-							<tool id="cdt.managedbuild.tool.gnu.assembler.cygwin.lib.release.109217404" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.lib.release">
+							<tool command="arm-unknown-riscos-as" id="cdt.managedbuild.tool.gnu.assembler.cygwin.lib.release.109217404" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.lib.release">
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.746592214" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.cygwin.lib.release.1037659546" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.cygwin.lib.release"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.lib.release.1582153526" name="Cygwin C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.lib.release">
-								<option id="gnu.cpp.compiler.cygwin.lib.release.option.optimization.level.528761721" name="Optimization Level" superClass="gnu.cpp.compiler.cygwin.lib.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
+							<tool command="/home/riscos/cross/bin/arm-unknown-riscos-ar" id="cdt.managedbuild.tool.gnu.archiver.cygwin.lib.release.1037659546" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.cygwin.lib.release"/>
+							<tool command="/home/riscos/cross/bin/arm-unknown-riscos-g++" id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.lib.release.1582153526" name="Cygwin C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.lib.release">
+								<option id="gnu.cpp.compiler.cygwin.lib.release.option.optimization.level.528761721" name="Optimization Level" superClass="gnu.cpp.compiler.cygwin.lib.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.more" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.cygwin.lib.release.option.debugging.level.2142624708" name="Debug Level" superClass="gnu.cpp.compiler.cygwin.lib.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.include.paths.1708702917" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;C:\Misc\cygwin\home\riscos\cross\include\c++\4.1.1&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Misc\cygwin\home\riscos\cross\arm-unknown-riscos\include\libunixlib&quot;"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.cygwin.1628430113" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input.cygwin"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.lib.release.1062522078" name="Cygwin C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.lib.release">
-								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.cygwin.lib.release.option.optimization.level.2112458441" name="Optimization Level" superClass="gnu.c.compiler.cygwin.lib.release.option.optimization.level" valueType="enumerated"/>
+							<tool command="arm-unknown-riscos-gcc" id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.lib.release.1062522078" name="Cygwin C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.lib.release">
+								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.cygwin.lib.release.option.optimization.level.2112458441" name="Optimization Level" superClass="gnu.c.compiler.cygwin.lib.release.option.optimization.level" value="gnu.c.optimization.level.more" valueType="enumerated"/>
 								<option id="gnu.c.compiler.cygwin.lib.release.option.debugging.level.488014847" name="Debug Level" superClass="gnu.c.compiler.cygwin.lib.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.cygwin.1284011331" superClass="cdt.managedbuild.tool.gnu.c.compiler.input.cygwin"/>
 							</tool>
@@ -108,6 +103,9 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.base.333346809" name="Cygwin C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.base"/>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="tests|examples" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>

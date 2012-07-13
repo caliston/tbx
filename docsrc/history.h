@@ -30,6 +30,7 @@
  * - Graphics classes modified to allow filling and stroking of draw paths, with the
  * user units in the draw path mapped to OS units.
  * - DrawTransform class modified to use new Fixed16 class to represent the 16.16 bit fixed point values in it.
+ * - Fixed removing individual events or handlers
  *
  * <B>0.5 November 2011</B>
  * - const char * constructor for Path class
