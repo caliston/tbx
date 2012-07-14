@@ -293,6 +293,32 @@ int Font::string_width_os(const char *text, int length /*= -1*/)
 }
 
 /**
+ * Get height of string in os units
+ *
+ * @param text string to measure
+ * @param length length of string or -1 to measure to terminating char 0
+ * @parma max_width maximum width of string is os units or -1 for maximum possible
+ * @returns height of string in os units
+ */
+int Font::string_height_os(const char *text, int length /*= -1*/, int max_width /* = -1 */)
+{
+	_kernel_swi_regs regs;
+	regs.r[0] = _font_ref->handle;
+	regs.r[1] = reinterpret_cast<int>(text);
+	regs.r[2] = 256 | 512; // Handle is in r0 and kerning is on
+	regs.r[3] = (max_width == -1) ? 0x70000000 : max_width * 400;
+	regs.r[4] = -0x70000000;
+	if (length > 0) regs.r[2] |= (1<<7); // Use string length
+	regs.r[7] = length;
+
+	// Font_ScanString
+	swix_check(_kernel_swi(0x400A1, &regs, &regs));
+
+	// 400 OS units to the millipoint
+	return (-regs.r[4] + 399) / 400;
+}
+
+/**
  * Find index where to split a string to fit in the given width.
  *
  * @param text text to measure

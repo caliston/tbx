@@ -72,6 +72,7 @@ namespace tbx
 		int string_width_mp(const char *text, int length = -1);
 		int string_width_os(const std::string &text);
 		int string_width_os(const char *text, int length = -1);
+		int string_height_os(const char *text, int length = -1, int max_width  = -1);
 		void get_char_bounds_mp(BBox &bounds, char c);
 		void get_char_bounds_os(BBox &bounds, char c);
 
