@@ -25,7 +25,7 @@
 #ifndef TBX_RES_RESDCS_H
 #define TBX_RES_RESDCS_H
 
-#include "ResObject.h"
+#include "resobject.h"
 
 namespace tbx {
 namespace res {

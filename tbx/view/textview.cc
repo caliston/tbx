@@ -29,7 +29,7 @@
  *      Author: alanb
  */
 
-#include "TextView.h"
+#include "textview.h"
 #include <cstring>
 #include "../font.h"
 #include <fstream>

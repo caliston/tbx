@@ -32,6 +32,7 @@
 #include "jpeg.h"
 #include "kernel.h"
 #include <fstream>
+#include <cstring>
 
 namespace tbx {
 

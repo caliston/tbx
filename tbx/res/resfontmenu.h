@@ -25,7 +25,7 @@
 #ifndef TBX_RES_RESFONTMENU_H
 #define TBX_RES_RESFONTMENU_H
 
-#include "ResObject.h"
+#include "resobject.h"
 
 namespace tbx {
 namespace res {

@@ -28,7 +28,7 @@
  *      Author: alanb
  */
 
-#include "DocPositionWindow.h"
+#include "docpositionwindow.h"
 #include "../modeinfo.h"
 #include <iostream>
 

@@ -32,6 +32,7 @@
  * - DrawTransform class modified to use new Fixed16 class to represent the 16.16 bit fixed point values in it.
  * - Fixed removing individual events or handlers
  * - add start_wimp_task method to the Application class
+ * - Fixed incorrect case and missing c includes that stopped cross compiling with latest GCC4
  *
  * <B>0.5 November 2011</B>
  * - const char * constructor for Path class

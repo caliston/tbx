@@ -25,6 +25,7 @@
 #include "propertyset.h"
 #include <sstream>
 #include <fstream>
+#include <cstdlib>
 
 namespace tbx {
 

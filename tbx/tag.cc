@@ -49,6 +49,7 @@
 /////////////////////////////////////////////////////////////
 
 #include "tag.h"
+#include <cstdlib>
 
 using namespace std;
 using namespace tbx;

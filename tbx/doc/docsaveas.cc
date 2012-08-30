@@ -31,8 +31,8 @@
 #include "../application.h"
 #include "../res/ressaveas.h"
 
-#include "DocSaveAs.h"
-#include "DocWindow.h"
+#include "docsaveas.h"
+#include "docwindow.h"
 
 namespace tbx
 {

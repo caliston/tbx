@@ -28,8 +28,8 @@
  *      Author: alanb
  */
 
-#include "DocManager.h"
-#include "Document.h"
+#include "docmanager.h"
+#include "document.h"
 #include "../application.h"
 #include "../deleteonhidden.h"
 #include "../stringutils.h"

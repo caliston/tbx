@@ -32,6 +32,7 @@
 #include "prequitlistener.h"
 #include "application.h"
 #include "swis.h"
+#include <algorithm>
 
 namespace tbx
 {

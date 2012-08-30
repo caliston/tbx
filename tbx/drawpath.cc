@@ -27,6 +27,7 @@
 #include <swis.h>
 #include <stdexcept>
 #include <memory>
+#include <cstring>
 
 namespace tbx
 {

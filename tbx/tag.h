@@ -29,6 +29,7 @@
 #include <string>
 #include <iostream>
 #include <stdexcept>
+#include <cstdlib>
 
 namespace tbx
 {

@@ -32,6 +32,7 @@
 #include "swixcheck.h"
 
 #include <sstream>
+#include <cstring>
 
 using namespace tbx;
 
@@ -704,7 +705,8 @@ SpriteArea::SpriteArea(const SpriteArea &other)
  * Deletes current area and replaces it with a copy of
  * the given area.
  */
-SpriteArea::SpriteArea &SpriteArea::operator=(const SpriteArea &other)
+//SpriteArea::SpriteArea &SpriteArea::operator=(const SpriteArea &other)
+SpriteArea &SpriteArea::operator=(const SpriteArea &other)
 {
     if (_owns_area) delete [] _area;
     _area = 0;

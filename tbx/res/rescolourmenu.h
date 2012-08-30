@@ -25,7 +25,7 @@
 #ifndef TBX_RES_RESCOLOURMENU_H
 #define TBX_RES_RESCOLOURMENU_H
 
-#include "ResObject.h"
+#include "resobject.h"
 
 namespace tbx {
 namespace res {

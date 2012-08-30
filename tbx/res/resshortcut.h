@@ -25,7 +25,8 @@
 #ifndef TBX_RES_SHORTCUT_H
 #define TBX_RES_SHORTCUT_H
 
-#include "ResBase.h"
+#include "resbase.h"
+#include <cstring>
 
 namespace tbx
 {

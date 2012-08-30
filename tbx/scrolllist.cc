@@ -32,6 +32,7 @@
 #include "scrolllist.h"
 #include "swixcheck.h"
 #include "kernel.h"
+#include <memory>
 
 namespace tbx {
 

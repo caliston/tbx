@@ -27,7 +27,7 @@
 
 #include "listener.h"
 #include "eventinfo.h"
-#include "Gadget.h"
+#include "gadget.h"
 
 namespace tbx
 {

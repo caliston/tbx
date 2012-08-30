@@ -34,7 +34,7 @@
 
 #include "showfullobject.h"
 #include "listener.h"
-#include "EventInfo.h"
+#include "eventinfo.h"
 #include "window.h"
 
 namespace tbx {

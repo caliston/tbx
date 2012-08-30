@@ -37,6 +37,7 @@
 #include "openermanager.h"
 #include "res/resobject.h"
 #include <swis.h>
+#include <cstdlib>
 
 // Unix file name processing
 #include "unixlib/local.h"

@@ -25,7 +25,7 @@
 #ifndef TBX_RES_RESFILEINFO_H
 #define TBX_RES_RESFILEINFO_H
 
-#include "ResObject.h"
+#include "resobject.h"
 
 #include "../path.h"
 

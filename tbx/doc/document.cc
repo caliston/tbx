@@ -28,8 +28,8 @@
  *      Author: alanb
  */
 
-#include "Document.h"
-#include "DocManager.h"
+#include "document.h"
+#include "docmanager.h"
 
 #include "../stringutils.h"
 #include "../path.h"

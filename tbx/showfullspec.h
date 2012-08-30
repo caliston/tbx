@@ -34,7 +34,7 @@
 
 #include "bbox.h"
 #include "handles.h"
-#include "VisibleArea.h"
+#include "visiblearea.h"
 
 namespace tbx
 {

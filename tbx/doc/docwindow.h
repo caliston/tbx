@@ -33,7 +33,7 @@
 
 #include "../window.h"
 #include "../closewindowlistener.h"
-#include "../DCS.h"
+#include "../dcs.h"
 
 #include "document.h"
 

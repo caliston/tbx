@@ -33,7 +33,7 @@
 #define TBX_SAVER_H_
 
 #include "pointerinfo.h"
-#include "WimpMessageListener.h"
+#include "wimpmessagelistener.h"
 #include <string>
 
 namespace tbx {

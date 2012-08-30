@@ -36,7 +36,7 @@
 #include "swis.h"
 
 #include <iostream>
-
+#include <cstring>
 
 namespace tbx {
 

@@ -32,7 +32,7 @@
 #include "textarea.h"
 #include "swixcheck.h"
 #include "kernel.h"
-
+#include <memory>
 
 namespace tbx {
 

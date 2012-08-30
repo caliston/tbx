@@ -33,6 +33,7 @@
 #include "abouttobeshownlistener.h"
 #include "hasbeenhiddenlistener.h"
 #include "res/rescolourdbox.h"
+#include <cstring>
 
 namespace tbx {
 

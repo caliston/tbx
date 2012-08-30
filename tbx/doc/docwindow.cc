@@ -28,7 +28,7 @@
  *      Author: alanb
  */
 
-#include "DocWindow.h"
+#include "docwindow.h"
 #include "../saveas.h"
 
 namespace tbx
