@@ -169,6 +169,7 @@ namespace tbx
 		bool owns_window(WindowHandle window_handle, IconHandle icon_handle = 0);
 
 		int start_wimp_task(std::string command);
+		void os_cli(std::string command);
 
 	private:
 		bool _running;

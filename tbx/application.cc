@@ -625,3 +625,21 @@ int Application::start_wimp_task(std::string command)
 	return handle;
 }
 
+/**
+ * Run a command using the RISC OS Command Line interpreter
+ *
+ * Warning: This method should only be used for module commands, any
+ * command that runs another program will replace the program that
+ * calls it and never return.
+ *
+ * Use start_wimp_task to run another program, leaving this program
+ * running.
+ *
+ * @param command command to run
+ * @throws OsError command failed to run
+ */
+void Application::os_cli(std::string command)
+{
+	swix_check(_swix(OS_CLI, _IN(0), command.c_str()));
+}
+

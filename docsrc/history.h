@@ -1,7 +1,7 @@
 /**
  * @page history History/Changelog
  *
- * <B>0.6 Alpha July 2012</B>
+ * <B>0.6 Alpha September 2012</B>
  * - Fixed incorrect return value from Font class string_width methods
  * - Add a few more methods to the WindowInfo class
  * - Added canonicalise and canonical_equals methods to Path class
@@ -32,6 +32,7 @@
  * - DrawTransform class modified to use new Fixed16 class to represent the 16.16 bit fixed point values in it.
  * - Fixed removing individual events or handlers
  * - add start_wimp_task method to the Application class
+ * - add os_cli method to the Application class
  * - Fixed incorrect case and missing c includes that stopped cross compiling with latest GCC4
  *
  * <B>0.5 November 2011</B>
