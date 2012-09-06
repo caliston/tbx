@@ -190,15 +190,22 @@ public:
      */
     int index() const {return _data.word[5];}
 
-    /**
+    /***
      * true if index was selected
-     */
-    bool selected() const {return (_data.word[4] & 1) !=0;}
+     *
+     * Following flag does not seem to be set
+     * bool selected() const {return (_data.word[4] & 1) !=0;}
+    */
 
     /**
      * true if index was double-clicked
      */
     bool double_click() const {return (_data.word[4] & 2) != 0;}
+
+    /**
+     * true if event was caused by adjust button click
+     */
+    int adjust() const {return (_data.word[4] & 4) != 0;}
 };
 
 /**

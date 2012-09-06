@@ -34,6 +34,8 @@
  * - add start_wimp_task method to the Application class
  * - add os_cli method to the Application class
  * - Fixed incorrect case and missing c includes that stopped cross compiling with latest GCC4
+ * - Removed ScrollListSelectionEvent selected() method as it always returned 0
+ * - Added ScrollListSelectionEvent adjust() method which returns true if the selection was done with adjust
  *
  * <B>0.5 November 2011</B>
  * - const char * constructor for Path class
