@@ -36,6 +36,7 @@
  * - Fixed incorrect case and missing c includes that stopped cross compiling with latest GCC4
  * - Removed ScrollListSelectionEvent selected() method as it always returned 0
  * - Added ScrollListSelectionEvent adjust() method which returns true if the selection was done with adjust
+ * - create directory/copy/move and similar functions now throw exceptions rather then returning bool so the failure OsError can be used.
  *
  * <B>0.5 November 2011</B>
  * - const char * constructor for Path class

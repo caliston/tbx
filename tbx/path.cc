@@ -441,9 +441,9 @@ bool Path::SetModifiedTime(const UTCTime &utcTime)
  * Create an empty file of the given file type
  *
  * @param type file type for the new file
- * @returns true if file created successfully
+ * @throws OsError if file failed to created
  */
-bool Path::create_file(int type) const
+void Path::create_file(int type) const
 {
 	_kernel_swi_regs regs;
 
@@ -453,17 +453,17 @@ bool Path::create_file(int type) const
 	regs.r[4] = 0;
 	regs.r[5] = 0;
 
-	return (_kernel_swi(OS_File, &regs, &regs) == 0);
+	swix_check(_kernel_swi(OS_File, &regs, &regs));
 }
 
 /**
  * Create a directory at the given path.
  *
- * If the directory already exists this does nothing and returns true.
+ * If the directory already exists this does nothing and no error is thrown.
  *
- * @returns true if directory created or already exists
+ * @throws OsError if directory cannot be created.
  */
-bool Path::create_directory() const
+void Path::create_directory() const
 {
 	_kernel_swi_regs regs;
 
@@ -471,24 +471,24 @@ bool Path::create_directory() const
 	regs.r[1] = reinterpret_cast<int>(_name.c_str());
 	regs.r[4] = 0; // Default number of entries
 
-	return (_kernel_swi(OS_File, &regs, &regs) == 0);
+	swix_check(_kernel_swi(OS_File, &regs, &regs));
 }
 
 /**
  * Remove this file or directory from the file system
  *
- * @returns true  if successful or the object does not exist
- *          false if the object is locked against deletion or is a directory
+ * Note: it is not an error if the object does not exist
+ * @throws OsError if the object is locked against deletion or is a directory
  *                which is not empty or already open.
  */
-bool Path::remove() const
+void Path::remove() const
 {
 	_kernel_swi_regs regs;
 
 	regs.r[0] = 6;
 	regs.r[1] = reinterpret_cast<int>(_name.c_str());
 
-	return (_kernel_swi(OS_File, &regs, &regs) == 0);
+	swix_check(_kernel_swi(OS_File, &regs, &regs));
 }
 
 /**
@@ -497,9 +497,9 @@ bool Path::remove() const
  * This is a simple rename that will only work on single objects
  * on the same file system.
  *
- * @returns true if successful, otherwise false
+ * @throws OsError if it fails
  */
-bool Path::rename(const std::string &new_name)
+void Path::rename(const std::string &new_name)
 {
 	_kernel_swi_regs regs;
 
@@ -507,7 +507,7 @@ bool Path::rename(const std::string &new_name)
 	regs.r[1] = reinterpret_cast<int>(_name.c_str());
 	regs.r[2] = reinterpret_cast<int>(new_name.c_str());
 
-	return (_kernel_swi(OS_FSControl, &regs, &regs) == 0);
+	swix_check(_kernel_swi(OS_FSControl, &regs, &regs));
 }
 
 /**
@@ -515,9 +515,9 @@ bool Path::rename(const std::string &new_name)
  *
  * @param copyto location to copy to
  * @param options bitwise or of flags from CopyOption enum.
- * @returns true if copy succeeds
+ * @throws OsError if the copy fails
  */
-bool Path::copy(const std::string &copyto, unsigned int options)
+void Path::copy(const std::string &copyto, unsigned int options)
 {
 	_kernel_swi_regs regs;
 
@@ -531,7 +531,7 @@ bool Path::copy(const std::string &copyto, unsigned int options)
 	regs.r[7] = 0;
 	regs.r[8] = 0;
 
-	return (_kernel_swi(OS_FSControl, &regs, &regs) == 0);
+	swix_check(_kernel_swi(OS_FSControl, &regs, &regs));
 }
 /**
  * Copy the object.
@@ -542,9 +542,9 @@ bool Path::copy(const std::string &copyto, unsigned int options)
  * @param options bitwise or of flags from CopyOption enum.
  * @param buffer  buffer to use
  * @param size size of buffer to use
- * @returns true if copy succeeds
+ * @throws OsError if the copy fails
  */
-bool Path::copy(const std::string &copyto, unsigned int options, void *buffer, unsigned int size)
+void Path::copy(const std::string &copyto, unsigned int options, void *buffer, unsigned int size)
 {
 	unsigned int descriptor[2];
 	descriptor[0] = reinterpret_cast<unsigned int>(buffer);
@@ -562,7 +562,7 @@ bool Path::copy(const std::string &copyto, unsigned int options, void *buffer, u
 	regs.r[7] = 0;
 	regs.r[8] = reinterpret_cast<int>(descriptor);
 
-	return (_kernel_swi(OS_FSControl, &regs, &regs) == 0);
+	swix_check(_kernel_swi(OS_FSControl, &regs, &regs));
 }
 
 /**
@@ -573,9 +573,9 @@ bool Path::copy(const std::string &copyto, unsigned int options, void *buffer, u
  *
  * @param copyto location to move to
  * @param options bitwise or of flags from CopyOption enum.
- * @returns true if move succeeds
+ * @throws OsError if the move fails
  */
-bool Path::move(const std::string &copyto, unsigned int options)
+void Path::move(const std::string &copyto, unsigned int options)
 {
 	_kernel_swi_regs regs;
 
@@ -589,7 +589,7 @@ bool Path::move(const std::string &copyto, unsigned int options)
 	regs.r[7] = 0;
 	regs.r[8] = 0;
 
-	return (_kernel_swi(OS_FSControl, &regs, &regs) == 0);
+	swix_check(_kernel_swi(OS_FSControl, &regs, &regs));
 }
 
 /**
@@ -604,9 +604,9 @@ bool Path::move(const std::string &copyto, unsigned int options)
  * @param options bitwise or of flags from CopyOption enum.
  * @param buffer  buffer to use
  * @param size size of buffer to use
- * @returns true if move succeeds
+ * @throws OsError if the move fails
  */
-bool Path::move(const std::string &copyto, unsigned int options, void *buffer, unsigned int size)
+void Path::move(const std::string &copyto, unsigned int options, void *buffer, unsigned int size)
 {
 	unsigned int descriptor[2];
 	descriptor[0] = reinterpret_cast<unsigned int>(buffer);
@@ -624,14 +624,15 @@ bool Path::move(const std::string &copyto, unsigned int options, void *buffer, u
 	regs.r[7] = 0;
 	regs.r[8] = reinterpret_cast<int>(descriptor);
 
-	return (_kernel_swi(OS_FSControl, &regs, &regs) == 0);
+	swix_check(_kernel_swi(OS_FSControl, &regs, &regs));
 }
 
 /**
  * Load this file into a character array
  *
  * @param length updated to length of file if specified
- * @returns new char[] with contents of file or null if load failed
+ * @returns new char[] with contents of file
+ * @throws OsError if load failed
  */
 char *Path::load_file(int *length /*= 0*/) const
 {
@@ -649,13 +650,15 @@ char *Path::load_file(int *length /*= 0*/) const
 		regs.r[2] = reinterpret_cast<int>(data);
 		regs.r[3] = 0;
 
-		if (_kernel_swi(OS_File, &regs, &regs) == 0)
-		{
-			if (length) *length = regs.r[4];
-		} else
+        try
+        {
+           swix_check(_kernel_swi(OS_File, &regs, &regs));
+		   if (length) *length = regs.r[4];
+		} catch(...)
 		{
 			delete [] data;
 			data = 0;
+			throw;
 		}
 	}
 
@@ -668,9 +671,9 @@ char *Path::load_file(int *length /*= 0*/) const
  * @param data the array of characters to save
  * @param length the number of characters to save from the array
  * @param file_type file type to save data as
- * @return true if successful, otherwise false
+ * @throws OsError if save fails
  */
-bool Path::save_file(const char *data, int length, int file_type) const
+void Path::save_file(const char *data, int length, int file_type) const
 {
 	_kernel_swi_regs regs;
 
@@ -680,7 +683,7 @@ bool Path::save_file(const char *data, int length, int file_type) const
 	regs.r[4] = reinterpret_cast<int>(data);
 	regs.r[5] = reinterpret_cast<int>(data+length);
 
-	return (_kernel_swi(OS_File, &regs, &regs) == 0);
+	swix_check(_kernel_swi(OS_File, &regs, &regs));
 }
 
 

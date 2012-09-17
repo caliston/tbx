@@ -309,14 +309,14 @@ namespace tbx
 //TODO:		bool modified_time(const UTCTime &utcTime);
 
 		// Creation
-		bool create_file(int type) const;
-		bool create_directory() const;
+		void create_file(int type) const;
+		void create_directory() const;
 
 		// Deletion
-		bool remove() const;
+		void remove() const;
 
 		// Simple renaming
-		bool rename(const std::string &new_name);
+		void rename(const std::string &new_name);
 
 		/**
 		 * Enumeration to options for copy method.
@@ -334,14 +334,14 @@ namespace tbx
 			COPY_LOOK = 0x4000u   // Check destination first
 		};
 
-		bool copy(const std::string &copyto, unsigned int options = 0);
-		bool copy(const std::string &copyto, unsigned int options, void *buffer, unsigned int size);
-		bool move(const std::string &copyto, unsigned int options = 0);
-		bool move(const std::string &copyto, unsigned int options, void *buffer, unsigned int size);
+		void copy(const std::string &copyto, unsigned int options = 0);
+		void copy(const std::string &copyto, unsigned int options, void *buffer, unsigned int size);
+		void move(const std::string &copyto, unsigned int options = 0);
+		void move(const std::string &copyto, unsigned int options, void *buffer, unsigned int size);
 
 		// Whole file loading/saving
 		char *load_file(int *length = 0) const;
-		bool save_file(const char *data, int length, int file_type) const;
+		void save_file(const char *data, int length, int file_type) const;
 
 		bool set_current_directory() const;
 
